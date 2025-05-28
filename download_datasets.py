@@ -1,7 +1,6 @@
 #This script downloads all the Colle Benchmarks to a local directory, defaults to ./Benchmarks
-# It also provides a utility method to fetch
+# It also provides utility methods to fetch all datasets from a local directory or from the online huggingFace Dataset
 import os
-
 import config
 import huggingface_hub
 from datasets import load_dataset
@@ -35,6 +34,7 @@ def load_datasets_from_disk(directory = DIRECTORY):
             print(f"{dataset_name} dataset was not able to be loaded, please ensure that datasets were retrieved with download_datasets()")
 
     return data
+
 def load_datasets_from_huggingface():
     data = dict()
     print(f"Loading datasets from {REPO_ID}/{DATA_DIRECTORY}...")
