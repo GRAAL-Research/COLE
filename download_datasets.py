@@ -1,0 +1,49 @@
+#This script downloads all the Colle Benchmarks to a local directory, defaults to ./Benchmarks
+# It also provides a utility method to fetch
+import os
+
+import config
+import huggingface_hub
+from datasets import load_dataset
+from huggingface_hub import snapshot_download
+
+
+
+REPO_ID = "COLLE-Graal/ColleGraal"
+DATA_DIRECTORY = "data"
+DIRECTORY = "./Benchmarks"
+HF_TOKEN = config.HF_TOKEN
+
+DATASETS= ["Allocine","paws_x","fquad","opus_parcus","gqnli","multiblimp","piaf","sickfr","Xnli"]
+
+huggingface_hub.login(token=HF_TOKEN)
+
+def download_datasets():
+    snapshot_download(repo_id=REPO_ID,local_dir=DIRECTORY,allow_patterns=f"*.jsonl", repo_type="dataset")
+
+
+def load_datasets_from_disk(directory = DIRECTORY):
+    data = dict()
+    print(f"Loading datasets from {os.path.realpath(directory + "/"+ DATA_DIRECTORY) }...")
+    for dataset_name in DATASETS:
+        try:
+            path = directory + "/"+ DATA_DIRECTORY +"/"+ dataset_name
+
+            new_dataset = load_dataset(path)
+            data[dataset_name] = new_dataset
+        except Exception as e :
+            print(f"{dataset_name} dataset was not able to be loaded, please ensure that datasets were retrieved with download_datasets()")
+
+    return data
+def load_datasets_from_huggingface():
+    data = dict()
+    print(f"Loading datasets from {REPO_ID}/{DATA_DIRECTORY}...")
+    for dataset_name in DATASETS:
+        try:
+            hub_dir = f"{DATA_DIRECTORY}/{dataset_name}"
+            new_dataset = load_dataset(REPO_ID,data_dir=hub_dir)
+            data[dataset_name] = new_dataset
+        except Exception as e :
+            print(f"{dataset_name} dataset was not able to be loaded, {e}. Please ensure that datasets names fit with names on the hub.")
+    return data
+
