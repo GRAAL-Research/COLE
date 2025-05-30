@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 from click import prompt
 
-from Metrics import Metrics
+import Metrics
 from Model import Model
 from download_datasets import load_datasets_from_huggingface, load_dataset_from_huggingface
 
@@ -10,7 +10,7 @@ from download_datasets import load_datasets_from_huggingface, load_dataset_from_
 class Benchmark:
     def __init__(self, name = "", metrics=None, prompt_instructions="", used_split="test"):
         if metrics is None:
-            metrics = []
+            metrics = [Metrics.Accuracy()]
         self.name = name
         self.metrics: list[Metrics] = []
         self.used_split = used_split
