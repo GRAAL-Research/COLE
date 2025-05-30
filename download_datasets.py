@@ -39,11 +39,17 @@ def load_datasets_from_huggingface():
     data = dict()
     print(f"Loading datasets from {REPO_ID}/{DATA_DIRECTORY}...")
     for dataset_name in DATASETS:
-        try:
-            hub_dir = f"{DATA_DIRECTORY}/{dataset_name}"
-            new_dataset = load_dataset(REPO_ID,data_dir=hub_dir)
-            data[dataset_name] = new_dataset
-        except Exception as e :
-            print(f"{dataset_name} dataset was not able to be loaded, {e}. Please ensure that datasets names fit with names on the hub.")
+        new_dataset = load_dataset_from_huggingface(dataset_name)
+        data[dataset_name] = new_dataset
+
     return data
 
+def load_dataset_from_huggingface(dataset_name):
+    try :
+        hub_dir = f"{DATA_DIRECTORY}/{dataset_name}"
+        new_dataset = load_dataset(REPO_ID, data_dir=hub_dir)
+        return new_dataset
+    except Exception as e:
+        print(
+            f"{dataset_name} dataset was not able to be loaded, {e}. Please ensure that datasets names fit with names on the hub.")
+        return None

@@ -4,7 +4,7 @@ from scipy.stats import pearsonr, spearmanr
 
 
 class Metrics(abc.ABC):
-    def __int__(self, name: str):
+    def __init__(self, name: str):
         self.name = name
 
     @abc.abstractmethod
@@ -13,7 +13,7 @@ class Metrics(abc.ABC):
 
 
 class Accuracy(Metrics):
-    def __int__(self):
+    def __init__(self):
         super().__init__('accuracy')
 
     def compute(self, golds, preds):
@@ -21,7 +21,7 @@ class Accuracy(Metrics):
 
 
 class F1(Metrics):
-    def __int__(self, average: str = 'micro'):
+    def __init__(self, average: str = 'micro'):
         name = f'f1_{average}'
         super().__init__(name)
         self.average = average
@@ -39,7 +39,7 @@ class MatthewsCC(Metrics):
 
 
 class Pearson(Metrics):
-    def __int__(self):
+    def __init__(self):
         super().__init__('pearson_r')
 
     def compute(self, golds, preds):
@@ -47,7 +47,7 @@ class Pearson(Metrics):
 
 
 class SpearmanR(Metrics):
-    def __int__(self):
+    def __init__(self):
         super().__init__('spearman_r')
 
     def compute(self, golds, preds):
