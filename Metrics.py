@@ -4,8 +4,8 @@ from scipy.stats import pearsonr, spearmanr
 
 
 class Metrics(abc.ABC):
-    def __int__(self, matric: str):
-        self.matric = matric
+    def __int__(self, name: str):
+        self.name = name
 
     @abc.abstractmethod
     def compute(self, golds, preds):
