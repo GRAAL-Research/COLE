@@ -27,8 +27,7 @@ class F1(Metrics):
         self.average = average
 
     def compute(self, golds, preds):
-        return f1_score(golds, preds)
-
+        return f1_score(golds, preds, average=self.average)
 
 class MatthewsCC(Metrics):
     def __init__(self):
