@@ -1,4 +1,4 @@
-#This script downloads all the Colle Benchmarks to a local directory, defaults to ./Benchmarks
+# This script downloads all the Colle Benchmarks to a local directory, defaults to ./Benchmarks
 # It also provides utility methods to fetch all datasets from a local directory or from the online huggingFace Dataset
 import os
 import config
@@ -6,34 +6,39 @@ import huggingface_hub
 from datasets import load_dataset
 from huggingface_hub import snapshot_download
 
-
-
 REPO_ID = "COLLE-Graal/ColleGraal"
 DATA_DIRECTORY = "data"
 DIRECTORY = "./Benchmarks"
 HF_TOKEN = config.HF_TOKEN
 
-DATASETS= ["Allocine","paws_x","fquad","opus_parcus","gqnli","multiblimp","piaf","sickfr","Xnli"]
+DATASETS = ["Allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "Xnli"]
 
 huggingface_hub.login(token=HF_TOKEN)
 
+
 def download_datasets():
-    snapshot_download(repo_id=REPO_ID,local_dir=DIRECTORY,allow_patterns=f"*.jsonl", repo_type="dataset")
+    snapshot_download(repo_id=REPO_ID, local_dir=DIRECTORY, allow_patterns=f"*.jsonl", repo_type="dataset")
 
 
-def load_datasets_from_disk(directory = DIRECTORY):
+def load_datasets_from_disk(directory=DIRECTORY):
     data = dict()
-    print(f"Loading datasets from {os.path.realpath(directory + "/"+ DATA_DIRECTORY) }...")
+    print(f"Loading datasets from {os.path.realpath(directory + "/" + DATA_DIRECTORY)}...")
     for dataset_name in DATASETS:
         try:
-            path = directory + "/"+ DATA_DIRECTORY +"/"+ dataset_name
-
-            new_dataset = load_dataset(path)
-            data[dataset_name] = new_dataset
-        except Exception as e :
-            print(f"{dataset_name} dataset was not able to be loaded, please ensure that datasets were retrieved with download_datasets()")
+            data[dataset_name] = load_dataset_from_disk(dataset_name, directory)
+        except Exception as e:
+            print(
+                f"{dataset_name} dataset was not able to be loaded, please ensure that datasets were retrieved with download_datasets()")
 
     return data
+
+
+def load_dataset_from_disk(dataset_name, directory=DIRECTORY):
+    path = directory + "/" + DATA_DIRECTORY + "/" + dataset_name
+
+    new_dataset = load_dataset(path)
+    return new_dataset
+
 
 def load_datasets_from_huggingface():
     data = dict()
@@ -44,8 +49,9 @@ def load_datasets_from_huggingface():
 
     return data
 
+
 def load_dataset_from_huggingface(dataset_name):
-    try :
+    try:
         hub_dir = f"{DATA_DIRECTORY}/{dataset_name}"
         new_dataset = load_dataset(REPO_ID, data_dir=hub_dir)
         return new_dataset
