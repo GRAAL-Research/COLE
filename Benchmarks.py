@@ -209,3 +209,22 @@ class XnliBench(Benchmark):
         self.name = "Xnli"
         self.prompt_instructions = ""
         self.metrics = [Metrics.Accuracy]
+class sts22(Benchmark):
+    def gather_test_data(self, test):
+        sentence1 = test["sentence1"]
+        sentence2 = test["sentence2"]
+        return f"{sentence1} {sentence2}"
+
+    def get_gold_label(self, test):
+        return test["score"]
+
+    def parse_answer(self, answer):
+        return int(answer)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.name = "sts22_crosslingual"
+        self.prompt_instructions = ""
+        self.metrics = [
+            Metrics.MetricCollection([Metrics.Pearson, Metrics.SpearmanR()]),
+        ]
