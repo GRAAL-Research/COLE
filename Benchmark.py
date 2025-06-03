@@ -16,9 +16,14 @@ class Benchmark:
         self.metrics: list[Metrics] = []
         self.used_split = used_split
         self.prompt_instructions = "Answer with 1 for positive, or 0 for negative"
+
+    def build_prompt(self, test):
+        return f"{test}. {self.prompt_instructions}"
         self.builder = PromptBuilder()
 
     @abstractmethod
+    def gather_test_data(self, test):
+        return ""
     def build_prompt(self, test) -> str:
         prompt = f"{test}. {self.prompt_instructions}"
         print(prompt)

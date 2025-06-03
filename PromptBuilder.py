@@ -31,6 +31,3 @@ class PromptBuilder():
             end = "".join(self.end)
             premise = "".join(self.premise)
             return f"{premise}\n{data}\n{end}"
-
-
-print(PromptBuilder().add_premise("Pour mon premier tour").add_end("voilà").add_data("1,").add_data("2").set_data_only(True).build())
