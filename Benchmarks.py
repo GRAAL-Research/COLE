@@ -41,15 +41,20 @@ class AllocineBench(Benchmark):
                   .add_premise("Cette phrase possède-t-elle un sentiment positif ou négatif ?")
                   .add_data(test["review"])
                   .add_end(("Réponds "
-             "uniquement par 1 si la phrase est positive,réponds par 0 sinon.")))
+             "uniquement par 1 si la phrase est positive,réponds par 0 sinon."))
+             .build())
         return prompt
 
 
     def get_gold_label(self, test):
         return test["label"]
 
+    def gather_test_data(self, test):
+        return test["review"]
     def parse_answer(self, answer):
-        return int(answer)
+        match = re.search(r"\b[01]\b", answer)
+        if match:
+            return int(match.group())
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -177,14 +182,19 @@ class Paws_xBench(Benchmark):
         prompt = (PromptBuilder()
                   .add_premise("Les deux phrases suivantes veulent-elles dire la même chose, ou ont-elles des significations différentes ?")
                   .add_data(sentence1).add_data(sentence2)
-                  .add_end("Réponds seulement 1 si les deux phrases ont la même signification, 0 sinon"))
+                  .add_end("Réponds seulement 1 si les deux phrases ont la même signification, 0 sinon")
+                  .build())
         return prompt
 
     def get_gold_label(self, test):
         return test["label"]
 
+    def gather_test_data(self, test):
+        return f"{test['sentence1']}  /  {test['sentence2']}"
     def parse_answer(self, answer):
-        return int(answer)
+        match = re.search(r"\b[01]\b", answer)
+        if match:
+            return int(match.group())
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -255,14 +265,18 @@ class XnliBench(Benchmark):
          "0 — si la deuxième phrase implique la première,\n"
          "1 — si la relation est neutre,\n"
          "2 — s'il y a contradiction.\n"
-         "Réponds uniquement par 0, 1 ou 2."))
+         "Réponds uniquement par 0, 1 ou 2.")
+        .build())
         return prompt
 
     def get_gold_label(self, test):
         return test["label"]
-
+    def gather_test_data(self, test):
+        return f"{test['premise']}  /  {test['hypothesis']}"
     def parse_answer(self, answer):
-        return int(answer)
+        match = re.search(r"\b[0-2]\b", answer)
+        if match:
+            return int(match.group())
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -280,9 +294,12 @@ class Sts22(Benchmark):
 
     def get_gold_label(self, test):
         return test["score"]
-
+    def gather_test_data(self, test):
+        return f"{test['sentence1']}  /  {test['sentence2']}"
     def parse_answer(self, answer):
-        return int(answer)
+        match = re.search(r"\b[0-5]\b", answer)
+        if match:
+            return int(match.group())
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
