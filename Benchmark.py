@@ -1,7 +1,4 @@
 from abc import abstractmethod
-
-from click import prompt
-
 import Metrics
 from Model import Model
 from PromptBuilder import PromptBuilder
@@ -9,7 +6,7 @@ from download_datasets import load_datasets_from_huggingface, load_dataset_from_
 
 
 class Benchmark:
-    def __init__(self, name = "", metrics=None, prompt_instructions="", used_split="test"):
+    def __init__(self, name="", metrics=None, prompt_instructions="", used_split="test"):
         if metrics is None:
             metrics = [Metrics.Accuracy()]
         self.name = name
@@ -17,18 +14,9 @@ class Benchmark:
         self.used_split = used_split
         self.prompt_instructions = "Answer with 1 for positive, or 0 for negative"
 
+    @abstractmethod
     def build_prompt(self, test):
         return f"{test}. {self.prompt_instructions}"
-        self.builder = PromptBuilder()
-
-    @abstractmethod
-    def gather_test_data(self, test):
-        return ""
-    def build_prompt(self, test) -> str:
-        prompt = f"{test}. {self.prompt_instructions}"
-        print(prompt)
-        return prompt
-
 
     def evaluate(self, model: Model):
         dataset = self.load_dataset()
@@ -63,6 +51,6 @@ class Benchmark:
     def compute(self, gold_labels, infered_labels):
         results = {}
         for metric in self.metrics:
-            result = metric.compute(golds=gold_labels,preds= infered_labels)
+            result = metric.compute(golds=gold_labels, preds=infered_labels)
             results[metric.name] = result
         return results

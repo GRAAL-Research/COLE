@@ -136,9 +136,6 @@ class gqnliBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "gqnli"
 
-        self.prompt_instructions = ("Donne moi la relation entre la prémise et l'hypothèse,"
-                                    "Réponds seulement 0 pour une implication, 1 pour une relation neutre"
-                                    "et 2 pour une contradiction.Réponds seulement avec 0, 1 ou 2")
         self.metrics = [Metrics.Accuracy()]
 
 
@@ -163,7 +160,6 @@ class opus_parcusBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "opus_parcus"
-        self.prompt_instructions = "TODO"
         self.metrics = [
             Metrics.MetricCollection([Metrics.Accuracy(), Metrics.F1()]),
         ]
@@ -192,7 +188,7 @@ class paws_xBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "paws_x"
-        self.prompt_instructions = ""
+
         self.metrics = [Metrics.Accuracy()]
 
 
@@ -217,7 +213,7 @@ class piafBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "piaf"
-        self.prompt_instructions = ""
+
         self.metrics = [
             Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
         ]
@@ -244,7 +240,7 @@ class sickfrBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "sickfr"
-        self.prompt_instructions = ""
+
         self.metrics = [
             Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
         ]
@@ -271,13 +267,16 @@ class XnliBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "Xnli"
-        self.prompt_instructions = ""
         self.metrics = [Metrics.Accuracy()]
+
 class sts22(Benchmark):
-    def gather_test_data(self, test):
-        sentence1 = test["sentence1"]
-        sentence2 = test["sentence2"]
-        return f"{sentence1} {sentence2}"
+    def build_prompt(self, test) -> str:
+        prompt = (PromptBuilder()
+                  .add_premise("")
+                  .add_data(test["sentence1"])
+                  .add_data(test["sentence2"])
+                  .add_end(""))
+        return prompt.build()
 
     def get_gold_label(self, test):
         return test["score"]
@@ -288,7 +287,6 @@ class sts22(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "sts22_crosslingual"
-        self.prompt_instructions = ""
         self.metrics = [
             Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
         ]
