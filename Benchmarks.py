@@ -1,4 +1,5 @@
 import random
+import re
 
 import Metrics
 from Benchmark import Benchmark
@@ -15,11 +16,16 @@ class FrColaBench(Benchmark):
 
         return prompt
 
+    def gather_test_data(self, test):
+        return test["sentence"]
+
     def get_gold_label(self, test):
         return test["label"]
 
     def parse_answer(self, answer):
-        return answer
+        match = re.search(r'\b[01]\b', answer)
+        if match:
+            return int(match.group())
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
