@@ -7,3 +7,5 @@
 /Benchmarks
 /__pycache__
 config.py
+.env
+/Loaded_Models

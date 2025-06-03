@@ -1,18 +1,20 @@
 # This script downloads all the Colle Benchmarks to a local directory, defaults to ./Benchmarks
 # It also provides utility methods to fetch all datasets from a local directory or from the online huggingFace Dataset
 import os
-import config
+
 import huggingface_hub
 from datasets import load_dataset
 from huggingface_hub import snapshot_download
+from dotenv import load_dotenv
+load_dotenv()
 
 REPO_ID = "COLLE-Graal/ColleGraal"
 DATA_DIRECTORY = "data"
 DIRECTORY = "./Benchmarks"
-HF_TOKEN = config.HF_TOKEN
+HF_TOKEN = os.getenv('HF_TOKEN')
 
 DATASETS = ["Allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "Xnli"]
-
+print(HF_TOKEN)
 huggingface_hub.login(token=HF_TOKEN)
 
 
@@ -59,5 +61,3 @@ def load_dataset_from_huggingface(dataset_name):
         print(
             f"{dataset_name} dataset was not able to be loaded, {e}. Please ensure that datasets names fit with names on the hub.")
         return None
-
-download_datasets()

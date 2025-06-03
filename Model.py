@@ -1,11 +1,13 @@
 import os
+from abc import abstractmethod
+
 from anthropic import Anthropic
 
 from dotenv import load_dotenv
-load_dotenv("config.env")
+load_dotenv(".env")
 api_key = os.getenv("ANTHROPIC_API_KEY")
 if api_key is None:
-    raise RuntimeError("ANTHROPIC_API_KEY non défini dans config.env")
+    raise RuntimeError("ANTHROPIC_API_KEY non défini dans .env")
 
 claude_client = Anthropic(api_key=api_key)
 
@@ -31,5 +33,6 @@ class Model:
 
         self.prompt_only = prompt_only
 
+    @abstractmethod
     def infer(self, prompt: str, conditions=None) -> str:
         return "0"
