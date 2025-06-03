@@ -48,15 +48,12 @@ class AllocineBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "Allocine"
-        self.prompt_instructions = \
-            ("Dis-moi si la phrase précédente est positive, réponds "
-             "uniquement par 1 si la phrase est positive, 0 sinon.")
         self.metrics = [Metrics.Accuracy()]
 
 
 
 #TODO
-class fquadBench(Benchmark):
+class FquadBench(Benchmark):
     def build_prompt(self, test) -> str:
         print("FQUAD in developpement")
         prompt = (PromptBuilder()
@@ -85,7 +82,7 @@ class fquadBench(Benchmark):
         self.metrics = [
             Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
         ]
-class frblimpBench(Benchmark):
+class FrblimpBench(Benchmark):
 
     def build_prompt(self, test) -> str:
         if self.get_0_1_seeded(test) == 1:
@@ -114,7 +111,7 @@ class frblimpBench(Benchmark):
         self.metrics=[Metrics.Accuracy()]
 
 
-class gqnliBench(Benchmark):
+class GqnliBench(Benchmark):
     def build_prompt(self, test) -> str:
         prompt = (PromptBuilder()
                   .add_premise("Quelle est la relation de la deuxième phrase par rapport à la première ?")
@@ -139,20 +136,20 @@ class gqnliBench(Benchmark):
         self.metrics = [Metrics.Accuracy()]
 
 
-class opus_parcusBench(Benchmark):
+class Opus_parcusBench(Benchmark):
     def build_prompt(self, test) -> str:
-        prompt = (PromptBuilder()
-                  .add_premise("")
-                  .add_data()
-                  .add_end(""))
-        return prompt
-    def gather_test_data(self, test):
         sent1 = test["sent1"]
         sent2 = test["sent2"]
-        return f"{sent1} {sent2}"
+        prompt = (PromptBuilder()
+                  .add_premise("Les deux phrases suivantes expriment-elles la même idée ou sont-elles différentes ?")
+                  .add_data(sent1).add_data(sent2)
+                  .add_end("Réponds seulement avec un chiffre de 0 à 5 où 5"
+                           " signifie que les deux phrases veulent dire exactement la même chose."))
+        return prompt
+
 
     def get_gold_label(self, test):
-        return test["quality"]
+        return test["quality"] # Ou test["annot-score"]
 
     def parse_answer(self, answer):
         return int(answer)
@@ -167,17 +164,15 @@ class opus_parcusBench(Benchmark):
 
 
 
-class paws_xBench(Benchmark):
+class Paws_xBench(Benchmark):
     def build_prompt(self, test) -> str:
-        prompt = (PromptBuilder()
-                  .add_premise("")
-                  .add_data()
-                  .add_end(""))
-        return prompt
-    def gather_test_data(self, test):
         sentence1 = test["sentence1"]
         sentence2 = test["sentence2"]
-        return f"{sentence1} {sentence2}"
+        prompt = (PromptBuilder()
+                  .add_premise("Les deux phrases suivantes veulent-elles dire la même chose, ou ont-elles des significations différentes ?")
+                  .add_data(sentence1).add_data(sentence2)
+                  .add_end("Réponds seulement 1 si les deux phrases ont la même signification, 0 sinon"))
+        return prompt
 
     def get_gold_label(self, test):
         return test["label"]
@@ -192,17 +187,17 @@ class paws_xBench(Benchmark):
         self.metrics = [Metrics.Accuracy()]
 
 
-class piafBench(Benchmark):
+class PiafBench(Benchmark):
     def build_prompt(self, test) -> str:
-        prompt = (PromptBuilder()
-                  .add_premise("")
-                  .add_data()
-                  .add_end(""))
-        return prompt
-    def gather_test_data(self, test):
         context = test["context"]
         question = test["question"]
-        return f"{context} {question}"
+        prompt = (PromptBuilder()
+                  .add_premise(
+            "Voici une question et un contexte. Où, dans le texte, commence la réponse à la question ?")
+                  .add_data(f"Question : {question}")
+                  .add_data(f"Contexte : {context}")
+                  .add_end("Réponds seulement avec le **nombre de mots** qui précèdent la réponse à la question dans le contexte."))
+        return prompt
 
     def get_gold_label(self, test):
         return test["answer_start"][0]
@@ -219,17 +214,16 @@ class piafBench(Benchmark):
         ]
 
 
-class sickfrBench(Benchmark):
+class SickfrBench(Benchmark):
     def build_prompt(self, test) -> str:
-        prompt = (PromptBuilder()
-                  .add_premise("")
-                  .add_data()
-                  .add_end(""))
-        return prompt
-    def gather_test_data(self, test):
         sentence_A = test["sentence_A"]
         sentence_B = test["sentence_B"]
-        return f"{sentence_A} {sentence_B}"
+        prompt = (PromptBuilder()
+                  .add_premise("À quel point, de 0 à 5, les 2 phrases suivantes sont-elles similaires ?")
+                  .add_data(sentence_A).add_data(sentence_B)
+                  .add_end("Réponds avec seulement un nombre de 0 à 5, où 5 signifie une très grande similarité entre les phrases."))
+        return prompt
+
 
     def get_gold_label(self, test):
         return test["relatedness_score"]
@@ -249,14 +243,14 @@ class sickfrBench(Benchmark):
 class XnliBench(Benchmark):
     def build_prompt(self, test) -> str:
         prompt = (PromptBuilder()
-                  .add_premise("")
-                  .add_data()
-                  .add_end(""))
+                  .add_premise("Quelle est la relation de la deuxième phrase par rapport à la première ?")
+                  .add_data(test["premise"]).add_data(test["hypothesis"])
+                  .add_end("Réponds uniquement par :\n"
+         "0 — si la deuxième phrase implique la première,\n"
+         "1 — si la relation est neutre,\n"
+         "2 — s'il y a contradiction.\n"
+         "Réponds uniquement par 0, 1 ou 2."))
         return prompt
-    def gather_test_data(self, test):
-        premise = test["premise"]
-        hypothesis = test["hypothesis"]
-        return f"{premise} {hypothesis}"
 
     def get_gold_label(self, test):
         return test["label"]
@@ -269,13 +263,13 @@ class XnliBench(Benchmark):
         self.name = "Xnli"
         self.metrics = [Metrics.Accuracy()]
 
-class sts22(Benchmark):
+class Sts22(Benchmark):
     def build_prompt(self, test) -> str:
         prompt = (PromptBuilder()
-                  .add_premise("")
+                  .add_premise("En scorant de 0 à 5, à quel point les phrases suivants sont-elles similaires ?")
                   .add_data(test["sentence1"])
                   .add_data(test["sentence2"])
-                  .add_end(""))
+                  .add_end("Réponds seulement avec un nombre de 0 à 5, où 5 signifie que les 2 phrases veulent dire exactement la même chose."))
         return prompt.build()
 
     def get_gold_label(self, test):

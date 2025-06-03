@@ -53,13 +53,16 @@ class SpearmanR(Metrics):
         return spearmanr(golds, preds)[0]
 
 
-class MetricCollection:
+class MetricCollection(Metrics):
 
-    def __init__(self, metrics):
-        self.metrics = metrics
-
-    def compute_all(self, golds, preds):
+    def compute(self, golds, preds):
         results = {}
         for metric in self.metrics:
             results[metric.name] = metric.compute(golds, preds)
         return results
+
+    def __init__(self, metrics):
+        super().__init__(f"Collection of {[metric.name for metric in metrics]}")
+        self.metrics = metrics
+
+

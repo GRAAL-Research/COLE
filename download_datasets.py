@@ -59,3 +59,5 @@ def load_dataset_from_huggingface(dataset_name):
         print(
             f"{dataset_name} dataset was not able to be loaded, {e}. Please ensure that datasets names fit with names on the hub.")
         return None
+
+download_datasets()
