@@ -2,12 +2,18 @@ import random
 
 import Metrics
 from Benchmark import Benchmark
+from PromptBuilder import PromptBuilder
 
 
 class FrColaBench(Benchmark):
 
-    def gather_test_data(self, test):
-        return test["sentence"]
+    def build_prompt(self, test) ->str:
+        prompt =  (PromptBuilder().
+                add_premise("Juge si cette phrase est grammaticalement correcte :")
+                .add_data(test["sentence"])
+                .add_end("Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon.").build())
+
+        return prompt
 
     def get_gold_label(self, test):
         return test["label"]
@@ -24,8 +30,14 @@ class FrColaBench(Benchmark):
 
 
 class AllocineBench(Benchmark):
-    def gather_test_data(self, test):
-        return test["review"]
+    def build_prompt(self, test) -> str:
+        prompt = (PromptBuilder()
+                  .add_premise("Cette phrase possède-t-elle un sentiment positif ou négatif ?")
+                  .add_data(test["review"])
+                  .add_end(("Réponds "
+             "uniquement par 1 si la phrase est positive,réponds par 0 sinon.")))
+        return prompt
+
 
     def get_gold_label(self, test):
         return test["label"]
@@ -42,7 +54,17 @@ class AllocineBench(Benchmark):
         self.metrics = [Metrics.Accuracy()]
 
 
+
+#TODO
 class fquadBench(Benchmark):
+    def build_prompt(self, test) -> str:
+        print("FQUAD in developpement")
+        prompt = (PromptBuilder()
+                  .add_premise("")
+                  .add_data()
+                  .add_end(""))
+        return prompt
+
     def gather_test_data(self, test):
         data = f""
         # TODO
@@ -64,12 +86,17 @@ class fquadBench(Benchmark):
             Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
         ]
 class frblimpBench(Benchmark):
-    def gather_test_data(self, test):
+
+    def build_prompt(self, test) -> str:
         if self.get_0_1_seeded(test) == 1:
-            return test["grammatical"]
+            data = test["grammatical"]
         else:
-            return test["ungrammatical"]
-        return
+            data = test["ungrammatical"]
+        prompt = (PromptBuilder()
+                  .add_premise("Cette phrase est-elle grammaticalement correcte ?")
+                  .add_data(data)
+                  .add_end("Réponds strictement par 1 si la phrase est correcte grammaticalement ; sinon, réponds 0."))
+        return prompt
 
     def get_0_1_seeded(self, test):
         return (self.seed + test["id"] ^ 2 * 7) % 2
@@ -83,16 +110,21 @@ class frblimpBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "fr_blimp"
-        self.prompt_instructions = "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon."
         self.seed = random.randint(1, 10000)
         self.metrics=[Metrics.Accuracy()]
 
 
 class gqnliBench(Benchmark):
-    def gather_test_data(self, test):
-        premise = test["premise"]
-        hypothesis = test["hypothesis"]
-        return f"{premise} {hypothesis}"
+    def build_prompt(self, test) -> str:
+        prompt = (PromptBuilder()
+                  .add_premise("Quelle est la relation de la deuxième phrase par rapport à la première ?")
+                  .add_data(test["premise"]).add_data(test["hypothesis"])
+                  .add_end("Réponds uniquement par :\n"
+         "0 — si la deuxième phrase implique la première,\n"
+         "1 — si la relation est neutre,\n"
+         "2 — s'il y a contradiction.\n"
+         "Réponds uniquement par 0, 1 ou 2."))
+        return prompt
 
     def get_gold_label(self, test):
         return test["label"]
@@ -111,6 +143,12 @@ class gqnliBench(Benchmark):
 
 
 class opus_parcusBench(Benchmark):
+    def build_prompt(self, test) -> str:
+        prompt = (PromptBuilder()
+                  .add_premise("")
+                  .add_data()
+                  .add_end(""))
+        return prompt
     def gather_test_data(self, test):
         sent1 = test["sent1"]
         sent2 = test["sent2"]
@@ -131,7 +169,14 @@ class opus_parcusBench(Benchmark):
         ]
 
 
+
 class paws_xBench(Benchmark):
+    def build_prompt(self, test) -> str:
+        prompt = (PromptBuilder()
+                  .add_premise("")
+                  .add_data()
+                  .add_end(""))
+        return prompt
     def gather_test_data(self, test):
         sentence1 = test["sentence1"]
         sentence2 = test["sentence2"]
@@ -151,6 +196,12 @@ class paws_xBench(Benchmark):
 
 
 class piafBench(Benchmark):
+    def build_prompt(self, test) -> str:
+        prompt = (PromptBuilder()
+                  .add_premise("")
+                  .add_data()
+                  .add_end(""))
+        return prompt
     def gather_test_data(self, test):
         context = test["context"]
         question = test["question"]
@@ -172,6 +223,12 @@ class piafBench(Benchmark):
 
 
 class sickfrBench(Benchmark):
+    def build_prompt(self, test) -> str:
+        prompt = (PromptBuilder()
+                  .add_premise("")
+                  .add_data()
+                  .add_end(""))
+        return prompt
     def gather_test_data(self, test):
         sentence_A = test["sentence_A"]
         sentence_B = test["sentence_B"]
@@ -193,6 +250,12 @@ class sickfrBench(Benchmark):
 
 
 class XnliBench(Benchmark):
+    def build_prompt(self, test) -> str:
+        prompt = (PromptBuilder()
+                  .add_premise("")
+                  .add_data()
+                  .add_end(""))
+        return prompt
     def gather_test_data(self, test):
         premise = test["premise"]
         hypothesis = test["hypothesis"]
