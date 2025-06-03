@@ -19,8 +19,8 @@ class FrColaBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "frcola"
 
-        self.prompt_instructions = "Answer with 1 if the sentence is correct, 0 otherwise"
-        self.metrics = [Metrics.MatthewsCC]
+        self.prompt_instructions = "Answer with 1 if the sentence is correct, 0 otherwise "
+        self.metrics = [Metrics.MatthewsCC()]
 
 
 class AllocineBench(Benchmark):
@@ -39,7 +39,7 @@ class AllocineBench(Benchmark):
         self.prompt_instructions = \
             ("Dis-moi si la phrase précédente est positive, réponds "
              "uniquement par 1 si la phrase est positive, 0 sinon.")
-        self.metrics = [Metrics.Accuracy]
+        self.metrics = [Metrics.Accuracy()]
 
 
 class fquadBench(Benchmark):
@@ -61,7 +61,7 @@ class fquadBench(Benchmark):
             "Réponds par 1 si tu peux répondre à la question uniquement à partir du contexte, 0 sinon.")
 
         self.metrics = [
-            Metrics.MetricCollection([Metrics.Pearson, Metrics.SpearmanR]),
+            Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
         ]
 class frblimpBench(Benchmark):
     def gather_test_data(self, test):
@@ -85,7 +85,7 @@ class frblimpBench(Benchmark):
         self.name = "fr_blimp"
         self.prompt_instructions = "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon."
         self.seed = random.randint(1, 10000)
-        self.metrics=[Metrics.Accuracy]
+        self.metrics=[Metrics.Accuracy()]
 
 
 class gqnliBench(Benchmark):
@@ -107,7 +107,7 @@ class gqnliBench(Benchmark):
         self.prompt_instructions = ("Donne moi la relation entre la prémise et l'hypothèse,"
                                     "Réponds seulement 0 pour une implication, 1 pour une relation neutre"
                                     "et 2 pour une contradiction.Réponds seulement avec 0, 1 ou 2")
-        self.metrics = [Metrics.Accuracy]
+        self.metrics = [Metrics.Accuracy()]
 
 
 class opus_parcusBench(Benchmark):
@@ -127,7 +127,7 @@ class opus_parcusBench(Benchmark):
         self.name = "opus_parcus"
         self.prompt_instructions = "TODO"
         self.metrics = [
-            Metrics.MetricCollection([Metrics.Accuracy, Metrics.F1]),
+            Metrics.MetricCollection([Metrics.Accuracy(), Metrics.F1()]),
         ]
 
 
@@ -147,7 +147,7 @@ class paws_xBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "paws_x"
         self.prompt_instructions = ""
-        self.metrics = [Metrics.Accuracy]
+        self.metrics = [Metrics.Accuracy()]
 
 
 class piafBench(Benchmark):
@@ -167,7 +167,7 @@ class piafBench(Benchmark):
         self.name = "piaf"
         self.prompt_instructions = ""
         self.metrics = [
-            Metrics.MetricCollection([Metrics.Pearson, Metrics.SpearmanR]),
+            Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
         ]
 
 
@@ -188,7 +188,7 @@ class sickfrBench(Benchmark):
         self.name = "sickfr"
         self.prompt_instructions = ""
         self.metrics = [
-            Metrics.MetricCollection([Metrics.Pearson, Metrics.SpearmanR()]),
+            Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
         ]
 
 
@@ -208,7 +208,7 @@ class XnliBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "Xnli"
         self.prompt_instructions = ""
-        self.metrics = [Metrics.Accuracy]
+        self.metrics = [Metrics.Accuracy()]
 class sts22(Benchmark):
     def gather_test_data(self, test):
         sentence1 = test["sentence1"]
@@ -226,5 +226,5 @@ class sts22(Benchmark):
         self.name = "sts22_crosslingual"
         self.prompt_instructions = ""
         self.metrics = [
-            Metrics.MetricCollection([Metrics.Pearson, Metrics.SpearmanR()]),
+            Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
         ]
