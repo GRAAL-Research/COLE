@@ -1,3 +1,5 @@
+import json
+
 from Benchmark import Benchmark
 from Model import Model
 
@@ -14,7 +16,7 @@ class BenchmarkSuite:
             print("Benchmarking model : ", model.model_name)
             results_per_model = {}
             for benchmark in self.benchmarks:
-                print(benchmark.name)
+                print(f"Testing benchmark {model.model_name} on dataset {benchmark.name}")
                 results_per_model[benchmark.name] = benchmark.evaluate(model, max_targets)
             global_results[model.model_name] = results_per_model
             model.unload_model()
@@ -47,3 +49,8 @@ class BenchmarkSuite:
             for benchmark in results[model]:
                 concise_results[model][benchmark] = results[model][benchmark][0]
         return concise_results
+
+    def save_results(self, results, directory="./results"):
+        for model in results.keys():
+            with open(directory + "/" + model + ".json", "w") as file:
+                json.dump(results[model], file)

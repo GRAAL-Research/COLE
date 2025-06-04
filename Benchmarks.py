@@ -95,7 +95,7 @@ class FquadBench(Benchmark):
             "Réponds par 1 si tu peux répondre à la question uniquement à partir du contexte, 0 sinon.")
 
         self.metrics = [
-            Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
+            Metrics.Pearson(), Metrics.SpearmanR()
         ]
 class FrblimpBench(Benchmark):
     def get_default_wrong_label(self, gold_label):
@@ -186,9 +186,7 @@ class Opus_parcusBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "opus_parcus"
-        self.metrics = [
-            Metrics.MetricCollection([Metrics.Accuracy(), Metrics.F1()]),
-        ]
+        self.metrics = [Metrics.Accuracy(), Metrics.F1()]
 
 
 
@@ -248,7 +246,7 @@ class PiafBench(Benchmark):
         self.name = "piaf"
 
         self.metrics = [
-            Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
+           Metrics.Pearson(), Metrics.SpearmanR()
         ]
 
 
@@ -276,9 +274,7 @@ class SickfrBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "sickfr"
 
-        self.metrics = [
-            Metrics.Pearson(), Metrics.SpearmanR()
-        ]
+        self.metrics = [Metrics.Pearson(), Metrics.SpearmanR()]
 
 
 class XnliBench(Benchmark):
@@ -328,6 +324,4 @@ class Sts22Bench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "sts22_crosslingual"
-        self.metrics = [
-            Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
-        ]
+        self.metrics = [Metrics.Pearson(), Metrics.SpearmanR()]

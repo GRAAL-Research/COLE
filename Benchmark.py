@@ -75,7 +75,6 @@ class Benchmark:
 
     def compute(self, gold_labels, infered_labels):
         print(f"Computing Metrics for {self.name}...")
-        print(gold_labels, infered_labels)
         results = {}
         for metric in self.metrics:
             result = metric.compute(golds=gold_labels, preds=infered_labels)
