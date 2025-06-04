@@ -4,7 +4,7 @@ import re
 import Metrics
 from Benchmark import Benchmark
 from PromptBuilder import PromptBuilder
-
+import parser
 
 class FrColaBench(Benchmark):
 
@@ -23,9 +23,7 @@ class FrColaBench(Benchmark):
         return test["label"]
 
     def parse_answer(self, answer):
-        match = re.search(r'\b[01]\b', answer)
-        if match:
-            return int(match.group())
+        return parser.parse_binary_answer(answer)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -52,9 +50,7 @@ class AllocineBench(Benchmark):
     def gather_test_data(self, test):
         return test["review"]
     def parse_answer(self, answer):
-        match = re.search(r"\b[01]\b", answer)
-        if match:
-            return int(match.group())
+        return parser.parse_binary_answer(answer)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -108,6 +104,8 @@ class FrblimpBench(Benchmark):
 
     def get_0_1_seeded(self, test):
         return (self.seed + test["id"] ^ 2 * 7) % 2
+    def gather_test_data(self, test):
+        return f"{test['grammatical']}  /  {test['ungrammatical']}"
 
     def get_gold_label(self, test):
         return self.get_0_1_seeded(test)
@@ -136,9 +134,12 @@ class GqnliBench(Benchmark):
 
     def get_gold_label(self, test):
         return test["label"]
+    def gather_test_data(self,test):
+        return f"{test['premise']}  /  {test['hypothesis']}"
+
 
     def parse_answer(self, answer):
-        return int(answer)
+        return parser.parse_ternary_answer(answer)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -161,9 +162,12 @@ class Opus_parcusBench(Benchmark):
 
     def get_gold_label(self, test):
         return test["quality"] # Ou test["annot-score"]
+    def gather_test_data(self,test):
+        return f"{test['sent1']}  /  {test['sent2']}"
 
     def parse_answer(self, answer):
-        return int(answer)
+        return parser.parse_int_range_answer(answer,100)
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -192,9 +196,7 @@ class Paws_xBench(Benchmark):
     def gather_test_data(self, test):
         return f"{test['sentence1']}  /  {test['sentence2']}"
     def parse_answer(self, answer):
-        match = re.search(r"\b[01]\b", answer)
-        if match:
-            return int(match.group())
+        return parser.parse_binary_answer(answer)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -217,9 +219,11 @@ class PiafBench(Benchmark):
 
     def get_gold_label(self, test):
         return test["answer_start"][0]
+    def gather_test_data(self, test):
+       return f"Contexte: {test['context']}  /  Question: {test['question']}"
 
     def parse_answer(self, answer):
-        return int(answer)
+        return int(answer.strip())
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -245,8 +249,9 @@ class SickfrBench(Benchmark):
         return test["relatedness_score"]
 
     def parse_answer(self, answer):
-        return float(answer)
-
+        return parser.parse_float_answer(answer)
+    def gather_test_data(self, test):
+       return f"{test['sentence_A']}  /  {test['sentence_B']}"
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "sickfr"
@@ -274,9 +279,7 @@ class XnliBench(Benchmark):
     def gather_test_data(self, test):
         return f"{test['premise']}  /  {test['hypothesis']}"
     def parse_answer(self, answer):
-        match = re.search(r"\b[0-2]\b", answer)
-        if match:
-            return int(match.group())
+        return parser.parse_ternary_answer(answer)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -297,10 +300,7 @@ class Sts22(Benchmark):
     def gather_test_data(self, test):
         return f"{test['sentence1']}  /  {test['sentence2']}"
     def parse_answer(self, answer):
-        match = re.search(r"\b[0-5]\b", answer)
-        if match:
-            return int(match.group())
-
+        return parser.parse_float_answer(answer)
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "sts22_crosslingual"
