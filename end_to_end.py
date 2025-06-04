@@ -1,5 +1,5 @@
 import pandas as pd
-from Benchmarks import FrColaBench, AllocineBench, Sts22,Paws_xBench,XnliBench
+from Benchmarks import FrColaBench, AllocineBench, Sts22Bench,Paws_xBench,XnliBench
 from Model import Model, make_claude_inference
 
 claude_model_names = [
@@ -73,7 +73,7 @@ evaluate_benchmark(FrColaBench, "FrCola")
 
 evaluate_benchmark(AllocineBench, "Allocine")
 
-evaluate_benchmark(Sts22, "STS22")
+evaluate_benchmark(Sts22Bench, "STS22")
 
 df_results = pd.DataFrame(results)
 print(df_results)

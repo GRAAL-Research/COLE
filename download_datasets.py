@@ -14,7 +14,7 @@ DIRECTORY = "./Benchmarks"
 HF_TOKEN = os.getenv('HF_TOKEN')
 
 DATASETS = ["Allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "Xnli"]
-print(HF_TOKEN)
+
 huggingface_hub.login(token=HF_TOKEN)
 
 
@@ -58,6 +58,5 @@ def load_dataset_from_huggingface(dataset_name):
         new_dataset = load_dataset(REPO_ID, data_dir=hub_dir)
         return new_dataset
     except Exception as e:
-        print(
-            f"{dataset_name} dataset was not able to be loaded, {e}. Please ensure that datasets names fit with names on the hub.")
+        print(f"{dataset_name} dataset was not able to be loaded, {e}. Please ensure that datasets names fit with names on the hub.")
         return None

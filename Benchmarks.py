@@ -8,13 +8,16 @@ import parser
 
 class FrColaBench(Benchmark):
 
+    def get_default_wrong_label(self, gold_label):
+        return (gold_label+1) % 2
+
     def build_prompt(self, test) ->str:
         prompt =  (PromptBuilder().
                 add_premise("Juge si cette phrase est grammaticalement correcte :")
                 .add_data(test["sentence"])
-                .add_end("Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon.").build())
+                .add_end("Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon."))
 
-        return prompt
+        return prompt.build()
 
     def gather_test_data(self, test):
         return test["sentence"]
@@ -34,14 +37,17 @@ class FrColaBench(Benchmark):
 
 
 class AllocineBench(Benchmark):
+
+    def get_default_wrong_label(self, gold_label):
+        return (gold_label+1) % 2
     def build_prompt(self, test) -> str:
         prompt = (PromptBuilder()
                   .add_premise("Cette phrase possède-t-elle un sentiment positif ou négatif ?")
                   .add_data(test["review"])
                   .add_end(("Réponds "
              "uniquement par 1 si la phrase est positive,réponds par 0 sinon."))
-             .build())
-        return prompt
+             )
+        return prompt.build()
 
 
     def get_gold_label(self, test):
@@ -61,13 +67,15 @@ class AllocineBench(Benchmark):
 
 #TODO
 class FquadBench(Benchmark):
+    def get_default_wrong_label(self, gold_label):
+        return (gold_label+1) % 2
     def build_prompt(self, test) -> str:
         print("FQUAD in developpement")
         prompt = (PromptBuilder()
                   .add_premise("")
                   .add_data()
                   .add_end(""))
-        return prompt
+        return prompt.build()
 
     def gather_test_data(self, test):
         data = f""
@@ -90,6 +98,8 @@ class FquadBench(Benchmark):
             Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
         ]
 class FrblimpBench(Benchmark):
+    def get_default_wrong_label(self, gold_label):
+        return (gold_label+1) % 2
 
     def build_prompt(self, test) -> str:
         if self.get_0_1_seeded(test) == 1:
@@ -100,7 +110,7 @@ class FrblimpBench(Benchmark):
                   .add_premise("Cette phrase est-elle grammaticalement correcte ?")
                   .add_data(data)
                   .add_end("Réponds strictement par 1 si la phrase est correcte grammaticalement ; sinon, réponds 0."))
-        return prompt
+        return prompt.build()
 
     def get_0_1_seeded(self, test):
         return (self.seed + test["id"] ^ 2 * 7) % 2
@@ -121,6 +131,8 @@ class FrblimpBench(Benchmark):
 
 
 class GqnliBench(Benchmark):
+    def get_default_wrong_label(self, gold_label):
+        return (gold_label+1) % 3
     def build_prompt(self, test) -> str:
         prompt = (PromptBuilder()
                   .add_premise("Quelle est la relation de la deuxième phrase par rapport à la première ?")
@@ -130,7 +142,7 @@ class GqnliBench(Benchmark):
          "1 — si la relation est neutre,\n"
          "2 — s'il y a contradiction.\n"
          "Réponds uniquement par 0, 1 ou 2."))
-        return prompt
+        return prompt.build()
 
     def get_gold_label(self, test):
         return test["label"]
@@ -149,6 +161,8 @@ class GqnliBench(Benchmark):
 
 
 class Opus_parcusBench(Benchmark):
+    def get_default_wrong_label(self, gold_label):
+        return 0 if gold_label >=3 else 5
     def build_prompt(self, test) -> str:
         sent1 = test["sent1"]
         sent2 = test["sent2"]
@@ -157,7 +171,7 @@ class Opus_parcusBench(Benchmark):
                   .add_data(sent1).add_data(sent2)
                   .add_end("Réponds seulement avec un chiffre de 0 à 5 où 5"
                            " signifie que les deux phrases veulent dire exactement la même chose."))
-        return prompt
+        return prompt.build()
 
 
     def get_gold_label(self, test):
@@ -180,6 +194,8 @@ class Opus_parcusBench(Benchmark):
 
 
 class Paws_xBench(Benchmark):
+    def get_default_wrong_label(self, gold_label):
+        return (gold_label+1) % 2
     def build_prompt(self, test) -> str:
         sentence1 = test["sentence1"]
         sentence2 = test["sentence2"]
@@ -187,8 +203,8 @@ class Paws_xBench(Benchmark):
                   .add_premise("Les deux phrases suivantes veulent-elles dire la même chose, ou ont-elles des significations différentes ?")
                   .add_data(sentence1).add_data(sentence2)
                   .add_end("Réponds seulement 1 si les deux phrases ont la même signification, 0 sinon")
-                  .build())
-        return prompt
+                  )
+        return prompt.build()
 
     def get_gold_label(self, test):
         return test["label"]
@@ -206,6 +222,8 @@ class Paws_xBench(Benchmark):
 
 
 class PiafBench(Benchmark):
+    def get_default_wrong_label(self, gold_label):
+        return (gold_label+1) % 2
     def build_prompt(self, test) -> str:
         context = test["context"]
         question = test["question"]
@@ -215,10 +233,10 @@ class PiafBench(Benchmark):
                   .add_data(f"Question : {question}")
                   .add_data(f"Contexte : {context}")
                   .add_end("Réponds seulement avec le **nombre de mots** qui précèdent la réponse à la question dans le contexte."))
-        return prompt
+        return prompt.build()
 
     def get_gold_label(self, test):
-        return test["answer_start"][0]
+        return test["answers"]["answer_start"][0]
     def gather_test_data(self, test):
        return f"Contexte: {test['context']}  /  Question: {test['question']}"
 
@@ -235,6 +253,8 @@ class PiafBench(Benchmark):
 
 
 class SickfrBench(Benchmark):
+    def get_default_wrong_label(self, gold_label):
+        return 0 if gold_label >=3 else 5
     def build_prompt(self, test) -> str:
         sentence_A = test["sentence_A"]
         sentence_B = test["sentence_B"]
@@ -242,7 +262,7 @@ class SickfrBench(Benchmark):
                   .add_premise("À quel point, de 0 à 5, les 2 phrases suivantes sont-elles similaires ?")
                   .add_data(sentence_A).add_data(sentence_B)
                   .add_end("Réponds avec seulement un nombre de 0 à 5, où 5 signifie une très grande similarité entre les phrases."))
-        return prompt
+        return prompt.build()
 
 
     def get_gold_label(self, test):
@@ -257,11 +277,13 @@ class SickfrBench(Benchmark):
         self.name = "sickfr"
 
         self.metrics = [
-            Metrics.MetricCollection([Metrics.Pearson(), Metrics.SpearmanR()]),
+            Metrics.Pearson(), Metrics.SpearmanR()
         ]
 
 
 class XnliBench(Benchmark):
+    def get_default_wrong_label(self, gold_label):
+        return (gold_label + 1) % 3
     def build_prompt(self, test) -> str:
         prompt = (PromptBuilder()
                   .add_premise("Quelle est la relation de la deuxième phrase par rapport à la première ?")
@@ -286,7 +308,9 @@ class XnliBench(Benchmark):
         self.name = "Xnli"
         self.metrics = [Metrics.Accuracy()]
 
-class Sts22(Benchmark):
+class Sts22Bench(Benchmark):
+    def get_default_wrong_label(self, gold_label):
+        return 0 if gold_label >=3 else 5
     def build_prompt(self, test) -> str:
         prompt = (PromptBuilder()
                   .add_premise("En scorant de 0 à 5, à quel point les phrases suivants sont-elles similaires ?")

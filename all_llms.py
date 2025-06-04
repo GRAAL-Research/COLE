@@ -2,7 +2,9 @@ import os
 
 from dotenv import load_dotenv
 
-from colle.HuggingFaceModel import HFModel
+
+
+from HuggingFaceModel import HFLLMModel
 
 load_dotenv()
 
@@ -113,8 +115,10 @@ models_token_pairs = [
     }]
 def create_models():
     print("loading models")
+    models = []
     for pair in models_token_pairs:
         for model in pair["models"]:
-            print(f"loading model {model}, token: {pair['token']}")
-            model = HFModel(model, pair["token"])
-            yield model
+            print(f"creating model {model}, token: {pair['token']}")
+            model = HFLLMModel(model, pair["token"])
+            models.append(model)
+    return models
