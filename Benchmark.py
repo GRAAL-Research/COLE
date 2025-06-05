@@ -1,4 +1,8 @@
+import os
 from abc import abstractmethod
+
+import pandas as pd
+
 import Metrics
 from Model import Model
 from PromptBuilder import PromptBuilder
@@ -6,13 +10,16 @@ from download_datasets import load_datasets_from_huggingface, load_dataset_from_
 
 
 class Benchmark:
-    def __init__(self, name="", metrics=None, prompt_instructions="", used_split="test"):
+    def __init__(self, name="", metrics=None, prompt_instructions="", used_split="test",**kwargs):
         if metrics is None:
             metrics = [Metrics.Accuracy()]
         self.name = name
         self.metrics: list[Metrics] = []
         self.used_split = used_split
         self.prompt_instructions = "Answer with 1 for positive, or 0 for negative"
+        self.data_path = kwargs.get("data_path", None)
+
+        self.no_label_path = kwargs.get("no_label_path", None)
 
     @abstractmethod
     def build_prompt(self, test):
@@ -83,3 +90,4 @@ class Benchmark:
     @abstractmethod
     def get_default_wrong_label(self, gold_label):
         return 0
+
