@@ -34,7 +34,7 @@ class MatthewsCC(Metrics):
         super().__init__('matthews_cc')
 
     def compute(self, golds, preds):
-        return matthews_corrcoef(golds, preds)
+        return float(matthews_corrcoef(golds, preds))
 
 
 class Pearson(Metrics):
@@ -42,15 +42,14 @@ class Pearson(Metrics):
         super().__init__('pearson_r')
 
     def compute(self, golds, preds):
-        return pearsonr(golds, preds)[0]
-
+        return float(pearsonr(golds, preds)[0])
 
 class SpearmanR(Metrics):
     def __init__(self):
         super().__init__('spearman_r')
 
     def compute(self, golds, preds):
-        return spearmanr(golds, preds)[0]
+        return float(spearmanr(golds, preds)[0])
 
 
 class MetricCollection(Metrics):

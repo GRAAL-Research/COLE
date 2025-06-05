@@ -25,8 +25,3 @@ class Metrics(Enum):
     PEARSON = None
 
 
-Colle = BenchSuites.COLLE.value
-Results = Colle.compute_all(5)
-print("Concise Results:")
-print(Colle.generate_concise_results(Results))
-Colle.save_results(Results)

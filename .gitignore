@@ -9,3 +9,4 @@
 config.py
 .env
 /Loaded_Models
+/results
