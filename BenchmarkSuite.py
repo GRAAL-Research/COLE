@@ -1,4 +1,5 @@
 import json
+import os
 
 from Benchmark import Benchmark
 from Model import Model
@@ -52,5 +53,8 @@ class BenchmarkSuite:
 
     def save_results(self, results, directory="./results"):
         for model in results.keys():
-            with open(directory + "/" + model + ".json", "w") as file:
+            os.makedirs(directory, exist_ok=True)
+            safe_model = model.replace("/", "_")
+            filepath = os.path.join(directory, safe_model + ".json")
+            with open(filepath, "w") as file:
                 json.dump(results[model], file)
