@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div><Taskbar></Taskbar></div>
-        <main className="flex justify-center px-4">
+        <main className="w-full flex justify-center px-4 pt-8">
         <div className="w-full max-w-3xl">{children}</div>
         </main>
       </body>
