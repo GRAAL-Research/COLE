@@ -7,7 +7,46 @@
 /Benchmarks
 /__pycache__
 config.py
-.env
 /Loaded_Models
 /results
 /hf_data
+
+
+colle_nlu_benchmark_site/node_modules
+colle_nlu_benchmark_site/.pnp
+colle_nlu_benchmark_site/.pnp.*
+colle_nlu_benchmark_site/.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+colle_nlu_benchmark_site/.next/
+colle_nlu_benchmark_site/out/
+
+# production
+colle_nlu_benchmark_site/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
