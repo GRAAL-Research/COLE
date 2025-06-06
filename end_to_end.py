@@ -1,6 +1,11 @@
+import os
 import pandas as pd
-from Benchmarks import FrColaBench, AllocineBench, Sts22Bench,Paws_xBench,XnliBench
+
+from Benchmarks import FrColaBench, AllocineBench, Sts22Bench, Paws_xBench, XnliBench,PiafBench,SickfrBench,Opus_parcusBench,FrblimpBench,GqnliBench
+from BenchmarkSuite import BenchmarkSuite
 from Model import Model, make_claude_inference
+from all_llms import create_models
+
 
 claude_model_names = [
     "claude-opus-4-20250514",
@@ -8,72 +13,69 @@ claude_model_names = [
     "claude-3-5-haiku-20241022",
     "claude-3-7-sonnet-20250219",
     "claude-3-opus-20240229",
+
 ]
+claude_models = []
+for name in claude_model_names:
+    infer_fn = make_claude_inference(name)
+    claude_models.append(Model(name, infer_fn))
 
-results = []
+print("Création des instances HFLLMModel à partir de all_llms.py …")
+hfllm_models = create_models()
+
+all_models = claude_models + hfllm_models
+print(f"→ Nombre total de modèles à évaluer : {len(all_models)}")
+for m in all_models:
+    print("   •", m.model_name)
 
 
+benchmarks = [
+    XnliBench(used_split="test"),
+    Paws_xBench(used_split="test"),
+    FrColaBench(used_split="test"),
+    AllocineBench(used_split="test"),
+    Sts22Bench(used_split="test"),
+    GqnliBench(used_split="test"),
+    PiafBench(used_split="test"),
+    SickfrBench(used_split="test"),
+    Opus_parcusBench(used_split="test"),
+    FrblimpBench(used_split="test"),
 
-def evaluate_benchmark(bench_class, benchmark_name):
-    bench = bench_class(used_split="test")
-    dataset = bench.load_dataset()["test"]
-    first_ten = list(dataset)[:10]
 
-    print(f"\n### Évaluation du benchmark {benchmark_name} ###\n")
+]
+bench_names = [b.name for b in benchmarks]
+print("\n Benchmarks à évaluer :", bench_names)
 
-    metric = bench.metrics[0]
 
-    for model_name in claude_model_names:
-        print(f"\n=== Évaluation pour le modèle {model_name} ===\n")
-        infer_fn = make_claude_inference(model_name)
-        model = Model(model_name, infer_fn)
+suite = BenchmarkSuite(
+    suite_name="Evaluation complète LLMs vs Claude",
+    models=all_models,
+    benchmarks=benchmarks
+)
 
-        gold_labels = []
-        predictions = []
 
-        print("--- 10 premiers exemples ---\n")
-        for idx, test in enumerate(first_ten):
-            prompt = bench.build_prompt(test)
-            raw_pred = model.infer(prompt)
-            parsed_pred = bench.parse_answer(raw_pred)
-            gold_label = bench.get_gold_label(test)
+max_examples = 3
 
-            gold_labels.append(gold_label)
-            predictions.append(parsed_pred)
+raw_results = suite.compute_all(max_targets=max_examples)
 
-            print(f"Exemple {idx + 1}:")
-            print(f"  Phrase       : {bench.gather_test_data(test)}")
-            print(f"  Prédiction   : {parsed_pred}")
-            print(f"  Gold Label   : {gold_label}\n")
 
-        score = metric.compute(gold_labels, predictions)
+concise = suite.generate_concise_results(raw_results)
 
-        if isinstance(score, dict):
-            score_strings = []
-            for name, val in score.items():
-                score_strings.append(f"{name}: {val:.2f}")
-            joined = ", ".join(score_strings)
-            print(f"✅ Scores (sur ces 10 exemples) : {joined}\n")
-            score_for_df = joined
-        else:
-            print(f"✅ {metric.__class__.__name__} (sur ces 10 exemples) : {score:.2f}\n")
-            score_for_df = f"{score:.2f}"
 
-        results.append({
-            "Benchmark": benchmark_name,
-            "Modèle Claude": model_name,
-            "Score (10 ex.)": score_for_df
+output_dir = "./results"
+suite.save_results(raw_results, directory=output_dir)
+print(f"\n Résultats complets enregistrés sous {os.path.abspath(output_dir)}")
+
+
+rows = []
+for model_name, bench_dict in concise.items():
+    for bench_name, score in bench_dict.items():
+        rows.append({
+            "Benchmark": bench_name,
+            "Modèle": model_name,
+            "Score (10 ex.)": score
         })
 
-evaluate_benchmark(XnliBench, "Xnli")
-
-evaluate_benchmark(Paws_xBench, "PAWS-X")
-
-evaluate_benchmark(FrColaBench, "FrCola")
-
-evaluate_benchmark(AllocineBench, "Allocine")
-
-evaluate_benchmark(Sts22Bench, "STS22")
-
-df_results = pd.DataFrame(results)
-print(df_results)
+df = pd.DataFrame(rows)
+print("\n\n=== Récapitulatif final de tous les scores (10 ex.) ===\n")
+print(df.to_string(index=False))

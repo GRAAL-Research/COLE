@@ -52,12 +52,15 @@ def load_datasets_from_huggingface():
     return data
 
 
-def load_dataset_from_huggingface(dataset_name):
+def load_dataset_from_huggingface(dataset_name,split=None):
     try:
         hub_dir = f"{DATA_DIRECTORY}/{dataset_name}"
-        new_dataset = load_dataset(REPO_ID, data_dir=hub_dir)
+        if split is None :
+           new_dataset = load_dataset(REPO_ID, data_dir=hub_dir)
+        else:
+            new_dataset = load_dataset(REPO_ID, data_dir=hub_dir,split=split)
         return new_dataset
     except Exception as e:
         print(f"{dataset_name} dataset was not able to be loaded, {e}. Please ensure that datasets names fit with names on the hub.")
         return None
-print(load_dataset_from_huggingface("frcola"))
+print(load_dataset_from_huggingface("frcola",))

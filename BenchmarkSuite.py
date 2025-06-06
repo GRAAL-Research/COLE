@@ -18,9 +18,17 @@ class BenchmarkSuite:
             results_per_model = {}
             for benchmark in self.benchmarks:
                 print(f"Testing benchmark {model.model_name} on dataset {benchmark.name}")
-                results_per_model[benchmark.name] = benchmark.evaluate(model, max_targets)
+                try:
+                    result = benchmark.evaluate(model, max_targets)
+                except Exception as e:
+                    print(f" Erreur lors de l'évaluation de {model.model_name} sur {benchmark.name} : {e}")
+                    result = None
+                results_per_model[benchmark.name] = result
             global_results[model.model_name] = results_per_model
-            model.unload_model()
+            try:
+                model.unload_model()
+            except Exception:
+                pass
         return global_results
 
     """Computes results by using a model for each benchmark, if you want to evaluate only 1 model for each benchmark, use evaluate_model instead"""
@@ -45,6 +53,7 @@ class BenchmarkSuite:
 
     def generate_concise_results(self, results: dict):
         concise_results = {}
+
         for model in results.keys():
             concise_results[model] = {}
             for benchmark in results[model]:
@@ -53,8 +62,14 @@ class BenchmarkSuite:
 
     def save_results(self, results, directory="./results"):
         for model in results.keys():
-            os.makedirs(directory, exist_ok=True)
+            try:
+                os.makedirs(directory, exist_ok=True)
+            except Exception as e:
+                print(f" Impossible de créer le répertoire {directory} : {e}")
             safe_model = model.replace("/", "_")
             filepath = os.path.join(directory, safe_model + ".json")
-            with open(filepath, "w") as file:
-                json.dump(results[model], file)
+            try:
+                with open(filepath, "w") as file:
+                    json.dump(results[model], file)
+            except Exception as e:
+                print(f" Impossible de sauvegarder {filepath} : {e}")

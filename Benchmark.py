@@ -33,13 +33,36 @@ class Benchmark:
         infered_labels = []
 
         for idx, test in enumerate(dataset[self.used_split]):
-            infered_label = self.infer_answer(test, model)
-            gold_label = self.get_gold_label(test)
+            try:
+                infered_label = self.infer_answer(test, model)
+            except Exception as e:
+                print(f" Erreur lors de l’inférence pour l’exemple {idx} : {e}")
+                gold_label_tmp = None
+                try:
+                    gold_label_tmp = self.get_gold_label(test)
+                except Exception:
+                    gold_label_tmp = None
+                infered_label = (
+                    self.get_default_wrong_label(gold_label_tmp)
+                    if gold_label_tmp is not None
+                    else 0
+                )
+
+            try:
+                gold_label = self.get_gold_label(test)
+            except Exception as e:
+                print(f" Erreur lors de la récupération du gold label pour l’exemple {idx} : {e}")
+                gold_label = None
+
             if infered_label is None:
-                infered_label = self.get_default_wrong_label(gold_label)
+                infered_label = (
+                    self.get_default_wrong_label(gold_label)
+                    if gold_label is not None
+                    else 0
+                )
 
             results[idx] = {"gold_label": gold_label, "Infered": infered_label}
-            gold_labels.append(self.get_gold_label(test))
+            gold_labels.append(gold_label)
             infered_labels.append(infered_label)
 
             if max_targets is not None and len(gold_labels) >= max_targets:

@@ -186,7 +186,10 @@ class Opus_parcusBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "opus_parcus"
-        self.metrics = [Metrics.Accuracy(), Metrics.F1()]
+        self.metrics = self.metrics = [
+    Metrics.Pearson(),
+    Metrics.SpearmanR(),
+]
 
 
 
