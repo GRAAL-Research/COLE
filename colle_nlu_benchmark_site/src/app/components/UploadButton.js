@@ -15,7 +15,7 @@ export default function UploadButton({children,uploaded}){
   }
 return(
     <div>
-        <label htmlFor="file_upload"> Upload your results</label>
+        <label htmlFor="file_upload">{children}</label>
         <input type="file" id="file_upload" accept=".zip" onChange={handleFileChange}
     className="bg-gray-500 text-white text-base
      font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"></input>
