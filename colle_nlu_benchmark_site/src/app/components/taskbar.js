@@ -1,6 +1,9 @@
 'use client';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Modal from './Modal';
+
+import { usePathname,useRouter,useSearchParams } from 'next/navigation';
+
 
 export default function Taskbar() {
   const pathname = usePathname();
@@ -9,7 +12,6 @@ export default function Taskbar() {
     pathname === path
       ? 'text-blue-500 font-semibold'
       : 'text-gray-700 hover:text-blue-500';
-
   return (
     <nav className="w-full py-4 bg-None flex justify-between items-center mx-auto max-w-5xl">
       
@@ -19,7 +21,7 @@ export default function Taskbar() {
         <Link href="/guide" className={linkStyle('/guide')}>Guide</Link>
         <Link href="/FAQ" className={linkStyle('/FAQ')}>FAQ</Link>
         <Link href="/contact" className={linkStyle('/contact')}>Contact us</Link>
-        <button className={linkStyle("/submit")}>Submit your results</button>
+        <Link href={`${pathname}?show=submit`} className={linkStyle("/submit")}>Submit your results</Link>
         <Link href="/benchmarks" className={linkStyle('/benchmarks')}>Our tasks</Link>
         <Link href="https://huggingface.co/datasets/COLLE-Graal/ColleGraal" className={linkStyle("/hf")}>Our datasets</Link>
       </div>

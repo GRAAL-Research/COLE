@@ -1,7 +1,9 @@
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Taskbar from "./components/taskbar";
-
+import Modal from "./components/Modal";
+import ModalManager from "./components/ModalManager";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -18,6 +20,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
       <body
@@ -25,8 +28,12 @@ export default function RootLayout({ children }) {
       >
         <div><Taskbar></Taskbar></div>
         <main className="w-full flex justify-center px-4 pt-8">
-        <div className="w-full max-w-3xl">{children}</div>
+        <div className="w-full max-w-3xl">
+          {children}
+        </div>
+        
         </main>
+        <ModalManager/>
       </body>
     </html>
   );

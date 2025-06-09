@@ -1,6 +1,6 @@
 export default function benchmarks(){
     return (
-        <body>
+        <div>
     <div>
         Colle is constitued of X tasks, each of them aims to test 1 or more facet of language understanding in machine learning. Below are each of the tasks in more detail.
     </div>
@@ -68,7 +68,7 @@ export default function benchmarks(){
             entailement is a choice between "entails", "contradicts" or "neutral". </div>
         <div>Metrics :</div>
     </div>
-</body>
+</div>
 
     );
 };
