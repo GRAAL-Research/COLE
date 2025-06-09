@@ -1,10 +1,27 @@
 import Link from "next/link";
 import CodeBlock from "../components/CodeBlock";
 
-export default function contact() {
+export default function Contact() {
   return (
-     <div>To contact us, please send a message to this email, it may take some time before getting an answer :
-        <CodeBlock>{'jeNeSaisPasEncore@unEmail.unjour'}</CodeBlock>
-     </div>
+      <div className="max-w-3xl mx-auto px-6 py-3">
+      <h2 className="text-3xl font-bold text-center text-blue-700 border-b pb-4 mb-10">
+        Contact us
+      </h2>
+
+        <p className="text-gray-700 mb-4 leading-relaxed">
+          If you have any questions, feedback, or suggestions regarding the COLLE benchmark, feel free to reach out to us.
+          We're happy to help — please note that response times may vary.
+        </p>
+
+        <div className="bg-gray-50 p-4 rounded-md border border-dashed border-blue-400">
+          <p className="text-sm text-gray-500 mb-2">Email us at:</p>
+          <a
+            href="mailto:jeNeSaisPasEncore@unEmail.unjour"
+            className="text-blue-600 font-mono text-lg hover:underline"
+          >
+            jeNeSaisPasEncore@unEmail.unjour
+          </a>
+        </div>
+    </div>
   );
 }
