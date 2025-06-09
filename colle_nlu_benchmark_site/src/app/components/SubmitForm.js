@@ -1,7 +1,7 @@
 import { useState } from "react";
 import UploadButton from "./UploadButton";
 import BigBlueButton from "./BigBlueButton";
-import send_results from "../resources/BenchmarksResource"
+import {send_results} from "../resources/BenchmarksResource"
 import ErrorMessage from "./ErrorMessage";
 
 export default function SubmitForm(){
