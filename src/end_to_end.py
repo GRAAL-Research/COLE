@@ -3,7 +3,7 @@ import pandas as pd
 
 from Benchmarks import FrColaBench, AllocineBench, Sts22Bench, Paws_xBench, XnliBench,PiafBench,SickfrBench,Opus_parcusBench,FrblimpBench,GqnliBench
 from BenchmarkSuite import BenchmarkSuite
-from Model import Model, make_claude_inference
+from colle.src.Models.Model import Model, make_claude_inference
 from all_llms import create_models
 
 
@@ -62,7 +62,7 @@ raw_results = suite.compute_all(max_targets=max_examples)
 concise = suite.generate_concise_results(raw_results)
 
 
-output_dir = "./results"
+output_dir = "../results"
 suite.save_results(raw_results, directory=output_dir)
 print(f"\n Résultats complets enregistrés sous {os.path.abspath(output_dir)}")
 

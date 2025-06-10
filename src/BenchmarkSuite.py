@@ -2,8 +2,8 @@ import json
 import os
 
 from Benchmark import Benchmark
-from Model import Model
-from colle.Utils import create_directory
+from colle.src.Models.Model import Model
+from colle.src.Utils import create_directory
 
 
 class BenchmarkSuite:

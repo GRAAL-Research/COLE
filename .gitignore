@@ -6,7 +6,7 @@
 .idea/workspace.xml
 /Benchmarks
 /__pycache__
-config.py
+src/config.py
 /Loaded_Models
 /results
 /hf_data

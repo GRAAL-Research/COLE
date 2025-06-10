@@ -4,12 +4,12 @@ import argparse
 import pandas as pd
 
 from datasets import load_dataset
-from Model import make_claude_inference
-from HuggingFaceModel import HFLLMModel
+from colle.src.Models.Model import make_claude_inference
+from colle.src.Models.HuggingFaceModel import HFLLMModel
 
-from BenchmarkSuite import BenchmarkSuite
+from colle.src.BenchmarkSuite import BenchmarkSuite
 
-from Benchmarks import AllocineBench , Paws_xBench
+from colle.src.Benchmarks import AllocineBench , Paws_xBench
 
 
 def make_model_instance(model_identifier: str):
@@ -105,7 +105,7 @@ def main():
     model = make_model_instance(model_identifier)
     print(f"[INFO] Modèle chargé : {model.model_name}")
 
-    hf_data_dir = "hf_data"
+    hf_data_dir = "../hf_data"
 
     allocine_lab, allocine_nolabel = dump_hf_test_and_nolabel(
         repo_id  = "COLLE-Graal/ColleGraal",
@@ -152,7 +152,7 @@ def main():
         models     = [model],
         benchmarks = benchmarks
     )
-    os.makedirs("results", exist_ok=True)
+    os.makedirs("../results", exist_ok=True)
 
     print(f"[INFO] Lancement de l’évaluation labellisée pour `{model.model_name}` …")
     global_scores = suite.evaluate_model(model, max_targets=max_examples)

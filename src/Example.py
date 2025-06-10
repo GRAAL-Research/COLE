@@ -1,7 +1,7 @@
 from random import randint
 
-from colle.Model import Model
-from colle.constants import BenchSuites
+from colle.src.Models.Model import Model
+from colle.src.constants import BenchSuites
 
 
 class ExampleModel(Model):

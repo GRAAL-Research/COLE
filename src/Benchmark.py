@@ -1,12 +1,8 @@
-import os
 from abc import abstractmethod
 
-import pandas as pd
-
 import Metrics
-from Model import Model
-from PromptBuilder import PromptBuilder
-from download_datasets import load_datasets_from_huggingface, load_dataset_from_huggingface
+from colle.src.Models.Model import Model
+from download_datasets import load_dataset_from_huggingface
 
 
 class Benchmark:
