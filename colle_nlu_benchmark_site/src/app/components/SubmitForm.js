@@ -16,13 +16,12 @@ export default function SubmitForm(){
     return;
   }
 
-  const isJson = file.name.toLowerCase().endsWith(".json");
+ const isZip = file.name.toLowerCase().endsWith(".zip");
 
-  if (!isJson) {
-    alert(" Le fichier doit être au format JSON.");
-    return;
-  }
-
+if (!isZip) {
+  alert("Le fichier doit être un fichier ZIP (.zip).");
+  return;
+}
   setRequiredVisible(false);
   send_results(email, file);
   setShowConfirmation(true);
