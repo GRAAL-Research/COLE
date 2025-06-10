@@ -8,23 +8,29 @@ export default function SubmitForm(){
     const [required_visible,setRequiredVisible] = useState(false)
     const [email,setEmail] = useState("")
     const [file,setFile] = useState(null)
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
-    const submitResults = (email,file) => {
-    if(!email||!file){
-        showRequired()
-    }
-    else{
-        setRequiredVisible(false)
-        send_results(email,file)
-    }}
+  const submitResults = (email, file) => {
+  if (!email || !file) {
+    showRequired();
+    return;
+  }
 
-    const showRequired = () =>{
-        setRequiredVisible(true)
-    }
+  const isJson = file.name.toLowerCase().endsWith(".json");
+
+  if (!isJson) {
+    alert(" Le fichier doit être au format JSON.");
+    return;
+  }
+
+  setRequiredVisible(false);
+  send_results(email, file);
+  setShowConfirmation(true);
+};
 
     return (
     <div className="space-y-6 bg-white rounded-xl shadow-md p-6 w-full max-w-xl mx-auto border border-gray-200">
-      
+
       <h2 className="text-2xl font-semibold text-gray-800 text-center">
         Submit Your Results
       </h2>
@@ -58,7 +64,24 @@ export default function SubmitForm(){
         <BigBlueButton onClick={() => submitResults(email, file)}>
           Submit Your Results
         </BigBlueButton>
-      </div>
-    
+      {showConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg text-center space-y-4 max-w-sm">
+            <p className="text-lg text-green-600 font-medium">
+              ✅ Vos résultats sont maintenant disponibles dans la page <strong>Results</strong>.
+            </p>
+            <a href="/results" className="text-blue-600 underline">
+              Aller à la page Results
+            </a>
+            <button
+              onClick={() => setShowConfirmation(false)}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

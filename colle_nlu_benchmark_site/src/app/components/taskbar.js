@@ -23,6 +23,7 @@ export default function Taskbar() {
         <Link href="/contact" className={linkStyle('/contact')}>Contact us</Link>
         <Link href={`${pathname}?show=submit`} className={linkStyle("/submit")}>Submit your results</Link>
         <Link href="/benchmarks" className={linkStyle('/benchmarks')}>Our tasks</Link>
+        <Link href="/results" className={linkStyle('/results')}>Results</Link>
         <Link href="https://huggingface.co/datasets/COLLE-Graal/ColleGraal" className={linkStyle("/hf")}>Our datasets</Link>
       </div>
     </nav>
