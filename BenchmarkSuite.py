@@ -3,9 +3,11 @@ import os
 
 from Benchmark import Benchmark
 from Model import Model
+from colle.Utils import create_directory
 
 
 class BenchmarkSuite:
+    FILE_EXTENSION = ".jsonl"
     def __init__(self, suite_name, models: list[Model | str] = None, benchmarks: list[Benchmark] = None):
         self.suite_name = suite_name
         self.models = models if models is not None else []
@@ -60,7 +62,7 @@ class BenchmarkSuite:
                 concise_results[model][benchmark] = results[model][benchmark][0]
         return concise_results
 
-    def save_results(self, results, directory="./results"):
+    def save_results_as_one_file(self, results, directory="./results"):
         for model in results.keys():
             try:
                 os.makedirs(directory, exist_ok=True)
@@ -73,3 +75,16 @@ class BenchmarkSuite:
                     json.dump(results[model], file)
             except Exception as e:
                 print(f" Impossible de sauvegarder {filepath} : {e}")
+
+    def save_results(self, results, directory="./results"):
+        create_directory(directory)
+        for model in results.keys():
+            safe_model = model.replace("/", "_")
+            filepath = os.path.join(directory, safe_model)
+            create_directory(filepath)
+            for benchmark in results[model].keys():
+                path = os.path.join(filepath, benchmark + BenchmarkSuite.FILE_EXTENSION)
+                with open(path, "w") as file:
+                    print(benchmark[1])
+                    file.write(json.dumps(results[model][benchmark][1]))
+

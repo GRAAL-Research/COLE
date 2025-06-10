@@ -110,6 +110,30 @@ class Benchmark:
             result = metric.compute(golds=gold_labels, preds=infered_labels)
             results[metric.name] = result
         return results
+
+    def parse_infered_labels(self,file):
+        preds = []
+        with open(file, "r") as f:
+            for line in f :
+                if line.strip():
+                    preds.append(self.parse_label(line.strip()))
+        return preds
+
+    def parse_label(self,line):
+        return line
+
+    def compare_infered_results(self,infered_labels_file,start : int = 0 ):
+        dataset = self.load_dataset()
+
+        preds = self.parse_infered_labels(infered_labels_file)
+        golds = [self.get_gold_label(test) for test in dataset[self.used_split]]
+        try:
+            golds = golds[start:start+len(preds)]
+        except Exception as e:
+            print("Oops, your predictions span over more than possible")
+            golds = golds[0:len(preds)]
+        return self.compute(golds, preds)
+
     @abstractmethod
     def get_default_wrong_label(self, gold_label):
         return 0

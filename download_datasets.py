@@ -63,4 +63,3 @@ def load_dataset_from_huggingface(dataset_name,split=None):
     except Exception as e:
         print(f"{dataset_name} dataset was not able to be loaded, {e}. Please ensure that datasets names fit with names on the hub.")
         return None
-print(load_dataset_from_huggingface("frcola",))

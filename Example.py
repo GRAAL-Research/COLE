@@ -15,5 +15,5 @@ class ExampleModel(Model):
 Colle = BenchSuites.COLLE.value
 results = Colle.evaluate_model(model = ExampleModel(model_name="mon_super_ultra_merveilleux_modele"),max_targets=5)
 
-print(Colle.generate_concise_results(results))
+print(results)
 Colle.save_results(results)
