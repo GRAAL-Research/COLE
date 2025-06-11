@@ -1,12 +1,15 @@
 from abc import abstractmethod
 
 import Metrics
-from colle.src.Models.Model import Model
+from Models.Model import Model
 from download_datasets import load_dataset_from_huggingface
 
 
 class Benchmark:
-    def __init__(self, name="", metrics=None, prompt_instructions="", used_split="test",**kwargs):
+    INFERED_LABEL_KEY = "infered"
+    GOLD_LABEL_KEY = "gold_label"
+
+    def __init__(self, name="", metrics=None, prompt_instructions="", used_split="test", **kwargs):
         if metrics is None:
             metrics = [Metrics.Accuracy()]
         self.name = name
@@ -57,7 +60,7 @@ class Benchmark:
                     else 0
                 )
 
-            results[idx] = {"gold_label": gold_label, "Infered": infered_label}
+            results[idx] = {Benchmark.GOLD_LABEL_KEY: gold_label, Benchmark.INFERED_LABEL_KEY: infered_label}
             gold_labels.append(gold_label)
             infered_labels.append(infered_label)
 
@@ -107,24 +110,21 @@ class Benchmark:
             results[metric.name] = result
         return results
 
-    def parse_infered_labels(self,file):
-        preds = []
-        with open(file, "r") as f:
-            for line in f :
-                if line.strip():
-                    preds.append(self.parse_label(line.strip()))
-        return preds
+    @staticmethod
+    def parse_benchmark_answers(file):
+        infered = []
+        for line in file:
+            result = json.loads(line)
+            infered.append(list(result.values())[0])
+        return infered
 
-    def parse_label(self,line):
-        return line
-
-    def compare_infered_results(self,infered_labels_file,start : int = 0 ):
+    def compare_infered_results(self, infered_labels_file, start: int = 0):
         dataset = self.load_dataset()
 
-        preds = self.parse_infered_labels(infered_labels_file)
+        preds = Benchmark.parse_benchmark_answers(infered_labels_file)
         golds = [self.get_gold_label(test) for test in dataset[self.used_split]]
         try:
-            golds = golds[start:start+len(preds)]
+            golds = golds[start:start + len(preds)]
         except Exception as e:
             print("Oops, your predictions span over more than possible")
             golds = golds[0:len(preds)]
@@ -133,4 +133,3 @@ class Benchmark:
     @abstractmethod
     def get_default_wrong_label(self, gold_label):
         return 0
-

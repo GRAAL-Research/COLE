@@ -5,7 +5,8 @@ from anthropic import Anthropic
 
 from dotenv import load_dotenv
 
-load_dotenv("../../.env")
+load_dotenv(".env")
+
 api_key = os.getenv("ANTHROPIC_API_KEY")
 if api_key is None:
     raise RuntimeError("ANTHROPIC_API_KEY non défini dans .env")

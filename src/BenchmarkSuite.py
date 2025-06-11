@@ -2,12 +2,13 @@ import json
 import os
 
 from Benchmark import Benchmark
-from colle.src.Models.Model import Model
-from colle.src.Utils import create_directory
+from Models.Model import Model
+from Utils import create_directory
 
 
 class BenchmarkSuite:
     FILE_EXTENSION = ".jsonl"
+
     def __init__(self, suite_name, models: list[Model | str] = None, benchmarks: list[Benchmark] = None):
         self.suite_name = suite_name
         self.models = models if models is not None else []
@@ -83,8 +84,18 @@ class BenchmarkSuite:
             filepath = os.path.join(directory, safe_model)
             create_directory(filepath)
             for benchmark in results[model].keys():
-                path = os.path.join(filepath, benchmark + BenchmarkSuite.FILE_EXTENSION)
-                with open(path, "w") as file:
-                    print(benchmark[1])
-                    file.write(json.dumps(results[model][benchmark][1]))
+                benchmark_path = os.path.join(filepath, benchmark + BenchmarkSuite.FILE_EXTENSION)
+                with open(benchmark_path, "w") as file:
+                    formated = self.format_benchmark_answers(results[model][benchmark])
+                    file.writelines(json.dumps(r) + "\n" for r in formated)
+
+    def format_benchmark_answers(self, model_results):
+        print(model_results)
+        lines = []
+        results = model_results[1]
+        for result in results.keys():
+            line = {result: results[result][Benchmark.INFERED_LABEL_KEY]}
+            lines.append(line)
+        return lines
+
 

@@ -1,8 +1,8 @@
 from random import randint
 
-from colle.src.Models.Model import Model
-from colle.src.constants import BenchSuites
+from Models.Model import Model
 
+from constants import BenchSuites
 
 class ExampleModel(Model):
 
@@ -15,5 +15,4 @@ class ExampleModel(Model):
 Colle = BenchSuites.COLLE.value
 results = Colle.evaluate_model(model = ExampleModel(model_name="mon_super_ultra_merveilleux_modele"),max_targets=5)
 
-print(results)
 Colle.save_results(results)

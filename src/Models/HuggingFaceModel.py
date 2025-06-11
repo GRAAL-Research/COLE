@@ -1,5 +1,5 @@
 
-from colle.src.Models.Model import Model
+from Models.Model import Model
 from transformers import AutoModel, pipeline, AutoTokenizer, AutoModelForCausalLM
 
 from Utils import omit_none
