@@ -1,11 +1,13 @@
 import os
 from abc import abstractmethod
+from pathlib import Path
 
 from anthropic import Anthropic
 
 from dotenv import load_dotenv
 
-load_dotenv("../.env")
+env_path = Path(__file__).resolve().parents[2] / ".env"
+load_dotenv(dotenv_path=env_path)
 
 api_key = os.getenv("ANTHROPIC_API_KEY")
 if api_key is None:
