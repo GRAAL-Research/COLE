@@ -1,9 +1,9 @@
 from enum import Enum
 
 from BenchmarkSuite import BenchmarkSuite
-from Benchmarks import FrColaBench, Paws_xBench, SickfrBench, Opus_parcusBench, PiafBench, XnliBench, Sts22Bench
+from Benchmarks import FrColaBench, Paws_xBench, SickfrBench, Opus_parcusBench, PiafBench, XnliBench, Sts22Bench,AllocineBench
 from Models.HuggingFaceModel import HFLLMModel
-from src.Benchmarks import AllocineBench
+
 
 DATASETS = ["Allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "Xnli"]
 

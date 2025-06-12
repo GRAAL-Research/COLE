@@ -3,10 +3,10 @@ import os
 
 from click.testing import Result
 
-from src.Benchmark import Benchmark
-from src.Models.Model import Model
-from src.Utils import create_directory
-from src.tests.BenchmarkFactory import create_from_file
+from Benchmark import Benchmark
+from Models.Model import Model
+from Utils import create_directory
+from BenchmarkFactory import create_from_file
 
 
 class BenchmarkSuite:

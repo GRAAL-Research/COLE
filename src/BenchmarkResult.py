@@ -7,7 +7,7 @@ from xxsubtype import bench
 
 from sympy.strategies.core import switch
 
-from src.Utils import create_directory
+from Utils import create_directory
 
 
 class Format(Enum):

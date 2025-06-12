@@ -3,7 +3,7 @@ from random import randint
 from Models.Model import Model
 
 from constants import BenchSuites
-from src.Benchmarks import AllocineBench
+from BenchmarkFactory import create_from_file
 
 
 class ExampleModel(Model):
@@ -18,3 +18,4 @@ Colle = BenchSuites.COLLE.value
 results = Colle.evaluate_model(model = ExampleModel(model_name="mon_super_ultra_merveilleux_modele"),max_targets=5)
 
 Colle.save_results(results)
+create_from_file("mon_super_ultra_merveilleux_modele")
