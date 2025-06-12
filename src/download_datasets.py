@@ -7,6 +7,8 @@ from datasets import load_dataset
 from huggingface_hub import snapshot_download
 from dotenv import load_dotenv
 
+from src import constants
+
 load_dotenv()
 
 REPO_ID = "COLLE-Graal/ColleGraal"
@@ -14,7 +16,7 @@ DATA_DIRECTORY = "data"
 DIRECTORY = "./Benchmarks"
 HF_TOKEN = os.getenv('HF_TOKEN')
 
-datasets = ["Allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "Xnli"]
+datasets = constants.DATASETS
 
 huggingface_hub.login(token=HF_TOKEN)
 

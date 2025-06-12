@@ -1,10 +1,10 @@
 import random
 
-import Metrics
-from Benchmark import Benchmark
-from PromptBuilder import PromptBuilder
-import BenchmarkAnswerParser as parser
-from Metrics import Accuracy,Pearson,SpearmanR,MatthewsCC
+import src.Metrics
+from src.Benchmark import Benchmark
+from src.PromptBuilder import PromptBuilder
+import src.BenchmarkAnswerParser as parser
+from src.Metrics import Accuracy,Pearson,SpearmanR,MatthewsCC
 
 class FrColaBench(Benchmark):
 

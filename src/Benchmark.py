@@ -2,10 +2,10 @@ import json
 from abc import abstractmethod
 
 
-from Models.Model import Model
-from download_datasets import load_dataset_from_huggingface
-from BenchmarkResult import BenchmarkResult
-from Metrics import Accuracy,Metrics
+from src.Models.Model import Model
+from src.download_datasets import load_dataset_from_huggingface
+from src.BenchmarkResult import BenchmarkResult
+from src.Metrics import Accuracy,Metrics
 
 
 class Benchmark:
