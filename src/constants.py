@@ -5,6 +5,8 @@ from Benchmarks import FrColaBench, Paws_xBench, SickfrBench, Opus_parcusBench, 
 from Models.HuggingFaceModel import HFLLMModel
 from src.Benchmarks import AllocineBench
 
+DATASETS = ["Allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "Xnli"]
+
 COLLE_HUGGING_FACE = "COLLE-Graal/ColleGraal"
 
 class BenchSuites(Enum):

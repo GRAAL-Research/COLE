@@ -27,7 +27,7 @@ class PromptBuilder():
         data = " ".join(self.data)
         if self.data_only:
             return data
-        else :
+        else:
             end = "".join(self.end)
             premise = "".join(self.premise)
             return f"{premise}\n{data}\n{end}"

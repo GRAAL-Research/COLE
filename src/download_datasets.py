@@ -6,6 +6,9 @@ import huggingface_hub
 from datasets import load_dataset
 from huggingface_hub import snapshot_download
 from dotenv import load_dotenv
+
+from src import constants
+
 load_dotenv()
 
 REPO_ID = "COLLE-Graal/ColleGraal"
@@ -13,7 +16,7 @@ DATA_DIRECTORY = "data"
 DIRECTORY = "./Benchmarks"
 HF_TOKEN = os.getenv('HF_TOKEN')
 
-DATASETS = ["Allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "Xnli"]
+datasets = constants.DATASETS
 
 huggingface_hub.login(token=HF_TOKEN)
 
@@ -25,7 +28,7 @@ def download_datasets():
 def load_datasets_from_disk(directory=DIRECTORY):
     data = dict()
     print(f"Loading datasets from {os.path.realpath(directory + "/" + DATA_DIRECTORY)}...")
-    for dataset_name in DATASETS:
+    for dataset_name in datasets:
         try:
             data[dataset_name] = load_dataset_from_disk(dataset_name, directory)
         except Exception as e:
@@ -45,7 +48,7 @@ def load_dataset_from_disk(dataset_name, directory=DIRECTORY):
 def load_datasets_from_huggingface():
     data = dict()
     print(f"Loading datasets from {REPO_ID}/{DATA_DIRECTORY}...")
-    for dataset_name in DATASETS:
+    for dataset_name in datasets:
         new_dataset = load_dataset_from_huggingface(dataset_name)
         data[dataset_name] = new_dataset
 

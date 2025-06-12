@@ -54,3 +54,4 @@ next-env.d.ts
 /src/__pycache__
 /src/Backend/__pycache__
 /src/Models/__pycache__
+*.pyc

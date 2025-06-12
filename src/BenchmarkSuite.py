@@ -1,9 +1,12 @@
 import json
 import os
 
-from Benchmark import Benchmark
-from Models.Model import Model
-from Utils import create_directory
+from click.testing import Result
+
+from src.Benchmark import Benchmark
+from src.Models.Model import Model
+from src.Utils import create_directory
+from src.tests.BenchmarkFactory import create_from_file
 
 
 class BenchmarkSuite:
@@ -17,17 +20,17 @@ class BenchmarkSuite:
     def compute_all(self, max_targets=None):
         global_results = {}
         for model in self.models:
-            print("Benchmarking model : ", model.model_name)
+            print("Benchmarking model : ", model.name)
             results_per_model = {}
             for benchmark in self.benchmarks:
-                print(f"Testing benchmark {model.model_name} on dataset {benchmark.name}")
+                print(f"Testing benchmark {model.name} on dataset {benchmark.name}")
                 try:
                     result = benchmark.evaluate(model, max_targets)
                 except Exception as e:
-                    print(f" Erreur lors de l'évaluation de {model.model_name} sur {benchmark.name} : {e}")
+                    print(f" Erreur lors de l'évaluation de {model.name} sur {benchmark.name} : {e}")
                     result = None
                 results_per_model[benchmark.name] = result
-            global_results[model.model_name] = results_per_model
+            global_results[model.name] = results_per_model
             try:
                 model.unload_model()
             except Exception:
@@ -51,8 +54,9 @@ class BenchmarkSuite:
     def evaluate_model(self, model: Model, max_targets=None):
         global_results = {}
         for benchmark in self.benchmarks:
-            global_results[benchmark.name] = benchmark.evaluate(model, max_targets)
-        return {model.model_name: global_results}
+            result = benchmark.evaluate(model, max_targets)
+            global_results[benchmark.name] = result
+        return {model.name: global_results}
 
     def generate_concise_results(self, results: dict):
         concise_results = {}
@@ -97,5 +101,21 @@ class BenchmarkSuite:
             line = {result: results[result][Benchmark.INFERED_LABEL_KEY]}
             lines.append(line)
         return lines
+    @staticmethod
+    def evaluate_zip(files):
+        results = []
+        for file in files:
+            results.append(BenchmarkSuite.evaluate_infered(file))
 
+        return results
 
+    @staticmethod
+    def evaluate_infered(file):
+        result = None
+        try :
+            bench = create_from_file(file)
+            bench_results = bench.compare_infered_results(file)
+            result = {bench.name: bench_results}
+        except Exception as e:
+            print(f"Bench could not be found for {file}")
+        return result

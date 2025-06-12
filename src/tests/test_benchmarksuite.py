@@ -1,5 +1,5 @@
 import pytest
-from BenchmarkSuite import Benchmark_suite
+from src.BenchmarkSuite import BenchmarkSuite
 
 # Modèles et benchmarks factices pour simuler le comportement
 class DummyModel:
@@ -21,7 +21,7 @@ def test_compute_all_multiple_models_and_benchmarks():
     b1 = DummyBenchmark("benchA", ("resA", {"label": 1}))
     b2 = DummyBenchmark("benchB", ("resB", {"label": 2}))
 
-    suite = Benchmark_suite(models=[m1, m2], benchmarks=[b1, b2])
+    suite = BenchmarkSuite(models=[m1, m2], benchmarks=[b1, b2])
     out = suite.compute_all()
 
     expected = {
@@ -42,7 +42,7 @@ def test_evaluate_model_single_model():
     b1 = DummyBenchmark("benchX", ("rx", {}))
     b2 = DummyBenchmark("benchY", ("ry", {}))
 
-    suite = Benchmark_suite(benchmarks=[b1, b2])
+    suite = BenchmarkSuite(benchmarks=[b1, b2])
     out = suite.evaluate_model(m)
 
     assert out == {
@@ -56,7 +56,7 @@ def test_compute_1_model_per_bench_model_with_missing_model():
     b1 = DummyBenchmark("B1", ("r1", {}))
     b2 = DummyBenchmark("B2", ("r2", {}))
 
-    suite = Benchmark_suite(models=[m1, None], benchmarks=[b1, b2])
+    suite = BenchmarkSuite(models=[m1, None], benchmarks=[b1, b2])
     out = suite.compute_1_model_per_bench_model()
 
     assert out == {

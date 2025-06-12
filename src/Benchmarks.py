@@ -1,10 +1,10 @@
 import random
 
-import Metrics
-from Benchmark import Benchmark
-from PromptBuilder import PromptBuilder
-import BenchmarkAnswerParser as parser
-
+import src.Metrics
+from src.Benchmark import Benchmark
+from src.PromptBuilder import PromptBuilder
+import src.BenchmarkAnswerParser as parser
+from src.Metrics import Accuracy,Pearson,SpearmanR,MatthewsCC
 
 class FrColaBench(Benchmark):
 
@@ -32,8 +32,7 @@ class FrColaBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "frcola"
 
-        self.prompt_instructions = "Answer with 1 if the sentence is correct, 0 otherwise "
-        self.metrics = [Metrics.MatthewsCC()]
+        self.metrics = [MatthewsCC()]
 
 
 class AllocineBench(Benchmark):
@@ -62,7 +61,7 @@ class AllocineBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "Allocine"
-        self.metrics = [Metrics.Accuracy()]
+        self.metrics = [Accuracy()]
 
 
 # TODO
@@ -92,11 +91,9 @@ class FquadBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "fquad"
-        self.prompt_instructions = (
-            "Réponds par 1 si tu peux répondre à la question uniquement à partir du contexte, 0 sinon.")
 
         self.metrics = [
-            Metrics.Pearson(), Metrics.SpearmanR()
+        Pearson(),SpearmanR()
         ]
 
 
@@ -131,7 +128,7 @@ class FrblimpBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "fr_blimp"
         self.seed = random.randint(1, 10000)
-        self.metrics = [Metrics.Accuracy()]
+        self.metrics = [Accuracy()]
 
 
 class GqnliBench(Benchmark):
@@ -162,7 +159,7 @@ class GqnliBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "gqnli"
 
-        self.metrics = [Metrics.Accuracy()]
+        self.metrics = [Accuracy()]
 
 
 class Opus_parcusBench(Benchmark):
@@ -192,8 +189,8 @@ class Opus_parcusBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "opus_parcus"
         self.metrics = self.metrics = [
-            Metrics.Pearson(),
-            Metrics.SpearmanR(),
+            Pearson(),
+            SpearmanR(),
         ]
 
 
@@ -225,7 +222,7 @@ class Paws_xBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "paws_x"
 
-        self.metrics = [Metrics.Accuracy()]
+        self.metrics = [Accuracy()]
 
 
 class PiafBench(Benchmark):
@@ -258,7 +255,7 @@ class PiafBench(Benchmark):
         self.name = "piaf"
 
         self.metrics = [
-            Metrics.Pearson(), Metrics.SpearmanR()
+            Pearson(), SpearmanR()
         ]
 
 
@@ -289,7 +286,7 @@ class SickfrBench(Benchmark):
         super().__init__(**kwargs)
         self.name = "sickfr"
 
-        self.metrics = [Metrics.Pearson(), Metrics.SpearmanR()]
+        self.metrics = [Pearson(), SpearmanR()]
 
 
 class XnliBench(Benchmark):
@@ -320,7 +317,7 @@ class XnliBench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "Xnli"
-        self.metrics = [Metrics.Accuracy()]
+        self.metrics = [Accuracy()]
 
 
 class Sts22Bench(Benchmark):
@@ -348,4 +345,4 @@ class Sts22Bench(Benchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "sts22_crosslingual"
-        self.metrics = [Metrics.Pearson(), Metrics.SpearmanR()]
+        self.metrics = [Pearson(), SpearmanR()]

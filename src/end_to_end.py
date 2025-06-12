@@ -1,11 +1,12 @@
+
 import os
 import pandas as pd
 
-from Benchmarks import FrColaBench, AllocineBench, Sts22Bench, Paws_xBench, XnliBench,PiafBench,SickfrBench,Opus_parcusBench,FrblimpBench,GqnliBench
+from Benchmarks import FrColaBench, AllocineBench, Sts22Bench, Paws_xBench, XnliBench, PiafBench, SickfrBench, \
+    Opus_parcusBench, FrblimpBench, GqnliBench
 from BenchmarkSuite import BenchmarkSuite
-from colle.src.Models.Model import Model, make_claude_inference
+from src.Models.Model import Model, make_claude_inference
 from all_llms import create_models
-
 
 claude_model_names = [
     "claude-opus-4-20250514",
@@ -26,8 +27,7 @@ hfllm_models = create_models()
 all_models = claude_models + hfllm_models
 print(f"→ Nombre total de modèles à évaluer : {len(all_models)}")
 for m in all_models:
-    print("   •", m.model_name)
-
+    print("   •", m.name)
 
 benchmarks = [
     XnliBench(used_split="test"),
@@ -41,11 +41,9 @@ benchmarks = [
     Opus_parcusBench(used_split="test"),
     FrblimpBench(used_split="test"),
 
-
 ]
 bench_names = [b.name for b in benchmarks]
 print("\n Benchmarks à évaluer :", bench_names)
-
 
 suite = BenchmarkSuite(
     suite_name="Evaluation complète LLMs vs Claude",
@@ -53,19 +51,15 @@ suite = BenchmarkSuite(
     benchmarks=benchmarks
 )
 
-
 max_examples = 3
 
 raw_results = suite.compute_all(max_targets=max_examples)
 
-
 concise = suite.generate_concise_results(raw_results)
-
 
 output_dir = "../results"
 suite.save_results(raw_results, directory=output_dir)
 print(f"\n Résultats complets enregistrés sous {os.path.abspath(output_dir)}")
-
 
 rows = []
 for model_name, bench_dict in concise.items():

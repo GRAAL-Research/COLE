@@ -5,6 +5,9 @@ from fastapi import FastAPI, UploadFile, Form, File
 from starlette.middleware.cors import CORSMiddleware
 import zipfile
 import tempfile
+
+from src.BenchmarkSuite import BenchmarkSuite
+
 app = FastAPI()
 
 app.add_middleware(
@@ -22,21 +25,23 @@ async def root():
 async def submit_post(email : str = Form(...),labels : UploadFile = File(...)):
     print(email,labels)
     print(inspect(labels))
-    return {"data received" : email}
+    results = BenchmarkSuite.evaluate_zip(open_zip(labels))
+    return {"data" : results}
 
 
 @app.get("/submit")
 async def submit_get():
     return {"data received" : "data"}
 
-def inspect(zip_file : UploadFile):
+def inspect(zip_file: UploadFile):
+    with open_zip(zip_file) as zip:
+        return zip.namelist()
+
+def open_zip(zip_file: UploadFile):
     tempf = tempfile.NamedTemporaryFile(delete=False)
-    shutil.copyfileobj(zip_file.file, tempf)
-
-    tempf.close()
-
-    with zipfile.ZipFile(tempf.name,"r") as zip:
-        ret = zip.namelist()
-
-    os.unlink(tempf.name)
-    return ret
+    try:
+        shutil.copyfileobj(zip_file.file, tempf)
+        tempf.close()
+        return zipfile.ZipFile(tempf.name, "r")
+    finally:
+        os.unlink(tempf.name)

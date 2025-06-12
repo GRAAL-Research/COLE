@@ -30,7 +30,7 @@ def make_claude_inference(model_name: str):
 
 class Model:
     def __init__(self, model_name: str, inference_callback=None, prompt_only=True):
-        self.model_name = model_name
+        self.name = model_name
         if inference_callback is not None:
             self.infer = inference_callback
         self.prompt_only = prompt_only

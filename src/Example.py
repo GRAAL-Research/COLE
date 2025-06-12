@@ -3,6 +3,8 @@ from random import randint
 from Models.Model import Model
 
 from constants import BenchSuites
+from src.Benchmarks import AllocineBench
+
 
 class ExampleModel(Model):
 
