@@ -6,9 +6,10 @@ export default function ResultsDefaultPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const savedId = localStorage.getItem("last_result_id");
-    if (savedId) {
-      router.push(`/results/${savedId}`);
+    const savedFile = localStorage.getItem("last_result_file");
+    if (savedFile) {
+      const id = savedFile.replace(".json", "");
+      router.push(`/results/${id}`);
     }
   }, [router]);
 

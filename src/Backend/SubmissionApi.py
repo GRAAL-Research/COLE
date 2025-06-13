@@ -5,8 +5,9 @@ import zipfile
 import json
 from dotenv import load_dotenv
 from datetime import datetime
+from uuid import uuid4
 
-from fastapi import FastAPI, UploadFile, Form, File
+from fastapi import FastAPI, UploadFile, Form, File, HTTPException
 from fastapi.responses import FileResponse
 from starlette.middleware.cors import CORSMiddleware
 
@@ -15,6 +16,7 @@ from src.Benchmarks import (
     PiafBench, SickfrBench, Opus_parcusBench, Sts22Bench
 )
 
+# Chargement des variables d’environnement
 load_dotenv()
 
 RESULTS_DIR = "src/Backend/results"
@@ -24,12 +26,16 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3001",  # Frontend
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Dictionnaire des benchmarks disponibles
 BENCHMARKS = {
     "allocine": AllocineBench(),
     "frcola": FrColaBench(),
@@ -45,6 +51,8 @@ BENCHMARKS = {
 @app.post("/submit")
 async def submit_post(email: str = Form(...), labels: UploadFile = File(...)):
     print(" Requête reçue avec email :", email)
+    print(" Nom du fichier ZIP soumis :", labels.filename)
+
     with tempfile.TemporaryDirectory() as tmpdir:
         zip_path = os.path.join(tmpdir, "submission.zip")
 
@@ -54,6 +62,7 @@ async def submit_post(email: str = Form(...), labels: UploadFile = File(...)):
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(tmpdir)
 
+        # Liste tous les fichiers JSON ou JSONL extraits
         json_files = []
         for root, _, files in os.walk(tmpdir):
             for file in files:
@@ -62,6 +71,7 @@ async def submit_post(email: str = Form(...), labels: UploadFile = File(...)):
 
         print(" Fichiers extraits :", json_files)
         print(" Benchmarks disponibles :", list(BENCHMARKS.keys()))
+
         results_summary = {}
         errors = {}
 
@@ -78,21 +88,22 @@ async def submit_post(email: str = Form(...), labels: UploadFile = File(...)):
             try:
                 with open(json_file, "r", encoding="utf-8") as f:
                     predictions = [line.strip() for line in f if line.strip()]
-
                 score = benchmark.compare_infered_results(predictions)
                 results_summary[bench_name] = score
-
             except Exception as e:
                 print(f" Erreur dans {json_file} :", e)
                 errors[json_file] = str(e)
 
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"results_{email.replace('@', '_at_')}_{timestamp}.json"
+        # Génère un identifiant unique pour la soumission
+        submission_id = str(uuid4())
+        filename = f"{submission_id}.json"
         result_path = os.path.join(RESULTS_DIR, filename)
 
+        # Sauvegarde le résultat dans un fichier JSON
         with open(result_path, "w", encoding="utf-8") as f:
             json.dump({
                 "email": email,
+                "zip_filename": labels.filename,        # ✅ ajouté
                 "results": results_summary,
                 "errors": errors
             }, f, indent=2, ensure_ascii=False)
@@ -103,41 +114,41 @@ async def submit_post(email: str = Form(...), labels: UploadFile = File(...)):
             "email": email,
             "results": results_summary,
             "errors": errors,
+            "submission_id": submission_id,
             "file": filename
         }
 
 
 @app.get("/results")
 def get_latest_results():
-    if not os.path.exists(RESULTS_DIR):
-        return {"error": "Aucun dossier de résultats"}
+    raise HTTPException(status_code=400, detail="Tu dois utiliser un identifiant de soumission pour voir les résultats.")
 
-    json_files = [
-        f for f in os.listdir(RESULTS_DIR)
-        if f.endswith(".json") or f.endswith(".jsonl")
-    ]
-    if not json_files:
-        return {"error": "Aucun résultat disponible"}
 
-    latest = max(
-        json_files,
-        key=lambda name: os.path.getmtime(os.path.join(RESULTS_DIR, name))
-    )
-    latest_path = os.path.join(RESULTS_DIR, latest)
-
-    print(" Lecture du dernier résultat :", latest_path)
-
-    try:
-        with open(latest_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            data["file"] = latest
-            return data
-    except Exception as e:
-        print(" Erreur lors de la lecture du fichier :", e)
-        return {"error": "Échec de la lecture du fichier de résultats."}
 @app.get("/results/{filename}")
 def get_result_file(filename: str):
     file_path = os.path.join(RESULTS_DIR, filename)
     if not os.path.exists(file_path):
         return {"error": "Fichier non trouvé"}
     return FileResponse(file_path, media_type="application/json", filename=filename)
+
+
+@app.get("/leaderboard")
+def get_leaderboard():
+    summaries = []
+    for file in os.listdir(RESULTS_DIR):
+        if not file.endswith(".json"):
+            continue
+        path = os.path.join(RESULTS_DIR, file)
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                summaries.append({
+                    "name": file,  # ← uuid.json
+                    "submission_id": data.get("submission_id"),      # ✅ utile pour lien direct
+                    "zip_filename": data.get("zip_filename"),        # ✅ nom ZIP affiché
+                    "email": data.get("email", "unknown"),
+                    "results": data.get("results", {})
+                })
+        except Exception as e:
+            print(f" Erreur lecture {file} : {e}")
+    return summaries
