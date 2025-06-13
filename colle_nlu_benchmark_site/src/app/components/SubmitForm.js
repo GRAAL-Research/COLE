@@ -1,35 +1,65 @@
 import { useState } from "react";
 import UploadButton from "./UploadButton";
 import BigBlueButton from "./BigBlueButton";
-import {send_results} from "../resources/BenchmarksResource"
 import ErrorMessage from "./ErrorMessage";
 
-export default function SubmitForm(){
-    const [required_visible,setRequiredVisible] = useState(false)
-    const [email,setEmail] = useState("")
-    const [file,setFile] = useState(null)
-    const [showConfirmation, setShowConfirmation] = useState(false);
+export default function SubmitForm() {
+  const [required_visible, setRequiredVisible] = useState(false);
+  const [email, setEmail] = useState("");
+  const [file, setFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitResults = (email, file) => {
-  if (!email || !file) {
-    showRequired();
-    return;
-  }
+  const submitResults = async (email, file) => {
+    if (!email || !file) {
+      showRequired();
+      return;
+    }
 
- const isZip = file.name.toLowerCase().endsWith(".zip");
+    const isZip = file.name.toLowerCase().endsWith(".zip");
+    if (!isZip) {
+      alert("The file must be a ZIP (.zip) file.");
+      return;
+    }
 
-if (!isZip) {
-  alert("Le fichier doit être un fichier ZIP (.zip).");
-  return;
-}
-  setRequiredVisible(false);
-  send_results(email, file);
-  setShowConfirmation(true);
-};
+    setRequiredVisible(false);
+    setIsSubmitting(true);
 
-    return (
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("labels", file);
+
+      const response = await fetch("http://localhost:8000/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Submission failed.");
+      }
+
+      const result = await response.json();
+      const submissionId = result.submission_id;
+
+      // ✅ Save ID + mark this as direct return from submit
+      localStorage.setItem("last_result_file", `${submissionId}.json`);
+      localStorage.setItem("just_submitted", "true");
+
+      // ✅ Redirect to result page
+      window.location.href = `/results/${submissionId}`;
+    } catch (err) {
+      alert("Error while submitting: " + err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const showRequired = () => {
+    setRequiredVisible(true);
+  };
+
+  return (
     <div className="space-y-6 bg-white rounded-xl shadow-md p-6 w-full max-w-xl mx-auto border border-gray-200">
-
       <h2 className="text-2xl font-semibold text-gray-800 text-center">
         Submit Your Results
       </h2>
@@ -51,7 +81,7 @@ if (!isZip) {
         </p>
       </div>
 
-      <UploadButton uploaded={(file) => { setFile(file); console.log(file); }}>
+      <UploadButton uploaded={(file) => setFile(file)}>
         Upload Labels
       </UploadButton>
 
@@ -59,28 +89,13 @@ if (!isZip) {
         Please ensure your data is properly formatted. Refer to our <a href="/guide" className="text-blue-500 underline">guide</a> for more info.
       </p>
 
-        <ErrorMessage condition={required_visible}>⚠️ Please provide both an email and a file before submitting.</ErrorMessage>
-        <BigBlueButton onClick={() => submitResults(email, file)}>
-          Submit Your Results
-        </BigBlueButton>
-      {showConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-xl shadow-lg text-center space-y-4 max-w-sm">
-            <p className="text-lg text-green-600 font-medium">
-              ✅ Vos résultats sont maintenant disponibles dans la page <strong>Results</strong>.
-            </p>
-            <a href="/results" className="text-blue-600 underline">
-              Aller à la page Results
-            </a>
-            <button
-              onClick={() => setShowConfirmation(false)}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
-      )}
+      <ErrorMessage condition={required_visible}>
+        ⚠️ Please provide both an email and a file before submitting.
+      </ErrorMessage>
+
+      <BigBlueButton onClick={() => submitResults(email, file)}>
+        {isSubmitting ? "Submitting..." : "Submit Your Results"}
+      </BigBlueButton>
     </div>
   );
 }
