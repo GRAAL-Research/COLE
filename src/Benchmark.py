@@ -50,6 +50,7 @@ class Benchmark:
             if max_targets is not None and len(gold_labels) >= max_targets:
                 break
         metrics = self.compute(gold_labels, infered_labels)
+        result = BenchmarkResult(gold_labels, infered_labels,self.name, metrics,model.name)
         return metrics, results
 
     def load_dataset(self):

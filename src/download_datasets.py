@@ -12,7 +12,7 @@ load_dotenv()
 
 REPO_ID = "COLLE-Graal/ColleGraal"
 DATA_DIRECTORY = "data"
-DIRECTORY = "./Benchmarks"
+DIRECTORY = "./Benchmarks_data"
 HF_TOKEN = os.getenv('HF_TOKEN')
 
 datasets = ["Allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "Xnli"]
@@ -65,3 +65,4 @@ def load_dataset_from_huggingface(dataset_name,split=None):
     except Exception as e:
         print(f"{dataset_name} dataset was not able to be loaded, {e}. Please ensure that datasets names fit with names on the hub.")
         return None
+
