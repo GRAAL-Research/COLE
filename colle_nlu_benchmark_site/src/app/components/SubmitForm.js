@@ -8,9 +8,10 @@ export default function SubmitForm() {
   const [email, setEmail] = useState("");
   const [file, setFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [displayName, setDisplayName] = useState("");
 
-  const submitResults = async (email, file) => {
-    if (!email || !file) {
+  const submitResults = async (email, file, displayName) => {
+    if (!email || !file || !displayName) {
       showRequired();
       return;
     }
@@ -27,6 +28,7 @@ export default function SubmitForm() {
     try {
       const formData = new FormData();
       formData.append("email", email);
+      formData.append("display_name", displayName);
       formData.append("labels", file);
 
       const response = await fetch("http://localhost:8000/submit", {
@@ -41,11 +43,9 @@ export default function SubmitForm() {
       const result = await response.json();
       const submissionId = result.submission_id;
 
-      // ✅ Save ID + mark this as direct return from submit
       localStorage.setItem("last_result_file", `${submissionId}.json`);
       localStorage.setItem("just_submitted", "true");
 
-      // ✅ Redirect to result page
       window.location.href = `/results/${submissionId}`;
     } catch (err) {
       alert("Error while submitting: " + err.message);
@@ -76,8 +76,22 @@ export default function SubmitForm() {
           onChange={(e) => setEmail(e.target.value)}
           className="border border-gray-300 p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="displayname" className="block text-sm font-medium text-gray-700">
+          Your Display Name
+        </label>
+        <input
+          id="displayname"
+          type="text"
+          placeholder="Display Name"
+          value={displayName} // ✅ CORRIGÉ
+          onChange={(e) => setDisplayName(e.target.value)} // ✅ CORRIGÉ
+          className="border border-gray-300 p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
         <p className="text-xs text-gray-500">
-          We’ll notify you at this address when your results are ready. This process may take some time.
+          This name will be shown on the leaderboard.
         </p>
       </div>
 
@@ -90,10 +104,10 @@ export default function SubmitForm() {
       </p>
 
       <ErrorMessage condition={required_visible}>
-        ⚠️ Please provide both an email and a file before submitting.
+        ⚠️ Please provide an email, a display name, and a ZIP file before submitting.
       </ErrorMessage>
 
-      <BigBlueButton onClick={() => submitResults(email, file)}>
+      <BigBlueButton onClick={() => submitResults(email, file, displayName)}>
         {isSubmitting ? "Submitting..." : "Submit Your Results"}
       </BigBlueButton>
     </div>

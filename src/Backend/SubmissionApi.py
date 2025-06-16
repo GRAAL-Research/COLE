@@ -16,7 +16,6 @@ from src.Benchmarks import (
     PiafBench, SickfrBench, Opus_parcusBench, Sts22Bench
 )
 
-# Chargement des variables d’environnement
 load_dotenv()
 
 RESULTS_DIR = "src/Backend/results"
@@ -35,7 +34,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Dictionnaire des benchmarks disponibles
 BENCHMARKS = {
     "allocine": AllocineBench(),
     "frcola": FrColaBench(),
@@ -49,7 +47,7 @@ BENCHMARKS = {
 
 
 @app.post("/submit")
-async def submit_post(email: str = Form(...), labels: UploadFile = File(...)):
+async def submit_post(email: str = Form(...), labels: UploadFile = File(...),display_name: str = Form(...),):
     print(" Requête reçue avec email :", email)
     print(" Nom du fichier ZIP soumis :", labels.filename)
 
@@ -62,7 +60,6 @@ async def submit_post(email: str = Form(...), labels: UploadFile = File(...)):
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(tmpdir)
 
-        # Liste tous les fichiers JSON ou JSONL extraits
         json_files = []
         for root, _, files in os.walk(tmpdir):
             for file in files:
@@ -94,15 +91,14 @@ async def submit_post(email: str = Form(...), labels: UploadFile = File(...)):
                 print(f" Erreur dans {json_file} :", e)
                 errors[json_file] = str(e)
 
-        # Génère un identifiant unique pour la soumission
         submission_id = str(uuid4())
         filename = f"{submission_id}.json"
         result_path = os.path.join(RESULTS_DIR, filename)
 
-        # Sauvegarde le résultat dans un fichier JSON
         with open(result_path, "w", encoding="utf-8") as f:
             json.dump({
                 "email": email,
+                "display_name": display_name,
                 "zip_filename": labels.filename,        # ✅ ajouté
                 "results": results_summary,
                 "errors": errors
@@ -143,9 +139,10 @@ def get_leaderboard():
             with open(path, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 summaries.append({
-                    "name": file,  # ← uuid.json
-                    "submission_id": data.get("submission_id"),      # ✅ utile pour lien direct
-                    "zip_filename": data.get("zip_filename"),        # ✅ nom ZIP affiché
+                    "name": file,
+                    "submission_id": data.get("submission_id"),
+                    "display_name": data.get("display_name", ""),
+                    "zip_filename": data.get("zip_filename"),
                     "email": data.get("email", "unknown"),
                     "results": data.get("results", {})
                 })

@@ -1,15 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
+import { computeRankedEntries, transformScore } from "./util";
+import ModelDetailsModal from "../components/ModelDetailsModal";
+
 
 export default function LeaderboardPage() {
   const [entries, setEntries] = useState([]);
   const [benchmarks, setBenchmarks] = useState([]);
+  const [selectedEntry, setSelectedEntry] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:8000/leaderboard")
       .then((res) => res.json())
       .then((data) => {
-        setEntries(data);
+        const ranked = computeRankedEntries(data);
+        setEntries(ranked);
 
         const allBenchmarks = new Set();
         data.forEach((entry) => {
@@ -32,14 +37,11 @@ export default function LeaderboardPage() {
         <table className="w-full text-sm border border-blue-500 shadow-md">
           <thead>
             <tr className="bg-blue-100 text-blue-800">
-              <th className="border border-blue-500 px-2 py-1 text-left text-sm">
-                Submission
-              </th>
+              <th className="border border-blue-500 px-2 py-1 text-left text-sm">Rank</th>
+              <th className="border border-blue-500 px-2 py-1 text-left text-sm">ModelName</th>
+              <th className="border border-blue-500 px-2 py-1 text-sm">Score</th>
               {benchmarks.map((b, i) => (
-                <th
-                  key={i}
-                  className="border border-blue-500 px-2 py-1 text-sm"
-                >
+                <th key={i} className="border border-blue-500 px-2 py-1 text-sm">
                   {b}
                 </th>
               ))}
@@ -48,23 +50,34 @@ export default function LeaderboardPage() {
           <tbody>
             {entries.map((entry, rowIndex) => (
               <tr key={rowIndex} className="bg-white hover:bg-gray-50">
-                <td className="border border-gray-300 px-2 py-1 font-medium text-blue-600 text-sm">
-                  {entry.zip_filename || entry.name.replace(".json", "")}
-
+                <td className="border border-gray-300 px-2 py-1 text-sm text-center font-bold text-purple-700">
+                  {entry.rank}
+                </td>
+                <td
+                  className="border border-gray-300 px-2 py-1 font-medium text-blue-600 text-sm cursor-pointer underline"
+                  onClick={() => setSelectedEntry(entry)}
+                >
+                  {entry.display_name || entry.name.replace(".json", "")}
+                </td>
+                <td className="border border-gray-300 px-2 py-1 text-center text-sm font-semibold text-green-700">
+                  {typeof entry.score === "number" ? entry.score.toFixed(1) : "-"}
                 </td>
                 {benchmarks.map((b, colIndex) => {
                   const scoreDict = entry.results?.[b];
-                  const scoreVal = scoreDict
-                    ? Object.values(scoreDict)[0]
-                    : "-";
+                  let scoreVal = "-";
+                  if (scoreDict) {
+                    const values = Object.values(scoreDict).filter((v) => typeof v === "number");
+                    if (values.length > 0) {
+                      const avg = values.reduce((sum, v) => sum + v, 0) / values.length;
+                      scoreVal = transformScore(avg);
+                    }
+                  }
                   return (
                     <td
                       key={colIndex}
                       className="border border-gray-200 px-2 py-1 text-center text-sm"
                     >
-                      {typeof scoreVal === "number"
-                        ? scoreVal.toFixed(3)
-                        : scoreVal}
+                      {typeof scoreVal === "number" ? scoreVal.toFixed(1) : scoreVal}
                     </td>
                   );
                 })}
@@ -73,6 +86,13 @@ export default function LeaderboardPage() {
           </tbody>
         </table>
       </div>
+
+      {selectedEntry && (
+        <ModelDetailsModal
+          entry={selectedEntry}
+          onClose={() => setSelectedEntry(null)}
+        />
+      )}
     </div>
   );
 }

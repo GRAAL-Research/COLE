@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { use } from "react"; // Next.js 15+
+import { use } from "react";
 
 export default function ResultsPage({ params }) {
   const { id: submissionId } = use(params);
@@ -73,7 +73,7 @@ export default function ResultsPage({ params }) {
     <main className="max-w-3xl mx-auto px-6 py-6">
       <h2 className="text-2xl font-bold text-center mb-6">
         <span className="text-blue-700">📊 Results for </span>
-        <span className="text-gray-800">{data.email}</span>
+        <span className="text-gray-800">{data.display_name || data.email}</span>
       </h2>
 
       {keys.length === 0 ? (
@@ -94,7 +94,7 @@ export default function ResultsPage({ params }) {
                 {Object.entries(results[benchmark]).map(([metric, value]) => (
                   <li key={metric}>
                     <strong>{metric}</strong>:{" "}
-                    {typeof value === "number" ? value.toFixed(3) : value}
+                      {typeof value === "number" ? (value * 100).toFixed(1) : value}
                   </li>
                 ))}
               </ul>
