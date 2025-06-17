@@ -1,5 +1,4 @@
 import os
-
 import huggingface_hub
 from datasets import load_dataset
 from dotenv import load_dotenv
@@ -10,7 +9,6 @@ import lighteval.metrics.metrics as metrics
 from src.PromptBuilder import PromptBuilder
 
 REPO_ID = "COLLE-Graal/ColleGraal"
-DATA_DIRECTORY = "data"
 
 load_dotenv()
 HF_TOKEN = os.getenv('HF_TOKEN')
@@ -18,10 +16,6 @@ print(HF_TOKEN)
 huggingface_hub.login(token=HF_TOKEN)
 
 def prompt_fn(line, task_name: str = None):
-    """Defines how to go from a dataset line to a doc object.
-    Follow examples in src/lighteval/tasks/default_prompts.py, or get more info
-    about what this function should do in the README.
-    """
     prompt = (PromptBuilder()
               .add_premise("Juge si cette phrase est grammaticalement correcte :")
               .add_data(line["sentence"])
@@ -30,21 +24,27 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=line["label"],  # assuming binary classification: 0 or 1
+        gold_index=line["label"],
         instruction=""
     )
+
 frcola = LightevalTaskConfig(
     name="frcola",
-    prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
-
-    hf_repo="COLLE-Graal/ColleGraal", #TODO COMMENT ACCÈDER AU SUBSET DE .../data C'EST POSSIBLE QU'IL FAILLE MODIFIER NOTRE REPO HF OU AJOUTER UN FICHIER CONFIG
-    hf_subset="data/frcola",
-    hf_avail_splits=["train", "dev", "test"],
+    prompt_function=prompt_fn,
+    hf_repo="COLLE-Graal/ColleGraal",
+    hf_subset="frcola",
+    hf_avail_splits=["train", "validation", "test"],  # <- C'était "dev" au lieu de "validation"
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.acc_golds_likelihood],  # select your metric in Metrics
+    metric=[metrics.Metrics.acc_golds_likelihood],
     trust_dataset=True,
 )
+
 if __name__ == "__main__":
-    print(load_dataset("COLLE-Graal/ColleGraal",data_dir="data/frcola"))
+    dataset = load_dataset(
+        path="COLLE-Graal/ColleGraal",
+        name="frcola",
+        trust_remote_code=True
+    )
+    print(dataset)
