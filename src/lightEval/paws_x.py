@@ -35,13 +35,13 @@ def prompt_fn(line, task_name: str = None):
         gold_index=line["label"],  # assuming binary classification: 0 or 1
         instruction=""
     )
-frcola = LightevalTaskConfig(
+paws_x = LightevalTaskConfig(
     name="paws_x", #NAME
     prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
 
     hf_repo=REPO_ID,
-    hf_subset="",
-    hf_avail_splits=["train", "dev", "test"],
+    hf_subset="data/paws-x",
+    hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,

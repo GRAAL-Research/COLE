@@ -6,13 +6,11 @@ from dotenv import load_dotenv
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
 import lighteval.metrics.metrics as metrics
-from src.PromptBuilder import PromptBuilder
 
-REPO_ID = "COLLE-Graal/ColleGraal"
+from src.PromptBuilder import PromptBuilder
 
 load_dotenv()
 HF_TOKEN = os.getenv('HF_TOKEN')
-print(HF_TOKEN)
 huggingface_hub.login(token=HF_TOKEN)
 
 def prompt_fn(line, task_name: str = None):
@@ -32,8 +30,8 @@ frcola = LightevalTaskConfig(
     name="frcola",
     prompt_function=prompt_fn,
     hf_repo="COLLE-Graal/ColleGraal",
-    hf_subset="frcola",
-    hf_avail_splits=["train", "validation", "test"],  # <- C'était "dev" au lieu de "validation"
+    hf_subset="data/frcola",
+    hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
@@ -43,8 +41,9 @@ frcola = LightevalTaskConfig(
 
 if __name__ == "__main__":
     dataset = load_dataset(
-        path="COLLE-Graal/ColleGraal",
-        name="frcola",
-        trust_remote_code=True
+        path=frcola.hf_repo,
+        data_dir=frcola.hf_subset,
+        split="test"
+
     )
     print(dataset)
