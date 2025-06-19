@@ -33,7 +33,8 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=line["label"],  # assuming binary classification: 0 or 1
+        gold_index=line["label"],
+        choices=["0", "1", "2"],
         instruction=""
     )
 xnli = LightevalTaskConfig(

@@ -31,7 +31,7 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=line["relatedness_score"],  # assuming binary classification: 0 or 1
+        gold_index=float(line["relatedness_score"]),   # assuming binary classification: 0 or 1
         instruction=""
     )
 sickfr = LightevalTaskConfig(

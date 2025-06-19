@@ -8,6 +8,7 @@ from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
 import lighteval.metrics.metrics as metrics
 from src.PromptBuilder import PromptBuilder
+from src.lightEval.frblimp import get_0_1_seeded
 
 REPO_ID = "COLLE-Graal/ColleGraal"
 
@@ -30,7 +31,9 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=line["label"],  # assuming binary classification: 0 or 1
+        gold_index=get_0_1_seeded(line),
+        choices=["0", "1"],
+
         instruction=""
     )
 allocine = LightevalTaskConfig(

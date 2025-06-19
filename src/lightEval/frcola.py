@@ -23,6 +23,8 @@ def prompt_fn(line, task_name: str = None):
         task_name=task_name,
         query=prompt,
         gold_index=line["label"],
+        choices=["0", "1"],
+
         instruction=""
     )
 
