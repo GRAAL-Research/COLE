@@ -1,15 +1,6 @@
- export const transformScore = (val) => {
-  if (typeof val !== "number") return val;
-
-  if (val >= 0) {
-    return val * 100;
-  }
-  return (val + 1) * 50;
-};
-
- export const computeAverageScore = (entry) => {
+export const computeAverageScore = (entry) => {
   const values = Object.values(entry.results || {}).flatMap((scoreObj) =>
-    Object.values(scoreObj).filter((v) => typeof v === "number").map(transformScore)
+    Object.values(scoreObj).filter((v) => typeof v === "number")
   );
 
   if (values.length === 0) return null;

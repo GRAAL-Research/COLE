@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { computeRankedEntries, transformScore } from "./util";
+import { computeRankedEntries } from "./util";
 import ModelDetailsModal from "../components/ModelDetailsModal";
-
 
 export default function LeaderboardPage() {
   const [entries, setEntries] = useState([]);
@@ -38,11 +37,11 @@ export default function LeaderboardPage() {
           <thead>
             <tr className="bg-blue-100 text-blue-800">
               <th className="border border-blue-500 px-2 py-1 text-left text-sm">Rank</th>
-              <th className="border border-blue-500 px-2 py-1 text-left text-sm">ModelName</th>
-              <th className="border border-blue-500 px-2 py-1 text-sm">Score</th>
+              <th className="border border-blue-500 px-2 py-1 text-left text-sm">Model Name</th>
+              <th className="border border-blue-500 px-2 py-1 text-sm">Score (%)</th>
               {benchmarks.map((b, i) => (
                 <th key={i} className="border border-blue-500 px-2 py-1 text-sm">
-                  {b}
+                  {b} (%)
                 </th>
               ))}
             </tr>
@@ -60,7 +59,7 @@ export default function LeaderboardPage() {
                   {entry.display_name || entry.name.replace(".json", "")}
                 </td>
                 <td className="border border-gray-300 px-2 py-1 text-center text-sm font-semibold text-green-700">
-                  {typeof entry.score === "number" ? entry.score.toFixed(1) : "-"}
+                  {typeof entry.score === "number" ? (entry.score * 100).toFixed(1) : "-"}
                 </td>
                 {benchmarks.map((b, colIndex) => {
                   const scoreDict = entry.results?.[b];
@@ -69,7 +68,7 @@ export default function LeaderboardPage() {
                     const values = Object.values(scoreDict).filter((v) => typeof v === "number");
                     if (values.length > 0) {
                       const avg = values.reduce((sum, v) => sum + v, 0) / values.length;
-                      scoreVal = transformScore(avg);
+                      scoreVal = avg * 100;
                     }
                   }
                   return (
