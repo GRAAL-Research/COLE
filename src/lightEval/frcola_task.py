@@ -1,7 +1,13 @@
 import os
 import huggingface_hub
+import numpy as np
+from aenum import extend_enum
 from datasets import load_dataset
 from dotenv import load_dotenv
+from lighteval.metrics.metrics import Metrics
+from lighteval.metrics.metrics_sample import LoglikelihoodAcc
+from lighteval.metrics.normalizations import LogProbCharNorm
+from lighteval.metrics.utils.metric_utils import SampleLevelMetric, MetricCategory, MetricUseCase
 
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 import lighteval.tasks.lighteval_task
@@ -10,9 +16,6 @@ import lighteval.metrics.metrics as metrics
 
 from src.PromptBuilder import PromptBuilder
 
-load_dotenv()
-HF_TOKEN = os.getenv('HF_TOKEN')
-huggingface_hub.login(token=HF_TOKEN)
 
 print("using local frcola")
 
@@ -20,7 +23,7 @@ def prompt_fn(line, task_name: str = None):
     prompt = (PromptBuilder()
               .add_premise("Juge si cette phrase est grammaticalement correcte :")
               .add_data(line["sentence"])
-              .add_end("Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon.")
+              .add_end("Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon. La réponse est : ")
               .build())
     return Doc(
         task_name=task_name,
@@ -28,6 +31,21 @@ def prompt_fn(line, task_name: str = None):
         gold_index=line["label"],
         choices=["0","1"],
     )
+
+def wrapper (*args, **kwargs):
+    print(args,kwargs)
+    return LoglikelihoodAcc(logprob_normalization=None).compute(*args,**kwargs)
+accuracy_wrapper = SampleLevelMetric(
+        metric_name="acc",
+        sample_level_fn=wrapper,
+        category=MetricCategory.MULTICHOICE,
+        use_case=MetricUseCase.ACCURACY,
+        corpus_level_fn=np.mean,
+        higher_is_better=True,
+    )
+
+extend_enum(Metrics,"accuracy_wrapper",accuracy_wrapper)
+
 
 frcola_task = LightevalTaskConfig(
     name="frcola",
@@ -39,8 +57,9 @@ frcola_task = LightevalTaskConfig(
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.acc_golds_likelihood],
+    metric=[Metrics.accuracy_wrapper],
     trust_dataset=True,
+    stop_sequence=[],
 )
 
 TASKS_TABLE = [frcola_task]

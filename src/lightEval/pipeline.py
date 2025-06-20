@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 REPO_ID = "COLLE-Graal/ColleGraal"
 HF_TOKEN = os.getenv('HF_TOKEN')
-print(HF_TOKEN)
+
 huggingface_hub.login(token=HF_TOKEN)
 
 if is_accelerate_available():
@@ -34,7 +34,7 @@ def main():
         launcher_type=ParallelismManager.ACCELERATE,
         custom_tasks_directory="./tasks.py",
         # Remove the 2 parameters below once your configuration is tested
-        #max_samples=10,
+        max_samples=10,
 
     )
     print(lighteval.pipeline.Registry)

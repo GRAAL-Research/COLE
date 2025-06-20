@@ -11,10 +11,7 @@ from src.PromptBuilder import PromptBuilder
 
 REPO_ID = "COLLE-Graal/ColleGraal"
 
-load_dotenv()
-HF_TOKEN = os.getenv('HF_TOKEN')
-print(HF_TOKEN)
-huggingface_hub.login(token=HF_TOKEN)
+
 
 def prompt_fn(line, task_name: str = None):
     """Defines how to go from a dataset line to a doc object.
