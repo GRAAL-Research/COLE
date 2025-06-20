@@ -3,7 +3,7 @@ import os
 import huggingface_hub
 from datasets import load_dataset
 from dotenv import load_dotenv
-
+import src.lightEval.pearsonAndSpearman
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
 import lighteval.metrics.metrics as metrics
@@ -40,10 +40,10 @@ sickfr = LightevalTaskConfig(
 
     hf_repo=REPO_ID,
     hf_subset="data/sickfr",
-    hf_avail_splits=["train", "dev", "test"],
+    hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.acc_golds_likelihood],  # select your metric in Metrics
+    metric=[metrics.Metrics.pearson_spearman],  # select your metric in Metrics
     trust_dataset=True,
 )

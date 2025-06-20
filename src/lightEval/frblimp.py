@@ -40,7 +40,6 @@ def prompt_fn(line, task_name: str = None):
         query=prompt,
         gold_index= get_0_1_seeded(line),
         choices=["0", "1"],
-        # assuming binary classification: 0 or 1
         instruction=""
     )
 frblimp = LightevalTaskConfig(

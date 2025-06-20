@@ -43,7 +43,7 @@ xnli = LightevalTaskConfig(
 
     hf_repo=REPO_ID,
     hf_subset="data/xnli",
-    hf_avail_splits=["train", "dev", "test"],
+    hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,

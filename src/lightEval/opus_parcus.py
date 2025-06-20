@@ -31,7 +31,7 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=float(line["quality"]), # assuming binary classification: 0 or 1
+        gold_index=float(line["quality"]),
         instruction=""
     )
 opus_parcus = LightevalTaskConfig(
@@ -44,7 +44,6 @@ opus_parcus = LightevalTaskConfig(
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    # noinspection PyUnresolvedReferences
     metric=[metrics.Metrics.pearson_spearman],
 
     trust_dataset=True,
