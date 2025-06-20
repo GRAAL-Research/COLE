@@ -48,3 +48,4 @@ gqnli = LightevalTaskConfig(
     metric=[metrics.Metrics.acc_golds_likelihood],  # select your metric in Metrics
     trust_dataset=True,
 )
+TASKS_TABLE = [gqnli]
