@@ -3,6 +3,7 @@ import os
 import huggingface_hub
 from datasets import load_dataset
 from dotenv import load_dotenv
+import src.lightEval.pearsonAndSpearman
 
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
@@ -30,7 +31,7 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=line["score"],  # assuming binary classification: 0 or 1
+        gold_index=float(line["score"]),  # assuming binary classification: 0 or 1
         instruction=""
     )
 sts22 = LightevalTaskConfig(
@@ -39,10 +40,10 @@ sts22 = LightevalTaskConfig(
 
     hf_repo=REPO_ID,
     hf_subset="data/sts22",
-    hf_avail_splits=["train", "dev", "test"],
+    hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.acc_golds_likelihood],  # select your metric in Metrics
+    metric=[metrics.Metrics.pearson_spearman],  # select your metric in Metrics
     trust_dataset=True,
 )

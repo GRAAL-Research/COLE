@@ -33,7 +33,8 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=line["label"],  # assuming binary classification: 0 or 1
+        gold_index=line["label"],
+        choices=["0", "1", "2"],
         instruction=""
     )
 xnli = LightevalTaskConfig(
@@ -42,7 +43,7 @@ xnli = LightevalTaskConfig(
 
     hf_repo=REPO_ID,
     hf_subset="data/xnli",
-    hf_avail_splits=["train", "dev", "test"],
+    hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,

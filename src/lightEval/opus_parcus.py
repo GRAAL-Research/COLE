@@ -3,7 +3,7 @@ import os
 import huggingface_hub
 from datasets import load_dataset
 from dotenv import load_dotenv
-
+import src.lightEval.pearsonAndSpearman
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
 import lighteval.metrics.metrics as metrics
@@ -31,7 +31,7 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=line["quality"],  # assuming binary classification: 0 or 1
+        gold_index=float(line["quality"]),
         instruction=""
     )
 opus_parcus = LightevalTaskConfig(
@@ -44,9 +44,8 @@ opus_parcus = LightevalTaskConfig(
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[
-        metrics.Metrics.pearson_r,
-        metrics.Metrics.spearman_r
-    ],
+    metric=[metrics.Metrics.pearson_spearman],
+
     trust_dataset=True,
 )
+print(metrics.Metrics.pearson_spearman)
