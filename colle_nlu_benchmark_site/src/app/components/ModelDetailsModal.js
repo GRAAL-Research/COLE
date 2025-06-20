@@ -1,6 +1,13 @@
 "use client";
 import Modal from "./Modal";
 
+// Fonction utilitaire pour nettoyer le nom du benchmark
+const getCleanBenchmarkName = (name) => {
+  const parts = name.split("|");
+  if (parts.length >= 2) return parts[1];
+  return name;
+};
+
 export default function ModelDetailsModal({ entry, onClose }) {
   const modelName = entry.display_name || entry.name?.replace(".json", "") || "Unknown Model";
 
@@ -17,11 +24,14 @@ export default function ModelDetailsModal({ entry, onClose }) {
         <div className="space-y-4">
           {Object.entries(entry.results || {}).map(([benchmark, metrics]) => (
             <div key={benchmark} className="p-4 border rounded-md bg-white shadow-md">
-              <h4 className="text-lg font-medium text-blue-600 mb-2">📊 {benchmark}</h4>
+              <h4 className="text-lg font-medium text-blue-600 mb-2">
+                📊 {getCleanBenchmarkName(benchmark)}
+              </h4>
               <ul className="ml-4 text-sm text-gray-700 list-disc">
                 {Object.entries(metrics).map(([metric, value]) => (
                   <li key={metric}>
-                    <strong>{metric}</strong>: {typeof value === "number" ? value.toFixed(4) : value}
+                    <strong>{metric}</strong>:{" "}
+                    {typeof value === "number" ? value.toFixed(4) : value}
                   </li>
                 ))}
               </ul>

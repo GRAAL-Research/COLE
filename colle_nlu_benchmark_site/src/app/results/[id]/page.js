@@ -16,7 +16,7 @@ const getReadableMetricName = (metric) => {
     metricLabel[metric] ||
     metric
       .replace(/_/g, " ")
-      .replace(/\b\w/g, (c) => c.toUpperCase()) // met en majuscule chaque mot
+      .replace(/\b\w/g, (c) => c.toUpperCase())
   );
 };
 
