@@ -1,7 +1,14 @@
+export const normalizeBenchmarkName = (name) => {
+  const parts = name.toLowerCase().split("|");
+  if (parts.length >= 2) return parts[1].replace("-", "_");
+  return name.toLowerCase();
+};
+
 export const computeAverageScore = (entry) => {
-  const values = Object.values(entry.results || {}).flatMap((scoreObj) =>
-    Object.values(scoreObj).filter((v) => typeof v === "number")
-  );
+  const values = Object.entries(entry.results || {})
+    .flatMap(([name, scoreObj]) =>
+      Object.values(scoreObj).filter((v) => typeof v === "number")
+    );
 
   if (values.length === 0) return null;
 
