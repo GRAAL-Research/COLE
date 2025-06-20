@@ -4,7 +4,6 @@ import tempfile
 import zipfile
 import json
 from dotenv import load_dotenv
-from datetime import datetime
 from uuid import uuid4
 
 from fastapi import FastAPI, UploadFile, Form, File, HTTPException
@@ -25,10 +24,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:3001",  # Frontend
-    ],
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -47,9 +43,9 @@ BENCHMARKS = {
 
 
 @app.post("/submit")
-async def submit_post(email: str = Form(...), labels: UploadFile = File(...),display_name: str = Form(...),):
+async def submit_post(email: str = Form(...), labels: UploadFile = File(...), display_name: str = Form(...)):
     print(" Requête reçue avec email :", email)
-    print(" Nom du fichier ZIP soumis :", labels.filename)
+    print(" Nom du fichier ZIP :", labels.filename)
 
     with tempfile.TemporaryDirectory() as tmpdir:
         zip_path = os.path.join(tmpdir, "submission.zip")
@@ -60,36 +56,54 @@ async def submit_post(email: str = Form(...), labels: UploadFile = File(...),dis
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(tmpdir)
 
-        json_files = []
-        for root, _, files in os.walk(tmpdir):
-            for file in files:
-                if file.endswith(".json") or file.endswith(".jsonl"):
-                    json_files.append(os.path.join(root, file))
+        json_files = [
+            os.path.join(root, file)
+            for root, _, files in os.walk(tmpdir)
+            for file in files
+            if file.endswith(".json")
+        ]
 
-        print(" Fichiers extraits :", json_files)
-        print(" Benchmarks disponibles :", list(BENCHMARKS.keys()))
+        if not json_files:
+            raise HTTPException(status_code=400, detail=" Aucun fichier JSON trouvé dans l'archive.")
 
         results_summary = {}
         errors = {}
 
         for json_file in json_files:
-            bench_name = os.path.splitext(os.path.basename(json_file))[0].lower()
-            print(" Benchmark détecté :", bench_name)
-            benchmark = BENCHMARKS.get(bench_name)
-
-            if not benchmark:
-                print(f" Benchmark inconnu : {bench_name}")
-                errors[json_file] = "Benchmark inconnu"
-                continue
-
             try:
-                with open(json_file, "r", encoding="utf-8") as f:
-                    predictions = [line.strip() for line in f if line.strip()]
-                score = benchmark.compare_infered_results(predictions)
-                results_summary[bench_name] = score
+                with open(json_file, "r", encoding="utf-8-sig") as f:
+                    data = json.load(f)
+
+                candidate_results = data.get("results") or data
+
+                if not isinstance(candidate_results, dict):
+                    raise ValueError("Format inattendu : les résultats ne sont pas un dictionnaire")
+
+                for raw_name, predictions in candidate_results.items():
+                    parts = raw_name.lower().split("|")
+                    bench_key = parts[1] if len(parts) >= 2 else raw_name.lower()
+                    bench_key = bench_key.replace("-", "_").strip()
+
+                    benchmark = BENCHMARKS.get(bench_key)
+
+                    if benchmark:
+                        if isinstance(predictions, dict) and "acc" in predictions:
+                            results_summary[raw_name] = predictions
+                            print(f" Résultat pré-calculé accepté pour : {raw_name}")
+                        else:
+                            try:
+                                score = benchmark.compare_infered_results(predictions)
+                                results_summary[raw_name] = score
+                            except Exception as e:
+                                print(f" Erreur benchmark connu {raw_name} :", e)
+                                errors[raw_name] = str(e)
+                    else:
+                        results_summary[raw_name] = predictions
+                        print(f"️ Résultat brut ajouté pour : {raw_name}")
+
             except Exception as e:
                 print(f" Erreur dans {json_file} :", e)
-                errors[json_file] = str(e)
+                errors[os.path.basename(json_file)] = str(e)
 
         submission_id = str(uuid4())
         filename = f"{submission_id}.json"
@@ -99,12 +113,13 @@ async def submit_post(email: str = Form(...), labels: UploadFile = File(...),dis
             json.dump({
                 "email": email,
                 "display_name": display_name,
-                "zip_filename": labels.filename,        # ✅ ajouté
+                "zip_filename": labels.filename,
                 "results": results_summary,
-                "errors": errors
+                "errors": errors,
+                "submission_id": submission_id
             }, f, indent=2, ensure_ascii=False)
 
-        print(f" Résultats sauvegardés dans {result_path}")
+        print(f" Résultats sauvegardés dans : {result_path}")
 
         return {
             "email": email,
@@ -117,7 +132,7 @@ async def submit_post(email: str = Form(...), labels: UploadFile = File(...),dis
 
 @app.get("/results")
 def get_latest_results():
-    raise HTTPException(status_code=400, detail="Tu dois utiliser un identifiant de soumission pour voir les résultats.")
+    raise HTTPException(status_code=400, detail="️ Tu dois utiliser un identifiant de soumission pour voir les résultats.")
 
 
 @app.get("/results/{filename}")
