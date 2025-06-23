@@ -19,7 +19,10 @@ if not hasattr(MetricUseCase, "SEMANTIC_SIMILARITY"):
 
 def pearson_spearman_metric(predictions: list[str], formatted_doc: Doc, **kwargs) -> dict:
     try:
-        response = float(predictions[0])
+        if predictions and predictions[0].strip():
+            response = float(predictions[0])
+        else:
+            response = 0.0
     except Exception:
         response = 0.0
     gold = float(formatted_doc.gold_index)
@@ -28,7 +31,6 @@ def pearson_spearman_metric(predictions: list[str], formatted_doc: Doc, **kwargs
         "spearman_r": (response, gold)
     }
 
-# -------- Corpus-level aggregations -------- #
 def pearson_agg(pairs):
     preds, golds = zip(*pairs)
     return pearsonr(preds, golds)[0]
@@ -37,7 +39,6 @@ def spearman_agg(pairs):
     preds, golds = zip(*pairs)
     return spearmanr(preds, golds)[0]
 
-# -------- Déclaration de la métrique groupée -------- #
 pearson_spearman_metric_obj = SampleLevelMetricGrouping(
     metric_name=["pearson_r", "spearman_r"],
     higher_is_better={"pearson_r": True, "spearman_r": True},
@@ -49,8 +50,6 @@ pearson_spearman_metric_obj = SampleLevelMetricGrouping(
         "spearman_r": spearman_agg,
     },
 )
-
-# -------- Ajout à l'enum officielle -------- #
 extend_enum(metrics.Metrics, "pearson_spearman", pearson_spearman_metric_obj)
 
 if __name__ == "__main__":
