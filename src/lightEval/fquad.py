@@ -35,7 +35,7 @@ fquad = LightevalTaskConfig(
     prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
 
     hf_repo=REPO_ID,
-    hf_subset="data/fquad",
+    hf_subset="fquad",
     hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,

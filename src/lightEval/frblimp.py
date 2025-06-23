@@ -16,7 +16,7 @@ seed = 32144523
 
 
 def get_0_1_seeded( test):
-    return (seed + test["id"] ^ 2 * 7) % 2
+    return (seed + test["__index"] ^ 2 * 7) % 2
 
 
 def prompt_fn(line, task_name: str = None):
@@ -44,11 +44,11 @@ frblimp = LightevalTaskConfig(
     prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
 
     hf_repo=REPO_ID,
-    hf_subset="data/fr_blimp",
+    hf_subset="fr_blimp",
     hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.acc_golds_likelihood],  # select your metric in Metrics
+    metric=[metrics.Metrics.accuracy_wrapper],  # select your metric in Metrics
     trust_dataset=True,
 )

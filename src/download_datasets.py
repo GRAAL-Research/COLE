@@ -16,7 +16,7 @@ DATA_DIRECTORY = "data"
 DIRECTORY = "./Benchmarks_data"
 HF_TOKEN = os.getenv('HF_TOKEN')
 
-datasets = ["allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "xnli","frcola","fr_blimp"]
+datasets = ["allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "xnli","frcola","fr_blimp","sts22_crosslingual"]
 huggingface_hub.login(token=HF_TOKEN)
 
 def download_datasets():
@@ -102,3 +102,5 @@ def build_split(splitname, datasetname):
 def create_new_yaml(path): #"file path
     with open(path, "w+") as file:
         yaml.dump(build_yaml(), file, sort_keys=False)
+
+print(load_dataset(REPO_ID,"sts22_crosslingual"))

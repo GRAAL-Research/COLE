@@ -2,7 +2,9 @@ import os
 
 import huggingface_hub
 import lighteval
+from datasets import load_dataset
 
+import CustomMetrics
 from lighteval.logging.evaluation_tracker import EvaluationTracker
 from lighteval.models.transformers.transformers_model import TransformersModelConfig
 from lighteval.pipeline import ParallelismManager, Pipeline, PipelineParameters
@@ -61,8 +63,9 @@ def main():
     pipeline.show_results()
 
 def build_tasks_name ():
-    tasks = ["custom|frcola|0|0",]
+    tasks = ["custom|gqnli|0|0",]
     return ",".join(tasks)
 
 if __name__ == "__main__":
+
     main()
