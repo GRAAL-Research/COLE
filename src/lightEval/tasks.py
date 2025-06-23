@@ -1,4 +1,5 @@
-from src.lightEval.frcola_task import frcola_task
+from src.lightEval.frblimp import frblimp
+from src.lightEval.frcola import frcola_task
 from sickfr import sickfr
 from gqnli import gqnli
 from allocine import allocine
@@ -7,4 +8,4 @@ from piaf import piaf
 from sts22 import sts22
 from paws_x import paws_x
 from xnli import xnli
-TASKS_TABLE = [frcola_task,sickfr,gqnli,allocine,fquad,paws_x,piaf,sts22,xnli]
+TASKS_TABLE = [frcola_task,sickfr,gqnli,allocine,fquad,paws_x,piaf,sts22,xnli,frblimp]

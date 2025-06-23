@@ -32,19 +32,7 @@ def prompt_fn(line, task_name: str = None):
         choices=["0","1"],
     )
 
-def wrapper (*args, **kwargs):
-    print(args,kwargs)
-    return LoglikelihoodAcc(logprob_normalization=None).compute(*args,**kwargs)
-accuracy_wrapper = SampleLevelMetric(
-        metric_name="acc",
-        sample_level_fn=wrapper,
-        category=MetricCategory.MULTICHOICE,
-        use_case=MetricUseCase.ACCURACY,
-        corpus_level_fn=np.mean,
-        higher_is_better=True,
-    )
 
-extend_enum(Metrics,"accuracy_wrapper",accuracy_wrapper)
 
 
 frcola_task = LightevalTaskConfig(
