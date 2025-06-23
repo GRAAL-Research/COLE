@@ -5,10 +5,15 @@ export const normalizeBenchmarkName = (name) => {
 };
 
 export const computeAverageScore = (entry) => {
+  const allowedMetrics = ["acc", "f1", "pearson", "spearman"];
+
   const values = Object.entries(entry.results || {})
     .flatMap(([name, scoreObj]) =>
-      Object.values(scoreObj).filter((v) => typeof v === "number")
-    );
+      Object.entries(scoreObj)
+        .filter(([metric]) => allowedMetrics.includes(metric.toLowerCase()))
+        .map(([_, value]) => value)
+    )
+    .filter((v) => typeof v === "number");
 
   if (values.length === 0) return null;
 
