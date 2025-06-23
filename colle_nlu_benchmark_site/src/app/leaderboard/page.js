@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { computeRankedEntries, normalizeBenchmarkName } from "./util";
 import ModelDetailsModal from "../components/ModelDetailsModal";
 
+const allowedMetrics = ["acc", "f1", "pearson", "spearman"];
+
 export default function LeaderboardPage() {
   const [entries, setEntries] = useState([]);
   const [benchmarks, setBenchmarks] = useState([]);
@@ -32,7 +34,7 @@ export default function LeaderboardPage() {
         Leaderboard
       </h2>
 
-      <div className="w-full">
+      <div className="w-full overflow-x-auto">
         <table className="w-full text-sm border border-blue-500 shadow-md">
           <thead>
             <tr className="bg-blue-100 text-blue-800">
@@ -68,19 +70,23 @@ export default function LeaderboardPage() {
 
                   let scoreVal = "-";
                   if (scoreDict) {
-                    const values = Object.values(scoreDict).filter((v) => typeof v === "number");
+                    const values = Object.entries(scoreDict)
+                      .filter(([metric]) => allowedMetrics.includes(metric.toLowerCase()))
+                      .map(([_, v]) => v)
+                      .filter((v) => typeof v === "number");
+
                     if (values.length > 0) {
                       const avg = values.reduce((sum, v) => sum + v, 0) / values.length;
-                      scoreVal = avg * 100;
+                      scoreVal = (avg * 100).toFixed(1);
                     }
                   }
 
                   return (
                     <td
                       key={colIndex}
-                      className="border border-gray-200 px-2 py-1 text-center text-sm"
+                      className="border border-gray-200 px-2 py-1 text-center text-sm text-purple-700"
                     >
-                      {typeof scoreVal === "number" ? scoreVal.toFixed(1) : scoreVal}
+                      {scoreVal}
                     </td>
                   );
                 })}
