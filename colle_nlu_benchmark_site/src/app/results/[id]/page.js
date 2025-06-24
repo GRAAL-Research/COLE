@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { use } from "react";
+import React, { useEffect, useState } from 'react';
+import { use } from 'react';
 
 const metricLabel = {
   acc: "Accuracy",
@@ -47,30 +47,25 @@ export default function ResultsPage({ params }) {
       .catch((err) => setError(err.message));
   }, [submissionId]);
 
-  useEffect(() => {
+  const handleDownload = () => {
     if (!data) return;
+    const fileName = data.file || `${submissionId}.json`;
+    const downloadUrl = `http://localhost:8000/results/${fileName}`;
 
-    const downloadKey = `downloaded_${submissionId}`;
-    const alreadyDownloaded = localStorage.getItem(downloadKey);
-
-    const file = data.file || `${submissionId}.json`;
-
-    if (!alreadyDownloaded && file) {
-      const link = document.createElement("a");
-      link.href = `http://localhost:8000/results/${file}`;
-      link.download = file;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      localStorage.setItem(downloadKey, "true");
-    }
-  }, [data, submissionId]);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   if (error) {
     return (
       <main className="max-w-3xl mx-auto px-6 py-6 text-center">
-        <p className="text-red-600 font-semibold text-lg">❌ Error: {error}</p>
+        <p className="text-red-600 font-semibold text-lg">
+          ❌ Error: {error}
+        </p>
       </main>
     );
   }
@@ -91,29 +86,42 @@ export default function ResultsPage({ params }) {
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-6">
-      <h2 className="text-2xl font-bold text-center mb-6">
+      <h2 className="text-2xl font-bold text-center mb-4">
         <span className="text-blue-700">📊 Results for </span>
         <span className="text-gray-800">{displayName}</span>
       </h2>
 
-      {/* Résumé global */}
+      <div className="flex justify-center mb-6">
+        <button
+          onClick={handleDownload}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+        >
+          ️ Download JSON
+        </button>
+      </div>
+
       {Object.keys(globalMetrics).length > 0 && (
         <div className="mb-6 p-5 bg-blue-50 border border-blue-300 rounded-md">
-          <h3 className="text-lg font-semibold text-blue-700 mb-2">🌐 Global Score</h3>
+          <h3 className="text-lg font-semibold text-blue-700 mb-2">
+            🌐 Global Score
+          </h3>
           <ul className="ml-4 text-sm text-gray-700 list-disc">
             {Object.entries(globalMetrics).map(([metric, value]) => (
               <li key={metric}>
                 <strong>{getReadableMetricName(metric)}</strong>:{" "}
-                {typeof value === "number" ? (value * 100).toFixed(1) + "%" : value}
+                {typeof value === "number"
+                  ? (value * 100).toFixed(1) + "%"
+                  : value}
               </li>
             ))}
           </ul>
         </div>
       )}
 
-      {/* Résultats par tâche */}
       {taskResults.length === 0 ? (
-        <p className="text-blue-700 text-center">⚠️ No benchmark results found.</p>
+        <p className="text-blue-700 text-center">
+          ⚠️ No benchmark results found.
+        </p>
       ) : (
         <div className="space-y-6">
           {taskResults.map(([key, metrics]) => {
