@@ -5,7 +5,8 @@ from gqnli import gqnli
 from allocine import allocine
 from fquad import fquad
 from piaf import piaf
+from src.lightEval.opus_parcus import opus_parcus
 from sts22 import sts22
 from paws_x import paws_x
 from xnli import xnli
-TASKS_TABLE = [frcola_task,sickfr,gqnli,allocine,fquad,paws_x,piaf,sts22,xnli,frblimp]
+TASKS_TABLE = [frcola_task,sickfr,gqnli,allocine,fquad,paws_x,piaf,sts22,xnli,frblimp,opus_parcus]

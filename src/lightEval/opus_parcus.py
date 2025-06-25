@@ -27,13 +27,13 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=float(line["quality"]),
+        gold_index=0,
+        choices=[line["quality"]],
         instruction=""
     )
 opus_parcus = LightevalTaskConfig(
     name="opus_parcus", #NAME
     prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
-
     hf_repo=REPO_ID,
     hf_subset="opus_parcus",
     hf_avail_splits=["train", "validation", "test"],

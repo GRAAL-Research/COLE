@@ -39,11 +39,11 @@ xnli = LightevalTaskConfig(
     prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
 
     hf_repo=REPO_ID,
-    hf_subset="data/xnli",
+    hf_subset="xnli",
     hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.acc_golds_likelihood],  # select your metric in Metrics
+    metric=[metrics.Metrics.accuracy_wrapper],  # select your metric in Metrics
     trust_dataset=True,
 )

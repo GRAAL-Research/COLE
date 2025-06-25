@@ -24,7 +24,8 @@ class PromptBuilder():
     def build(self):
         if len(self.data) == 0:
             print("This prompt did not contain any data, was it intentional ?")
-        data = " ".join(self.data)
+
+        data = "/n".join(self.data)
         if self.data_only:
             return data
         else:

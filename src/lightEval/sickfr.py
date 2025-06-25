@@ -31,13 +31,14 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=float(line["relatedness_score"]),   # assuming binary classification: 0 or 1
+        gold_index=0,
+        choices=[line["relatedness_score"]],
         instruction=""
     )
 sickfr = LightevalTaskConfig(
-    name="sickfr", #NAME
-    prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
-
+    name="sickfr",
+    prompt_function=prompt_fn,
+    generation_size=5,
     hf_repo=REPO_ID,
     hf_subset="sickfr",
     hf_avail_splits=["train", "validation", "test"],
