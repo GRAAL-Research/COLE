@@ -22,7 +22,7 @@ def prompt_fn(line, task_name: str = None):
     prompt = (PromptBuilder()
               .add_premise("Les deux phrases suivantes expriment-elles la même idée ou sont-elles différentes ?")
               .add_data(sent1).add_data(sent2)
-              .add_end("Réponds seulement avec un chiffre de 0 à 5 où 5"
+              .add_end("Réponds seulement avec un chiffre entre 60 et 100 où 100"
                        " signifie que les deux phrases veulent dire exactement la même chose.").build())
     return Doc(
         task_name=task_name,

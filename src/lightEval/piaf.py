@@ -31,7 +31,9 @@ def prompt_fn(line, task_name: str = None):
         task_name=task_name,
         query=prompt,
         gold_index=line["answers"]["answer_start"][0],  # assuming binary classification: 0 or 1
-        instruction=""
+        instruction="",
+        choices = [str(i) for i in range(1, 1000)],
+
     )
 piaf = LightevalTaskConfig(
     name="piaf", #NAME
@@ -43,6 +45,6 @@ piaf = LightevalTaskConfig(
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.pearson_spearman],  # select your metric in Metrics
+    metric=[metrics.Metrics.pearson],  # select your metric in Metrics
     trust_dataset=True,
 )

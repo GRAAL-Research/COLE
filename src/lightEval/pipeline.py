@@ -36,7 +36,7 @@ def main():
         launcher_type=ParallelismManager.ACCELERATE,
         custom_tasks_directory="./tasks.py",
         # Remove the 2 parameters below once your configuration is tested
-        max_samples=10,
+        max_samples=3,
 
     )
     print(lighteval.pipeline.Registry)
@@ -44,6 +44,7 @@ def main():
             model_name="babylm/babyllama-100m-2024",
             dtype="float16",
             use_chat_template=True,
+
     )
 
     task = build_tasks_name()
@@ -54,18 +55,18 @@ def main():
         evaluation_tracker=evaluation_tracker,
         model_config=model_config,
 
+
     )
 
     pipeline.evaluate()
-    print(pipeline.task_dict)
-    print(pipeline.get_results())
-    pipeline.save_and_push_results()
+    print("task dict :",pipeline.task_dict)
+    print("results : ", pipeline.get_results())
+    #pipeline.save_and_push_results() TODO add back before run
     pipeline.show_results()
 
 def build_tasks_name ():
-    tasks = ["custom|gqnli|0|0",]
+    tasks = ["custom|piaf|0|0",]
     return ",".join(tasks)
 
 if __name__ == "__main__":
-
     main()
