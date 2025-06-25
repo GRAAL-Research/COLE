@@ -36,14 +36,16 @@ def main():
         launcher_type=ParallelismManager.ACCELERATE,
         custom_tasks_directory="./tasks.py",
         # Remove the 2 parameters below once your configuration is tested
-        max_samples=10,
+        max_samples=3,
 
     )
     print(lighteval.pipeline.Registry)
     model_config = TransformersModelConfig(
-            model_name="babylm/babyllama-100m-2024",
-            dtype="float16",
+            model_name="mistralai/Mistral-7B-v0.1",
+            dtype="auto",
             use_chat_template=True,
+            device="cuda",
+            batch_size=1
     )
 
     task = build_tasks_name()
@@ -54,18 +56,20 @@ def main():
         evaluation_tracker=evaluation_tracker,
         model_config=model_config,
 
+
     )
 
     pipeline.evaluate()
-    print(pipeline.task_dict)
-    print(pipeline.get_results())
+    print("task dict :",pipeline.task_dict)
+    print("results : ", pipeline.get_results())
     pipeline.save_and_push_results()
     pipeline.show_results()
 
 def build_tasks_name ():
-    tasks = ["custom|gqnli|0|0",]
+    tasks_names = ["allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "piaf", "sickfr", "xnli","frcola","frblimp","sts22"]
+    tasks = [build_task(name=task_name) for task_name in tasks_names]
     return ",".join(tasks)
-
+def build_task(section="custom",name=None,shots=0,instruct=0):
+    return f"{section}|{name}|{shots}|{instruct}"
 if __name__ == "__main__":
-
     main()

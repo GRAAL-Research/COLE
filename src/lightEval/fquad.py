@@ -1,4 +1,5 @@
 import os
+from random import choices
 
 import huggingface_hub
 from datasets import load_dataset
@@ -19,21 +20,26 @@ def prompt_fn(line, task_name: str = None):
     about what this function should do in the README.
     """
     #TODO build fquad prompt
+
+
     prompt = (PromptBuilder()
-              .add_premise("")
-              .add_data()
-              .add_end("").build())
+              .add_premise("Voici un contexte et une question. Réponds à la question en te basant uniquement sur le contexte.")
+              .add_data("contexte : ").add_data(line["context"])
+              .add_data("question :").add_data(line["question"])
+              .add_end("Dans le texte ci-dessous, combien de caractères précèdent la réponse à la question ? Réponds uniquement avec un nombre.. La réponse est : ").build())
     is_impossible = line["is_impossible"]
+    answers = [str(i) for i in line["answers"]["answers_start"]]
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index= 1 if not is_impossible else 0,  # assuming binary classification: 0 or 1
-        instruction=""
+        gold_index=0,  # assuming binary classification: 0 or 1
+        instruction="",
+        choices = answers if not is_impossible else ["0"]
     )
 fquad = LightevalTaskConfig(
     name="fquad", #NAME
     prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
-
+    generation_size=5,
     hf_repo=REPO_ID,
     hf_subset="fquad",
     hf_avail_splits=["train", "validation", "test"],

@@ -22,18 +22,18 @@ def prompt_fn(line, task_name: str = None):
     prompt = (PromptBuilder()
               .add_premise("Les deux phrases suivantes expriment-elles la même idée ou sont-elles différentes ?")
               .add_data(sent1).add_data(sent2)
-              .add_end("Réponds seulement avec un chiffre de 0 à 5 où 5"
+              .add_end("Réponds seulement avec un chiffre entre 60 et 100 où 100"
                        " signifie que les deux phrases veulent dire exactement la même chose.").build())
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=float(line["quality"]),
+        gold_index=0,
+        choices=[line["quality"]],
         instruction=""
     )
 opus_parcus = LightevalTaskConfig(
     name="opus_parcus", #NAME
     prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
-
     hf_repo=REPO_ID,
     hf_subset="opus_parcus",
     hf_avail_splits=["train", "validation", "test"],

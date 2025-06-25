@@ -50,7 +50,7 @@ pearson_spearman_metric_obj = SampleLevelMetricGrouping(
         "spearman_r": spearman_agg,
     },
 )
-extend_enum(metrics.Metrics, "pearson_spearman", pearson_spearman_metric_obj)
+extend_enum(metrics.Metrics, "pearson_spearman_deprecated", pearson_spearman_metric_obj)
 
 if __name__ == "__main__":
     print("✅ Imported pearson_spearman metric")
