@@ -12,11 +12,7 @@ from lighteval.utils.imports import is_accelerate_available
 from dotenv import load_dotenv
 
 
-load_dotenv()
-REPO_ID = "COLLE-Graal/ColleGraal"
-HF_TOKEN = os.getenv('HF_TOKEN')
 
-huggingface_hub.login(token=HF_TOKEN)
 
 if is_accelerate_available():
     from datetime import timedelta
@@ -41,7 +37,7 @@ def main():
     )
     print(lighteval.pipeline.Registry)
     model_config = TransformersModelConfig(
-            model_name="mistralai/Mistral-7B-v0.1",
+            model_name="babylm/babyllama-100m-2024",
             dtype="auto",
             use_chat_template=True,
             device="cuda",
