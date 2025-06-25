@@ -18,5 +18,5 @@ def hugging_face_login():
         HF_TOKEN = os.getenv('HF_TOKEN')
         huggingface_hub.login(token=HF_TOKEN)
     except Exception as e:
-        print(f"Couldn't login to Huggingface hub : {e})
+        print(f"Couldn't login to Huggingface hub : {e}")
 
