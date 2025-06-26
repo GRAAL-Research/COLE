@@ -8,9 +8,7 @@ from lighteval.metrics.utils.metric_utils import SampleLevelMetric, MetricCatego
 from lighteval.tasks.requests import Doc
 
 def wrapper(*args, **kwargs):
-    print(args)
     return LoglikelihoodAcc(logprob_normalization=None).compute(*args, **kwargs)
-
 
 accuracy_wrapper = SampleLevelMetric(
     metric_name="acc",
@@ -44,18 +42,14 @@ def pearson_spearman_parse(predictions):
 
 def pearson_spearman_metric(items, **kwargs) -> dict:
     # Convert predictions to float
-    print("items :", items)
     preds = [sample["preds"] for sample in items]
     golds = [sample["gold"] for sample in items]
     if len(preds) < 2:
         int()
         return {"pearson": 0.0, "spearman": 0.0}  # Can't compute correlation with <2 points
-    print("golds :", golds)
-    print("preds :", preds)
 
     pearson_corr = float(pearsonr(preds, golds)[0])
     spearman_corr = float(spearmanr(preds, golds)[0])
-    print("pearson:", pearson_corr)
     return {"pearson": pearson_corr, "spearman": spearman_corr}
 
 pearson = CorpusLevelMetric(

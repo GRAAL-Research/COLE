@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 
 
-from src.Models.HuggingFaceModel import HFLLMModel
+from archives.Models.HuggingFaceModel import HFLLMModel
 
 load_dotenv()
 

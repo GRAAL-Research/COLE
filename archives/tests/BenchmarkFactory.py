@@ -1,6 +1,6 @@
 import os
 
-from src.Benchmarks import AllocineBench, Paws_xBench, FquadBench, Opus_parcusBench, GqnliBench, FrblimpBench, \
+from archives.Benchmarks import AllocineBench, Paws_xBench, FquadBench, Opus_parcusBench, GqnliBench, FrblimpBench, \
     PiafBench, SickfrBench, XnliBench
 
 DATASETS = ["Allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "multiblimp", "piaf", "sickfr", "Xnli"]

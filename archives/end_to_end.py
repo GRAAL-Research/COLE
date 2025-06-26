@@ -5,7 +5,7 @@ import pandas as pd
 from Benchmarks import FrColaBench, AllocineBench, Sts22Bench, Paws_xBench, XnliBench, PiafBench, SickfrBench, \
     Opus_parcusBench, FrblimpBench, GqnliBench
 from BenchmarkSuite import BenchmarkSuite
-from src.Models.Model import Model, make_claude_inference
+from archives.Models.Model import Model, make_claude_inference
 from all_llms import create_models
 
 claude_model_names = [

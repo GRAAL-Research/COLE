@@ -1,5 +1,5 @@
 import pytest
-from src.BenchmarkSuite import BenchmarkSuite
+from archives.BenchmarkSuite import BenchmarkSuite
 
 # Modèles et benchmarks factices pour simuler le comportement
 class DummyModel:

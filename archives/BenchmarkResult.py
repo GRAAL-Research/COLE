@@ -2,12 +2,9 @@ import json
 import os
 from enum import Enum
 from pathlib import Path
-from unittest import case
 from xxsubtype import bench
 
-from sympy.strategies.core import switch
-
-from src.Utils import create_directory
+from src.lightEval.Utils import create_directory
 
 
 class Format(Enum):

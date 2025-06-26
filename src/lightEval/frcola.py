@@ -1,7 +1,7 @@
 from lighteval.metrics.metrics import Metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
-from src.PromptBuilder import PromptBuilder
+from src.lightEval.PromptBuilder import PromptBuilder
 
 print("using local frcola")
 

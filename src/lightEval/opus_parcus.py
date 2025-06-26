@@ -1,13 +1,7 @@
-import os
-
-import huggingface_hub
-from datasets import load_dataset
-from dotenv import load_dotenv
-import src.lightEval.pearsonAndSpearman
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
 import lighteval.metrics.metrics as metrics
-from src.PromptBuilder import PromptBuilder
+from src.lightEval.PromptBuilder import PromptBuilder
 
 REPO_ID = "COLLE-Graal/ColleGraal"
 

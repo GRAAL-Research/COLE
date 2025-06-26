@@ -6,7 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 import zipfile
 import tempfile
 
-from src.BenchmarkSuite import BenchmarkSuite
+from archives.BenchmarkSuite import BenchmarkSuite
 
 app = FastAPI()
 

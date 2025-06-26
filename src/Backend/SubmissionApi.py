@@ -10,7 +10,7 @@ from fastapi import FastAPI, UploadFile, Form, File, HTTPException
 from fastapi.responses import FileResponse
 from starlette.middleware.cors import CORSMiddleware
 
-from src.Benchmarks import (
+from archives.Benchmarks import (
     AllocineBench, FrColaBench, Paws_xBench, XnliBench,
     PiafBench, SickfrBench, Opus_parcusBench, Sts22Bench
 )

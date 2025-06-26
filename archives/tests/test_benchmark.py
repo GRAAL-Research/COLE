@@ -2,10 +2,10 @@ from pathlib import Path
 
 import pytest
 
-from src.Benchmark import Benchmark
-from src.Benchmarks import AllocineBench
-from src.Metrics import Accuracy
-from src.Models.Model import Model
+from archives.Benchmark import Benchmark
+from archives.Benchmarks import AllocineBench
+from archives.Metrics import Accuracy
+from archives.Models.Model import Model
 
 
 class DummyModel(Model):
