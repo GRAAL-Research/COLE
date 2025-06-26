@@ -3,14 +3,9 @@ import re
 import numpy as np
 from aenum import extend_enum
 from lighteval.metrics.metrics import Metrics
-from lighteval.metrics.metrics_corpus import CorpusLevelF1Score
 from lighteval.metrics.metrics_sample import LoglikelihoodAcc
-from lighteval.metrics.sample_preparator import LogprobCorpusMetricInput, LoglikelihoodPreparator
 from lighteval.metrics.utils.metric_utils import SampleLevelMetric, MetricCategory, MetricUseCase, CorpusLevelMetric
 from lighteval.tasks.requests import Doc
-
-from src.Metrics import Pearson
-
 
 def wrapper(*args, **kwargs):
     print(args)
@@ -26,7 +21,7 @@ accuracy_wrapper = SampleLevelMetric(
     higher_is_better=True,
 )
 
-extend_enum(Metrics, "accuracy_wrapper", accuracy_wrapper)
+
 
 from scipy.stats import pearsonr, spearmanr
 
@@ -72,3 +67,5 @@ pearson = CorpusLevelMetric(
     higher_is_better=True,
 )
 extend_enum(Metrics, "pearson_spearman", pearson)
+extend_enum(Metrics, "accuracy_wrapper", accuracy_wrapper)
+print("added custom metrics")

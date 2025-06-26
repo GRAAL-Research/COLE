@@ -1,16 +1,9 @@
-import os
-
-import huggingface_hub
-from datasets import load_dataset
-from dotenv import load_dotenv
-
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
 import lighteval.metrics.metrics as metrics
 from src.PromptBuilder import PromptBuilder
 
 REPO_ID = "COLLE-Graal/ColleGraal"
-
 
 
 def prompt_fn(line, task_name: str = None):
@@ -34,10 +27,12 @@ def prompt_fn(line, task_name: str = None):
         choices=["0", "1", "2"],
         instruction=""
     )
-xnli = LightevalTaskConfig(
-    name="xnli", #NAME
-    prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
 
+
+xnli = LightevalTaskConfig(
+    name="xnli",  # NAME
+    prompt_function=prompt_fn,
+    # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
     hf_repo=REPO_ID,
     hf_subset="xnli",
     hf_avail_splits=["train", "validation", "test"],

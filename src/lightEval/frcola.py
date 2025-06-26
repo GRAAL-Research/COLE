@@ -1,38 +1,24 @@
-import os
-import huggingface_hub
-import numpy as np
-from aenum import extend_enum
-from datasets import load_dataset
-from dotenv import load_dotenv
 from lighteval.metrics.metrics import Metrics
-from lighteval.metrics.metrics_sample import LoglikelihoodAcc
-from lighteval.metrics.normalizations import LogProbCharNorm
-from lighteval.metrics.utils.metric_utils import SampleLevelMetric, MetricCategory, MetricUseCase
-
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
-import lighteval.tasks.lighteval_task
 from lighteval.tasks.requests import Doc
-import lighteval.metrics.metrics as metrics
-
 from src.PromptBuilder import PromptBuilder
 
-
 print("using local frcola")
+
 
 def prompt_fn(line, task_name: str = None):
     prompt = (PromptBuilder()
               .add_premise("Juge si cette phrase est grammaticalement correcte :")
               .add_data(line["sentence"])
-              .add_end("Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon. La réponse est : ")
+              .add_end(
+        "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon. La réponse est : ")
               .build())
     return Doc(
         task_name=task_name,
         query=prompt,
         gold_index=line["label"],
-        choices=["0","1"],
+        choices=["0", "1"],
     )
-
-
 
 
 frcola_task = LightevalTaskConfig(
