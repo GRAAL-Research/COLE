@@ -33,6 +33,7 @@ def prompt_fn(line, task_name: str = None):
 
 fquad = LightevalTaskConfig(
     name="fquad",  # NAME
+
     prompt_function=prompt_fn,
     # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
     generation_size=5,

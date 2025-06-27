@@ -5,7 +5,7 @@ from lighteval.models.transformers.transformers_model import TransformersModelCo
 from lighteval.models.vllm.vllm_model import VLLMModelConfig
 from lighteval.pipeline import ParallelismManager, Pipeline, PipelineParameters
 from lighteval.utils.imports import is_accelerate_available
-import src.lightEval.Utils as Utils
+import lightEval.Utils as Utils
 #import custom components
 import CustomMetrics
 import tasks
@@ -35,8 +35,8 @@ def main():
 
 
 def build_tasks_name():
-    tasks_names = ["allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "piaf", "sickfr", "xnli", "frcola", "frblimp",
-                   "sts22"]
+    #tasks_names = ["allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "piaf", "sickfr", "xnli", "frcola", "frblimp","sts22"]
+    tasks_names = [ "fquad"]
     tasks = [build_task(name=task_name) for task_name in tasks_names]
     return ",".join(tasks)
 
@@ -99,6 +99,4 @@ def test_model(model_name, max_samples = None):
 
 if __name__ == "__main__":
     Utils.hugging_face_login()
-    test_model("EleutherAI/pythia-70m", max_samples=None)
-
-#
+    test_model("EleutherAI/pythia-70m", max_samples=10000)
