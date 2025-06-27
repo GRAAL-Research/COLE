@@ -24,9 +24,6 @@ accuracy_wrapper = SampleLevelMetric(
 from scipy.stats import pearsonr, spearmanr
 
 def pearson_spearman_sample_preparator(golds, predictions, formatted_doc : Doc, **kwargs):
-    print("golds : ", golds)
-    print("predictions : ", predictions)
-    print("formatted_doc : ", formatted_doc)
     return {"gold": float(formatted_doc.choices[formatted_doc.gold_index]), "preds": pearson_spearman_parse(predictions)}
 
 
@@ -62,4 +59,4 @@ pearson = CorpusLevelMetric(
 )
 extend_enum(Metrics, "pearson_spearman", pearson)
 extend_enum(Metrics, "accuracy_wrapper", accuracy_wrapper)
-print("added custom metrics")
+print("imported custom metrics")
