@@ -6,9 +6,11 @@ from lighteval.models.vllm.vllm_model import VLLMModelConfig
 from lighteval.pipeline import ParallelismManager, Pipeline, PipelineParameters
 from lighteval.utils.imports import is_accelerate_available
 import Utils as Utils
-#import custom components
+
+# import custom components
 import CustomMetrics
-import tasks
+
+CustomMetrics.add_custom_metrics_to_lighteval()
 
 if is_accelerate_available():
     from datetime import timedelta
@@ -18,25 +20,9 @@ if is_accelerate_available():
 else:
     accelerator = None
 
-def main():
-
-    print("Searching for custom tasks in:", os.path.abspath("./"))
-
-
-    pipeline = build_pipeline("distilbert/distilgpt2")
-    pipeline.evaluate()
-    pipeline.save_and_push_results()
-    pipeline.show_results()
-
-    pipeline = build_pipeline("EleutherAI/pythia-70m")
-    pipeline.evaluate()
-    pipeline.save_and_push_results()
-    pipeline.show_results()
-
 
 def build_tasks_name():
-    #tasks_names = ["allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "piaf", "sickfr", "xnli", "frcola", "frblimp","sts22"]
-    tasks_names = [ "fquad"]
+    tasks_names = ["allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "piaf", "sickfr", "xnli", "frcola", "frblimp","sts22"]
     tasks = [build_task(name=task_name) for task_name in tasks_names]
     return ",".join(tasks)
 
@@ -44,23 +30,7 @@ def build_tasks_name():
 def build_task(section="custom", name=None, shots=0, instruct=0):
     return f"{section}|{name}|{shots}|{instruct}"
 
-def build_transformers_config(model_name):
-    return TransformersModelConfig(
-        model_name=model_name,
-        dtype="auto",
-        use_chat_template=True,
-        device="cuda",
-        batch_size=4,
-        max_length= 5
 
-    )
-def build_vllm_config(model_name):
-    return VLLMModelConfig(
-        model_name=model_name,
-        dtype="auto",
-        use_chat_template=True,
-        gpu_memory_utilization=0.8,
-    )
 def create_model_config(model_name):
     print("creating model config.")
     try:
@@ -69,7 +39,29 @@ def create_model_config(model_name):
         print("Could not create model as VLLM, falling back to transformers...")
         return build_transformers_config(model_name)
 
-def build_pipeline(model_name,max = None):
+
+def build_transformers_config(model_name):
+    return TransformersModelConfig(
+        model_name=model_name,
+        dtype="auto",
+        use_chat_template=True,
+        device="cuda",
+        batch_size=4,
+        max_length=5
+
+    )
+
+
+def build_vllm_config(model_name):
+    return VLLMModelConfig(
+        model_name=model_name,
+        dtype="auto",
+        use_chat_template=True,
+        gpu_memory_utilization=0.8,
+    )
+
+
+def build_pipeline(model_name, max=None):
     evaluation_tracker = EvaluationTracker(
         output_dir="./results",
         save_details=False,
@@ -81,7 +73,7 @@ def build_pipeline(model_name,max = None):
         # Remove the 2 parameters below once your configuration is tested
         max_samples=max,
 
-        )
+    )
 
     tasks = build_tasks_name()
     return Pipeline(
@@ -89,14 +81,17 @@ def build_pipeline(model_name,max = None):
         pipeline_parameters=pipeline_params,
         evaluation_tracker=evaluation_tracker,
         model_config=build_vllm_config(model_name),
-        )
+    )
 
-def test_model(model_name, max_samples = None):
+
+def test_model(model_name, max_samples=None):
     pipeline = build_pipeline(model_name, max_samples)
     pipeline.evaluate()
     pipeline.save_and_push_results()
     pipeline.show_results()
 
+
 if __name__ == "__main__":
     Utils.hugging_face_login()
-    test_model("EleutherAI/pythia-70m", max_samples=10000)
+    test_model("EleutherAI/pythia-70m", max_samples=500)
+    test_model("distilbert/distilgpt2", max_samples=500)

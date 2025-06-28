@@ -34,7 +34,7 @@ def pearson_spearman_parse(predictions):
         if match and number == 0:
             return float(match.group())
         else:
-            number = 0  # or raise an exception / default value
+            number = 0
     return number
 
 def pearson_spearman_metric(items, **kwargs) -> dict:
@@ -57,6 +57,10 @@ pearson = CorpusLevelMetric(
     corpus_level_fn=pearson_spearman_metric,
     higher_is_better=True,
 )
-extend_enum(Metrics, "pearson_spearman", pearson)
-extend_enum(Metrics, "accuracy_wrapper", accuracy_wrapper)
+
+def add_custom_metrics_to_lighteval():
+    extend_enum(Metrics, "pearson_spearman", pearson)
+    extend_enum(Metrics, "accuracy_wrapper", accuracy_wrapper)
+
+
 print("imported custom metrics")

@@ -13,10 +13,6 @@ def get_0_1_seeded(test):
 
 
 def prompt_fn(line, task_name: str = None):
-    """Defines how to go from a dataset line to a doc object.
-    Follow examples in src/lighteval/tasks/default_prompts.py, or get more info
-    about what this function should do in the README.
-    """
     if get_0_1_seeded(line) == 1:
         data = line["grammatical"]
     else:
@@ -36,16 +32,14 @@ def prompt_fn(line, task_name: str = None):
 
 
 frblimp = LightevalTaskConfig(
-    name="frblimp",  # NAME
+    name="frblimp",
     prompt_function=prompt_fn,
-    # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
-
     hf_repo=REPO_ID,
     hf_subset="fr_blimp",
     hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.accuracy_wrapper],  # select your metric in Metrics
+    metric=[metrics.Metrics.accuracy_wrapper],
     trust_dataset=True,
 )

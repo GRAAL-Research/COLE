@@ -15,10 +15,6 @@ huggingface_hub.login(token=HF_TOKEN)
 
 
 def prompt_fn(line, task_name: str = None):
-    """Defines how to go from a dataset line to a doc object.
-    Follow examples in src/lighteval/tasks/default_prompts.py, or get more info
-    about what this function should do in the README.
-    """
     sentence_A = line["sentence_A"]
     sentence_B = line["sentence_B"]
     prompt = (PromptBuilder()
@@ -45,6 +41,6 @@ sickfr = LightevalTaskConfig(
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.pearson_spearman],  # select your metric in Metrics
+    metric=[metrics.Metrics.pearson_spearman],
     trust_dataset=True,
 )

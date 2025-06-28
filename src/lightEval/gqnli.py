@@ -7,10 +7,7 @@ REPO_ID = "COLLE-Graal/ColleGraal"
 
 
 def prompt_fn(line, task_name: str = None):
-    """Defines how to go from a dataset line to a doc object.
-    Follow examples in src/lighteval/tasks/default_prompts.py, or get more info
-    about what this function should do in the README.
-    """
+
     prompt = (PromptBuilder()
               .add_premise("Quelle est la relation de la deuxième phrase par rapport à la première ?")
               .add_data(line["premise"]).add_data(line["hypothesis"])

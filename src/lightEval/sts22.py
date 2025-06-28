@@ -7,10 +7,7 @@ REPO_ID = "COLLE-Graal/ColleGraal"
 
 
 def prompt_fn(line, task_name: str = None):
-    """Defines how to go from a dataset line to a doc object.
-    Follow examples in src/lighteval/tasks/default_prompts.py, or get more info
-    about what this function should do in the README.
-    """
+
     prompt = (PromptBuilder()
               .add_premise("En scorant de 0 à 5, à quel point les phrases suivants sont-elles similaires ?")
               .add_data("sentence 1 :")
@@ -22,16 +19,16 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=int(line["score"]),  # assuming binary classification: 0 or 1
+        gold_index=int(line["score"]),
         instruction="",
         choices=[str(i) for i in range(0, 5)],
     )
 
 
 sts22 = LightevalTaskConfig(
-    name="sts22",  # NAME
+    name="sts22",
     prompt_function=prompt_fn,
-    # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
+
     generation_size=5,
     hf_repo=REPO_ID,
     hf_subset="sts22_crosslingual",
@@ -39,6 +36,6 @@ sts22 = LightevalTaskConfig(
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.pearson_spearman],  # select your metric in Metrics
+    metric=[metrics.Metrics.pearson_spearman],
     trust_dataset=True,
 )

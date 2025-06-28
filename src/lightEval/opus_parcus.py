@@ -7,10 +7,7 @@ REPO_ID = "COLLE-Graal/ColleGraal"
 
 
 def prompt_fn(line, task_name: str = None):
-    """Defines how to go from a dataset line to a doc object.
-    Follow examples in src/lighteval/tasks/default_prompts.py, or get more info
-    about what this function should do in the README.
-    """
+
     sent1 = line["sent1"]
     sent2 = line["sent2"]
     prompt = (PromptBuilder()
@@ -26,8 +23,8 @@ def prompt_fn(line, task_name: str = None):
         instruction=""
     )
 opus_parcus = LightevalTaskConfig(
-    name="opus_parcus", #NAME
-    prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
+    name="opus_parcus",
+    prompt_function=prompt_fn,
     hf_repo=REPO_ID,
     hf_subset="opus_parcus",
     hf_avail_splits=["test"],

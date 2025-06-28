@@ -7,10 +7,7 @@ REPO_ID = "COLLE-Graal/ColleGraal"
 
 
 def prompt_fn(line, task_name: str = None):
-    """Defines how to go from a dataset line to a doc object.
-    Follow examples in src/lighteval/tasks/default_prompts.py, or get more info
-    about what this function should do in the README.
-    """
+
     prompt = (PromptBuilder()
               .add_premise("Quelle est la relation de la deuxième phrase par rapport à la première ?")
               .add_data(line["premise"]).add_data(line["hypothesis"])
@@ -30,15 +27,15 @@ def prompt_fn(line, task_name: str = None):
 
 
 xnli = LightevalTaskConfig(
-    name="xnli",  # NAME
+    name="xnli",
     prompt_function=prompt_fn,
-    # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
+
     hf_repo=REPO_ID,
     hf_subset="xnli",
     hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.accuracy_wrapper],  # select your metric in Metrics
+    metric=[metrics.Metrics.accuracy_wrapper],
     trust_dataset=True,
 )
