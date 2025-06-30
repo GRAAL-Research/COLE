@@ -80,7 +80,7 @@ def build_pipeline(model_name, max=None):
         tasks=tasks,
         pipeline_parameters=pipeline_params,
         evaluation_tracker=evaluation_tracker,
-        model_config=build_vllm_config(model_name),
+        model_config=create_model_config(model_name),
     )
 
 
@@ -93,5 +93,5 @@ def test_model(model_name, max_samples=None):
 
 if __name__ == "__main__":
     Utils.hugging_face_login()
-    test_model("EleutherAI/pythia-70m", max_samples=500)
-    test_model("distilbert/distilgpt2", max_samples=500)
+    test_model("EleutherAI/pythia-70m", max_samples=5)
+    test_model("distilbert/distilgpt2", max_samples=5)
