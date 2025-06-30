@@ -6,9 +6,14 @@ export default function ResultsDefaultPage() {
   const router = useRouter();
 
   useEffect(() => {
+    // Vérifier si une soumission vient d'être faite
+    const justSubmitted = localStorage.getItem("just_submitted");
     const savedFile = localStorage.getItem("last_result_file");
-    if (savedFile) {
+
+    if (justSubmitted && savedFile) {
       const id = savedFile.replace(".json", "");
+      // Réinitialiser le drapeau pour éviter redirections infinies
+      localStorage.removeItem("just_submitted");
       router.push(`/results/${id}`);
     }
   }, [router]);
