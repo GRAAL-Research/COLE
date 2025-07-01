@@ -87,22 +87,12 @@ async def submit(
         max_samples=max_samples,
     )
 
-    config = TransformersModelConfig(
-        model_name="bert-base-uncased",
-        dtype="auto",
-        use_chat_template=True,
-        device="cpu",
-        batch_size=1,
-    )
-
     pipeline = Pipeline(
         tasks=task_str,
         pipeline_parameters=params,
         evaluation_tracker=tracker,
-        model_config=config,
+        model=ZipInferenceModel(tasks_prediction_dictionary),
     )
-
-    pipeline.model = ZipInferenceModel(tasks_prediction_dictionary)
 
     pipeline.evaluate()
 

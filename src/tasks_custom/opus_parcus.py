@@ -43,4 +43,3 @@ opus_parcus = LightevalTaskConfig(
     metric=[metrics.Metrics.pearson_spearman],
     trust_dataset=True,
 )
-print(metrics.Metrics.pearson_spearman)
