@@ -49,7 +49,7 @@ def load_predictions_from_zip(zip_bytes: bytes) -> dict:
     """Lit directement predictions.json depuis le ZIP en mémoire."""
     with zipfile.ZipFile(io.BytesIO(zip_bytes)) as z:
         if "predictions.json" not in z.namelist():
-            raise HTTPException(400, "Le ZIP ne contient pas predictions.json")
+            raise HTTPException(400, "Le ZIP ne contient pas predictions.json.")
         with z.open("predictions.json") as f:
             return json.load(f)
 
