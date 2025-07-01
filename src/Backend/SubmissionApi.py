@@ -137,7 +137,7 @@ async def submit(
                   "sickfr","xnli","frcola","frblimp","sts22"]
     available = [t for t in base_tasks if t in all_preds]
     if not available:
-        raise HTTPException(400, "Aucune tâche reconnue dans predictions.json")
+        raise HTTPException(400, "Aucune tâche reconnue dans predictions.json.")
     task_str = ",".join(f"custom|{t}|0|0" for t in available)
     logging.info(f"Evaluating tasks: {task_str}")
 
