@@ -52,7 +52,7 @@ yarn-error.log*
 next-env.d.ts
 /src/results
 /src/__pycache__
-/src/Backend/__pycache__
+/src/backend/__pycache__
 /archives/Models/__pycache__
 *.pyc
 /src/Benchmarks_data

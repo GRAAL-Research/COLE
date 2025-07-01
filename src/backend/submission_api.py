@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 SRC_DIR = BASE_DIR / "src"
 sys.path.insert(0, str(SRC_DIR))
 
-RESULTS_DIR = BASE_DIR / "src" / "Backend" / "results"
+RESULTS_DIR = BASE_DIR / "src" / "backend" / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # --- Imports LightEval & FastAPI ---
