@@ -13,7 +13,12 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
-from src.backend.submit_tools import get_customs_keys, convert_custom_dict_to_task_dict
+from src.backend.submit_tools import (
+    convert_custom_dict_to_task_dict,
+    predictions_logging,
+    get_max_samples,
+    get_tasks_as_str,
+)
 
 # --- Logs suppressions of LightEval ---
 logging.getLogger("lighteval").setLevel(logging.WARNING)
@@ -31,7 +36,8 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 import src.light_eval_custom.custom_metrics as custom_metrics
 
 custom_metrics.add_custom_metrics_to_lighteval()
-import src.light_eval_custom.tasks as tasks_module
+
+import src.tasks_custom as tasks_module
 
 from lighteval.logging.evaluation_tracker import EvaluationTracker
 from lighteval.pipeline import Pipeline, PipelineParameters, ParallelismManager
@@ -131,43 +137,29 @@ async def submit(
     zip_bytes = await predictions_zip.read()
     raw_dict = load_predictions_from_zip(zip_bytes)
 
-    all_preds = convert_custom_dict_to_task_dict(raw_dict)
+    tasks_prediction_dictionary = convert_custom_dict_to_task_dict(raw_dict)
 
-    logging.info("=== Loaded predictions ===")
-    for t, vals in all_preds.items():
-        logging.info(f"  {t}: {vals}")
+    predictions_logging(tasks_prediction_dictionary)
 
-    max_samples = len(next(iter(all_preds.values()))) if all_preds else 0
+    max_samples = get_max_samples(
+        tasks_prediction_dictionary=tasks_prediction_dictionary
+    )
     logging.info(f"Using 'max_samples={max_samples}' in pipeline parameters.")
 
-    # 4) Préparer tasks
-    base_tasks = [
-        "allocine",
-        "paws_x",
-        "fquad",
-        "gqnli",
-        "piaf",
-        "sickfr",
-        "xnli",
-        "frcola",
-        "frblimp",
-        "sts22",
-    ]
-    available = [t for t in base_tasks if t in all_preds]
-    if not available:
-        raise HTTPException(400, "Aucune tâche reconnue dans predictions.json.")
-    task_str = ",".join(f"custom|{t}|0|0" for t in available)
-    logging.info(f"Evaluating tasks: {task_str}")
+    task_str, available_tasks = get_tasks_as_str(
+        tasks_prediction_dictionary=tasks_prediction_dictionary
+    )
 
-    # 5) Configurer l’évaluation
     tracker = EvaluationTracker(
         output_dir=str(RESULTS_DIR / "temp"), save_details=True, push_to_hub=False
     )
+
     params = PipelineParameters(
         launcher_type=ParallelismManager.ACCELERATE,
         custom_tasks_directory=tasks_module,
         max_samples=max_samples,
     )
+
     config = TransformersModelConfig(
         model_name="bert-base-uncased",
         dtype="auto",
@@ -175,15 +167,16 @@ async def submit(
         device="cpu",
         batch_size=1,
     )
+
     pipeline = Pipeline(
         tasks=task_str,
         pipeline_parameters=params,
         evaluation_tracker=tracker,
         model_config=config,
     )
-    pipeline.model = ZipInferenceModel(all_preds)
 
-    # 6) Lancer l’évaluation
+    pipeline.model = ZipInferenceModel(tasks_prediction_dictionary)
+
     pipeline.evaluate()
 
     # 7) Logger paire à paire (gold/pred)
@@ -217,7 +210,9 @@ async def submit(
             "zip_filename": predictions_zip.filename,
         },
         "results": results,
-        "predictions": {t: all_preds[t][:N] for t in available},
+        "predictions": {
+            t: tasks_prediction_dictionary[t][:max_samples] for t in available_tasks
+        },
     }
 
     out_path = RESULTS_DIR / f"{output['config_general']['submission_id']}.json"

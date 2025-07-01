@@ -1,3 +1,4 @@
+import logging
 import re
 
 import numpy as np
@@ -25,7 +26,6 @@ accuracy_wrapper = SampleLevelMetric(
     corpus_level_fn=np.mean,
     higher_is_better=True,
 )
-
 
 from scipy.stats import pearsonr, spearmanr
 
@@ -81,4 +81,4 @@ def add_custom_metrics_to_lighteval():
     extend_enum(Metrics, "accuracy_wrapper", accuracy_wrapper)
 
 
-print("imported custom metrics")
+logging.info(f"Imported custom metrics.")

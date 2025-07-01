@@ -1,7 +1,8 @@
-from pipeline import test_model
 import argparse
+
 import utils
-from all_llms import llms
+from offline_evaluation.all_llms import llms
+from src.light_eval_custom.pipeline import test_model
 
 TEST_MAX_EXAMPLES = 5
 TEST_MODEL = "distilbert/distilgpt2"
@@ -45,7 +46,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 if __name__ == "__main__":
-    Utils.hugging_face_login(args.token)
+    utils.hugging_face_login(args.token)
     print("---------Logged in HuggingFace !")
     if args.test:
         print(

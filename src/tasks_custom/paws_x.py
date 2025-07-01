@@ -1,26 +1,23 @@
+import lighteval.metrics.metrics as metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
-import lighteval.metrics.metrics as metrics
-from prompt_builder import PromptBuilder
 
-REPO_ID = "COLLE-Graal/ColleGraal"
+from src.prompt_builder.prompt_builder import PromptBuilder
+from src.tasks_custom import REPO_ID
 
 
 def prompt_fn(line, task_name: str = None):
-
+    sentence1 = line["sentence1"]
+    sentence2 = line["sentence2"]
     prompt = (
         PromptBuilder()
         .add_premise(
-            "Quelle est la relation de la deuxième phrase par rapport à la première ?"
+            "Les deux phrases suivantes veulent-elles dire la même chose, ou ont-elles des significations différentes ?"
         )
-        .add_data(line["premise"])
-        .add_data(line["hypothesis"])
+        .add_data(sentence1)
+        .add_data(sentence2)
         .add_end(
-            "Réponds uniquement par :\n"
-            "0 — si la deuxième phrase implique la première,\n"
-            "1 — si la relation est neutre,\n"
-            "2 — s'il y a contradiction.\n"
-            "Réponds uniquement par 0, 1 ou 2. La réponse est :"
+            "Réponds seulement 1 si les deux phrases ont la même signification, 0 sinon. La réponse est :"
         )
         .build()
     )
@@ -28,16 +25,16 @@ def prompt_fn(line, task_name: str = None):
         task_name=task_name,
         query=prompt,
         gold_index=line["label"],
-        choices=["0", "1", "2"],
+        choices=["0", "1"],
         instruction="",
     )
 
 
-xnli = LightevalTaskConfig(
-    name="xnli",
+paws_x = LightevalTaskConfig(
+    name="paws_x",
     prompt_function=prompt_fn,
     hf_repo=REPO_ID,
-    hf_subset="xnli",
+    hf_subset="paws_x",
     hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,

@@ -1,13 +1,12 @@
+import lighteval.metrics.metrics as metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
-import lighteval.metrics.metrics as metrics
-from prompt_builder import PromptBuilder
 
-REPO_ID = "COLLE-Graal/ColleGraal"
+from src.prompt_builder.prompt_builder import PromptBuilder
+from src.tasks_custom import REPO_ID
 
 
 def prompt_fn(line, task_name: str = None):
-
     prompt = (
         PromptBuilder()
         .add_premise(
@@ -20,7 +19,7 @@ def prompt_fn(line, task_name: str = None):
             "0 — si la deuxième phrase implique la première,\n"
             "1 — si la relation est neutre,\n"
             "2 — s'il y a contradiction.\n"
-            "Réponds uniquement par 0, 1 ou 2."
+            "Réponds uniquement par 0, 1 ou 2. La réponse est :"
         )
         .build()
     )
@@ -33,17 +32,15 @@ def prompt_fn(line, task_name: str = None):
     )
 
 
-gqnli = LightevalTaskConfig(
-    name="gqnli",  # NAME
+xnli = LightevalTaskConfig(
+    name="xnli",
     prompt_function=prompt_fn,
-    # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
     hf_repo=REPO_ID,
-    hf_subset="gqnli",
+    hf_subset="xnli",
     hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.accuracy_wrapper],  # select your metric in Metrics
+    metric=[metrics.Metrics.accuracy_wrapper],
     trust_dataset=True,
 )
-TASKS_TABLE = [gqnli]

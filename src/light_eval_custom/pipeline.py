@@ -1,18 +1,14 @@
-import os
-
 from lighteval.logging.evaluation_tracker import EvaluationTracker
 from lighteval.models.transformers.transformers_model import TransformersModelConfig
 from lighteval.models.vllm.vllm_model import VLLMModelConfig
 from lighteval.pipeline import ParallelismManager, Pipeline, PipelineParameters
 from lighteval.utils.imports import is_accelerate_available
-import utils as Utils
 
-# import custom components
 import custom_metrics
 
 MAX_BOOTSTRAP_ITER = 50
 
-CustomMetrics.add_custom_metrics_to_lighteval()
+custom_metrics.add_custom_metrics_to_lighteval()
 
 if is_accelerate_available():
     from datetime import timedelta

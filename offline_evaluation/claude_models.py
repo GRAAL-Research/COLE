@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+
+from anthropic import Anthropic
 from dotenv import load_dotenv
 from lighteval.models.abstract_model import LightevalModel
 from lighteval.models.model_output import (
@@ -14,7 +16,6 @@ from lighteval.tasks.requests import (
     LoglikelihoodSingleTokenRequest,
 )
 from transformers import PreTrainedTokenizerBase
-from anthropic import Anthropic
 
 env_path = Path(__file__).resolve().parents[2] / ".env"
 load_dotenv(dotenv_path=env_path)

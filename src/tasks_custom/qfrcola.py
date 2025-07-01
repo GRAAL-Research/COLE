@@ -1,7 +1,9 @@
 from lighteval.metrics.metrics import Metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
-from prompt_builder import PromptBuilder
+
+from src.prompt_builder.prompt_builder import PromptBuilder
+from src.tasks_custom import REPO_ID
 
 
 def prompt_fn(line, task_name: str = None):
@@ -23,11 +25,11 @@ def prompt_fn(line, task_name: str = None):
 
 
 frcola = LightevalTaskConfig(
-    name="frcola",
+    name="qfrcola",
     prompt_function=prompt_fn,
     suite=["custom"],
-    hf_repo="COLLE-Graal/ColleGraal",
-    hf_subset="frcola",
+    hf_repo=REPO_ID,
+    hf_subset="qfrcola",
     hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,

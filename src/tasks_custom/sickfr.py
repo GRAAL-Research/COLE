@@ -1,12 +1,9 @@
-import os
-import huggingface_hub
-from dotenv import load_dotenv
+import lighteval.metrics.metrics as metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
-import lighteval.metrics.metrics as metrics
-from prompt_builder import PromptBuilder
 
-REPO_ID = "COLLE-Graal/ColleGraal"
+from src.prompt_builder.prompt_builder import PromptBuilder
+from src.tasks_custom import REPO_ID
 
 
 def prompt_fn(line, task_name: str = None):

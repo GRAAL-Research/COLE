@@ -1,9 +1,9 @@
+import lighteval.metrics.metrics as metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
-import lighteval.metrics.metrics as metrics
-from prompt_builder import PromptBuilder
 
-REPO_ID = "COLLE-Graal/ColleGraal"
+from src.prompt_builder.prompt_builder import PromptBuilder
+from src.tasks_custom import REPO_ID
 
 
 def prompt_fn(line, task_name: str = None):
@@ -37,7 +37,8 @@ def prompt_fn(line, task_name: str = None):
 
 piaf = LightevalTaskConfig(
     name="piaf",  # NAME
-    prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
+    prompt_function=prompt_fn,
+    # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
     generation_size=5,
     hf_repo=REPO_ID,
     hf_subset="piaf",
