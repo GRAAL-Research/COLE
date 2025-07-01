@@ -15,7 +15,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
-# --- suppression des logs LightEval ---
+# --- Logs suppressions of LightEval ---
 logging.getLogger("lighteval").setLevel(logging.WARNING)
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
