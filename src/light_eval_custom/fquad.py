@@ -7,13 +7,20 @@ REPO_ID = "COLLE-Graal/ColleGraal"
 
 
 def prompt_fn(line, task_name: str = None):
-    prompt = (PromptBuilder()
-              .add_premise(
-        "Voici un contexte et une question. Réponds à la question en te basant uniquement sur le contexte.")
-              .add_data("contexte : ").add_data(line["context"])
-              .add_data("question :").add_data(line["question"])
-              .add_end(
-        "Dans le texte ci-dessous, combien de caractères précèdent la réponse à la question ? Réponds uniquement avec un nombre.. La réponse est : ").build())
+    prompt = (
+        PromptBuilder()
+        .add_premise(
+            "Voici un contexte et une question. Réponds à la question en te basant uniquement sur le contexte."
+        )
+        .add_data("contexte : ")
+        .add_data(line["context"])
+        .add_data("question :")
+        .add_data(line["question"])
+        .add_end(
+            "Dans le texte ci-dessous, combien de caractères précèdent la réponse à la question ? Réponds uniquement avec un nombre.. La réponse est : "
+        )
+        .build()
+    )
     is_impossible = line["is_impossible"]
     answers = [str(i) for i in line["answers"]["answers_start"]]
     return Doc(
@@ -21,15 +28,13 @@ def prompt_fn(line, task_name: str = None):
         query=prompt,
         gold_index=0,
         instruction="",
-        choices=answers if not is_impossible else ["0"]
+        choices=answers if not is_impossible else ["0"],
     )
 
 
 fquad = LightevalTaskConfig(
     name="fquad",
-
     prompt_function=prompt_fn,
-
     generation_size=5,
     hf_repo=REPO_ID,
     hf_subset="fquad",

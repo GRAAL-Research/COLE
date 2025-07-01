@@ -8,20 +8,28 @@ REPO_ID = "COLLE-Graal/ColleGraal"
 
 def prompt_fn(line, task_name: str = None):
 
-    prompt = (PromptBuilder()
-              .add_premise("Quelle est la relation de la deuxième phrase par rapport à la première ?")
-              .add_data(line["premise"]).add_data(line["hypothesis"])
-              .add_end("Réponds uniquement par :\n"
-                       "0 — si la deuxième phrase implique la première,\n"
-                       "1 — si la relation est neutre,\n"
-                       "2 — s'il y a contradiction.\n"
-                       "Réponds uniquement par 0, 1 ou 2.").build())
+    prompt = (
+        PromptBuilder()
+        .add_premise(
+            "Quelle est la relation de la deuxième phrase par rapport à la première ?"
+        )
+        .add_data(line["premise"])
+        .add_data(line["hypothesis"])
+        .add_end(
+            "Réponds uniquement par :\n"
+            "0 — si la deuxième phrase implique la première,\n"
+            "1 — si la relation est neutre,\n"
+            "2 — s'il y a contradiction.\n"
+            "Réponds uniquement par 0, 1 ou 2."
+        )
+        .build()
+    )
     return Doc(
         task_name=task_name,
         query=prompt,
         gold_index=line["label"],
         choices=["0", "1", "2"],
-        instruction=""
+        instruction="",
     )
 
 
@@ -29,7 +37,6 @@ gqnli = LightevalTaskConfig(
     name="gqnli",  # NAME
     prompt_function=prompt_fn,
     # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
-
     hf_repo=REPO_ID,
     hf_subset="gqnli",
     hf_avail_splits=["train", "validation", "test"],

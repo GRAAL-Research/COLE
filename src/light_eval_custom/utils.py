@@ -15,12 +15,12 @@ def create_directory(directory):
         print(f" Couldn't create directory {directory} : {e}")
 
 
-def hugging_face_login(token = None):
+def hugging_face_login(token=None):
     try:
-        if not token :
+        if not token:
             load_dotenv()
-            HF_TOKEN = os.getenv('HF_TOKEN')
-        else :
+            HF_TOKEN = os.getenv("HF_TOKEN")
+        else:
             HF_TOKEN = token
         huggingface_hub.login(token=HF_TOKEN)
     except Exception as e:

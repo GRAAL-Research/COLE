@@ -2,9 +2,17 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 from lighteval.models.abstract_model import LightevalModel
-from lighteval.models.model_output import GenerativeResponse, LoglikelihoodResponse, LoglikelihoodSingleTokenResponse
-from lighteval.tasks.requests import GreedyUntilRequest, LoglikelihoodRequest, LoglikelihoodRollingRequest, \
-    LoglikelihoodSingleTokenRequest
+from lighteval.models.model_output import (
+    GenerativeResponse,
+    LoglikelihoodResponse,
+    LoglikelihoodSingleTokenResponse,
+)
+from lighteval.tasks.requests import (
+    GreedyUntilRequest,
+    LoglikelihoodRequest,
+    LoglikelihoodRollingRequest,
+    LoglikelihoodSingleTokenRequest,
+)
 from transformers import PreTrainedTokenizerBase
 from anthropic import Anthropic
 
@@ -32,20 +40,25 @@ class Claude(LightevalModel):
     def tokenizer(self) -> PreTrainedTokenizerBase:
         pass
 
-    def loglikelihood_single_token(self, requests: list[LoglikelihoodSingleTokenRequest]) -> list[
-        LoglikelihoodSingleTokenResponse]:
+    def loglikelihood_single_token(
+        self, requests: list[LoglikelihoodSingleTokenRequest]
+    ) -> list[LoglikelihoodSingleTokenResponse]:
         pass
 
-    def loglikelihood_rolling(self, requests: list[LoglikelihoodRollingRequest]) -> list[LoglikelihoodResponse]:
+    def loglikelihood_rolling(
+        self, requests: list[LoglikelihoodRollingRequest]
+    ) -> list[LoglikelihoodResponse]:
         pass
 
-    def loglikelihood(self, requests: list[LoglikelihoodRequest]) -> list[LoglikelihoodResponse]:
+    def loglikelihood(
+        self, requests: list[LoglikelihoodRequest]
+    ) -> list[LoglikelihoodResponse]:
         pass
 
-    def greedy_until(self, requests: list[GreedyUntilRequest]) -> list[GenerativeResponse]:
+    def greedy_until(
+        self, requests: list[GreedyUntilRequest]
+    ) -> list[GenerativeResponse]:
         pass
-
-
 
 
 def make_claude_inference(model_name: str):

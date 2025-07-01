@@ -1,12 +1,10 @@
 import io
-import os
-import sys
-import shutil
-import tempfile
-import zipfile
 import json
 import logging
 import math
+import os
+import sys
+import zipfile
 from pathlib import Path
 from uuid import uuid4
 
@@ -29,10 +27,10 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # --- Imports LightEval & FastAPI ---
 import src.light_eval_custom.custom_metrics as custom_metrics
+
 custom_metrics.add_custom_metrics_to_lighteval()
 import src.light_eval_custom.tasks as tasks_module
 
-import lighteval
 from lighteval.logging.evaluation_tracker import EvaluationTracker
 from lighteval.pipeline import Pipeline, PipelineParameters, ParallelismManager
 from lighteval.models.transformers.transformers_model import TransformersModelConfig
@@ -41,9 +39,12 @@ app = FastAPI()
 app.mount("/results", StaticFiles(directory=str(RESULTS_DIR)), name="results")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], allow_credentials=True,
-    allow_methods=["*"], allow_headers=["*"],
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
 
 def load_predictions_from_zip(zip_bytes: bytes) -> dict:
     """Lit directement predictions.json depuis le ZIP en mémoire."""
@@ -53,6 +54,7 @@ def load_predictions_from_zip(zip_bytes: bytes) -> dict:
         with z.open("predictions.json") as f:
             return json.load(f)
 
+
 class DummyResponse:
     def __init__(self, idx: int, choices: list, prompt: str):
         self.result = [choices[idx] if 0 <= idx < len(choices) else choices[0]]
@@ -61,23 +63,29 @@ class DummyResponse:
         self.truncated_tokens_count = 0
         self.padded_tokens_count = 0
         hp, lp = 0.9, 0.1
-        self.choice_logprobs = [math.log(hp) if i == idx else math.log(lp)
-                                for i in range(len(choices))]
+        self.choice_logprobs = [
+            math.log(hp) if i == idx else math.log(lp) for i in range(len(choices))
+        ]
         self.logprobs = [self.choice_logprobs[idx]]
 
     def get_result_for_eval(self) -> str:
         return self.result[0]
 
+
 class ZipInferenceModel:
     is_async = False
+
     def __init__(self, predictions: dict):
         # predictions: {"allocine": [...], ...}
         self._predictions = predictions
 
     def infer(self, requests, conditions=None):
         # extraire task_name complet, p.ex. "custom|allocine|0|0"
-        raw = (conditions[0].task_name if conditions and hasattr(conditions[0], "task_name")
-               else getattr(requests[0], "task_name", None))
+        raw = (
+            conditions[0].task_name
+            if conditions and hasattr(conditions[0], "task_name")
+            else getattr(requests[0], "task_name", None)
+        )
         # short = le nom entre les pipes
         short = raw.split("|")[1] if raw and "|" in raw else raw
 
@@ -109,13 +117,14 @@ class ZipInferenceModel:
     def cleanup(self):
         pass
 
+
 @app.post("/submit")
 async def submit(
     email: str = Form(...),
     predictions_zip: UploadFile = File(...),
     display_name: str = Form(...),
 ):
-    logging.info(f"Submission from {email!r} as {display_name!r}")
+    logging.info(f"Submission from {email!r} as {display_name!r}.")
 
     # 1) Charger le ZIP
     zip_bytes = await predictions_zip.read()
@@ -133,8 +142,18 @@ async def submit(
     logging.info(f"Using max_samples = {N}")
 
     # 4) Préparer tasks
-    base_tasks = ["allocine","paws_x","fquad","gqnli","piaf",
-                  "sickfr","xnli","frcola","frblimp","sts22"]
+    base_tasks = [
+        "allocine",
+        "paws_x",
+        "fquad",
+        "gqnli",
+        "piaf",
+        "sickfr",
+        "xnli",
+        "frcola",
+        "frblimp",
+        "sts22",
+    ]
     available = [t for t in base_tasks if t in all_preds]
     if not available:
         raise HTTPException(400, "Aucune tâche reconnue dans predictions.json.")
@@ -143,27 +162,25 @@ async def submit(
 
     # 5) Configurer l’évaluation
     tracker = EvaluationTracker(
-        output_dir=str(RESULTS_DIR / "temp"),
-        save_details=True,
-        push_to_hub=False
+        output_dir=str(RESULTS_DIR / "temp"), save_details=True, push_to_hub=False
     )
     params = PipelineParameters(
         launcher_type=ParallelismManager.ACCELERATE,
         custom_tasks_directory=tasks_module,
-        max_samples=N
+        max_samples=N,
     )
     config = TransformersModelConfig(
         model_name="bert-base-uncased",
         dtype="auto",
         use_chat_template=True,
         device="cpu",
-        batch_size=1
+        batch_size=1,
     )
     pipeline = Pipeline(
         tasks=task_str,
         pipeline_parameters=params,
         evaluation_tracker=tracker,
-        model_config=config
+        model_config=config,
     )
     pipeline.model = ZipInferenceModel(all_preds)
 
@@ -198,10 +215,10 @@ async def submit(
             "submission_id": str(uuid4()),
             "email": email,
             "display_name": display_name,
-            "zip_filename": predictions_zip.filename
+            "zip_filename": predictions_zip.filename,
         },
         "results": results,
-        "predictions": {t: all_preds[t][:N] for t in available}
+        "predictions": {t: all_preds[t][:N] for t in available},
     }
 
     out_path = RESULTS_DIR / f"{output['config_general']['submission_id']}.json"
@@ -209,10 +226,9 @@ async def submit(
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     return FileResponse(
-        str(out_path),
-        media_type="application/json",
-        filename=out_path.name
+        str(out_path), media_type="application/json", filename=out_path.name
     )
+
 
 @app.get("/leaderboard")
 async def leaderboard():
@@ -223,6 +239,7 @@ async def leaderboard():
                 data = json.load(f)
             entries.append(data["config_general"])
     return JSONResponse({"leaderboard": entries})
+
 
 @app.get("/health")
 async def health_check():

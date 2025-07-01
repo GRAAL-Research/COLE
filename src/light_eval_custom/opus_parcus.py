@@ -10,18 +10,28 @@ def prompt_fn(line, task_name: str = None):
 
     sent1 = line["sent1"]
     sent2 = line["sent2"]
-    prompt = (PromptBuilder()
-              .add_premise("Les deux phrases suivantes expriment-elles la même idée ou sont-elles différentes ?")
-              .add_data(sent1).add_data(sent2)
-              .add_end("Réponds seulement avec un chiffre entre 60 et 100 où 100"
-                       " signifie que les deux phrases veulent dire exactement la même chose.").build())
+    prompt = (
+        PromptBuilder()
+        .add_premise(
+            "Les deux phrases suivantes expriment-elles la même idée ou sont-elles différentes ?"
+        )
+        .add_data(sent1)
+        .add_data(sent2)
+        .add_end(
+            "Réponds seulement avec un chiffre entre 60 et 100 où 100"
+            " signifie que les deux phrases veulent dire exactement la même chose."
+        )
+        .build()
+    )
     return Doc(
         task_name=task_name,
         query=prompt,
         gold_index=0,
         choices=[line["quality"]],
-        instruction=""
+        instruction="",
     )
+
+
 opus_parcus = LightevalTaskConfig(
     name="opus_parcus",
     prompt_function=prompt_fn,
@@ -32,7 +42,6 @@ opus_parcus = LightevalTaskConfig(
     few_shots_split=None,
     few_shots_select=None,
     metric=[metrics.Metrics.pearson_spearman],
-
     trust_dataset=True,
 )
 print(metrics.Metrics.pearson_spearman)

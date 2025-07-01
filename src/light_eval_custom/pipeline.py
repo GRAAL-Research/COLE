@@ -18,13 +18,27 @@ if is_accelerate_available():
     from datetime import timedelta
     from accelerate import Accelerator, InitProcessGroupKwargs
 
-    accelerator = Accelerator(kwargs_handlers=[InitProcessGroupKwargs(timeout=timedelta(seconds=3000))])
+    accelerator = Accelerator(
+        kwargs_handlers=[InitProcessGroupKwargs(timeout=timedelta(seconds=3000))]
+    )
 else:
     accelerator = None
 
 
 def build_tasks_name():
-    tasks_names = ["allocine", "paws_x", "fquad", "opus_parcus", "gqnli", "piaf", "sickfr", "xnli", "frcola", "frblimp","sts22"]
+    tasks_names = [
+        "allocine",
+        "paws_x",
+        "fquad",
+        "opus_parcus",
+        "gqnli",
+        "piaf",
+        "sickfr",
+        "xnli",
+        "frcola",
+        "frblimp",
+        "sts22",
+    ]
     tasks = [build_task(name=task_name) for task_name in tasks_names]
     return ",".join(tasks)
 
@@ -33,11 +47,11 @@ def build_task(section="custom", name=None, shots=0, instruct=0):
     return f"{section}|{name}|{shots}|{instruct}"
 
 
-def create_model_config(model_name,backend):
+def create_model_config(model_name, backend):
     try:
-        if backend == "transformers" :
+        if backend == "transformers":
             return build_transformers_config(model_name)
-        elif backend == "vllm" :
+        elif backend == "vllm":
             return build_vllm_config(model_name)
         else:
             print("backend configuration unavailable, defaulting to vllm")
@@ -55,8 +69,7 @@ def build_transformers_config(model_name):
         use_chat_template=True,
         device="cuda",
         batch_size=4,
-        max_length=5
-
+        max_length=5,
     )
 
 
@@ -69,7 +82,11 @@ def build_vllm_config(model_name):
     )
 
 
-def build_pipeline(model_name,backend="vllm", max=None,):
+def build_pipeline(
+    model_name,
+    backend="vllm",
+    max=None,
+):
     evaluation_tracker = EvaluationTracker(
         output_dir="./results",
         save_details=False,
@@ -80,7 +97,6 @@ def build_pipeline(model_name,backend="vllm", max=None,):
         custom_tasks_directory="./tasks.py",
         # Remove the 2 parameters below once your configuration is tested
         max_samples=max,
-
     )
 
     tasks = build_tasks_name()
@@ -88,12 +104,12 @@ def build_pipeline(model_name,backend="vllm", max=None,):
         tasks=tasks,
         pipeline_parameters=pipeline_params,
         evaluation_tracker=evaluation_tracker,
-        model_config=create_model_config(model_name,backend),
+        model_config=create_model_config(model_name, backend),
     )
 
 
-def test_model(model_name, max_samples=None,backend = "vllm"):
-    pipeline = build_pipeline(model_name, max_samples,backend)
+def test_model(model_name, max_samples=None, backend="vllm"):
+    pipeline = build_pipeline(model_name, max_samples, backend)
     pipeline.evaluate()
     pipeline.save_and_push_results()
     pipeline.show_results()

@@ -5,12 +5,15 @@ from prompt_builder import PromptBuilder
 
 
 def prompt_fn(line, task_name: str = None):
-    prompt = (PromptBuilder()
-              .add_premise("Juge si cette phrase est grammaticalement correcte :")
-              .add_data(line["sentence"])
-              .add_end(
-        "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon. La réponse est : ")
-              .build())
+    prompt = (
+        PromptBuilder()
+        .add_premise("Juge si cette phrase est grammaticalement correcte :")
+        .add_data(line["sentence"])
+        .add_end(
+            "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon. La réponse est : "
+        )
+        .build()
+    )
     return Doc(
         task_name=task_name,
         query=prompt,

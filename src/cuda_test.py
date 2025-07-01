@@ -1,5 +1,6 @@
 import torch
 
+
 def test_cuda():
     print("Checking CUDA availability...")
     cuda_available = torch.cuda.is_available()
@@ -21,6 +22,7 @@ def test_cuda():
         print(f"Result (on CUDA): {z}")
     else:
         print("CUDA is not available on this system.")
+
 
 if __name__ == "__main__":
     test_cuda()

@@ -8,14 +8,20 @@ REPO_ID = "COLLE-Graal/ColleGraal"
 
 def prompt_fn(line, task_name: str = None):
 
-    prompt = (PromptBuilder()
-              .add_premise("En scorant de 0 à 5, à quel point les phrases suivants sont-elles similaires ?")
-              .add_data("sentence 1 :")
-              .add_data(line["sentence1"])
-              .add_data("sentence 2 :")
-              .add_data(line["sentence2"])
-              .add_end(
-        "Réponds seulement avec un nombre de 0 à 5, où 5 signifie que les 2 phrases veulent dire exactement la même chose. La réponse est :").build())
+    prompt = (
+        PromptBuilder()
+        .add_premise(
+            "En scorant de 0 à 5, à quel point les phrases suivants sont-elles similaires ?"
+        )
+        .add_data("sentence 1 :")
+        .add_data(line["sentence1"])
+        .add_data("sentence 2 :")
+        .add_data(line["sentence2"])
+        .add_end(
+            "Réponds seulement avec un nombre de 0 à 5, où 5 signifie que les 2 phrases veulent dire exactement la même chose. La réponse est :"
+        )
+        .build()
+    )
     return Doc(
         task_name=task_name,
         query=prompt,
@@ -28,7 +34,6 @@ def prompt_fn(line, task_name: str = None):
 sts22 = LightevalTaskConfig(
     name="sts22",
     prompt_function=prompt_fn,
-
     generation_size=5,
     hf_repo=REPO_ID,
     hf_subset="sts22_crosslingual",

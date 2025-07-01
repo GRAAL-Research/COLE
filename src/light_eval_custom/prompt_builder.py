@@ -1,4 +1,4 @@
-class PromptBuilder():
+class PromptBuilder:
     def __init__(self):
         self.premise: list[str] = []
         self.end: list[str] = []

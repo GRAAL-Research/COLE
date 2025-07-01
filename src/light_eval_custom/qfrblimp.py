@@ -17,17 +17,21 @@ def prompt_fn(line, task_name: str = None):
         data = line["grammatical"]
     else:
         data = line["ungrammatical"]
-    prompt = (PromptBuilder()
-              .add_premise("Cette phrase est-elle grammaticalement correcte ?")
-              .add_data(data)
-              .add_end(
-        "Réponds strictement par 1 si la phrase est correcte grammaticalement ; sinon, réponds 0.").build())
+    prompt = (
+        PromptBuilder()
+        .add_premise("Cette phrase est-elle grammaticalement correcte ?")
+        .add_data(data)
+        .add_end(
+            "Réponds strictement par 1 si la phrase est correcte grammaticalement ; sinon, réponds 0."
+        )
+        .build()
+    )
     return Doc(
         task_name=task_name,
         query=prompt,
         gold_index=get_0_1_seeded(line),
         choices=["0", "1"],
-        instruction=""
+        instruction="",
     )
 
 
