@@ -5,7 +5,7 @@ from lighteval.models.transformers.transformers_model import TransformersModelCo
 from lighteval.models.vllm.vllm_model import VLLMModelConfig
 from lighteval.pipeline import ParallelismManager, Pipeline, PipelineParameters
 from lighteval.utils.imports import is_accelerate_available
-import Utils as Utils
+import utils as Utils
 
 # import custom components
 import custom_metrics

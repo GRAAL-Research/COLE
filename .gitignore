@@ -56,4 +56,4 @@ next-env.d.ts
 /archives/Models/__pycache__
 *.pyc
 /src/Benchmarks_data
-/src/lightEval/results
+/src/light_eval/results

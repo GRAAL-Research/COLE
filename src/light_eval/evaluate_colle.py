@@ -1,6 +1,6 @@
 from pipeline import test_model
 import argparse
-import Utils
+import utils
 from all_llms import llms
 TEST_MAX_EXAMPLES = 5
 TEST_MODEL = "distilbert/distilgpt2"
