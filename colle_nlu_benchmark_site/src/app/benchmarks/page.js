@@ -17,15 +17,15 @@ export default function benchmarks(){
             in giving the correct sentiment for each review.
             "
                metrics="Accuracy"></Benchmark>
-        <Benchmark title="XNLI - Cross lingual sentence representation"
+        <Benchmark title="XNLI - The Cross-Lingual NLI Corpus"
                    link="https://github.com/facebookresearch/XNLI"
                description="This task consists of pairs of sentences where the goal is to determine the relation between the two sentences, this relation can be either
                             entailement, neutral or contradiction."
                metrics="Accuracy"></Benchmark>
 
-        <Benchmark title="FrCola - a French Corpus of Linguistic Acceptability Judge"
+        <Benchmark title="QFrCoLA  - a French Corpus of Linguistic Acceptability Judge"
                    link="https://github.com/davebulaval/qfrcola"
-                   description="FrCola is a french dataset made from multiple french language sites such as académie-française.fr and vitrinelinguistique.com.
+                   description="QFrCoLA  is a french dataset made from multiple french language sites such as académie-française.fr and vitrinelinguistique.com.
                    It aims to tests models ability to determine a sentence's acceptability in french on subjects such as grammar and syntax. The answer is a binary label
                    indicating if the sentence is correct or not."
                   metrics="MatthewsCC"></Benchmark>
@@ -36,7 +36,7 @@ export default function benchmarks(){
             question really can be found in the provided answer."
                metrics="Pearson,Spearman"></Benchmark>
 
-        <Benchmark title="FR-Blimp - Linguistic minimal pairs"
+        <Benchmark title="QFrBLiMP - Linguistic minimal pairs"
                    link="https://github.com/davebulaval/FrBLiMP"
                description="This task gives the model sentences pairs, the goal is to determine if the sentences
             are semantically equivalent, or, put more simply, if they mean the same thing, even with slightly different

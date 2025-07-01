@@ -1,5 +1,5 @@
-from frblimp import frblimp
-from frcola import frcola
+from qfrblimp import frblimp
+from qfrcola import frcola
 from sickfr import sickfr
 from gqnli import gqnli
 from allocine import allocine
