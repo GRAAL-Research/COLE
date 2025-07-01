@@ -1,8 +1,9 @@
+import lighteval.metrics.metrics as metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
-import lighteval.metrics.metrics as metrics
+
+from src import REPO_ID
 from src.prompt_builder.prompt_builder import PromptBuilder
-from src.tasks_custom import REPO_ID
 
 
 def prompt_fn(line, task_name: str = None):
@@ -33,7 +34,8 @@ def prompt_fn(line, task_name: str = None):
 
 allocine = LightevalTaskConfig(
     name="allocine",  # NAME
-    prompt_function=prompt_fn,  # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
+    prompt_function=prompt_fn,
+    # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
     hf_repo=REPO_ID,
     hf_subset="allocine",
     hf_avail_splits=["train", "validation", "test"],

@@ -26,5 +26,3 @@ TASKS_TABLE = [
     opus_parcus,
 ]
 logging.info(f"Imported custom tasks.")
-
-REPO_ID = "COLLE-Graal/ColleGraal"

@@ -1,8 +1,9 @@
+import lighteval.metrics.metrics as metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
-import lighteval.metrics.metrics as metrics
+
+from src import REPO_ID
 from src.prompt_builder.prompt_builder import PromptBuilder
-from src.tasks_custom import REPO_ID
 
 
 def prompt_fn(line, task_name: str = None):

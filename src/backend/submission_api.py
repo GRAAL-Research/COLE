@@ -1,23 +1,22 @@
-import io
 import json
 import logging
-import math
 import os
 import sys
-import zipfile
 from pathlib import Path
 from uuid import uuid4
 
-from fastapi import FastAPI, UploadFile, Form, File, HTTPException
+from fastapi import FastAPI, UploadFile, Form, File
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
+from src.backend.model import ZipInferenceModel
 from src.backend.submit_tools import (
     convert_custom_dict_to_task_dict,
     predictions_logging,
     get_max_samples,
     get_tasks_as_str,
+    load_predictions_from_zip,
 )
 
 # --- Logs suppressions of LightEval ---
@@ -52,78 +51,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-def load_predictions_from_zip(zip_bytes: bytes) -> dict:
-    """Lit directement predictions.json depuis le ZIP en mémoire."""
-    with zipfile.ZipFile(io.BytesIO(zip_bytes)) as z:
-        if "predictions.json" not in z.namelist():
-            raise HTTPException(400, "Le ZIP ne contient pas predictions.json.")
-        with z.open("predictions.json") as f:
-            return json.load(f)
-
-
-class DummyResponse:
-    def __init__(self, idx: int, choices: list, prompt: str):
-        self.result = [choices[idx] if 0 <= idx < len(choices) else choices[0]]
-        self.generated_tokens = self.result
-        self.input_tokens = [prompt]
-        self.truncated_tokens_count = 0
-        self.padded_tokens_count = 0
-        hp, lp = 0.9, 0.1
-        self.choice_logprobs = [
-            math.log(hp) if i == idx else math.log(lp) for i in range(len(choices))
-        ]
-        self.logprobs = [self.choice_logprobs[idx]]
-
-    def get_result_for_eval(self) -> str:
-        return self.result[0]
-
-
-class ZipInferenceModel:
-    is_async = False
-
-    def __init__(self, predictions: dict):
-        # predictions: {"allocine": [...], ...}
-        self._predictions = predictions
-
-    def infer(self, requests, conditions=None):
-        # extraire task_name complet, p.ex. "custom|allocine|0|0"
-        raw = (
-            conditions[0].task_name
-            if conditions and hasattr(conditions[0], "task_name")
-            else getattr(requests[0], "task_name", None)
-        )
-        # short = le nom entre les pipes
-        short = raw.split("|")[1] if raw and "|" in raw else raw
-
-        vals = self._predictions.get(short, [])
-        if not isinstance(vals, list):
-            vals = [vals]
-
-        logging.info(f"[INFER] Task={short}, JSON vals (len={len(vals)}): {vals}")
-
-        outputs = []
-        for i, req in enumerate(requests):
-            prompt = getattr(req, "prompt", getattr(req, "query", str(req)))
-            try:
-                idx = int(vals[i])
-            except Exception:
-                idx = 0
-            choices = getattr(req, "choices", ["0", "1"])
-            if idx >= len(choices):
-                idx = 0
-            outputs.append(DummyResponse(idx, choices, prompt))
-
-        preds = [o.get_result_for_eval() for o in outputs]
-        logging.info(f"[INFER] Task={short}, Generated preds: {preds}")
-        return outputs
-
-    def get_method_from_request_type(self, request_type):
-        return self.infer
-
-    def cleanup(self):
-        pass
 
 
 @app.post("/submit")

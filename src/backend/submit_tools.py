@@ -1,6 +1,11 @@
+import io
+import json
+import logging
+import zipfile
 from http.client import HTTPException
 from typing import Dict, List, Tuple
-import logging
+
+from fastapi import HTTPException
 
 from src.light_eval_custom import BASE_TASKS
 
@@ -38,7 +43,6 @@ def get_max_samples(tasks_prediction_dictionary: Dict) -> int:
 
 
 def get_tasks_as_str(tasks_prediction_dictionary: Dict) -> Tuple[str, List]:
-
     available_tasks = [t for t in BASE_TASKS if t in tasks_prediction_dictionary]
     if not available_tasks:
         raise HTTPException(400, "Aucune tâche reconnue dans predictions.json.")
@@ -46,3 +50,14 @@ def get_tasks_as_str(tasks_prediction_dictionary: Dict) -> Tuple[str, List]:
     logging.info(f"Evaluating tasks: {task_str}")
 
     return task_str, available_tasks
+
+
+def load_predictions_from_zip(zip_bytes: bytes) -> dict:
+    """
+    Reads predictions.json directly from the ZIP in memory.
+    """
+    with zipfile.ZipFile(io.BytesIO(zip_bytes)) as z:
+        if "predictions.json" not in z.namelist():
+            raise HTTPException(400, "Le ZIP ne contient pas predictions.json.")
+        with z.open("predictions.json") as f:
+            return json.load(f)
