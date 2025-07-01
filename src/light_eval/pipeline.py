@@ -8,7 +8,7 @@ from lighteval.utils.imports import is_accelerate_available
 import Utils as Utils
 
 # import custom components
-import CustomMetrics
+import custom_metrics
 
 MAX_BOOTSTRAP_ITER = 50
 

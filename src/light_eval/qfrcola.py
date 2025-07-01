@@ -1,7 +1,7 @@
 from lighteval.metrics.metrics import Metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
-from PromptBuilder import PromptBuilder
+from prompt_builder import PromptBuilder
 
 
 def prompt_fn(line, task_name: str = None):

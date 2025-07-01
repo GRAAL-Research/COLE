@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
 import lighteval.metrics.metrics as metrics
-from PromptBuilder import PromptBuilder
+from prompt_builder import PromptBuilder
 
 REPO_ID = "COLLE-Graal/ColleGraal"
 
