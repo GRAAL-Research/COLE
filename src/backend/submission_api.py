@@ -13,6 +13,8 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
+from src.backend.submit_tools import get_customs_keys, convert_custom_dict_to_task_dict
+
 # --- Logs suppressions of LightEval ---
 logging.getLogger("lighteval").setLevel(logging.WARNING)
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
@@ -126,12 +128,10 @@ async def submit(
 ):
     logging.info(f"Submission from {email!r} as {display_name!r}.")
 
-    # 1) Charger le ZIP
     zip_bytes = await predictions_zip.read()
     raw_dict = load_predictions_from_zip(zip_bytes)
 
-    # 2) Transformer clés "custom|t|0|0" → "t"
-    all_preds = {k.split("|")[1]: v for k, v in raw_dict.items()}
+    all_preds = convert_custom_dict_to_task_dict(raw_dict)
 
     logging.info("=== Loaded predictions ===")
     for t, vals in all_preds.items():
