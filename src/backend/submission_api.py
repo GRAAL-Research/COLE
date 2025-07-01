@@ -137,9 +137,8 @@ async def submit(
     for t, vals in all_preds.items():
         logging.info(f"  {t}: {vals}")
 
-    # 3) Déterminer N
-    N = len(next(iter(all_preds.values()))) if all_preds else 0
-    logging.info(f"Using max_samples = {N}")
+    max_samples = len(next(iter(all_preds.values()))) if all_preds else 0
+    logging.info(f"Using 'max_samples={max_samples}' in pipeline parameters.")
 
     # 4) Préparer tasks
     base_tasks = [
@@ -167,7 +166,7 @@ async def submit(
     params = PipelineParameters(
         launcher_type=ParallelismManager.ACCELERATE,
         custom_tasks_directory=tasks_module,
-        max_samples=N,
+        max_samples=max_samples,
     )
     config = TransformersModelConfig(
         model_name="bert-base-uncased",
