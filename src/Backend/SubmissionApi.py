@@ -19,7 +19,7 @@ from starlette.middleware.cors import CORSMiddleware
 logging.getLogger("lighteval").setLevel(logging.WARNING)
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-# --- Configuration des chemins ---
+# --- Paths configuration ---
 BASE_DIR = Path(__file__).resolve().parents[2]
 SRC_DIR = BASE_DIR / "src"
 sys.path.insert(0, str(SRC_DIR))
