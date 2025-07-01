@@ -89,9 +89,3 @@ def test_model(model_name, max_samples=None):
     pipeline.evaluate()
     pipeline.save_and_push_results()
     pipeline.show_results()
-
-
-if __name__ == "__main__":
-    Utils.hugging_face_login()
-    test_model("EleutherAI/pythia-70m", max_samples=5)
-    test_model("distilbert/distilgpt2", max_samples=5)

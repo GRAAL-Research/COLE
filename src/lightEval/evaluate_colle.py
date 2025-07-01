@@ -38,9 +38,7 @@ if __name__ == "__main__":
             models = args.models_name.split(",")
         else :
             models = ["unsloth/Llama-3.2-3B-unsloth-bnb-4bit",
-
         "unsloth/Llama-3.2-3B-Instruct-unsloth-bnb-4bit",
-
         "unsloth/mistral-7b-v0.3-bnb-4bit"]
 
         print(args.max_examples)
