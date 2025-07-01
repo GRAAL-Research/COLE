@@ -10,6 +10,8 @@ import Utils as Utils
 # import custom components
 import CustomMetrics
 
+MAX_BOOTSTRAP_ITER = 50
+
 CustomMetrics.add_custom_metrics_to_lighteval()
 
 if is_accelerate_available():
@@ -31,12 +33,18 @@ def build_task(section="custom", name=None, shots=0, instruct=0):
     return f"{section}|{name}|{shots}|{instruct}"
 
 
-def create_model_config(model_name):
-    print("creating model config.")
+def create_model_config(model_name,backend):
     try:
-        return build_vllm_config(model_name)
+        if backend == "transformers" :
+            return build_transformers_config(model_name)
+        elif backend == "vllm" :
+            return build_vllm_config(model_name)
+        else:
+            print("backend configuration unavailable, defaulting to vllm")
+            return build_vllm_config(model_name)
+
     except Exception as e:
-        print("Could not create model as VLLM, falling back to transformers...")
+        print("Could not create model, falling back to transformers...")
         return build_transformers_config(model_name)
 
 
@@ -61,7 +69,7 @@ def build_vllm_config(model_name):
     )
 
 
-def build_pipeline(model_name, max=None):
+def build_pipeline(model_name,backend="vllm", max=None,):
     evaluation_tracker = EvaluationTracker(
         output_dir="./results",
         save_details=False,
@@ -80,12 +88,12 @@ def build_pipeline(model_name, max=None):
         tasks=tasks,
         pipeline_parameters=pipeline_params,
         evaluation_tracker=evaluation_tracker,
-        model_config=create_model_config(model_name),
+        model_config=create_model_config(model_name,backend),
     )
 
 
-def test_model(model_name, max_samples=None):
-    pipeline = build_pipeline(model_name, max_samples)
+def test_model(model_name, max_samples=None,backend = "vllm"):
+    pipeline = build_pipeline(model_name, max_samples,backend)
     pipeline.evaluate()
     pipeline.save_and_push_results()
     pipeline.show_results()
