@@ -1,166 +1,229 @@
+import io
 import os
+import sys
 import shutil
 import tempfile
 import zipfile
 import json
-from dotenv import load_dotenv
+import logging
+import math
+from pathlib import Path
 from uuid import uuid4
 
 from fastapi import FastAPI, UploadFile, Form, File, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
-from archives.Benchmarks import (
-    AllocineBench, FrColaBench, Paws_xBench, XnliBench,
-    PiafBench, SickfrBench, Opus_parcusBench, Sts22Bench
-)
+# --- suppression des logs LightEval ---
+logging.getLogger("lighteval").setLevel(logging.WARNING)
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-load_dotenv()
+# --- Configuration des chemins ---
+BASE_DIR = Path(__file__).resolve().parents[2]
+SRC_DIR = BASE_DIR / "src"
+sys.path.insert(0, str(SRC_DIR))
 
-RESULTS_DIR = "src/Backend/results"
-os.makedirs(RESULTS_DIR, exist_ok=True)
+RESULTS_DIR = BASE_DIR / "src" / "Backend" / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
+# --- Imports LightEval & FastAPI ---
+import src.lightEval.CustomMetrics as custom_metrics
+custom_metrics.add_custom_metrics_to_lighteval()
+import src.lightEval.tasks as tasks_module
+
+import lighteval
+from lighteval.logging.evaluation_tracker import EvaluationTracker
+from lighteval.pipeline import Pipeline, PipelineParameters, ParallelismManager
+from lighteval.models.transformers.transformers_model import TransformersModelConfig
 
 app = FastAPI()
-
+app.mount("/results", StaticFiles(directory=str(RESULTS_DIR)), name="results")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"], allow_credentials=True,
+    allow_methods=["*"], allow_headers=["*"],
 )
 
-BENCHMARKS = {
-    "allocine": AllocineBench(),
-    "frcola": FrColaBench(),
-    "paws_x": Paws_xBench(),
-    "xnli": XnliBench(),
-    "piaf": PiafBench(),
-    "sickfr": SickfrBench(),
-    "opus_parcus": Opus_parcusBench(),
-    "sts22_crosslingual": Sts22Bench()
-}
+def load_predictions_from_zip(zip_bytes: bytes) -> dict:
+    """Lit directement predictions.json depuis le ZIP en mémoire."""
+    with zipfile.ZipFile(io.BytesIO(zip_bytes)) as z:
+        if "predictions.json" not in z.namelist():
+            raise HTTPException(400, "Le ZIP ne contient pas predictions.json")
+        with z.open("predictions.json") as f:
+            return json.load(f)
 
+class DummyResponse:
+    def __init__(self, idx: int, choices: list, prompt: str):
+        self.result = [choices[idx] if 0 <= idx < len(choices) else choices[0]]
+        self.generated_tokens = self.result
+        self.input_tokens = [prompt]
+        self.truncated_tokens_count = 0
+        self.padded_tokens_count = 0
+        hp, lp = 0.9, 0.1
+        self.choice_logprobs = [math.log(hp) if i == idx else math.log(lp)
+                                for i in range(len(choices))]
+        self.logprobs = [self.choice_logprobs[idx]]
+
+    def get_result_for_eval(self) -> str:
+        return self.result[0]
+
+class ZipInferenceModel:
+    is_async = False
+    def __init__(self, predictions: dict):
+        # predictions: {"allocine": [...], ...}
+        self._predictions = predictions
+
+    def infer(self, requests, conditions=None):
+        # extraire task_name complet, p.ex. "custom|allocine|0|0"
+        raw = (conditions[0].task_name if conditions and hasattr(conditions[0], "task_name")
+               else getattr(requests[0], "task_name", None))
+        # short = le nom entre les pipes
+        short = raw.split("|")[1] if raw and "|" in raw else raw
+
+        vals = self._predictions.get(short, [])
+        if not isinstance(vals, list):
+            vals = [vals]
+
+        logging.info(f"[INFER] Task={short}, JSON vals (len={len(vals)}): {vals}")
+
+        outputs = []
+        for i, req in enumerate(requests):
+            prompt = getattr(req, "prompt", getattr(req, "query", str(req)))
+            try:
+                idx = int(vals[i])
+            except Exception:
+                idx = 0
+            choices = getattr(req, "choices", ["0", "1"])
+            if idx >= len(choices):
+                idx = 0
+            outputs.append(DummyResponse(idx, choices, prompt))
+
+        preds = [o.get_result_for_eval() for o in outputs]
+        logging.info(f"[INFER] Task={short}, Generated preds: {preds}")
+        return outputs
+
+    def get_method_from_request_type(self, request_type):
+        return self.infer
+
+    def cleanup(self):
+        pass
 
 @app.post("/submit")
-async def submit_post(email: str = Form(...), labels: UploadFile = File(...), display_name: str = Form(...)):
-    print(" Requête reçue avec email :", email)
-    print(" Nom du fichier ZIP :", labels.filename)
+async def submit(
+    email: str = Form(...),
+    predictions_zip: UploadFile = File(...),
+    display_name: str = Form(...),
+):
+    logging.info(f"Submission from {email!r} as {display_name!r}")
 
-    with tempfile.TemporaryDirectory() as tmpdir:
-        zip_path = os.path.join(tmpdir, "submission.zip")
+    # 1) Charger le ZIP
+    zip_bytes = await predictions_zip.read()
+    raw_dict = load_predictions_from_zip(zip_bytes)
 
-        with open(zip_path, "wb") as f:
-            shutil.copyfileobj(labels.file, f)
+    # 2) Transformer clés "custom|t|0|0" → "t"
+    all_preds = {k.split("|")[1]: v for k, v in raw_dict.items()}
 
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_ref.extractall(tmpdir)
+    logging.info("=== Loaded predictions ===")
+    for t, vals in all_preds.items():
+        logging.info(f"  {t}: {vals}")
 
-        json_files = [
-            os.path.join(root, file)
-            for root, _, files in os.walk(tmpdir)
-            for file in files
-            if file.endswith(".json")
-        ]
+    # 3) Déterminer N
+    N = len(next(iter(all_preds.values()))) if all_preds else 0
+    logging.info(f"Using max_samples = {N}")
 
-        if not json_files:
-            raise HTTPException(status_code=400, detail=" Aucun fichier JSON trouvé dans l'archive.")
+    # 4) Préparer tasks
+    base_tasks = ["allocine","paws_x","fquad","gqnli","piaf",
+                  "sickfr","xnli","frcola","frblimp","sts22"]
+    available = [t for t in base_tasks if t in all_preds]
+    if not available:
+        raise HTTPException(400, "Aucune tâche reconnue dans predictions.json")
+    task_str = ",".join(f"custom|{t}|0|0" for t in available)
+    logging.info(f"Evaluating tasks: {task_str}")
 
-        results_summary = {}
-        errors = {}
+    # 5) Configurer l’évaluation
+    tracker = EvaluationTracker(
+        output_dir=str(RESULTS_DIR / "temp"),
+        save_details=True,
+        push_to_hub=False
+    )
+    params = PipelineParameters(
+        launcher_type=ParallelismManager.ACCELERATE,
+        custom_tasks_directory=tasks_module,
+        max_samples=N
+    )
+    config = TransformersModelConfig(
+        model_name="bert-base-uncased",
+        dtype="auto",
+        use_chat_template=True,
+        device="cpu",
+        batch_size=1
+    )
+    pipeline = Pipeline(
+        tasks=task_str,
+        pipeline_parameters=params,
+        evaluation_tracker=tracker,
+        model_config=config
+    )
+    pipeline.model = ZipInferenceModel(all_preds)
 
-        for json_file in json_files:
-            try:
-                with open(json_file, "r", encoding="utf-8-sig") as f:
-                    data = json.load(f)
+    # 6) Lancer l’évaluation
+    pipeline.evaluate()
 
-                candidate_results = data.get("results") or data
+    # 7) Logger paire à paire (gold/pred)
+    details = tracker.results.get("details", {})
+    logging.info("=== Per-example (gold vs pred) ===")
+    for full_task, info in details.items():
+        # extraction safe du nom court
+        parts = full_task.split("|")
+        short = parts[1] if len(parts) > 1 else parts[0]
+        logging.info(f"--- Task {short} ---")
+        for ex in info.get("examples", []):
+            logging.info(f"   gold={ex['gold']!r}  pred={ex['pred']!r}")
 
-                if not isinstance(candidate_results, dict):
-                    raise ValueError("Format inattendu : les résultats ne sont pas un dictionnaire")
+    # 8) Récupérer et afficher métriques agrégées
+    raw = tracker.results.get("results", {})
+    results = {}
+    logging.info("=== Aggregated metrics ===")
+    for full_task, metrics in raw.items():
+        parts = full_task.split("|")
+        short = parts[1] if len(parts) > 1 else parts[0]
+        filtered = {k: v for k, v in metrics.items() if isinstance(v, (int, float))}
+        results[short] = filtered
+        logging.info(f"  {short}: {filtered}")
 
-                for raw_name, predictions in candidate_results.items():
-                    parts = raw_name.lower().split("|")
-                    bench_key = parts[1] if len(parts) >= 2 else raw_name.lower()
-                    bench_key = bench_key.replace("-", "_").strip()
-
-                    benchmark = BENCHMARKS.get(bench_key)
-
-                    if benchmark:
-                        if isinstance(predictions, dict) and "acc" in predictions:
-                            results_summary[raw_name] = predictions
-                            print(f" Résultat pré-calculé accepté pour : {raw_name}")
-                        else:
-                            try:
-                                score = benchmark.compare_infered_results(predictions)
-                                results_summary[raw_name] = score
-                            except Exception as e:
-                                print(f" Erreur benchmark connu {raw_name} :", e)
-                                errors[raw_name] = str(e)
-                    else:
-                        results_summary[raw_name] = predictions
-                        print(f"️ Résultat brut ajouté pour : {raw_name}")
-
-            except Exception as e:
-                print(f" Erreur dans {json_file} :", e)
-                errors[os.path.basename(json_file)] = str(e)
-
-        submission_id = str(uuid4())
-        filename = f"{submission_id}.json"
-        result_path = os.path.join(RESULTS_DIR, filename)
-
-        with open(result_path, "w", encoding="utf-8") as f:
-            json.dump({
-                "email": email,
-                "display_name": display_name,
-                "zip_filename": labels.filename,
-                "results": results_summary,
-                "errors": errors,
-                "submission_id": submission_id
-            }, f, indent=2, ensure_ascii=False)
-
-        print(f" Résultats sauvegardés dans : {result_path}")
-
-        return {
+    # 9) Construire le JSON de sortie
+    output = {
+        "config_general": {
+            "submission_id": str(uuid4()),
             "email": email,
-            "results": results_summary,
-            "errors": errors,
-            "submission_id": submission_id,
-            "file": filename
-        }
+            "display_name": display_name,
+            "zip_filename": predictions_zip.filename
+        },
+        "results": results,
+        "predictions": {t: all_preds[t][:N] for t in available}
+    }
 
+    out_path = RESULTS_DIR / f"{output['config_general']['submission_id']}.json"
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(output, f, ensure_ascii=False, indent=2)
 
-@app.get("/results")
-def get_latest_results():
-    raise HTTPException(status_code=400, detail="️ Tu dois utiliser un identifiant de soumission pour voir les résultats.")
-
-
-@app.get("/results/{filename}")
-def get_result_file(filename: str):
-    file_path = os.path.join(RESULTS_DIR, filename)
-    if not os.path.exists(file_path):
-        return {"error": "Fichier non trouvé"}
-    return FileResponse(file_path, media_type="application/json", filename=filename)
-
+    return FileResponse(
+        str(out_path),
+        media_type="application/json",
+        filename=out_path.name
+    )
 
 @app.get("/leaderboard")
-def get_leaderboard():
-    summaries = []
-    for file in os.listdir(RESULTS_DIR):
-        if not file.endswith(".json"):
-            continue
-        path = os.path.join(RESULTS_DIR, file)
-        try:
-            with open(path, "r", encoding="utf-8") as f:
+async def leaderboard():
+    entries = []
+    for fn in sorted(os.listdir(RESULTS_DIR)):
+        if fn.endswith(".json"):
+            with open(RESULTS_DIR / fn, encoding="utf-8") as f:
                 data = json.load(f)
-                summaries.append({
-                    "name": file,
-                    "submission_id": data.get("submission_id"),
-                    "display_name": data.get("display_name", ""),
-                    "zip_filename": data.get("zip_filename"),
-                    "email": data.get("email", "unknown"),
-                    "results": data.get("results", {})
-                })
-        except Exception as e:
-            print(f" Erreur lecture {file} : {e}")
-    return summaries
+            entries.append(data["config_general"])
+    return JSONResponse({"leaderboard": entries})
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "message": "API is running"}

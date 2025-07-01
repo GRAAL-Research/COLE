@@ -1,61 +1,59 @@
+"use client";
+
 import { useState } from "react";
-import UploadButton from "./UploadButton";
+import { useRouter } from "next/navigation";
 import BigBlueButton from "./BigBlueButton";
 import ErrorMessage from "./ErrorMessage";
 
 export default function SubmitForm() {
-  const [required_visible, setRequiredVisible] = useState(false);
+  const router = useRouter();
+  const [requiredVisible, setRequiredVisible] = useState(false);
   const [email, setEmail] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [file, setFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [displayName, setDisplayName] = useState("");
 
-  const submitResults = async (email, file, displayName) => {
-    if (!email || !file || !displayName) {
-      showRequired();
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const submitResults = async () => {
+    if (!email || !displayName || !file) {
+      setRequiredVisible(true);
       return;
     }
-
-    const isZip = file.name.toLowerCase().endsWith(".zip");
-    if (!isZip) {
-      alert("The file must be a ZIP (.zip) file.");
+    if (!file.name.toLowerCase().endsWith(".zip")) {
+      alert("Please upload a ZIP (.zip) file.");
       return;
     }
-
     setRequiredVisible(false);
     setIsSubmitting(true);
 
-    try {
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("display_name", displayName);
-      formData.append("labels", file);
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("display_name", displayName);
+    formData.append("predictions_zip", file);
 
-      const response = await fetch("http://localhost:8000/submit", {
+    try {
+      const res = await fetch("http://localhost:8000/submit", {
         method: "POST",
         body: formData,
       });
-
-      if (!response.ok) {
-        throw new Error("Submission failed.");
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        throw new Error(err?.detail || `HTTP ${res.status}`);
       }
-
-      const result = await response.json();
-      const submissionId = result.submission_id;
+      const json = await res.json();
+      const submissionId = json.config_general.submission_id;
 
       localStorage.setItem("last_result_file", `${submissionId}.json`);
       localStorage.setItem("just_submitted", "true");
-
-      window.location.href = `/results/${submissionId}`;
+      router.push(`/results/${submissionId}`);
     } catch (err) {
       alert("Error while submitting: " + err.message);
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const showRequired = () => {
-    setRequiredVisible(true);
   };
 
   return (
@@ -69,45 +67,43 @@ export default function SubmitForm() {
           Your Email
         </label>
         <input
-          id="email"
-          type="email"
-          placeholder="your_email@example.com"
+          id="email" type="email"
+          placeholder="you@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border border-gray-300 p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border border-gray-300 p-3 rounded-md w-full focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
       <div className="space-y-2">
         <label htmlFor="displayname" className="block text-sm font-medium text-gray-700">
-          Your Display Name
+          Display Name
         </label>
         <input
-          id="displayname"
-          type="text"
-          placeholder="Display Name"
-          value={displayName} // ✅ CORRIGÉ
-          onChange={(e) => setDisplayName(e.target.value)} // ✅ CORRIGÉ
-          className="border border-gray-300 p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          id="displayname" type="text"
+          placeholder="Leaderboard Name"
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+          className="border border-gray-300 p-3 rounded-md w-full focus:ring-2 focus:ring-blue-500"
         />
-        <p className="text-xs text-gray-500">
-          This name will be shown on the leaderboard.
-        </p>
       </div>
 
-      <UploadButton uploaded={(file) => setFile(file)}>
-        Upload Labels
-      </UploadButton>
+      <div className="space-y-2">
+        <label htmlFor="zipfile" className="block text-sm font-medium text-gray-700">
+          Predictions ZIP
+        </label>
+        <input
+          id="zipfile" type="file" accept=".zip"
+          onChange={handleFileChange}
+          className="border border-gray-300 p-2 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
-      <p className="text-sm text-gray-600 italic">
-        Please ensure your data is properly formatted. Refer to our <a href="/guide" className="text-blue-500 underline">guide</a> for more info.
-      </p>
-
-      <ErrorMessage condition={required_visible}>
-        ⚠️ Please provide an email, a display name, and a ZIP file before submitting.
+      <ErrorMessage condition={requiredVisible}>
+        ⚠️ Email, display name & ZIP are requis.
       </ErrorMessage>
 
-      <BigBlueButton onClick={() => submitResults(email, file, displayName)}>
+      <BigBlueButton onClick={submitResults} disabled={isSubmitting}>
         {isSubmitting ? "Submitting..." : "Submit Your Results"}
       </BigBlueButton>
     </div>

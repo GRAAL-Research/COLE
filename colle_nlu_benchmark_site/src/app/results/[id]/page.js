@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from 'react';
 import { use } from 'react';
@@ -49,7 +49,8 @@ export default function ResultsPage({ params }) {
 
   const handleDownload = () => {
     if (!data) return;
-    const fileName = data.file || `${submissionId}.json`;
+    // Le fichier a pour nom <submissionId>.json côté back-end
+    const fileName = `${submissionId}.json`;
     const downloadUrl = `http://localhost:8000/results/${fileName}`;
 
     const link = document.createElement("a");
@@ -80,9 +81,9 @@ export default function ResultsPage({ params }) {
 
   const results = data.results || {};
   const taskResults = Object.entries(results).filter(([key]) => key !== "all");
-  const globalMetrics = results["all"] || {};
-  const displayName =
-    data.config_general?.model_name || data.display_name || data.email;
+  const globalMetrics = results.all || {};
+  // Affiche le nom fourni par l'utilisateur
+  const displayName = data.config_general?.display_name || data.config_general?.email;
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-6">
@@ -96,7 +97,7 @@ export default function ResultsPage({ params }) {
           onClick={handleDownload}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
         >
-          ️ Download JSON
+          Download JSON
         </button>
       </div>
 
@@ -108,10 +109,10 @@ export default function ResultsPage({ params }) {
           <ul className="ml-4 text-sm text-gray-700 list-disc">
             {Object.entries(globalMetrics).map(([metric, value]) => (
               <li key={metric}>
-                <strong>{getReadableMetricName(metric)}</strong>:{" "}
-                {typeof value === "number"
-                  ? (value * 100).toFixed(1) + "%"
-                  : value}
+                <strong>{getReadableMetricName(metric)}</strong>: {typeof value === 'number'
+                  ? (value * 100).toFixed(1) + '%'
+                  : value
+                }
               </li>
             ))}
           </ul>
@@ -137,10 +138,10 @@ export default function ResultsPage({ params }) {
                 <ul className="list-disc ml-6 text-gray-700">
                   {Object.entries(metrics).map(([metric, value]) => (
                     <li key={metric}>
-                      <strong>{getReadableMetricName(metric)}</strong>:{" "}
-                      {typeof value === "number"
-                        ? (value * 100).toFixed(1) + "%"
-                        : value}
+                      <strong>{getReadableMetricName(metric)}</strong>: {typeof value === 'number'
+                        ? (value * 100).toFixed(1) + '%'
+                        : value
+                      }
                     </li>
                   ))}
                 </ul>
