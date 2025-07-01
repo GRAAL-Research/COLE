@@ -78,7 +78,7 @@ class GetTasksAsStr(TestCase):
 
         expected = "custom|frcola|0|0"
 
-        actual = get_tasks_as_str(tasks_prediction_dictionary=a_fr_cola_dict)
+        actual, _ = get_tasks_as_str(tasks_prediction_dictionary=a_fr_cola_dict)
 
         self.assertEqual(expected, actual)
 
@@ -86,7 +86,7 @@ class GetTasksAsStr(TestCase):
 
         expected = "custom|allocine|0|0"
 
-        actual = get_tasks_as_str(tasks_prediction_dictionary=a_fr_cola_dict)
+        actual, _ = get_tasks_as_str(tasks_prediction_dictionary=a_fr_cola_dict)
 
         self.assertEqual(expected, actual)
 
@@ -97,7 +97,37 @@ class GetTasksAsStr(TestCase):
 
         expected = "custom|allocine|0|0,custom|frcola|0|0"
 
-        actual = get_tasks_as_str(tasks_prediction_dictionary=a_dict)
+        actual, _ = get_tasks_as_str(tasks_prediction_dictionary=a_dict)
+
+        self.assertEqual(expected, actual)
+
+    def test_given_a_single_dict_task_when_get_tasks_as_str_then_return_available_tasks(
+        self,
+    ):
+        a_fr_cola_dict = {"frcola": self.a_list}
+
+        expected = ["frcola"]
+
+        _, actual = get_tasks_as_str(tasks_prediction_dictionary=a_fr_cola_dict)
+
+        self.assertEqual(expected, actual)
+
+        a_fr_cola_dict = {"allocine": self.a_list}
+
+        expected = ["allocine"]
+
+        _, actual = get_tasks_as_str(tasks_prediction_dictionary=a_fr_cola_dict)
+
+        self.assertEqual(expected, actual)
+
+    def test_given_a_double_dict_task_when_get_tasks_as_str_then_return_tasks_as_str(
+        self,
+    ):
+        a_dict = {"frcola": self.a_list, "allocine": self.a_list}
+
+        expected = ["allocine", "frcola"]
+
+        _, actual = get_tasks_as_str(tasks_prediction_dictionary=a_dict)
 
         self.assertEqual(expected, actual)
 
