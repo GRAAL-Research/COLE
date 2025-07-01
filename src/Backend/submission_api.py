@@ -28,9 +28,9 @@ RESULTS_DIR = BASE_DIR / "src" / "Backend" / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # --- Imports LightEval & FastAPI ---
-import src.lightEval.CustomMetrics as custom_metrics
+import src.light_eval.custom_metrics as custom_metrics
 custom_metrics.add_custom_metrics_to_lighteval()
-import src.lightEval.tasks as tasks_module
+import src.light_eval.tasks as tasks_module
 
 import lighteval
 from lighteval.logging.evaluation_tracker import EvaluationTracker
