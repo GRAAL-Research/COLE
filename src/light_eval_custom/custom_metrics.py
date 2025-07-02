@@ -79,6 +79,6 @@ pearson = CorpusLevelMetric(
 def add_custom_metrics_to_lighteval():
     extend_enum(Metrics, "pearson_spearman", pearson)
     extend_enum(Metrics, "accuracy_wrapper", accuracy_wrapper)
+    logging.info(f"Imported custom metrics.")
 
 
-logging.info(f"Imported custom metrics.")

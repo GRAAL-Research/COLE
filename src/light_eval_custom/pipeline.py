@@ -4,11 +4,12 @@ from lighteval.models.vllm.vllm_model import VLLMModelConfig
 from lighteval.pipeline import ParallelismManager, Pipeline, PipelineParameters
 from lighteval.utils.imports import is_accelerate_available
 
-import custom_metrics
+from src.light_eval_custom.custom_metrics import add_custom_metrics_to_lighteval
+
 
 MAX_BOOTSTRAP_ITER = 50
-
-custom_metrics.add_custom_metrics_to_lighteval()
+CUSTOM_TASKS_DIRECTORY = "../tasks_custom/__init__.py"
+add_custom_metrics_to_lighteval()
 
 if is_accelerate_available():
     from datetime import timedelta
@@ -81,7 +82,7 @@ def build_vllm_config(model_name):
 def build_pipeline(
     model_name,
     backend="vllm",
-    max=None,
+    max_samples=None,
 ):
     evaluation_tracker = EvaluationTracker(
         output_dir="./results",
@@ -90,9 +91,9 @@ def build_pipeline(
     )
     pipeline_params = PipelineParameters(
         launcher_type=ParallelismManager.ACCELERATE,
-        custom_tasks_directory="./tasks.py",
+        custom_tasks_directory=CUSTOM_TASKS_DIRECTORY,
         # Remove the 2 parameters below once your configuration is tested
-        max_samples=max,
+        max_samples=max_samples,
     )
 
     tasks = build_tasks_name()
