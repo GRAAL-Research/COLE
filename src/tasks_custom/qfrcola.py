@@ -39,4 +39,3 @@ qfrcola = LightevalTaskConfig(
     stop_sequence=[],
 )
 
-TASKS_TABLE = [qfrcola]

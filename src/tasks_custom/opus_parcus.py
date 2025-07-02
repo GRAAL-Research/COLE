@@ -40,6 +40,7 @@ opus_parcus = LightevalTaskConfig(
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
+    generation_size=3,
     metric=[metrics.Metrics.pearson_spearman],
     trust_dataset=True,
 )

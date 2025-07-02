@@ -1,4 +1,5 @@
 import argparse
+import traceback
 
 import utils
 from offline_evaluation.all_llms import llms
@@ -71,7 +72,7 @@ if __name__ == "__main__":
             try:
                 test_model(model, max_samples=args.max_examples, backend=args.backend)
             except Exception as e:
-                print("Exception occured", e, f"model: {model} was skipped")
+                print("Exception occured", traceback.format_exc(), f"model: {model} was skipped")
                 skipped_models.append(model)
 
             print(f"end of model test {model}")
