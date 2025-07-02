@@ -8,7 +8,7 @@ from src.light_eval_custom.custom_metrics import add_custom_metrics_to_lighteval
 
 
 MAX_BOOTSTRAP_ITER = 50
-CUSTOM_TASKS_DIRECTORY = "../tasks_custom/__init__.py"
+CUSTOM_TASKS_DIRECTORY = "./custom_tasks.py"
 add_custom_metrics_to_lighteval()
 
 if is_accelerate_available():
