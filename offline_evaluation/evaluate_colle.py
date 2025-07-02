@@ -46,6 +46,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 if __name__ == "__main__":
+    print("used backend:", args.backend)
     utils.hugging_face_login(args.token)
     print("---------Logged in HuggingFace !")
     if args.test:

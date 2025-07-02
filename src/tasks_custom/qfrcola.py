@@ -24,7 +24,7 @@ def prompt_fn(line, task_name: str = None):
     )
 
 
-frcola = LightevalTaskConfig(
+qfrcola = LightevalTaskConfig(
     name="qfrcola",
     prompt_function=prompt_fn,
     suite=["custom"],
@@ -39,4 +39,4 @@ frcola = LightevalTaskConfig(
     stop_sequence=[],
 )
 
-TASKS_TABLE = [frcola]
+TASKS_TABLE = [qfrcola]

@@ -32,8 +32,8 @@ def build_tasks_name():
         "piaf",
         "sickfr",
         "xnli",
-        "frcola",
-        "frblimp",
+        "qfrcola",
+        "qfrblimp",
         "sts22",
     ]
     tasks = [build_task(name=task_name) for task_name in tasks_names]
@@ -51,7 +51,7 @@ def create_model_config(model_name, backend):
         elif backend == "vllm":
             return build_vllm_config(model_name)
         else:
-            print("backend configuration unavailable, defaulting to vllm")
+            print(f"backend configuration {backend} unavailable, defaulting to vllm")
             return build_vllm_config(model_name)
 
     except Exception as e:
@@ -81,8 +81,8 @@ def build_vllm_config(model_name):
 
 def build_pipeline(
     model_name,
-    backend="vllm",
     max_samples=None,
+    backend="vllm",
 ):
     evaluation_tracker = EvaluationTracker(
         output_dir="./results",

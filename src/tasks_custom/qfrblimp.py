@@ -35,7 +35,7 @@ def prompt_fn(line, task_name: str = None):
     )
 
 
-frblimp = LightevalTaskConfig(
+qfrblimp = LightevalTaskConfig(
     name="qfrblimp",
     prompt_function=prompt_fn,
     hf_repo=REPO_ID,

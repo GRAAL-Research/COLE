@@ -1,7 +1,7 @@
 import logging
 
-from src.tasks_custom.qfrblimp import frblimp
-from src.tasks_custom.qfrcola import frcola
+from src.tasks_custom.qfrblimp import qfrblimp
+from src.tasks_custom.qfrcola import qfrcola
 from src.tasks_custom.sickfr import sickfr
 from src.tasks_custom.gqnli import gqnli
 from src.tasks_custom.allocine import allocine
@@ -13,7 +13,7 @@ from src.tasks_custom.paws_x import paws_x
 from src.tasks_custom.xnli import xnli
 
 TASKS_TABLE = [
-    frcola,
+    qfrcola,
     sickfr,
     gqnli,
     allocine,
@@ -22,7 +22,7 @@ TASKS_TABLE = [
     piaf,
     sts22,
     xnli,
-    frblimp,
+    qfrblimp,
     opus_parcus,
 ]
 logging.info(f"Imported custom tasks.")

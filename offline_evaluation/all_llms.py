@@ -50,5 +50,3 @@ llms = {
 for key in llms.keys():
     if isinstance(llms[key], list) and key != "all":
         llms["all"].extend(llms[key])
-
-print(llms["all"])
