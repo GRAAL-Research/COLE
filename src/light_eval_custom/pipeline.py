@@ -21,6 +21,11 @@ if is_accelerate_available():
 else:
     accelerator = None
 
+class PipelineConfig:
+    def __init__(self,backend="vllm",batch_size=8,max_length=2048):
+        self.backend = backend
+        self.batch_size = batch_size
+        self.max_length = max_length
 
 def build_tasks_name():
     tasks_names = [
@@ -44,33 +49,33 @@ def build_task(section="custom", name=None, shots=0, instruct=0):
     return f"{section}|{name}|{shots}|{instruct}"
 
 
-def create_model_config(model_name, backend):
+def create_model_config(model_name, config : PipelineConfig):
     try:
-        if backend == "transformers":
-            return build_transformers_config(model_name)
-        elif backend == "vllm":
-            return build_vllm_config(model_name)
+        if config.backend == "transformers":
+            return build_transformers_config(model_name,config)
+        elif config.backend == "vllm":
+            return build_vllm_config(model_name,config)
         else:
-            print(f"backend configuration {backend} unavailable, defaulting to vllm")
-            return build_vllm_config(model_name)
+            print(f"backend configuration {config.backend} unavailable, defaulting to vllm")
+            return build_vllm_config(model_name,config)
 
     except Exception as e:
         print("Could not create model, falling back to transformers...")
         return build_transformers_config(model_name)
 
 
-def build_transformers_config(model_name):
+def build_transformers_config(model_name,config):
     return TransformersModelConfig(
         model_name=model_name,
         dtype="auto",
         use_chat_template=True,
         device="cuda",
-        batch_size=4,
-        max_length=5,
+        batch_size=config.batch_size,
+        max_length=config.max_length,
     )
 
 
-def build_vllm_config(model_name):
+def build_vllm_config(model_name,config):
     return VLLMModelConfig(
         model_name=model_name,
         dtype="auto",
@@ -81,8 +86,8 @@ def build_vllm_config(model_name):
 
 def build_pipeline(
     model_name,
-    max_samples=None,
-    backend="vllm",
+    max_samples,
+    config : PipelineConfig,
 ):
     evaluation_tracker = EvaluationTracker(
         output_dir="./results",
@@ -101,12 +106,13 @@ def build_pipeline(
         tasks=tasks,
         pipeline_parameters=pipeline_params,
         evaluation_tracker=evaluation_tracker,
-        model_config=create_model_config(model_name, backend),
+        model_config=create_model_config(model_name, config),
     )
 
 
-def test_model(model_name, max_samples=None, backend="vllm"):
-    pipeline = build_pipeline(model_name, max_samples, backend)
+def test_model(model_name, max_samples=None, config : PipelineConfig = PipelineConfig()):
+    pipeline = build_pipeline(model_name, max_samples, config)
     pipeline.evaluate()
     pipeline.save_and_push_results()
     pipeline.show_results()
+
