@@ -176,14 +176,29 @@ async def submit(
 
 
 @app.get("/leaderboard")
-async def leaderboard():
-    entries = []
+async def leaderboard() -> List[Dict[str, Any]]:
+    entries: List[Dict[str, Any]] = []
     for fn in sorted(os.listdir(RESULTS_DIR)):
-        if fn.endswith(".json"):
-            with open(RESULTS_DIR / fn, encoding="utf-8") as f:
-                data = json.load(f)
-            entries.append(data["config_general"])
-    return JSONResponse({"leaderboard": entries})
+        if not fn.endswith(".json"):
+            continue
+        with open(RESULTS_DIR / fn, encoding="utf-8") as f:
+            data = json.load(f)
+
+        cfg = data["config_general"]
+        global_metrics = data.get("results", {}).get("all", {})
+        acc = global_metrics.get("acc")
+        score_pct = None
+        if isinstance(acc, (int, float)):
+            score_pct = round(acc * 100, 1)
+
+        entries.append({
+            "submission_id": cfg["submission_id"],
+            "display_name": cfg["display_name"],
+            "score": score_pct,        # global
+            "results": data.get("results", {}),  # ← on ajoute ça
+        })
+
+    return entries
 
 
 @app.get("/health")

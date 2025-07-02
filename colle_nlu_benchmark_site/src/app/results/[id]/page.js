@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { use } from 'react';
+import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 const metricLabel = {
   acc: "Accuracy",
@@ -20,20 +20,14 @@ const getReadableMetricName = (metric) => {
   );
 };
 
-export default function ResultsPage({ params }) {
-  const { id: submissionId } = use(params);
+export default function ResultsPage() {
+  // unwrap the params promise using the hook
+  const { id: submissionId } = useParams();
+
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const localKey = `results_${submissionId}`;
-    const cached = localStorage.getItem(localKey);
-
-    if (cached) {
-      setData(JSON.parse(cached));
-      return;
-    }
-
     const url = `http://localhost:8000/results/${submissionId}.json`;
     fetch(url)
       .then((res) => {
@@ -42,14 +36,12 @@ export default function ResultsPage({ params }) {
       })
       .then((json) => {
         setData(json);
-        localStorage.setItem(localKey, JSON.stringify(json));
       })
       .catch((err) => setError(err.message));
   }, [submissionId]);
 
   const handleDownload = () => {
     if (!data) return;
-    // Le fichier a pour nom <submissionId>.json côté back-end
     const fileName = `${submissionId}.json`;
     const downloadUrl = `http://localhost:8000/results/${fileName}`;
 
@@ -82,8 +74,8 @@ export default function ResultsPage({ params }) {
   const results = data.results || {};
   const taskResults = Object.entries(results).filter(([key]) => key !== "all");
   const globalMetrics = results.all || {};
-  // Affiche le nom fourni par l'utilisateur
-  const displayName = data.config_general?.display_name || data.config_general?.email;
+  const displayName =
+    data.config_general?.display_name || data.config_general?.email;
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-6">
@@ -109,10 +101,10 @@ export default function ResultsPage({ params }) {
           <ul className="ml-4 text-sm text-gray-700 list-disc">
             {Object.entries(globalMetrics).map(([metric, value]) => (
               <li key={metric}>
-                <strong>{getReadableMetricName(metric)}</strong>: {typeof value === 'number'
-                  ? (value * 100).toFixed(1) + '%'
-                  : value
-                }
+                <strong>{getReadableMetricName(metric)}</strong>:{" "}
+                {typeof value === "number"
+                  ? (value * 100).toFixed(1) + "%"
+                  : value}
               </li>
             ))}
           </ul>
@@ -138,10 +130,10 @@ export default function ResultsPage({ params }) {
                 <ul className="list-disc ml-6 text-gray-700">
                   {Object.entries(metrics).map(([metric, value]) => (
                     <li key={metric}>
-                      <strong>{getReadableMetricName(metric)}</strong>: {typeof value === 'number'
-                        ? (value * 100).toFixed(1) + '%'
-                        : value
-                      }
+                      <strong>{getReadableMetricName(metric)}</strong>:{" "}
+                      {typeof value === "number"
+                        ? (value * 100).toFixed(1) + "%"
+                        : value}
                     </li>
                   ))}
                 </ul>
