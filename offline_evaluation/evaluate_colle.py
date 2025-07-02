@@ -1,5 +1,8 @@
 import argparse
+import logging
+import os
 import traceback
+from datetime import time, datetime
 
 import utils
 from offline_evaluation.all_llms import llms
@@ -50,10 +53,13 @@ parser.add_argument(
     default=8,
 
 )
-parser.add_argument("--max_seq_length",type=int,default=2048)
+parser.add_argument("--max_seq_length",type=int,default=4096)
 args = parser.parse_args()
 
 if __name__ == "__main__":
+    time_start = datetime.now()
+    logging.info(f"Start time: {time_start}")
+
     config = PipelineConfig(backend=args.backend,batch_size=args.batch_size,max_length=args.max_seq_length)
     print("used backend:", args.backend)
     utils.hugging_face_login(args.token)
@@ -62,7 +68,7 @@ if __name__ == "__main__":
         print(
             f"Initiating Tests on {TEST_MODEL}, with max_samples set to {TEST_MAX_EXAMPLES}"
         )
-        test_model(TEST_MODEL, max_samples=TEST_MAX_EXAMPLES)
+        test_model(TEST_MODEL, max_samples=TEST_MAX_EXAMPLES,config=config)
 
     else:
 
@@ -85,3 +91,7 @@ if __name__ == "__main__":
 
             print(f"end of model test {model}")
         print(f"skipped models: {skipped_models}")
+        time_end = datetime.now()
+        logging.info(f"End time: {time_end}")
+        elapsed_time = time_end - time_start
+        logging.info(f"Elapsed time: {elapsed_time}")
