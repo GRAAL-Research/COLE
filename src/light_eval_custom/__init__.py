@@ -6,7 +6,7 @@ BASE_TASKS = [
     "piaf",
     "sickfr",
     "xnli",
-    "frcola",
-    "frblimp",
+    "qfrcola",
+    "qfrblimp",
     "sts22",
 ]
