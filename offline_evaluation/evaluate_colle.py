@@ -57,8 +57,8 @@ if __name__ == "__main__":
     else:
 
         if args.models_name is not None:
-            if args.model_name in llms.keys():
-                models = llms[args.model_name]
+            if args.models_name in llms.keys():
+                models = llms[args.models_name]
             else:
                 models = args.models_name.split(",")
         else:
