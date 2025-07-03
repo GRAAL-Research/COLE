@@ -1,7 +1,7 @@
 from http.client import HTTPException
 from unittest import TestCase
 
-from src.backend.submit_tools import (
+from src.Backend.submit_tools import (
     convert_custom_dict_to_task_dict,
     get_max_samples,
     get_tasks_as_str,
@@ -10,7 +10,7 @@ from src.backend.submit_tools import (
 
 class ConvertCustomDictToTaskDictTest(TestCase):
     def setUp(self):
-        self.task = "frcola"
+        self.task = "qfrcola"
 
     def test_given_proper_dictionary_when_get_convert_custom_dict_to_task_dict_then_return_convert(
         self,
@@ -74,9 +74,9 @@ class GetTasksAsStr(TestCase):
     def test_given_a_single_dict_task_when_get_tasks_as_str_then_return_tasks_as_str(
         self,
     ):
-        a_fr_cola_dict = {"frcola": self.a_list}
+        a_fr_cola_dict = {"qfrcola": self.a_list}
 
-        expected = "custom|frcola|0|0"
+        expected = "custom|qfrcola|0|0"
 
         actual, _ = get_tasks_as_str(tasks_prediction_dictionary=a_fr_cola_dict)
 
@@ -93,9 +93,9 @@ class GetTasksAsStr(TestCase):
     def test_given_a_double_dict_task_when_get_tasks_as_str_then_return_tasks_as_str(
         self,
     ):
-        a_dict = {"frcola": self.a_list, "allocine": self.a_list}
+        a_dict = {"qfrcola": self.a_list, "allocine": self.a_list}
 
-        expected = "custom|allocine|0|0,custom|frcola|0|0"
+        expected = "custom|allocine|0|0,custom|qfrcola|0|0"
 
         actual, _ = get_tasks_as_str(tasks_prediction_dictionary=a_dict)
 
@@ -104,9 +104,9 @@ class GetTasksAsStr(TestCase):
     def test_given_a_single_dict_task_when_get_tasks_as_str_then_return_available_tasks(
         self,
     ):
-        a_fr_cola_dict = {"frcola": self.a_list}
+        a_fr_cola_dict = {"qfrcola": self.a_list}
 
-        expected = ["frcola"]
+        expected = ["qfrcola"]
 
         _, actual = get_tasks_as_str(tasks_prediction_dictionary=a_fr_cola_dict)
 
@@ -120,16 +120,7 @@ class GetTasksAsStr(TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_given_a_double_dict_task_when_get_tasks_as_str_then_return_tasks_as_str(
-        self,
-    ):
-        a_dict = {"frcola": self.a_list, "allocine": self.a_list}
 
-        expected = ["allocine", "frcola"]
-
-        _, actual = get_tasks_as_str(tasks_prediction_dictionary=a_dict)
-
-        self.assertEqual(expected, actual)
 
     def test_given_a_empty_dict_task_when_get_tasks_as_str_then_raiseException(self):
         an_empty_dict = {}
