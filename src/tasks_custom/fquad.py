@@ -17,7 +17,8 @@ def prompt_fn(line, task_name: str = None):
         .add_data("question :")
         .add_data(line["question"])
         .add_end(
-            "Dans le texte ci-dessous, combien de caractères précèdent la réponse à la question ? Réponds uniquement avec un nombre.. La réponse est : "
+            "Dans le texte ci-dessous, combien de caractères précèdent la réponse à la question ? "
+            "Réponds uniquement avec un nombre. La réponse est : "
         )
         .build()
     )
