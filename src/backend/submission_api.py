@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
+from src.backend.evaluation_pipeline import evaluation_submission
 from src.backend.model import ZipInferenceModel
 from src.backend.submit_tools import (
     load_predictions_from_zip,
@@ -125,26 +126,28 @@ async def submit(
         tasks_prediction_dictionary=tasks_prediction_dictionary
     )
 
-    tracker = EvaluationTracker(
+    results_tracker = EvaluationTracker(
         output_dir=str(RESULTS_DIR / "temp"), save_details=True, push_to_hub=False
     )
 
-    pipeline = Pipeline(
-        tasks=task_str,
-        pipeline_parameters=PipelineParameters(
-            launcher_type=ParallelismManager.ACCELERATE,
-            custom_tasks_directory=tasks_module,
-            max_samples=max_samples,
-        ),
-        evaluation_tracker=tracker,
-        model=ZipInferenceModel(tasks_prediction_dictionary),
+    pipeline_parameters = PipelineParameters(
+        launcher_type=ParallelismManager.ACCELERATE,
+        custom_tasks_directory=tasks_module,
+        max_samples=max_samples,
     )
 
-    pipeline.evaluate()
+    model = ZipInferenceModel(tasks_prediction_dictionary)
 
-    log_per_example_results(tracker)
+    evaluation_submission(
+        task_str=task_str,
+        results_tracker=results_tracker,
+        pipeline_parameters=pipeline_parameters,
+        model=model,
+    )
 
-    results = extract_aggregated_metrics(tracker)
+    log_per_example_results(results_tracker)
+
+    results = extract_aggregated_metrics(results_tracker)
 
     output = build_output_json(
         email=email,
