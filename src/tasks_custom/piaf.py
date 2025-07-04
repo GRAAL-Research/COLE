@@ -1,8 +1,8 @@
-import lighteval.metrics.metrics as metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
 
 from src import REPO_ID
+from src.light_eval_custom.custom_metrics import pearson_metric_wrapper
 from src.prompt_builder.prompt_builder import PromptBuilder
 
 
@@ -36,9 +36,8 @@ def prompt_fn(line, task_name: str = None):
 
 
 piaf = LightevalTaskConfig(
-    name="piaf",  # NAME
+    name="piaf",
     prompt_function=prompt_fn,
-    # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
     generation_size=5,
     hf_repo=REPO_ID,
     hf_subset="piaf",
@@ -46,6 +45,6 @@ piaf = LightevalTaskConfig(
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.pearson_spearman],  # select your metric in Metrics
+    metric=[pearson_metric_wrapper],
     trust_dataset=True,
 )

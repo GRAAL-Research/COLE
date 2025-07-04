@@ -1,9 +1,6 @@
-import logging
 import re
 
 import numpy as np
-from aenum import extend_enum
-from lighteval.metrics.metrics import Metrics
 from lighteval.metrics.metrics_sample import LoglikelihoodAcc
 from lighteval.metrics.utils.metric_utils import (
     SampleLevelMetric,
@@ -66,7 +63,7 @@ def pearson_spearman_metric(items, **kwargs) -> dict:
     return {"pearson": pearson_corr, "spearman": spearman_corr}
 
 
-pearson = CorpusLevelMetric(
+pearson_metric_wrapper = CorpusLevelMetric(
     metric_name="pearson",
     sample_level_fn=pearson_spearman_sample_preparator,
     category=MetricCategory.GENERATIVE,
@@ -74,11 +71,3 @@ pearson = CorpusLevelMetric(
     corpus_level_fn=pearson_spearman_metric,
     higher_is_better=True,
 )
-
-
-def add_custom_metrics_to_lighteval():
-    extend_enum(Metrics, "pearson_spearman", pearson)
-    extend_enum(Metrics, "accuracy_wrapper", accuracy_wrapper)
-    logging.info(f"Imported custom metrics.")
-
-

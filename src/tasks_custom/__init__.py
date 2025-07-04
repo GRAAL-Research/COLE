@@ -12,6 +12,19 @@ from src.tasks_custom.sts22 import sts22
 from src.tasks_custom.paws_x import paws_x
 from src.tasks_custom.xnli import xnli
 
+BASE_TASKS = [
+    "allocine",
+    "paws_x",
+    "fquad",
+    "gqnli",
+    "piaf",
+    "sickfr",
+    "xnli",
+    "qfrcola",
+    "qfrblimp",
+    "sts22",
+]
+
 TASKS_TABLE = [
     qfrcola,
     sickfr,

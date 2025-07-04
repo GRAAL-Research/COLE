@@ -7,7 +7,7 @@ from typing import Dict, List, Tuple
 
 from fastapi import HTTPException
 
-from src.light_eval_custom import BASE_TASKS
+from src.tasks_custom import BASE_TASKS
 
 
 def convert_custom_dict_to_task_dict(dictionary: Dict) -> Dict:

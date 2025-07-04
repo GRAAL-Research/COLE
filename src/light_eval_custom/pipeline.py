@@ -7,7 +7,6 @@ from lighteval.utils.imports import is_accelerate_available
 from src.light_eval_custom.custom_metrics import add_custom_metrics_to_lighteval
 
 
-
 CUSTOM_TASKS_DIRECTORY = "./src/light_eval_custom/custom_tasks.py"
 add_custom_metrics_to_lighteval()
 
@@ -21,11 +20,13 @@ if is_accelerate_available():
 else:
     accelerator = None
 
+
 class PipelineConfig:
-    def __init__(self,backend="vllm",batch_size=8,max_length=2048):
+    def __init__(self, backend="vllm", batch_size=8, max_length=2048):
         self.backend = backend
         self.batch_size = batch_size
         self.max_length = max_length
+
 
 def build_tasks_name():
     tasks_names = [
@@ -49,22 +50,24 @@ def build_task(section="custom", name=None, shots=0, instruct=0):
     return f"{section}|{name}|{shots}|{instruct}"
 
 
-def create_model_config(model_name, config : PipelineConfig):
+def create_model_config(model_name, config: PipelineConfig):
     try:
         if config.backend == "transformers":
-            return build_transformers_config(model_name,config)
+            return build_transformers_config(model_name, config)
         elif config.backend == "vllm":
-            return build_vllm_config(model_name,config)
+            return build_vllm_config(model_name, config)
         else:
-            print(f"backend configuration {config.backend} unavailable, defaulting to vllm")
-            return build_vllm_config(model_name,config)
+            print(
+                f"backend configuration {config.backend} unavailable, defaulting to vllm"
+            )
+            return build_vllm_config(model_name, config)
 
     except Exception as e:
         print("Could not create model, falling back to transformers...")
         return build_transformers_config(model_name)
 
 
-def build_transformers_config(model_name,config):
+def build_transformers_config(model_name, config):
     return TransformersModelConfig(
         model_name=model_name,
         dtype="auto",
@@ -75,7 +78,7 @@ def build_transformers_config(model_name,config):
     )
 
 
-def build_vllm_config(model_name,config):
+def build_vllm_config(model_name, config):
     return VLLMModelConfig(
         model_name=model_name,
         dtype="auto",
@@ -87,7 +90,7 @@ def build_vllm_config(model_name,config):
 def build_pipeline(
     model_name,
     max_samples,
-    config : PipelineConfig,
+    config: PipelineConfig,
 ):
     evaluation_tracker = EvaluationTracker(
         output_dir="./results",
@@ -110,9 +113,8 @@ def build_pipeline(
     )
 
 
-def test_model(model_name, max_samples=None, config : PipelineConfig = PipelineConfig()):
+def test_model(model_name, max_samples=None, config: PipelineConfig = PipelineConfig()):
     pipeline = build_pipeline(model_name, max_samples, config)
     pipeline.evaluate()
     pipeline.save_and_push_results()
     pipeline.show_results()
-

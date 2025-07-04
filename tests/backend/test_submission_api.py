@@ -4,14 +4,18 @@ import zipfile
 
 from fastapi.testclient import TestClient
 
-from src.Backend.submission_api import app
-import src.Backend.submission_api as submission_api
+from src.backend import submission_api
+from src.backend.submission_api import (
+    app,
+    log_per_example_results,
+    extract_aggregated_metrics,
+    build_output_json,
+)
 
 client = TestClient(app)
 
 
 def make_zip(content: dict) -> io.BytesIO:
-
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, mode="w") as z:
         z.writestr("predictions.json", json.dumps(content))
@@ -38,14 +42,19 @@ def test_submit_missing_predictions_json():
     )
     assert response.status_code == 400
     assert response.json()["detail"] == "Le ZIP ne contient pas predictions.json."
+
+
 def test_submit_valid_predictions(monkeypatch, tmp_path):
     monkeypatch.setattr(submission_api, "RESULTS_DIR", tmp_path)
+
     class DummyPipeline:
         def __init__(self, *args, **kwargs):
             pass
+
         def evaluate(self):
             return
-    monkeypatch.setattr(submission_api, 'Pipeline', DummyPipeline)
+
+    monkeypatch.setattr(submission_api, "Pipeline", DummyPipeline)
 
     valid_content = {"custom|qfrcola|0|0": [0]}
     valid_zip = make_zip(valid_content)
@@ -62,6 +71,7 @@ def test_submit_valid_predictions(monkeypatch, tmp_path):
     assert "predictions" in data
     assert "qfrcola" in data["predictions"]
     assert data["predictions"]["qfrcola"] == [0]
+
 
 def test_submit_empty_predictions_dict():
     empty_zip = make_zip({})
@@ -122,12 +132,6 @@ def test_leaderboard_with_entries(monkeypatch, tmp_path):
 
 from uuid import UUID
 
-from src.Backend.submission_api import (
-    log_per_example_results,
-    extract_aggregated_metrics,
-    build_output_json,
-)
-
 
 class DummyTracker:
     def __init__(self, details: dict, results: dict):
@@ -136,7 +140,9 @@ class DummyTracker:
 
 def test_log_per_example_results(capsys):
     details = {
-        "custom|taskA|0|0": {"examples": [{"gold": "0", "pred": "1"}, {"gold": "1", "pred": "1"}]},
+        "custom|taskA|0|0": {
+            "examples": [{"gold": "0", "pred": "1"}, {"gold": "1", "pred": "1"}]
+        },
     }
     tracker = DummyTracker(details=details, results={})
 
@@ -145,7 +151,6 @@ def test_log_per_example_results(capsys):
     assert "=== Per-example (gold vs pred) ===" in captured
     assert "--- Task taskA ---" in captured
     assert "gold='0'  pred='1'" in captured
-
 
 
 def test_extract_aggregated_metrics(caplog):
@@ -179,7 +184,7 @@ def test_build_output_json_structure_and_content():
         results=results,
         tasks_prediction_dictionary=tasks_dict,
         available_tasks=available_tasks,
-        max_samples=max_samples
+        max_samples=max_samples,
     )
     assert "config_general" in out and "results" in out and "predictions" in out
     cfg = out["config_general"]

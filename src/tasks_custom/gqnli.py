@@ -1,13 +1,12 @@
-import lighteval.metrics.metrics as metrics
 from lighteval.tasks.lighteval_task import LightevalTaskConfig
 from lighteval.tasks.requests import Doc
 
 from src import REPO_ID
+from src.light_eval_custom.custom_metrics import accuracy_wrapper
 from src.prompt_builder.prompt_builder import PromptBuilder
 
 
 def prompt_fn(line, task_name: str = None):
-
     prompt = (
         PromptBuilder()
         .add_premise(
@@ -34,16 +33,15 @@ def prompt_fn(line, task_name: str = None):
 
 
 gqnli = LightevalTaskConfig(
-    name="gqnli",  # NAME
+    name="gqnli",
     prompt_function=prompt_fn,
-    # must be defined in the file or imported from src/lighteval/tasks/tasks_prompt_formatting.py
     hf_repo=REPO_ID,
     hf_subset="gqnli",
     hf_avail_splits=["train", "validation", "test"],
     evaluation_splits=["test"],
     few_shots_split=None,
     few_shots_select=None,
-    metric=[metrics.Metrics.accuracy_wrapper],  # select your metric in Metrics
+    metric=[accuracy_wrapper],
     trust_dataset=True,
 )
 TASKS_TABLE = [gqnli]

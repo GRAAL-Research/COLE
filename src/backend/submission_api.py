@@ -3,21 +3,21 @@ import logging
 import os
 import sys
 from pathlib import Path
+from typing import Dict, List, Any
 from uuid import uuid4
-from typing import Dict, List, Any, Tuple
 
 from fastapi import FastAPI, UploadFile, Form, File
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
-from src.Backend.model import ZipInferenceModel
-from src.Backend.submit_tools import (
+from src.backend.model import ZipInferenceModel
+from src.backend.submit_tools import (
+    load_predictions_from_zip,
     convert_custom_dict_to_task_dict,
     predictions_logging,
     get_max_samples,
     get_tasks_as_str,
-    load_predictions_from_zip,
 )
 
 logging.getLogger("lighteval").setLevel(logging.WARNING)
@@ -31,15 +31,10 @@ sys.path.insert(0, str(SRC_DIR))
 RESULTS_DIR = BASE_DIR / "src" / "backend" / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
-import src.light_eval_custom.custom_metrics as custom_metrics
-
-custom_metrics.add_custom_metrics_to_lighteval()
-
 import src.tasks_custom as tasks_module
 
 from lighteval.logging.evaluation_tracker import EvaluationTracker
 from lighteval.pipeline import Pipeline, PipelineParameters, ParallelismManager
-from lighteval.models.transformers.transformers_model import TransformersModelConfig
 
 app = FastAPI()
 app.mount("/results", StaticFiles(directory=str(RESULTS_DIR)), name="results")
@@ -53,7 +48,6 @@ app.add_middleware(
 
 
 def log_per_example_results(tracker: EvaluationTracker) -> None:
-
     details = tracker.results.get("details", {})
     logging.info("=== Per-example (gold vs pred) ===")
 
@@ -68,7 +62,6 @@ def log_per_example_results(tracker: EvaluationTracker) -> None:
 
 
 def extract_aggregated_metrics(tracker: EvaluationTracker) -> Dict[str, Dict[str, Any]]:
-
     raw = tracker.results.get("results", {})
     results = {}
     logging.info("=== Aggregated metrics ===")
@@ -84,15 +77,14 @@ def extract_aggregated_metrics(tracker: EvaluationTracker) -> Dict[str, Dict[str
 
 
 def build_output_json(
-        email: str,
-        display_name: str,
-        predictions_zip_filename: str,
-        results: Dict[str, Dict[str, Any]],
-        tasks_prediction_dictionary: Dict[str, List[Any]],
-        available_tasks: List[str],
-        max_samples: int
+    email: str,
+    display_name: str,
+    predictions_zip_filename: str,
+    results: Dict[str, Dict[str, Any]],
+    tasks_prediction_dictionary: Dict[str, List[Any]],
+    available_tasks: List[str],
+    max_samples: int,
 ) -> Dict[str, Any]:
-
     output = {
         "config_general": {
             "submission_id": str(uuid4()),
@@ -111,9 +103,9 @@ def build_output_json(
 
 @app.post("/submit")
 async def submit(
-        email: str = Form(...),
-        predictions_zip: UploadFile = File(...),
-        display_name: str = Form(...),
+    email: str = Form(...),
+    predictions_zip: UploadFile = File(...),
+    display_name: str = Form(...),
 ):
     logging.info(f"Submission from {email!r} as {display_name!r}.")
 
@@ -137,15 +129,13 @@ async def submit(
         output_dir=str(RESULTS_DIR / "temp"), save_details=True, push_to_hub=False
     )
 
-    params = PipelineParameters(
-        launcher_type=ParallelismManager.ACCELERATE,
-        custom_tasks_directory=tasks_module,
-        max_samples=max_samples,
-    )
-
     pipeline = Pipeline(
         tasks=task_str,
-        pipeline_parameters=params,
+        pipeline_parameters=PipelineParameters(
+            launcher_type=ParallelismManager.ACCELERATE,
+            custom_tasks_directory=tasks_module,
+            max_samples=max_samples,
+        ),
         evaluation_tracker=tracker,
         model=ZipInferenceModel(tasks_prediction_dictionary),
     )
@@ -163,7 +153,7 @@ async def submit(
         results=results,
         tasks_prediction_dictionary=tasks_prediction_dictionary,
         available_tasks=available_tasks,
-        max_samples=max_samples
+        max_samples=max_samples,
     )
 
     out_path = RESULTS_DIR / f"{output['config_general']['submission_id']}.json"
@@ -191,12 +181,14 @@ async def leaderboard() -> List[Dict[str, Any]]:
         if isinstance(acc, (int, float)):
             score_pct = round(acc * 100, 1)
 
-        entries.append({
-            "submission_id": cfg["submission_id"],
-            "display_name": cfg["display_name"],
-            "score": score_pct,        # global
-            "results": data.get("results", {}),  # ← on ajoute ça
-        })
+        entries.append(
+            {
+                "submission_id": cfg["submission_id"],
+                "display_name": cfg["display_name"],
+                "score": score_pct,  # global
+                "results": data.get("results", {}),  # ← on ajoute ça
+            }
+        )
 
     return entries
 

@@ -120,8 +120,6 @@ class GetTasksAsStr(TestCase):
 
         self.assertEqual(expected, actual)
 
-
-
     def test_given_a_empty_dict_task_when_get_tasks_as_str_then_raiseException(self):
         an_empty_dict = {}
 

@@ -2,16 +2,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 from offline_evaluation.convert_results_to_md import results_data
 import math
-def extract_plot_task_data(all_tasks_data,task):
+
+
+def extract_plot_task_data(all_tasks_data, task):
     task_data = all_tasks_data[task]
     models = []
     task_metrics = {}
     for model, model_metrics in task_data.items():
         models.append(model)
-        for metric,results in model_metrics.items():
+        for metric, results in model_metrics.items():
             if metric in task_metrics.keys():
                 task_metrics[metric].append(results)
-            else :
+            else:
                 task_metrics[metric] = [results]
 
     return models, task_metrics
@@ -22,13 +24,13 @@ all_tasks = {}
 datas = results_data()
 for data in datas:
     model_name = data["config_general"]["model_name"]
-    for key,value in data["results"].items():
+    for key, value in data["results"].items():
         if key not in all_tasks.keys():
-            all_tasks[key] = {model_name:value}
-        else :
+            all_tasks[key] = {model_name: value}
+        else:
             all_tasks[key][model_name] = value
-    print(all_tasks['custom|allocine|0'])
-labels, metrics = extract_plot_task_data(all_tasks,'custom|allocine|0')
+    print(all_tasks["custom|allocine|0"])
+labels, metrics = extract_plot_task_data(all_tasks, "custom|allocine|0")
 print(metrics)
 
 num_plots = len(all_tasks)
@@ -51,8 +53,8 @@ for i, dataset_name in enumerate(all_tasks.keys()):
 
     labels = [s.split("/")[-1] for s in labels]
     ax.set_ylim(top=1)
-    ax.set_xlabel('Models')
-    ax.set_ylabel('Score')
+    ax.set_xlabel("Models")
+    ax.set_ylabel("Score")
     ax.set_title(dataset_name)
     ax.set_xticks(x)
     ax.set_xticklabels(labels, rotation=-45)
