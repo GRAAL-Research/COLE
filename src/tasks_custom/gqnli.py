@@ -19,7 +19,7 @@ def prompt_fn(line, task_name: str = None):
             "0 — si la deuxième phrase implique la première,\n"
             "1 — si la relation est neutre,\n"
             "2 — s'il y a contradiction.\n"
-            "Réponds uniquement par 0, 1 ou 2."
+            "Réponds uniquement par 0, 1 ou 2. La réponse est :"
         )
         .build()
     )

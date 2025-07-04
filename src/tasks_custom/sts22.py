@@ -27,7 +27,7 @@ def prompt_fn(line, task_name: str = None):
         query=prompt,
         gold_index=int(line["score"]),
         instruction="",
-        choices=[str(i) for i in range(0, 5)],
+        choices=[str(i) for i in range(0, 6)],
     )
 
 

@@ -29,9 +29,9 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=0,  # assuming binary classification: 0 or 1
+        gold_index=gold,  # assuming binary classification: 0 or 1
         instruction="",
-        choices=[gold],
+        choices=[str(i) for i in range(len(line["context"]))],
     )
 
 

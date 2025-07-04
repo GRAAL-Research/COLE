@@ -17,15 +17,19 @@ def prompt_fn(line, task_name: str = None):
         .add_data(sentence_A)
         .add_data(sentence_B)
         .add_end(
-            "Réponds avec seulement un nombre de 0 à 5, où 5 signifie une très grande similarité entre les phrases."
+            "Réponds avec seulement un nombre de 0 à 5, où 5 signifie une très grande similarité entre les phrases. La réponse est :"
         )
         .build()
     )
+
+    rounded_relatedness = round(line["relatedness_score"] * 2) / 2
+    choices = [str(i * 0.5) for i in range(0, 11)]
+    gold_index = choices.index(str(rounded_relatedness))
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=0,
-        choices=[line["relatedness_score"]],
+        gold_index=gold_index,
+        choices=choices,
         instruction="",
     )
 

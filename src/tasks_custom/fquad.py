@@ -30,6 +30,7 @@ def prompt_fn(line, task_name: str = None):
         gold_index=0,
         instruction="",
         choices=answers if not is_impossible else ["0"],
+        choices=[str(i) for i in range(len(line["context"]))],
     )
 
 

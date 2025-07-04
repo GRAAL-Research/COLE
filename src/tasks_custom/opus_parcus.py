@@ -25,8 +25,8 @@ def prompt_fn(line, task_name: str = None):
     return Doc(
         task_name=task_name,
         query=prompt,
-        gold_index=0,
-        choices=[line["quality"]],
+        gold_index=line["quality"],
+        choices=[str(i) for i in range(101)],
         instruction="",
     )
 
