@@ -1,7 +1,7 @@
 from http.client import HTTPException
 from unittest import TestCase
 
-from src.Backend.submit_tools import (
+from src.backend.submit_tools import (
     convert_custom_dict_to_task_dict,
     get_max_samples,
     get_tasks_as_str,
