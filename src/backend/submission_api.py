@@ -7,7 +7,7 @@ from typing import Dict, List, Any
 from uuid import uuid4
 
 from fastapi import FastAPI, UploadFile, Form, File
-from fastapi.responses import FileResponse
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
@@ -19,6 +19,10 @@ from src.backend.submit_tools import (
     predictions_logging,
     get_max_samples,
     get_tasks_as_str,
+    log_per_example_results,
+    extract_aggregated_metrics,
+    build_output_json,
+
 )
 
 logging.getLogger("lighteval").setLevel(logging.WARNING)
@@ -46,60 +50,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-def log_per_example_results(tracker: EvaluationTracker) -> None:
-    details = tracker.results.get("details", {})
-    logging.info("=== Per-example (gold vs pred) ===")
-
-    for full_task, info in details.items():
-        # Safe extraction of short task name
-        parts = full_task.split("|")
-        short = parts[1] if len(parts) > 1 else parts[0]
-        logging.info(f"--- Task {short} ---")
-
-        for ex in info.get("examples", []):
-            logging.info(f"   gold={ex['gold']!r}  pred={ex['pred']!r}")
-
-
-def extract_aggregated_metrics(tracker: EvaluationTracker) -> Dict[str, Dict[str, Any]]:
-    raw = tracker.results.get("results", {})
-    results = {}
-    logging.info("=== Aggregated metrics ===")
-
-    for full_task, metrics in raw.items():
-        parts = full_task.split("|")
-        short = parts[1] if len(parts) > 1 else parts[0]
-        filtered = {k: v for k, v in metrics.items() if isinstance(v, (int, float))}
-        results[short] = filtered
-        logging.info(f"  {short}: {filtered}")
-
-    return results
-
-
-def build_output_json(
-    email: str,
-    display_name: str,
-    predictions_zip_filename: str,
-    results: Dict[str, Dict[str, Any]],
-    tasks_prediction_dictionary: Dict[str, List[Any]],
-    available_tasks: List[str],
-    max_samples: int,
-) -> Dict[str, Any]:
-    output = {
-        "config_general": {
-            "submission_id": str(uuid4()),
-            "email": email,
-            "display_name": display_name,
-            "zip_filename": predictions_zip_filename,
-        },
-        "results": results,
-        "predictions": {
-            t: tasks_prediction_dictionary[t][:max_samples] for t in available_tasks
-        },
-    }
-
-    return output
 
 
 @app.post("/submit")
@@ -163,9 +113,7 @@ async def submit(
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
-    return FileResponse(
-        str(out_path), media_type="application/json", filename=out_path.name
-    )
+    return JSONResponse(content=output)
 
 
 @app.get("/leaderboard")
