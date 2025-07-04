@@ -4,11 +4,11 @@ from lighteval.models.vllm.vllm_model import VLLMModelConfig
 from lighteval.pipeline import ParallelismManager, Pipeline, PipelineParameters
 from lighteval.utils.imports import is_accelerate_available
 
-from src.light_eval_custom.custom_metrics import add_custom_metrics_to_lighteval
+
 
 
 CUSTOM_TASKS_DIRECTORY = "./src/light_eval_custom/custom_tasks.py"
-add_custom_metrics_to_lighteval()
+
 
 if is_accelerate_available():
     from datetime import timedelta
