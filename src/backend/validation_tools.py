@@ -23,11 +23,11 @@ def validate_submission_template(dictionary: Dict) -> None:
         error = "The submission is missing a model name."
         logging.error(error)
         raise HTTPException(200, error)
-    elif dictionary.get("model_url", None) is None:
+    if dictionary.get("model_url", None) is None:
         error = "The submission is missing a model URL."
         logging.error(error)
         raise HTTPException(200, error)
-    elif dictionary.get("tasks", None) is None:
+    if dictionary.get("tasks", None) is None:
         error = "The submission is missing a tasks keyword."
         logging.error(error)
         raise HTTPException(200, error)
@@ -44,7 +44,10 @@ def validate_submission_template(dictionary: Dict) -> None:
 
     for task in tasks:
         if len(task.keys()) > 1:
-            error = "Each task must be a dictionary of one element where the key is the task name and the value is a list."
+            error = (
+                "Each task must be a dictionary of one element where the key is "
+                "the task name and the value is a list."
+            )
             logging.error(error)
             raise HTTPException(200, error)
 
@@ -74,7 +77,7 @@ def validate_submission_json(dictionary: Dict) -> None:
                 logging.error(error)
                 raise HTTPException(200, error)
             for key, value in payload.items():
-                if not (key == "predictions" or key == "prediction"):
+                if key not in ["predictions", "prediction"]:
                     error = f"The task '{task_name}' payload does not have the expected key: 'predictions'."
                     logging.error(error)
                     raise HTTPException(200, error)

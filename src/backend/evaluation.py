@@ -1,10 +1,7 @@
 import copy
-import logging
 import operator
 from functools import reduce
 from typing import List, Dict
-
-from fastapi import HTTPException
 
 from src.task.task_factory import Task
 

@@ -48,7 +48,8 @@ async def submit(
     predictions_zip: UploadFile = File(...),
     display_name: str = Form(...),
 ):
-    logging.info(f"Submission from {email!r} as {display_name!r}.")
+    info_message = f"Submission from {email!r} as {display_name!r}."
+    logging.info(info_message)
 
     zip_bytes = await predictions_zip.read()
     submission_json = unzip_predictions_from_zip(zip_bytes)
@@ -80,8 +81,8 @@ async def leaderboard() -> List[Dict[str, Any]]:
     for accepted_submission in glob.glob(str(RESULTS_DIR / "*.json")):
         with open(accepted_submission, encoding="utf-8") as f:
             data = json.load(f)
-
         # TODO
+        print(data)
 
     return entries
 
