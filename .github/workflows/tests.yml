@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -Ur src/requirements.txt
-          pip install -Ur tests/test_requirements.txt
+          pip install -Ur tests/tests_requirements.txt
       - name: Test with pytest
         run: |
           pytest
