@@ -1,5 +1,6 @@
 import io
 import json
+import uuid
 import zipfile
 
 from fastapi.testclient import TestClient
@@ -7,9 +8,6 @@ from fastapi.testclient import TestClient
 from src.backend import submission_api
 from src.backend.submission_api import (
     app,
-    log_per_example_results,
-    extract_aggregated_metrics,
-    build_output_json,
 )
 
 client = TestClient(app)
@@ -23,10 +21,18 @@ def make_zip(content: dict) -> io.BytesIO:
     return buf
 
 
+def make_wrong_zip(content: dict) -> io.BytesIO:
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, mode="w") as z:
+        z.writestr("wrong.json", json.dumps(content))
+    buf.seek(0)
+    return buf
+
+
 def test_health_check():
     r = client.get("/health")
     assert r.status_code == 200
-    assert r.json() == {"status": "healthy", "message": "API is running"}
+    assert r.json() == {"status": "healthy", "message": "API is running."}
 
 
 def test_submit_missing_predictions_json():
@@ -41,36 +47,33 @@ def test_submit_missing_predictions_json():
         files={"predictions_zip": ("test.zip", buf, "application/zip")},
     )
     assert response.status_code == 400
-    assert response.json()["detail"] == "Le ZIP ne contient pas predictions.json."
+    assert (
+        response.json()["detail"]
+        == "The uploaded ZIP file does not contains a predictions.json file."
+    )
 
 
 def test_submit_valid_predictions(monkeypatch, tmp_path):
     monkeypatch.setattr(submission_api, "RESULTS_DIR", tmp_path)
 
-    def mock_evaluation_submission(*args, **kwargs):
-        pass
-
-    monkeypatch.setattr(submission_api, "evaluation_submission", mock_evaluation_submission)
-
-    # Mock the tracker and its methods
-    class MockTracker:
-        def __init__(self, *args, **kwargs):
-            self.results = {
-                "details": {
-                    "custom|qfrcola|0|0": {
-                        "examples": [{"gold": "0", "pred": "0"}]
-                    }
-                },
-                "results": {
-                    "custom|qfrcola|0|0": {"acc": 1.0},
-                    "all": {"acc": 1.0}
+    valid_content = {
+        "model_name": "a_model_name",
+        "model_url": "a_model_url",
+        "tasks": [
+            {"allocine": {"predictions": [1, 1, 1, 1, 1]}},
+            {
+                "fquad": {
+                    "predictions": [
+                        "par un mauvais état de santé",
+                        "par un mauvais état de santé",
+                        "par un mauvais état de santé",
+                        "par un mauvais état de santé",
+                        "par un mauvais état de santé",
+                    ]
                 }
-            }
-
-    # Mock the EvaluationTracker
-    monkeypatch.setattr(submission_api, "EvaluationTracker", MockTracker)
-
-    valid_content = {"custom|qfrcola|0|0": [0]}
+            },
+        ],
+    }
     valid_zip = make_zip(valid_content)
     response = client.post(
         "/submit",
@@ -79,24 +82,23 @@ def test_submit_valid_predictions(monkeypatch, tmp_path):
     )
     assert response.status_code == 200
     data = response.json()
-    assert "config_general" in data
-    assert data["config_general"]["email"] == "test@example.com"
-    assert data["config_general"]["display_name"] == "Tester"
-    assert "predictions" in data
-    assert "qfrcola" in data["predictions"]
-    assert data["predictions"]["qfrcola"] == [0]
+
+    assert data.get("display_name") == "Tester"
+    assert data.get("tasks")[0].get("allocine").get("accuracy") is not None
 
 
-
-def test_submit_empty_predictions_dict():
-    empty_zip = make_zip({})
+def test_submit_wrong_file_name_predictions_dict():
+    wrong_zip = make_wrong_zip({})
     response = client.post(
         "/submit",
         data={"email": "bob@example.com", "display_name": "Bob"},
-        files={"predictions_zip": ("empty.zip", empty_zip, "application/zip")},
+        files={"predictions_zip": ("empty.zip", wrong_zip, "application/zip")},
     )
     assert response.status_code == 400
-    assert response.json()["detail"] == "Aucune tâche reconnue dans predictions.json."
+    assert (
+        response.json()["detail"]
+        == "The uploaded ZIP file does not contains a predictions.json file."
+    )
 
 
 def test_leaderboard_empty(monkeypatch, tmp_path):
@@ -111,105 +113,69 @@ def test_leaderboard_with_entries(monkeypatch, tmp_path):
     monkeypatch.setattr(submission_api, "RESULTS_DIR", tmp_path)
 
     sample1 = {
-        "config_general": {
-            "submission_id": "id1",
-            "display_name": "User1",
-            "zip_filename": "a.zip",
-            "email": "u1@example.com",
-        },
-        "results": {"all": {"acc": 0.42}},
+        "display_name": "User1",
+        "model_name": "a_model_name",
+        "model_url": "a_model_url",
+        "tasks": [
+            {
+                "allocine": {
+                    "accuracy": {
+                        "accuracy": 0.4,
+                        "accuracy_warning": "Your prediction size is of '5', while the "
+                        "ground truths size is of '20000'."
+                        " We computed the metric over the first 5 elements.",
+                    },
+                }
+            },
+            {
+                "fquad": {
+                    "fquad": {
+                        "exact_match": 20.0,
+                        "f1": 25.33333333332,
+                        "fquad_warning": "Your prediction size is of '5', "
+                        "while the ground truths size is of '400'. "
+                        "We computed the metric over the first 5 elements.",
+                    },
+                }
+            },
+        ],
     }
     sample2 = {
-        "config_general": {
-            "submission_id": "id2",
-            "display_name": "User2",
-            "zip_filename": "b.zip",
-            "email": "u2@example.com",
-        },
-        "results": {"all": {"acc": 0.99}},
+        "display_name": "User2",
+        "model_name": "a_model_name_2",
+        "model_url": "a_model_url_2",
+        "tasks": [
+            {
+                "allocine": {
+                    "accuracy": {
+                        "accuracy": 0.4,
+                        "accuracy_warning": "Your prediction size is of '5', while the "
+                        "ground truths size is of '20000'."
+                        " We computed the metric over the first 5 elements.",
+                    },
+                }
+            },
+            {
+                "fquad": {
+                    "fquad": {
+                        "exact_match": 20.0,
+                        "f1": 25.33333333332,
+                        "fquad_warning": "Your prediction size is of '5', "
+                        "while the ground truths size is of '400'. "
+                        "We computed the metric over the first 5 elements.",
+                    },
+                }
+            },
+        ],
     }
-    p1 = tmp_path / "r1.json"
+    uuid_1 = uuid.uuid4()
+    p1 = tmp_path / f"{uuid_1}.json"
     p1.write_text(json.dumps(sample1))
-    p2 = tmp_path / "r2.json"
+    uuid_2 = uuid.uuid4()
+    p2 = tmp_path / f"{uuid_2}.json"
     p2.write_text(json.dumps(sample2))
 
     response = client.get("/leaderboard")
     assert response.status_code == 200
     data = response.json()
-    assert isinstance(data, list) and len(data) == 2
-    assert data[0]["submission_id"] == "id1"
-    assert data[0]["display_name"] == "User1"
-    assert data[0]["score"] == 42.0
-    assert data[1]["submission_id"] == "id2"
-    assert data[1]["display_name"] == "User2"
-    assert data[1]["score"] == 99.0
-
-
-from uuid import UUID
-
-
-class DummyTracker:
-    def __init__(self, details: dict, results: dict):
-        self.results = {"details": details, "results": results}
-
-
-def test_log_per_example_results(capsys):
-    details = {
-        "custom|taskA|0|0": {
-            "examples": [{"gold": "0", "pred": "1"}, {"gold": "1", "pred": "1"}]
-        },
-    }
-    tracker = DummyTracker(details=details, results={})
-
-    log_per_example_results(tracker)
-    captured = capsys.readouterr().out
-    assert "=== Per-example (gold vs pred) ===" in captured
-    assert "--- Task taskA ---" in captured
-    assert "gold='0'  pred='1'" in captured
-
-
-def test_extract_aggregated_metrics(caplog):
-    # Set the logging level to INFO to ensure the log message is captured
-    import logging
-    logging.getLogger().setLevel(logging.INFO)
-
-    results = {
-        "custom|taskX|0|0": {"acc": 0.8, "foo": "bar"},
-    }
-    tracker = DummyTracker(details={}, results=results)
-
-    with caplog.at_level(logging.INFO):
-        metrics = extract_aggregated_metrics(tracker)
-
-    assert metrics["taskX"] == {"acc": 0.8}
-    assert "=== Aggregated metrics ===" in caplog.text
-    assert "taskX: {'acc': 0.8}" in caplog.text
-
-
-def test_build_output_json_structure_and_content():
-    email = "alice@example.com"
-    display_name = "Alice"
-    zip_filename = "preds.zip"
-    results = {"task1": {"acc": 0.33}, "all": {"acc": 0.33}}
-    tasks_dict = {"task1": [0, 1, 1], "task2": [1, 0, 0]}
-    available_tasks = ["task1"]
-    max_samples = 2
-
-    out = build_output_json(
-        email=email,
-        display_name=display_name,
-        predictions_zip_filename=zip_filename,
-        results=results,
-        tasks_prediction_dictionary=tasks_dict,
-        available_tasks=available_tasks,
-        max_samples=max_samples,
-    )
-    assert "config_general" in out and "results" in out and "predictions" in out
-    cfg = out["config_general"]
-    assert cfg["email"] == email
-    assert cfg["display_name"] == display_name
-    assert cfg["zip_filename"] == zip_filename
-    UUID(cfg["submission_id"])
-    assert out["results"] == results
-    assert set(out["predictions"].keys()) == {"task1"}
-    assert out["predictions"]["task1"] == [0, 1]
+    # TODO

@@ -4,6 +4,7 @@
 .idea/modules.xml
 .idea/vcs.xml
 .idea/workspace.xml
+.idea/*
 /Benchmarks
 /__pycache__
 src/config.py

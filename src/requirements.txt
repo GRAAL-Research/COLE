@@ -4,25 +4,10 @@ numpy
 scipy
 pandas
 requests
+evaluate
 
-# Machine learning & NLP
-transformers
-datasets
-huggingface_hub
-accelerate
-torch
-
-# LightEval (assure-toi d’avoir cette version ou repo local si modifié)
-lighteval
-bitsandbytes
-more_itertools
-vllm
-
-#Anthropic pour calls Claude
-anthropic
 # Web backend (si tu utilises FastAPI/Flask, sinon à ignorer)
 fastapi
-# uvicorn
 
 # Optional: pretty printing, progress bars, etc.
 tqdm
