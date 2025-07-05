@@ -1,32 +1,27 @@
+import glob
 import json
 import logging
-import os
 import sys
+import uuid
 from pathlib import Path
 from typing import Dict, List, Any
-from uuid import uuid4
 
 from fastapi import FastAPI, UploadFile, Form, File
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
-from src.backend.evaluation_pipeline import evaluation_submission
-from src.backend.model import ZipInferenceModel
-from src.backend.submit_tools import (
-    load_predictions_from_zip,
-    convert_custom_dict_to_task_dict,
-    predictions_logging,
-    get_max_samples,
-    get_tasks_as_str,
-    log_per_example_results,
-    extract_aggregated_metrics,
-    build_output_json,
-
+from src.backend.evaluation import compute_tasks_ratings
+from src.backend.submit_tools import unzip_predictions_from_zip
+from src.backend.validation_tools import (
+    validate_submission_tasks_name,
+    validate_submission_json,
+    validate_submission_template,
 )
-
-logging.getLogger("lighteval").setLevel(logging.WARNING)
-logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+from src.task.task import Task
+from src.task.task_factory import (
+    tasks_factory,
+)
 
 # --- Paths configuration ---
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -35,11 +30,6 @@ sys.path.insert(0, str(SRC_DIR))
 
 RESULTS_DIR = BASE_DIR / "src" / "backend" / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-
-import src.tasks_custom as tasks_module
-
-from lighteval.logging.evaluation_tracker import EvaluationTracker
-from lighteval.pipeline import Pipeline, PipelineParameters, ParallelismManager
 
 app = FastAPI()
 app.mount("/results", StaticFiles(directory=str(RESULTS_DIR)), name="results")
@@ -58,92 +48,45 @@ async def submit(
     predictions_zip: UploadFile = File(...),
     display_name: str = Form(...),
 ):
-    logging.info(f"Submission from {email!r} as {display_name!r}.")
+    info_message = f"Submission from {email!r} as {display_name!r}."
+    logging.info(info_message)
 
     zip_bytes = await predictions_zip.read()
-    raw_dict = load_predictions_from_zip(zip_bytes)
+    submission_json = unzip_predictions_from_zip(zip_bytes)
 
-    tasks_prediction_dictionary = convert_custom_dict_to_task_dict(raw_dict)
+    validate_submission_template(submission_json)
 
-    predictions_logging(tasks_prediction_dictionary)
+    validate_submission_tasks_name(submission_json)
+    validate_submission_json(submission_json)
 
-    max_samples = get_max_samples(
-        tasks_prediction_dictionary=tasks_prediction_dictionary
-    )
-    logging.info(f"Using 'max_samples={max_samples}' in pipeline parameters.")
+    tasks: List[Task] = tasks_factory(submission_json)
 
-    task_str, available_tasks = get_tasks_as_str(
-        tasks_prediction_dictionary=tasks_prediction_dictionary
-    )
-
-    results_tracker = EvaluationTracker(
-        output_dir=str(RESULTS_DIR / "temp"), save_details=True, push_to_hub=False
+    submission_response = compute_tasks_ratings(tasks=tasks, submission=submission_json)
+    submission_response.update(
+        {
+            "display_name": display_name,
+        }
     )
 
-    pipeline_parameters = PipelineParameters(
-        launcher_type=ParallelismManager.ACCELERATE,
-        custom_tasks_directory=tasks_module,
-        max_samples=max_samples,
-    )
-
-    model = ZipInferenceModel(tasks_prediction_dictionary)
-
-    evaluation_submission(
-        task_str=task_str,
-        results_tracker=results_tracker,
-        pipeline_parameters=pipeline_parameters,
-        model=model,
-    )
-
-    log_per_example_results(results_tracker)
-
-    results = extract_aggregated_metrics(results_tracker)
-
-    output = build_output_json(
-        email=email,
-        display_name=display_name,
-        predictions_zip_filename=predictions_zip.filename,
-        results=results,
-        tasks_prediction_dictionary=tasks_prediction_dictionary,
-        available_tasks=available_tasks,
-        max_samples=max_samples,
-    )
-
-    out_path = RESULTS_DIR / f"{output['config_general']['submission_id']}.json"
+    out_path = RESULTS_DIR / f"{uuid.uuid4()}.json"
     with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
+        json.dump(submission_response, f, ensure_ascii=False, indent=2)
 
-    return JSONResponse(content=output)
+    return JSONResponse(content=submission_response)
 
 
 @app.get("/leaderboard")
 async def leaderboard() -> List[Dict[str, Any]]:
     entries: List[Dict[str, Any]] = []
-    for fn in sorted(os.listdir(RESULTS_DIR)):
-        if not fn.endswith(".json"):
-            continue
-        with open(RESULTS_DIR / fn, encoding="utf-8") as f:
+    for accepted_submission in glob.glob(str(RESULTS_DIR / "*.json")):
+        with open(accepted_submission, encoding="utf-8") as f:
             data = json.load(f)
-
-        cfg = data["config_general"]
-        global_metrics = data.get("results", {}).get("all", {})
-        acc = global_metrics.get("acc")
-        score_pct = None
-        if isinstance(acc, (int, float)):
-            score_pct = round(acc * 100, 1)
-
-        entries.append(
-            {
-                "submission_id": cfg["submission_id"],
-                "display_name": cfg["display_name"],
-                "score": score_pct,  # global
-                "results": data.get("results", {}),  # ← on ajoute ça
-            }
-        )
+        # TODO
+        print(data)
 
     return entries
 
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "message": "API is running"}
+    return {"status": "healthy", "message": "API is running."}
