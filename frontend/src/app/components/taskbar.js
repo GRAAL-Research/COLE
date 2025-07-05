@@ -32,8 +32,8 @@ export default function Taskbar() {
         <Link href={`${pathname}?show=submit`} className={linkStyle('/submit')}>Submit your results</Link>
         <Link href="/benchmarks" className={linkStyle('/benchmarks')}>Our tasks</Link>
         <Link href="/results" className={linkStyle('/results')}>Results</Link>
-        <Link href="/leaderboard" className={linkStyle('/leaderboard')}>Colle Leaderboard</Link>
-        <Link href="https://huggingface.co/datasets/COLLE-Graal/ColleGraal" className={linkStyle('/hf')}>Our datasets</Link>
+        <Link href="/leaderboard" className={linkStyle('/leaderboard')}>COLLE Leaderboard</Link>
+        <Link href="https://huggingface.co/datasets/graalul/COLLE-public" className={linkStyle('/hf')}>Our datasets</Link>
       </div>
     </nav>
   );

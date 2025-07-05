@@ -3,16 +3,12 @@ import { useState } from 'react';
 
 const faqs = [
   {
-    question: "When will this site be completed?",
-    answer: "The site is currently under development and will be released as soon as it is ready.",
-  },
-  {
     question: "How can I evaluate my model?",
     answer: "You can upload your model outputs in JSON format on the website. The system will automatically evaluate them, and you can view the results in the evaluation interface.",
   },
   {
     question: "Is COLLE multilingual?",
-    answer: "No, COLLE is currently available only in French. The benchmark is specifically designed to evaluate NLU models in the French language.",
+    answer: "No, COLLE is available only in French. The benchmark is specifically designed to evaluate NLU models in the French language.",
   },
 ];
 

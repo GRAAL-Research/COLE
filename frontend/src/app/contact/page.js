@@ -16,10 +16,10 @@ export default function Contact() {
         <div className="bg-gray-50 p-4 rounded-md border border-dashed border-blue-400">
           <p className="text-sm text-gray-500 mb-2">Email us at:</p>
           <a
-            href="mailto:jeNeSaisPasEncore@unEmail.unjour"
+            href="mailto:david.beauchemin@ift.ulaval.ca"
             className="text-blue-600 font-mono text-lg hover:underline"
           >
-            jeNeSaisPasEncore@unEmail.unjour
+            david.beauchemin@ift.ulaval.ca
           </a>
         </div>
     </div>
