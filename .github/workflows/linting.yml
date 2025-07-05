@@ -18,6 +18,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -Ur styling_requirements.txt
+          pip install -Ur src/requirements.txt
+          pip install -Ur tests/tests_requirements.txt
       - name: PyLint
         run: |
           pylint src/ tests/
