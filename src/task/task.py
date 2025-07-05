@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Union, Tuple, Callable
+from typing import Dict, Union, Tuple, Callable, List
 
 from datasets import load_dataset
 
@@ -39,22 +39,14 @@ class Task:
     def metric_name(self) -> str:
         return self._metric_name
 
-    def compute(self, predictions: Union[Dict, None]) -> Tuple[Dict, str]:
+    def compute(self, predictions: Union[List, None]) -> Tuple[Dict, str]:
         warning = None
         if predictions is None:
             # Case were we did not find any prediction for the task.
             warning = "No predictions found for this task."
             return {self.metric_name: 0.0}, warning
 
-        # To handle potential missing proper naming in the prediction dictionary.
-        predictions_list = predictions.get("predictions", None)
-        if predictions_list is None:
-            predictions_list = predictions.get("prediction", None)
-            if predictions_list is None:
-                warning = "Missing predictions tag this task."
-                return {self.metric_name: 0.0}, warning
-
-        sample_size = len(predictions_list)
+        sample_size = len(predictions)
 
         if sample_size < len(self._ground_truths):
             # Means we have a sample of the prediction
@@ -72,7 +64,7 @@ class Task:
             ground_truths = self._ground_truths
 
         metric_score = self._metric_computer.compute(
-            predictions=predictions_list, references=ground_truths
+            predictions=predictions, references=ground_truths
         )
 
         return metric_score, warning

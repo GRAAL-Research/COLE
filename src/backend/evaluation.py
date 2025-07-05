@@ -1,3 +1,4 @@
+import copy
 import logging
 import operator
 from functools import reduce
@@ -14,14 +15,14 @@ def compute_tasks_ratings(tasks: List[Task], submission: Dict) -> Dict:
     """
 
     # We merge the tasks dictionary for simpler handling.
-    submission_response = reduce(operator.ior, submission.get("tasks"), {})
+    submission_copy = copy.deepcopy(submission)
+    submission_response = reduce(operator.ior, submission_copy.get("tasks"), {})
+
     for task in tasks:
         task_name = task.task_name
-        predictions = submission_response.get(task_name, None)
-        if predictions is None:
-            error = f"Task {task_name} has no predictions"
-            logging.error(error)
-            raise HTTPException(200, error)
+
+        # We remove the prediction since we do not keep it in the response.
+        predictions = submission_response.get(task_name).pop("predictions")
 
         ratings, warning = task.compute(predictions=predictions)
         ratings.update({f"{task.metric_name}_warning": warning})

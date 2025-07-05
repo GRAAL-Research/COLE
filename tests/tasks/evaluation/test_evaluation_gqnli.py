@@ -9,8 +9,7 @@ class TaskGQNLITest(TaskTest):
     def test_given_a_prediction_smaller_than_corpus_when_compute_then_return_expected_result_and_warning(
         self,
     ):
-        predictions_list = [1, 1, 1, 1, 1]
-        a_predictions = {"predictions": predictions_list}
+        a_predictions = [1, 1, 1, 1, 1]
         task = Task(
             task_name="gqnli",
             metric="accuracy",
@@ -19,8 +18,8 @@ class TaskGQNLITest(TaskTest):
 
         expected_results = {"accuracy": 0.6}
         expected_warning = (
-            f"Your prediction size is of '{len(predictions_list)}', while the ground truths size is "
-            f"of '{self.dataset_size}'. We computed the metric over the first {len(predictions_list)}"
+            f"Your prediction size is of '{len(a_predictions)}', while the ground truths size is "
+            f"of '{self.dataset_size}'. We computed the metric over the first {len(a_predictions)}"
             f" elements."
         )
 
@@ -33,7 +32,7 @@ class TaskGQNLITest(TaskTest):
     def test_given_a_prediction_when_compute_then_return_expected_result_no_warnings(
         self,
     ):
-        a_predictions = {"predictions": [1] * self.dataset_size}
+        a_predictions = [1] * self.dataset_size
         task = Task(
             task_name="gqnli",
             metric="accuracy",
@@ -50,7 +49,7 @@ class TaskGQNLITest(TaskTest):
         self.assertEqual(expected_warning, actual_warning)
 
     def test_given_a_prediction_larger_than_ground_truth_raise_error(self):
-        a_predictions = {"predictions": [1] * (self.dataset_size + 1)}
+        a_predictions = [1] * (self.dataset_size + 1)
         task = Task(
             task_name="gqnli",
             metric="accuracy",
