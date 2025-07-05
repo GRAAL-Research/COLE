@@ -1,0 +1,15 @@
+# Machine learning & NLP
+transformers
+datasets
+huggingface_hub
+accelerate
+torch
+
+# LightEval (assure-toi d’avoir cette version ou repo local si modifié)
+lighteval
+bitsandbytes
+more_itertools
+vllm
+
+#Anthropic pour calls Claude
+anthropic

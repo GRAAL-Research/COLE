@@ -7,22 +7,22 @@ from lighteval.pipeline import PipelineParameters, ParallelismManager
 import src.tasks_custom as tasks_module
 from src.backend.evaluation_pipeline import evaluation_submission
 from src.backend.model import ZipInferenceModel
-from src.backend.submit_tools import convert_custom_dict_to_task_dict, get_tasks_as_str
+from src.backend.task_factory import convert_custom_dict_to_task_dict, get_tasks_as_str
 
 
-class EvaluationPipelinepiafTest(TestCase):
+class EvaluationPipelineSickfrTest(TestCase):
     def assertDictIsEmpty(self, dict_to_assert):
         self.assertDictEqual(dict_to_assert, {})
 
     def setUp(self):
-        self.task = "piaf"
+        self.task = "sickfr"
         self.max_samples = 5
 
-        perfect_preds = [163, 144, 293, 119, 806]
+        perfect_preds = [1, 1, 1, 0, 1]
         raw_perfect = {f"custom|{self.task}|0|0": perfect_preds}
         self.task_dict_perfect = convert_custom_dict_to_task_dict(raw_perfect)
 
-        imperfect_preds = [70, 95, 80, 80, 70]
+        imperfect_preds = [0, 0, 1, 1, 1]
         raw_imperfect = {f"custom|{self.task}|0|0": imperfect_preds}
         self.task_dict_imperfect = convert_custom_dict_to_task_dict(raw_imperfect)
 

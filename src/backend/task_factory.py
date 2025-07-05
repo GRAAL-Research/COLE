@@ -54,7 +54,7 @@ def get_tasks_as_str(tasks_prediction_dictionary: Dict) -> Tuple[str, List]:
     return task_str, available_tasks
 
 
-def load_predictions_from_zip(zip_bytes: bytes) -> dict:
+def unzip_predictions_from_zip(zip_bytes: bytes) -> dict:
     """
     Reads predictions.json directly from the ZIP in memory.
     """

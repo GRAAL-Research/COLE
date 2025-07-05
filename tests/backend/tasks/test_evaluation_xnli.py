@@ -7,22 +7,22 @@ from lighteval.pipeline import PipelineParameters, ParallelismManager
 import src.tasks_custom as tasks_module
 from src.backend.evaluation_pipeline import evaluation_submission
 from src.backend.model import ZipInferenceModel
-from src.backend.submit_tools import convert_custom_dict_to_task_dict, get_tasks_as_str
+from src.backend.task_factory import convert_custom_dict_to_task_dict, get_tasks_as_str
 
 
-class EValuationPipelinePawsxTest(TestCase):
+class EValuationPipelineXnliTest(TestCase):
     def assertDictIsEmpty(self, dict_to_assert):
         self.assertDictEqual(dict_to_assert, {})
 
     def setUp(self):
-        self.a_task = "paws_x"
-        self.a_prediction_perfect_score = [1, 0, 0, 1, 0]
+        self.a_task = "xnli"
+        self.a_prediction_perfect_score = [2, 0, 1, 1, 0]
         max_samples = 5
         self.a_prediction_perfect_score = {
             f"custom|{self.a_task}|0|0": self.a_prediction_perfect_score
         }
 
-        self.a_prediction_imperfect_score = [1, 0, 1, 0, 0]
+        self.a_prediction_imperfect_score = [1, 1, 2, 2, 0]
         self.a_prediction_imperfect_score = {
             f"custom|{self.a_task}|0|0": self.a_prediction_perfect_score
         }

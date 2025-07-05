@@ -7,7 +7,7 @@ from lighteval.pipeline import PipelineParameters, ParallelismManager
 import src.tasks_custom as tasks_module
 from src.backend.evaluation_pipeline import evaluation_submission
 from src.backend.model import ZipInferenceModel
-from src.backend.submit_tools import convert_custom_dict_to_task_dict, get_tasks_as_str
+from src.backend.task_factory import convert_custom_dict_to_task_dict, get_tasks_as_str
 
 class EValuationPipelineGQNLITest(TestCase):
     def assertDictIsEmpty(self, dict_to_assert):
