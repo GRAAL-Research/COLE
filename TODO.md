@@ -21,12 +21,12 @@
     }
 ```
 4. ~~Finir le README.md du repor COLLE, inclure notamment les détail de chaque corpus et provenance du dataset.~~
-7. Retirer les étiquettes des tests set des jeu de données dans [COLLE-public](https://huggingface.co/datasets/graalul/COLLE-public/).
+7. ~~Retirer les étiquettes des tests set des jeu de données dans [COLLE-public](https://huggingface.co/datasets/graalul/COLLE-public/).~~
 6. Vérifier les licences des datasets pour respecter l'acchiage de licence de [COLLE-public](https://huggingface.co/datasets/graalul/COLLE-public).
 3. Expliquer pour chaque tâche le format des prédictions attendus. P. ex. pour FQuaD:
    ```{"predictions": ["text1", "text 2", ...```
 
 # TODO David:
-1. Il y une erreur dans le corpus QFrBLiMP sur COLLE et COLLE-public. Le 2e tests de la task va break quand tu va faire le changement.
+1. ~~Il y une erreur dans le corpus QFrBLiMP sur COLLE et COLLE-public. Le 2e tests de la task va break quand tu va faire le changement.~~
 2. La description de QFrBLiMP n'est pas bonne à finaliser.
-3. Publication de QFrCoLA à corriger assi
+3. Publication de QFrCoLA à corriger aussi.
