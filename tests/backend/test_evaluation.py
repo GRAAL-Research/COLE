@@ -1,7 +1,7 @@
 import copy
 from typing import Dict, List
 from unittest import TestCase
-from unittest.mock import ANY, Mock
+from unittest.mock import ANY
 
 from src.backend.evaluation import compute_tasks_ratings
 from src.task.task_factory import Task
@@ -96,7 +96,7 @@ class ComputeTasksRatingsTest(TestCase):
         self.assertEqual(
             len(expected_response.get("tasks")), len(actual_response.get("tasks"))
         )
-        self.assertAlmostEquals(
+        self.assertAlmostEqual(
             expected_response.get("tasks")[0]
             .get("allocine")
             .get("accuracy")
@@ -106,7 +106,7 @@ class ComputeTasksRatingsTest(TestCase):
             .get("accuracy")
             .get("accuracy"),
         )
-        self.assertAlmostEquals(
+        self.assertAlmostEqual(
             expected_response.get("tasks")[1]
             .get("fquad")
             .get("fquad")
@@ -116,7 +116,7 @@ class ComputeTasksRatingsTest(TestCase):
             .get("fquad")
             .get("exact_match"),
         )
-        self.assertAlmostEquals(
+        self.assertAlmostEqual(
             expected_response.get("tasks")[1].get("fquad").get("fquad").get("f1"),
             actual_response.get("tasks")[1].get("fquad").get("fquad").get("f1"),
         )

@@ -5,7 +5,6 @@ import pytest
 from fastapi import HTTPException
 
 from src.backend.validation_tools import (
-    tasks_name,
     validate_submission_tasks_name,
     validate_submission_json,
     validate_submission_template,

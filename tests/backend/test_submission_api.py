@@ -179,3 +179,4 @@ def test_leaderboard_with_entries(monkeypatch, tmp_path):
     assert response.status_code == 200
     data = response.json()
     # TODO
+    print(data)
