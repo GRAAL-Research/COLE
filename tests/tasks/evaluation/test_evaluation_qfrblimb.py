@@ -4,7 +4,7 @@ from tests.tasks.evaluation.task_test_case import TaskTest
 
 class TaskQFrBLiMPTest(TaskTest):
     def setUp(self) -> None:
-        self.dataset_size = 2290
+        self.dataset_size = 529
 
     def test_given_a_prediction_smaller_than_corpus_when_compute_then_return_expected_result_and_warning(
         self,
@@ -16,7 +16,7 @@ class TaskQFrBLiMPTest(TaskTest):
             ground_truths_column_name="label",
         )
 
-        expected_results = {"accuracy": 0.2}
+        expected_results = {"accuracy": 0.6}
         expected_warning = (
             f"Your prediction size is of '{len(a_predictions)}', while the ground truths size is "
             f"of '{self.dataset_size}'. We computed the metric over the first {len(a_predictions)}"
@@ -39,7 +39,7 @@ class TaskQFrBLiMPTest(TaskTest):
             ground_truths_column_name="label",
         )
 
-        expected_results = {"accuracy": 0.0}
+        expected_results = {"accuracy": 0.51984877}
         expected_warning = None
 
         actual_result, actual_warning = task.compute(predictions=a_predictions)
