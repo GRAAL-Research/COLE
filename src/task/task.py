@@ -21,7 +21,6 @@ class Task:
         task_name: str,
         metric: str,
         ground_truths_column_name: str,
-        label_cleaning_fn: Callable = None,
     ) -> None:
         self._metric_name = metric
         self._metric_computer = metric_factory(metric_name=self.metric_name)
@@ -29,9 +28,6 @@ class Task:
         test_split = load_dataset(
             f"{REPOSITORY_NAME}", name=self.task_name, split="test"
         )[ground_truths_column_name]
-
-        if label_cleaning_fn is not None:
-            test_split = label_cleaning_fn(test_split)
 
         self._ground_truths = test_split
 
