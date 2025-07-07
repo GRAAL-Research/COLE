@@ -1,35 +1,45 @@
+
 export const normalizeBenchmarkName = (name) => {
   const parts = name.toLowerCase().split("|");
-  if (parts.length >= 2) return parts[1].replace("-", "_");
+  if (parts.length >= 2) return parts[1].replace(/-/g, "_");
   return name.toLowerCase();
 };
 
 export const computeAverageScore = (entry) => {
-  const allowedMetrics = ["acc", "f1", "pearson", "spearman"];
+  const allowedMetrics = [
+    "acc",
+    "accuracy",
+    "f1",
+    "pearson",
+    "pearsonr",
+    "spearman",
+  ];
 
-  const values = Object.entries(entry.results || {})
-    .flatMap(([name, scoreObj]) =>
-      Object.entries(scoreObj)
-        .filter(([metric]) => allowedMetrics.includes(metric.toLowerCase()))
-        .map(([_, value]) => value)
-    )
-    .filter((v) => typeof v === "number");
+  const rawValues = [];
+  Object.values(entry.results || {}).forEach((taskData) => {
+    if (taskData && typeof taskData === "object") {
+      Object.values(taskData).forEach((metricGroup) => {
+        if (metricGroup && typeof metricGroup === "object") {
+          Object.entries(metricGroup)
+            .filter(([metric]) =>
+              allowedMetrics.includes(metric.toLowerCase())
+            )
+            .forEach(([, value]) => {
+              if (typeof value === "number") {
+                rawValues.push(value);
+              }
+            });
+        }
+      });
+    }
+  });
 
-  if (values.length === 0) return null;
+  if (rawValues.length === 0) return null;
 
-  const sum = values.reduce((acc, v) => acc + v, 0);
-  return sum / values.length;
-};
 
-export const computeRankedEntries = (data) => {
-  return data
-    .map((entry) => ({
-      ...entry,
-      score: computeAverageScore(entry),
-    }))
-    .sort((a, b) => (b.score ?? -Infinity) - (a.score ?? -Infinity))
-    .map((entry, index) => ({
-      ...entry,
-      rank: index + 1,
-    }));
+  const normalized = rawValues.map((v) =>
+    v > 1 ? v / 100 : v
+  );
+  const sum = normalized.reduce((a, b) => a + b, 0);
+  return sum / normalized.length;
 };

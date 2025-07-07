@@ -25,7 +25,8 @@ def normalize_answer(answer: str) -> str:
     def lower(text):
         return text.lower()
 
-    return white_space_fix(remove_articles(remove_punc(lower(answer))))
+    answer = str(answer)
+    return white_space_fix(remove_articles(remove_punc(answer.lower())))
 
 
 def f1_score(prediction: str, ground_truth: str) -> float:

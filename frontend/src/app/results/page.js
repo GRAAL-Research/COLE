@@ -6,7 +6,6 @@ export default function ResultsDefaultPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Vérifier si une soumission vient d'être faite
     const justSubmitted = localStorage.getItem("just_submitted");
     const savedFile = localStorage.getItem("last_result_file");
 

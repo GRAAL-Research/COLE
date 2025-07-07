@@ -1,4 +1,5 @@
-"use client";
+//submitforum
+ "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -44,7 +45,7 @@ export default function SubmitForm() {
         throw new Error(err?.detail || `HTTP ${res.status}`);
       }
       const json = await res.json();
-      const submissionId = json.config_general.submission_id;
+      const submissionId = json.submission_id;
 
       localStorage.setItem("last_result_file", `${submissionId}.json`);
       localStorage.setItem("just_submitted", "true");
