@@ -22,8 +22,8 @@
 ```
 4. ~~Finir le README.md du repor COLLE, inclure notamment les détail de chaque corpus et provenance du dataset.~~
 7. ~~Retirer les étiquettes des tests set des jeu de données dans [COLLE-public](https://huggingface.co/datasets/graalul/COLLE-public/).~~
-6. Vérifier les licences des datasets pour respecter l'acchiage de licence de [COLLE-public](https://huggingface.co/datasets/graalul/COLLE-public).
-3. Expliquer pour chaque tâche le format des prédictions attendus. P. ex. pour FQuaD:
+6. ~~Vérifier les licences des datasets pour respecter l'acchiage de licence de [COLLE-public](https://huggingface.co/datasets/graalul/COLLE-public).~~ (Voir datasets_metadata)
+~~3. Expliquer pour chaque tâche le format des prédictions attendus. P. ex. pour FQuaD:~~ (Voir datasets_metadata)
    ```{"predictions": ["text1", "text 2", ...```
 4. Étoffer le contenu du README.md de COLLE-public et copier-coller dans COLLE.
 
