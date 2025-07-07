@@ -25,7 +25,7 @@
 6. ~~Vérifier les licences des datasets pour respecter l'acchiage de licence de [COLLE-public](https://huggingface.co/datasets/graalul/COLLE-public).~~ (Voir datasets_metadata)
 ~~3. Expliquer pour chaque tâche le format des prédictions attendus. P. ex. pour FQuaD:~~ (Voir datasets_metadata)
    ```{"predictions": ["text1", "text 2", ...```
-4. Étoffer le contenu du README.md de COLLE-public et copier-coller dans COLLE.
+4. ~~Étoffer le contenu du README.md de COLLE-public et copier-coller dans COLLE.~~
 
 # TODO David:
 1. ~~Il y une erreur dans le corpus QFrBLiMP sur COLLE et COLLE-public. Le 2e tests de la task va break quand tu va faire le changement.~~
