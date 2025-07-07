@@ -4,50 +4,36 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 const metricLabel = {
-  acc: "Accuracy",
-  acc_stderr: "Standard Error",
+  accuracy: "Accuracy",
+  exact_match: "Exact Match",
   f1: "F1 Score",
-  pearson: "Pearson Correlation",
-  spearman: "Spearman Correlation",
+  pearsonr: "Pearson Correlation",
 };
 
-const getReadableMetricName = (metric) => {
-  return (
-    metricLabel[metric] ||
-    metric
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (c) => c.toUpperCase())
-  );
-};
+const getReadableMetricName = (metricKey) =>
+  metricLabel[metricKey] ||
+  metricKey.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
 export default function ResultsPage() {
-  // unwrap the params promise using the hook
   const { id: submissionId } = useParams();
-
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const url = `http://localhost:8000/results/${submissionId}.json`;
-    fetch(url)
+    fetch(`http://localhost:8000/results/${submissionId}.json`)
       .then((res) => {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
       })
-      .then((json) => {
-        setData(json);
-      })
+      .then(setData)
       .catch((err) => setError(err.message));
   }, [submissionId]);
 
   const handleDownload = () => {
     if (!data) return;
-    const fileName = `${submissionId}.json`;
-    const downloadUrl = `http://localhost:8000/results/${fileName}`;
-
     const link = document.createElement("a");
-    link.href = downloadUrl;
-    link.download = fileName;
+    link.href = `http://localhost:8000/results/${submissionId}.json`;
+    link.download = `${submissionId}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -62,7 +48,6 @@ export default function ResultsPage() {
       </main>
     );
   }
-
   if (!data) {
     return (
       <main className="max-w-3xl mx-auto px-6 py-6 text-center">
@@ -71,11 +56,9 @@ export default function ResultsPage() {
     );
   }
 
-  const results = data.results || {};
-  const taskResults = Object.entries(results).filter(([key]) => key !== "all");
-  const globalMetrics = results.all || {};
+  const tasksArray = data.tasks || [];
   const displayName =
-    data.config_general?.display_name || data.config_general?.email;
+    data.display_name || data.config_general?.display_name;
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-6">
@@ -93,50 +76,48 @@ export default function ResultsPage() {
         </button>
       </div>
 
-      {Object.keys(globalMetrics).length > 0 && (
-        <div className="mb-6 p-5 bg-blue-50 border border-blue-300 rounded-md">
-          <h3 className="text-lg font-semibold text-blue-700 mb-2">
-            🌐 Global Score
-          </h3>
-          <ul className="ml-4 text-sm text-gray-700 list-disc">
-            {Object.entries(globalMetrics).map(([metric, value]) => (
-              <li key={metric}>
-                <strong>{getReadableMetricName(metric)}</strong>:{" "}
-                {typeof value === "number"
-                  ? (value * 100).toFixed(1) + "%"
-                  : value}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {taskResults.length === 0 ? (
+      {tasksArray.length === 0 ? (
         <p className="text-blue-700 text-center">
           ⚠️ No benchmark results found.
         </p>
       ) : (
         <div className="space-y-6">
-          {taskResults.map(([key, metrics]) => {
-            const prettyName = key.split("|")[1] || key;
+          {tasksArray.map((taskObj) => {
+            const [taskName, metricsObj] = Object.entries(taskObj)[0];
+            const [metricType, metricValues] = Object.entries(metricsObj)[0];
+            const prettyName = taskName.split("|")[1] || taskName;
+            const warningKey = `${metricType}_warning`;
+
             return (
               <div
-                key={key}
+                key={taskName}
                 className="p-5 border border-purple-400 rounded-xl shadow-md bg-white"
               >
                 <h3 className="text-xl font-semibold text-blue-700 mb-3">
                   🧪 Benchmark: {prettyName}
                 </h3>
                 <ul className="list-disc ml-6 text-gray-700">
-                  {Object.entries(metrics).map(([metric, value]) => (
-                    <li key={metric}>
-                      <strong>{getReadableMetricName(metric)}</strong>:{" "}
-                      {typeof value === "number"
-                        ? (value * 100).toFixed(1) + "%"
-                        : value}
-                    </li>
-                  ))}
+                  {Object.entries(metricValues)
+                    .filter(([k]) => !k.endsWith("_warning"))
+                    .map(([metricKey, value]) => (
+                      <li key={metricKey}>
+                        <strong>{getReadableMetricName(metricKey)}</strong>:{" "}
+                        {typeof value === "number" ? (
+                          (metricKey === "exact_match" || metricKey === "f1"
+                            ? value
+                            : value * 100
+                          ).toFixed(1) + "%"
+                        ) : (
+                          value
+                        )}
+                      </li>
+                    ))}
                 </ul>
+                {metricValues[warningKey] && (
+                  <p className="text-sm text-yellow-700 mt-2">
+                    ⚠️ {metricValues[warningKey]}
+                  </p>
+                )}
               </div>
             );
           })}
