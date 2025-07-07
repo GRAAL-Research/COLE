@@ -22,8 +22,8 @@ from src.task.task import Task
 from src.task.task_factory import (
     tasks_factory,
 )
+from functools import lru_cache
 
-# --- Paths configuration ---
 BASE_DIR = Path(__file__).resolve().parents[2]
 SRC_DIR = BASE_DIR / "src"
 sys.path.insert(0, str(SRC_DIR))
@@ -48,43 +48,70 @@ async def submit(
     predictions_zip: UploadFile = File(...),
     display_name: str = Form(...),
 ):
-    info_message = f"Submission from {email!r} as {display_name!r}."
-    logging.info(info_message)
-
+    logging.info(f"Submission from {email!r} as {display_name!r}.")
     zip_bytes = await predictions_zip.read()
     submission_json = unzip_predictions_from_zip(zip_bytes)
 
     validate_submission_template(submission_json)
-
     validate_submission_tasks_name(submission_json)
-    validate_submission_json(submission_json)
+    validate_submission_json(submigssion_json)
 
     tasks: List[Task] = tasks_factory(submission_json)
-
     submission_response = compute_tasks_ratings(tasks=tasks, submission=submission_json)
-    submission_response.update(
-        {
-            "display_name": display_name,
-        }
-    )
 
-    out_path = RESULTS_DIR / f"{uuid.uuid4()}.json"
+    submission_id = str(uuid.uuid4())
+    submission_response.update({
+        "display_name": display_name,
+        "email": email,
+        "submission_id": submission_id,
+    })
+
+    out_path = RESULTS_DIR / f"{submission_id}.json"
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(submission_response, f, ensure_ascii=False, indent=2)
+
+    # <-- c’est bien ici qu’on clear le cache
+    get_leaderboard_entries.cache_clear()
 
     return JSONResponse(content=submission_response)
 
 
-@app.get("/leaderboard")
-async def leaderboard() -> List[Dict[str, Any]]:
+@lru_cache(maxsize=1)
+def get_leaderboard_entries() -> List[Dict[str, Any]]:
+
     entries: List[Dict[str, Any]] = []
-    for accepted_submission in glob.glob(str(RESULTS_DIR / "*.json")):
-        with open(accepted_submission, encoding="utf-8") as f:
-            data = json.load(f)
-        # TODO
-        print(data)
+
+    for filepath in glob.glob(str(RESULTS_DIR / "*.json")):
+        try:
+            with open(filepath, encoding="utf-8") as f:
+                data = json.load(f)
+
+            results = {}
+            for task_obj in data.get("tasks", []):
+                for task_name, metrics in task_obj.items():
+                    results[task_name] = metrics
+
+            entry = {
+                "submission_id": data["submission_id"],
+                "display_name": data["display_name"],
+                "email": data.get("email"),
+                "results": results
+            }
+
+            entries.append(entry)
+
+        except Exception as e:
+            logging.error(f"Error processing file {filepath}: {e}")
+            continue
 
     return entries
+
+
+@app.get("/leaderboard")
+async def leaderboard() -> List[Dict[str, Any]]:
+
+
+    return get_leaderboard_entries()
 
 
 @app.get("/health")
