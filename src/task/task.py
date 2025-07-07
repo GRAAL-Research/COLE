@@ -42,7 +42,7 @@ class Task:
     def compute(self, predictions: Union[List, None]) -> Tuple[Dict, str]:
         warning = None
         if predictions is None:
-            # Case were we did not find any prediction for the task.
+            # Case where we did not find any prediction for the task.
             warning = "No predictions found for this task."
             return {self.metric_name: 0.0}, warning
 
