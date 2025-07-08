@@ -54,7 +54,7 @@ async def submit(
 
     validate_submission_template(submission_json)
     validate_submission_tasks_name(submission_json)
-    validate_submission_json(submigssion_json)
+    validate_submission_json(submission_json)
 
     tasks: List[Task] = tasks_factory(submission_json)
     submission_response = compute_tasks_ratings(tasks=tasks, submission=submission_json)
