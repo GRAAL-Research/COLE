@@ -1,7 +1,6 @@
 from datasets import load_dataset
-from src.task import REPOSITORY_NAME
+from src.task import COLLE_REPOSITORY_NAME
 from predictions.utils import hugging_face_login
-
 hugging_face_login("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")
 
 
@@ -9,12 +8,16 @@ class Dataset:
     def __init__(
         self,
         name,
+        description,
+        possible_ground_thruths,
         huggingFace_repo,
         line_to_thruth_fn,
         line_to_prompt_fn,
         line_to_data_fn,
     ):
-        self.data = load_dataset(f"{huggingFace_repo}", name=name, split="test")
+        self.dataset = load_dataset(f"{huggingFace_repo}", name=name, split="test")
+        self.description = description
+        self.possible_ground_thruths = possible_ground_thruths
         self.line_to_prompt_fn = line_to_prompt_fn
         self.line_to_thruth_fn = line_to_thruth_fn
         self.line_to_data_fn = line_to_data_fn
@@ -30,3 +33,10 @@ class Dataset:
     @property
     def data(self):
         return [self.line_to_data_fn(line) for line in self.data]
+
+    @property
+    def metadata(self):
+        return {
+            "description": self.description,
+            "possible_ground_thruths": self.possible_ground_thruths,
+        }
