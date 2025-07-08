@@ -18,7 +18,6 @@ export default function ResultsPage() {
   const { id: submissionId } = useParams();
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     fetch(`http://localhost:8000/results/${submissionId}.json`)
       .then((res) => {
@@ -28,26 +27,28 @@ export default function ResultsPage() {
       .then(setData)
       .catch((err) => setError(err.message));
   }, [submissionId]);
+ const handleDownload = async () => {
+ if (!data) return;
+  try {
+    const res = await fetch(`http://localhost:8000/results/${submissionId}.json`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const blob = await res.blob();
 
-  const handleDownload = () => {
-    if (!data) return;
+    const url = URL.createObjectURL(blob);
+
     const link = document.createElement("a");
-    link.href = `http://localhost:8000/results/${submissionId}.json`;
+    link.href = url;
     link.download = `${submissionId}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
 
-  if (error) {
-    return (
-      <main className="max-w-3xl mx-auto px-6 py-6 text-center">
-        <p className="text-red-600 font-semibold text-lg">
-          ❌ Error: {error}
-        </p>
-      </main>
-    );
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    console.error("Download failed:", e);
   }
+};
+
   if (!data) {
     return (
       <main className="max-w-3xl mx-auto px-6 py-6 text-center">
@@ -57,8 +58,7 @@ export default function ResultsPage() {
   }
 
   const tasksArray = data.tasks || [];
-  const displayName =
-    data.display_name || data.config_general?.display_name;
+  const displayName = data.display_name || data.config_general?.display_name;
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-6">
