@@ -21,14 +21,16 @@ class Task:
         task_name: str,
         metric: str,
         ground_truths_column_name: str,
+        llm_prompt_building_fn: Callable = None,
     ) -> None:
         self._metric_name = metric
         self._metric_computer = metric_factory(metric_name=self.metric_name)
         self.task_name = task_name
-        test_split = load_dataset(
+        self.dataset = load_dataset(
             f"{REPOSITORY_NAME}", name=self.task_name, split="test"
-        )[ground_truths_column_name]
+        )
 
+        test_split = self.dataset[ground_truths_column_name]
         self._ground_truths = test_split
 
     @property
@@ -53,7 +55,7 @@ class Task:
                 f"{sample_size} elements."
             )
         elif sample_size > len(self._ground_truths):
-            error = "There is more prediction thant ground truths."
+            error = "There are more predictions than ground truths."
             logging.error(error)
             raise ValueError(error)
         else:
