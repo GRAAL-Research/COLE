@@ -60,11 +60,13 @@ async def submit(
     submission_response = compute_tasks_ratings(tasks=tasks, submission=submission_json)
 
     submission_id = str(uuid.uuid4())
-    submission_response.update({
-        "display_name": display_name,
-        "email": email,
-        "submission_id": submission_id,
-    })
+    submission_response.update(
+        {
+            "display_name": display_name,
+            "email": email,
+            "submission_id": submission_id,
+        }
+    )
 
     out_path = RESULTS_DIR / f"{submission_id}.json"
     with open(out_path, "w", encoding="utf-8") as f:
@@ -95,7 +97,7 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
                 "submission_id": data["submission_id"],
                 "display_name": data["display_name"],
                 "email": data.get("email"),
-                "results": results
+                "results": results,
             }
 
             entries.append(entry)
@@ -109,7 +111,6 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
 
 @app.get("/leaderboard")
 async def leaderboard() -> List[Dict[str, Any]]:
-
 
     return get_leaderboard_entries()
 
