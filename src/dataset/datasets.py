@@ -120,7 +120,7 @@ datasets = {
         line_to_thruth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Les deux phrases suivantes veulent-elles dire la même chose, ou ont-elles des significations différentes ?")
-        .add_data(line["sentence1 "]).add_data(line["sentence1 "])
+        .add_data(line["sentence1 "]).add_data(line["sentence2 "])
         .add_end(
             (
                 "Réponds seulement 1 si les deux phrases ont la même signification, 0 sinon. La réponse est :"
@@ -136,7 +136,7 @@ datasets = {
     "piaf ": Dataset(
         "piaf",
         "desc",
-        "line['answers']['text']",
+        "line['answers']['answer_start']",
         COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: line["answers"]["answer_start"][0],
         line_to_prompt_fn=lambda line: PromptBuilder()
@@ -160,9 +160,10 @@ datasets = {
     "fquad ": Dataset(
         "fquad",
         "desc",
-        "line['answers']['text']",
+
+        "line['answers']['answer_start']",
         COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: "line['answers']['text']",
+        line_to_thruth_fn=lambda line: "line['answers']['answer_start'][0]",
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Voici un contexte et une question. Réponds à la question en te basant uniquement sur le contexte.")
         .add_data(
