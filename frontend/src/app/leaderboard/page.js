@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import {
   normalizeBenchmarkName,
@@ -25,6 +24,7 @@ export default function LeaderboardPage() {
   const [benchmarks, setBenchmarks] = useState([]);
   const [sortCol, setSortCol] = useState("overall");
   const [sortOrder, setSortOrder] = useState("desc");
+  const [selectedEntry, setSelectedEntry] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:8000/leaderboard")
@@ -59,7 +59,6 @@ export default function LeaderboardPage() {
     );
     if (!pair) return null;
 
-    // 1) on collecte rawValues
     const rawValues = [];
     const taskData = pair[1];
     Object.values(taskData).forEach((metricGroup) => {
@@ -79,9 +78,7 @@ export default function LeaderboardPage() {
     });
     if (rawValues.length === 0) return null;
 
-    const normalized = rawValues.map((v) =>
-      v > 1 ? v / 100 : v
-    );
+    const normalized = rawValues.map((v) => (v > 1 ? v / 100 : v));
     const sum = normalized.reduce((a, b) => a + b, 0);
     return sum / normalized.length;
   };
@@ -112,8 +109,7 @@ export default function LeaderboardPage() {
 
   const renderHeader = (col) => {
     const baseLabel = headerLabels[col] ?? col;
-    const arrow =
-      sortCol === col ? (sortOrder === "asc" ? " ▲" : " ▼") : "";
+    const arrow = sortCol === col ? (sortOrder === "asc" ? " ▲" : " ▼") : "";
 
     if (col === "overall") {
       return (
@@ -122,9 +118,7 @@ export default function LeaderboardPage() {
             {baseLabel}
             {arrow}
           </div>
-          <div className="text-xs text-gray-600 text-center">
-            (avg score)
-          </div>
+          <div className="text-xs text-gray-600 text-center">(avg score)</div>
         </>
       );
     }
@@ -162,7 +156,7 @@ export default function LeaderboardPage() {
         <table className="min-w-full border-collapse">
           <thead>
             <tr>
-              {["model", "overall", ...benchmarks].map((b) => (
+              {['model', 'overall', ...benchmarks].map((b) => (
                 <th
                   key={b}
                   className="border border-gray-300 px-2 py-1 bg-blue-100 text-left text-sm font-semibold text-blue-700"
@@ -176,7 +170,8 @@ export default function LeaderboardPage() {
             {sorted.map((entry) => (
               <tr
                 key={entry.submission_id}
-                className="bg-white hover:bg-gray-50"
+                className="bg-white hover:bg-gray-50 cursor-pointer"
+                onClick={() => setSelectedEntry(entry)}
               >
                 <td className="border border-gray-300 px-2 py-1 font-medium text-blue-600">
                   {entry.display_name}
@@ -204,6 +199,45 @@ export default function LeaderboardPage() {
           </tbody>
         </table>
       </div>
+
+      {selectedEntry && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-2xl shadow-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Results for {selectedEntry.display_name}
+            </h3>
+            {Object.entries(selectedEntry.results || {}).map(([taskKey, metricsObj]) => {
+              const prettyName = taskKey.split("|")[1] || taskKey;
+              const [metricType, values] = Object.entries(metricsObj)[0];
+              return (
+                <div key={taskKey} className="mb-4">
+                  <h4 className="font-medium text-blue-700">{prettyName}</h4>
+                  <ul className="list-disc list-inside text-gray-700">
+                    {Object.entries(values)
+                      .filter(([k]) => !k.endsWith("_warning"))
+                      .map(([metricKey, value]) => (
+                        <li key={metricKey}>
+                          <strong>{metricKey.replace(/_/g, ' ')}</strong>: {typeof value === 'number' ? (value > 1 ? (value).toFixed(1) + '%' : (value*100).toFixed(1) + '%') : value}
+                        </li>
+                      ))}
+                  </ul>
+                  {values[`${metricType}_warning`] && (
+                    <p className="text-sm text-yellow-700 mt-2">
+                      ⚠️ {values[`${metricType}_warning`]}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+            <button
+              className="mt-4 px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300"
+              onClick={() => setSelectedEntry(null)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
