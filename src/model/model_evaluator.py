@@ -28,7 +28,7 @@ class ModelEvaluator:
             logging.info("No metrics saved")
             return
         else:
-            self.save_object(save_path,self.last_metrics, f"{self.last_model_name}_metrics.json")
+            self.save_object(save_path,self.last_metrics, f"{self.last_model_name.replace('/', '_')}_metrics.json")
 
     def evaluate(self, model: Model, tasks: list[Task]):
         self.evaluate_subset(model, tasks)
@@ -66,12 +66,12 @@ class ModelEvaluator:
 tasks = tasks_factory({"tasks" : [{"allocine":""},{"qfrcola":""},{"xnli":""},]})
 models = ["OpenLLM-France/Lucie-7B",
         "OpenLLM-France/Lucie-7B-Instruct-v1.1",]
-
+models = ["gpt2"]
 
 for model_name in models:
     model = HFLLMModelClassifier(model_name, batch_size=16)
     evaluator = ModelEvaluator()
-    evaluator.evaluate_subset(model, tasks, 100)
+    evaluator.evaluate_subset(model, tasks, 32)
     evaluator.save_results("./results")
     evaluator.compute_metrics()
     evaluator.save_metrics("./results")

@@ -49,7 +49,7 @@ class HFModel(Model):
         return new_model
 
     def get_model_args(self, token):
-        return omit_none(use_auth_token=token, cache_dir=MODEL_CACHE)
+        return omit_none(use_auth_token=token, cache_dir=MODEL_CACHE,trust_remote_code=True)
 
     def create_tokenizer(self, model_name, token=None):
         """Creates an adapted tokenizer from Hugging Face"""
@@ -166,7 +166,7 @@ class HFLLMModelClassifier(HFLLMModelGenerative):
                 labels = batch_score_labels(sub_batch,possible_answers,self.model,self.tokenizer)
                 all_answers.extend(labels)
             except Exception as e:
-                logging.error(e)
+                logging.error("error occure",e)
                 batch_outputs = [{} for _ in sub_batch]
 
 
