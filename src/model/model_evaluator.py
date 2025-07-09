@@ -66,7 +66,6 @@ class ModelEvaluator:
 tasks = tasks_factory({"tasks" : [{"allocine":""},{"qfrcola":""},{"xnli":""},]})
 models = ["OpenLLM-France/Lucie-7B",
         "OpenLLM-France/Lucie-7B-Instruct-v1.1",]
-models = ["gpt2"]
 
 for model_name in models:
     model = HFLLMModelClassifier(model_name, batch_size=16)
