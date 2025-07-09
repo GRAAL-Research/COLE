@@ -180,7 +180,8 @@ def batch_score_labels(
     tokenizer,
 ):
     device = model.device
-    tokenizer.pad_token = tokenizer.pad_token or tokenizer.eos_token
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
 
 
     all_scores = []
@@ -199,6 +200,7 @@ def batch_score_labels(
             return_tensors="pt",
             padding=True,
             truncation=True,
+            max_length=4096,
         ).to(device)
 
         with torch.no_grad():
