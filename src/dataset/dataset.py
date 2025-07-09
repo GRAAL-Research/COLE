@@ -1,0 +1,57 @@
+from datasets import load_dataset
+from src.task import COLLE_REPOSITORY_NAME
+from predictions.utils import hugging_face_login
+
+hugging_face_login()
+
+
+class Dataset:
+    """class representing a usable dataset. Allows dataset to be expressed as multiple forms, including as prompts,data or answers
+    :param name : name of the dataset
+    :param description : description of the dataset
+    :param possible_ground_thruths : the form that could be taken by ground thruths
+    :param huggingFace_repo : where to download the dataset on huggingFace
+    :param line_to_thruth_fn : a function converting a dataset line to its truth value.
+    :param line_to_prompt_fn : a function converting a dataset line to a prompt for LLM inference.
+    :param line_to_data_fn : a function converting a dataset line to its data value for non LLM inference.
+    """
+
+    def __init__(
+        self,
+        name,
+        description,
+        possible_ground_thruths,
+        huggingFace_repo,
+        line_to_thruth_fn,
+        line_to_prompt_fn,
+        line_to_data_fn,
+    ):
+        self.dataset = load_dataset(f"{huggingFace_repo}", name=name, split="test")
+        self.description = description
+        self.possible_ground_thruths = possible_ground_thruths
+        self.line_to_prompt_fn = line_to_prompt_fn
+        self.line_to_thruth_fn = line_to_thruth_fn
+        self.line_to_data_fn = line_to_data_fn
+
+    @property
+    def ground_truths(self):
+        """The dataset's ground truths as a list"""
+        return [self.line_to_thruth_fn(line) for line in self.dataset]
+
+    @property
+    def prompts(self):
+        """The dataset's prompts as a list"""
+        return [self.line_to_prompt_fn(line) for line in self.dataset]
+
+    @property
+    def data(self):
+        """The dataset's data as a list"""
+        return [self.line_to_data_fn(line) for line in self.dataset]
+
+    @property
+    def metadata(self):
+        """The dataset's metadata as a dict"""
+        return {
+            "description": self.description,
+            "possible_ground_thruths": str(self.possible_ground_thruths),
+        }

@@ -1,10 +1,7 @@
 import logging
 from typing import Dict, Union, Tuple, Callable, List
-
-from datasets import load_dataset
-
 from src.metrics.metric_factory import metric_factory
-from src.task import REPOSITORY_NAME
+from src.dataset.datasets import datasets
 
 
 class Task:
@@ -26,12 +23,8 @@ class Task:
         self._metric_name = metric
         self._metric_computer = metric_factory(metric_name=self.metric_name)
         self.task_name = task_name
-        self.dataset = load_dataset(
-            f"{REPOSITORY_NAME}", name=self.task_name, split="test"
-        )
-
-        test_split = self.dataset[ground_truths_column_name]
-        self._ground_truths = test_split
+        self.dataset = datasets[task_name]
+        self._ground_truths = self.dataset.ground_truths
 
     @property
     def metric_name(self) -> str:
