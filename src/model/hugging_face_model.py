@@ -181,7 +181,7 @@ def batch_score_labels(
 ):
     device = model.device
     tokenizer.pad_token = tokenizer.pad_token or tokenizer.eos_token
-    assert tokenizer.pad_token_id == tokenizer.eos_token_id
+
 
     all_scores = []
 
