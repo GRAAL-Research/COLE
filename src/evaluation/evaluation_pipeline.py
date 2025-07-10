@@ -1,7 +1,7 @@
 from predictions import utils
 import logging
 from predictions.all_llms import llms
-from src.model.hugging_face_model import HFLLMModelClassifier, HFLLMModelGenerative
+from src.model.hugging_face_model import HFLLMModelClassifier
 from src.evaluation.model_evaluator import ModelEvaluator
 from src.task.task_factory import tasks_factory
 import argparse
@@ -49,7 +49,10 @@ args = parser.parse_args()
 utils.hugging_face_login(args.token)
 
 
-tasks = tasks_factory(["qfrcola","fquad"])
+tasks = tasks_factory([
+
+    "piaf",
+])
 
 models = []
 if args.models_name is not None:
@@ -60,7 +63,7 @@ if args.models_name is not None:
 
 logging.warning("starting Evaluation")
 for model_name in models:
-    model = HFLLMModelGenerative(model_name,max_gen_length=7, batch_size=args.batch_size)
+    model = HFLLMModelClassifier(model_name, batch_size=args.batch_size)
     logging.warning("creating model")
     evaluator = ModelEvaluator()
     logging.warning("evaluating model")

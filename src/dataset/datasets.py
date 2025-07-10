@@ -44,24 +44,21 @@ datasets = {
         "desc",
         ["0", "1"],
         COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: line["label"],
+        # label renvoyé comme chaîne
+        line_to_thruth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Cette phrase est-elle grammaticalement correcte ?")
         .add_data(
-            f"Phrase grammaticale : {line["grammatical"]}\n"
-            f"Phrase non-grammaticale: {line["ungrammatical"]}"
+             {line["ungrammatical"],["grammatical"]}
         )
         .add_end(
-            (
-                "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon."
-            )
+            "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon."
         )
         .build(),
-        line_to_data_fn=lambda line: {
-            "grammatical": line["grammatical"],
-            "ungrammatical": line["ungrammatical"],
+        line_to_data_fn=lambda line: {["ungrammatical"],["grammatical"]
         },
     ),
+
     "gqnli": Dataset(
         "gqnli",
         "desc",
@@ -92,7 +89,7 @@ datasets = {
     "opus_parcus": Dataset(
         "opus_parcus",
         "desc",
-        "str(list(range(0,100,5)))",
+        [str(i) for i in range(0, 101, 5)],
         COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: line["quality"],
         line_to_prompt_fn=lambda line: PromptBuilder()
@@ -134,53 +131,61 @@ datasets = {
         },
     ),
     "piaf": Dataset(
-        "piaf",
-        "desc",
-        "line['answers']['answer_start']",
-        COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: line["answers"]["answer_start"][0],
-        line_to_prompt_fn=lambda line: PromptBuilder()
+    "piaf",
+    "desc",
+    [],
+    COLLE_REPOSITORY_NAME,
+
+        line_to_thruth_fn=lambda line:
+            line["answers"],
+
+
+    line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "Voici une question et un contexte. Où, dans le texte, commence la réponse à la question ?"
+            "Tu vas recevoir un contexte et une question.\n"
+            "→ Donne **exactement** le passage du contexte qui répond à la question.\n"
+            "→ Immédiatement après, mets trois barres verticales `|||` puis le nombre de caractères qui le précèdent.\n"
         )
-        .add_data(f"Contexte : {line['context']}\n" f"Question: {line['question']}")
-        .add_end(
-            (
-                "Réponds seulement avec le nombre de charactères qui précèdent la réponse à la question dans le contexte. La réponse est :"
-            )
-        )
+        .add_data(f"Contexte  : {line['context']}")
+        .add_data(f"Question : {line['question']}")
+        .add_end("Réponse :")
         .build(),
-        line_to_data_fn=lambda line: {
-            "Contexte ": line["Contexte"],
-            "Question ": line["Question"],
-        },
-    ),
+
+    line_to_data_fn=lambda line: {
+        "context":  line["context"],
+        "question": line["question"],
+    },
+),
     "fquad": Dataset(
-        "fquad",
-        "desc",
-        "line['answers']['answer_start']",
-        COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: "line['answers']['answer_start'][0]",
-        line_to_prompt_fn=lambda line: PromptBuilder()
+    "fquad",
+    "desc",
+
+    [],
+    COLLE_REPOSITORY_NAME,
+    line_to_thruth_fn=lambda line:
+         line["answers"],
+
+    line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "Voici un contexte et une question. Réponds à la question en te basant uniquement sur le contexte."
+            "Tu vas recevoir un contexte et une question.\n"
+            "→ Donne **exactement** le passage du contexte qui répond à la question.\n"
+            "→ Immédiatement après, mets trois barres verticales `|||` puis le nombre de caractères qui le précèdent.\n"
+
         )
-        .add_data(f"contexte    : {line['context']}\n" f"question: {line['question']}")
-        .add_end(
-            (
-                "Dans le texte ci-dessous, combien de caractères précèdent la réponse à la question ? Réponds uniquement avec un nombre.. La réponse est : "
-            )
-        )
+        .add_data(f"Contexte  : {line['context']}")
+        .add_data(f"Question : {line['question']}")
+        .add_end("Réponse :")
         .build(),
-        line_to_data_fn=lambda line: {
-            "contexte ": line["contexte"],
-            "question ": line["question"],
-        },
-    ),
+    line_to_data_fn=lambda line: {
+        "context":  line["context"],
+        "question": line["question"],
+    },
+),
+
     "sickfr": Dataset(
         "sickfr",
         "desc",
-        ["relatedness_score"],
+        [i * 0.1 for i in range(0, 51)],
         COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: float(line["relatedness_score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
@@ -204,7 +209,7 @@ datasets = {
     "sts22": Dataset(
         "sts22",
         "desc",
-        ["score"],
+        [i * 0.1 for i in range(0, 51)],
         COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: float(line["score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
@@ -230,7 +235,7 @@ datasets = {
         "desc",
         ["0", "1", "2"],
         COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: line["label"],
+        line_to_thruth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Quelle est la relation de la deuxième phrase par rapport à la première ?"

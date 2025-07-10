@@ -215,12 +215,12 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
     all_scores = []
 
     for label in candidate_labels:
-        label_str = " " + label.strip()
+        label_str = " " + str(label).strip()
         full_prompts = [p.rstrip() + label_str for p in prompts]
 
         # Tokenize original prompts to get lengths
         prompt_inputs = tokenizer(
-            prompts, return_tensors="pt", padding=True, truncation=True, max_length=2048
+            prompts, return_tensors="pt", padding=True, truncation=True, max_length=model.config.n_positions,
         ).to(device)
 
         full_inputs = tokenizer(
@@ -228,7 +228,7 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
             return_tensors="pt",
             padding=True,
             truncation=True,
-            max_length=2048,
+            max_length=model.config.n_positions,
         ).to(device)
 
         with torch.no_grad():
