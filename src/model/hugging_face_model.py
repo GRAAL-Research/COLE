@@ -32,7 +32,6 @@ class HFModel(Model):
         token=None,
         lazy_load=True,
         batch_size=8,
-
     ):
         super().__init__(model_name)
         self.model_name = model_name
@@ -42,6 +41,7 @@ class HFModel(Model):
         self.batch_size = batch_size
         if not lazy_load:
             self.load_model(model_name, task=task, token=token)
+
     def create_model(self, model_name, token=None):
         """creates the model by fetching by name on Hugging Face"""
         args = self.get_model_args(token)
@@ -118,7 +118,6 @@ class HFLLMModelGenerative(HFModel):
         batch_size=8,
         task="text-generation",
         max_gen_length=3,
-
     ):
         super().__init__(model_name, task, token, batch_size=batch_size)
         self.max_gen_length = max_gen_length
@@ -176,6 +175,7 @@ class HFLLMModelGenerative(HFModel):
 
         return all_answers
 
+
 class HFLLMModelClassifier(HFLLMModelGenerative):
     """
     Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses it for inference.
@@ -220,7 +220,11 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
 
         # Tokenize original prompts to get lengths
         prompt_inputs = tokenizer(
-            prompts, return_tensors="pt", padding=True, truncation=True, max_length=model.config.n_positions,
+            prompts,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=model.config.n_positions,
         ).to(device)
 
         full_inputs = tokenizer(

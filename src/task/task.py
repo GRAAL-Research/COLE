@@ -4,9 +4,11 @@ from typing import Dict, Union, Tuple, Callable, List
 from src.metrics.metric_factory import metric_factory
 from src.dataset.datasets import datasets
 
+
 class Tasktype(Enum):
     GENERATIVE = 0
     INFERENCE = 1
+
 
 class Task:
     """

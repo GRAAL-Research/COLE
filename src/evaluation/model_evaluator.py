@@ -3,7 +3,7 @@ import logging
 import os
 from datetime import datetime
 from src.model.model import Model
-from src.task.task import Task,Tasktype
+from src.task.task import Task, Tasktype
 from src.task.task_factory import tasks_factory
 
 
@@ -17,11 +17,25 @@ class ModelEvaluator:
 
     def compute_metrics(self):
         """compute metrics over last tested model's predictions, must have called one the evaluate functions before"""
-        metrics = {}
-        for key, value in self.last_predictions["tasks"].items():
-            tasks = tasks_factory({"tasks": [{key: value}]})
-            metrics[key] = tasks[0].compute(value)
+        metrics = []
+        for task_dict in self.last_predictions["tasks"]:
+            task_name, preds = list(task_dict.items())[0]
+            tasks = tasks_factory([task_name])
+            task = tasks[0]
+            metric_score, warning = task.compute(preds)
+            metric_name = task.metric_name
+            task_entry = {
+                task_name: {
+                    metric_name: {**metric_score, f"{metric_name}_warning": warning}
+                }
+            }
+            metrics.append(task_entry)
+
         self.last_metrics = metrics
+        metrics = self.last_predictions
+        metrics["tasks"] = self.last_metrics
+        self.last_metrics = metrics
+        print("metrics", metrics)
         return metrics
 
     def save_metrics(self, save_path):
@@ -31,7 +45,7 @@ class ModelEvaluator:
             logging.info("No metrics saved")
             return
         else:
-            self.save_object(
+            return self.save_object(
                 save_path,
                 self.last_metrics,
                 f"{self.last_model_name.replace('/', '_')}_metrics.json",
@@ -41,31 +55,34 @@ class ModelEvaluator:
         """evaluates a given model on the given tasks
         :param model : the model that will infer on the given tasks
         :param tasks : the tasks to be evaluated on"""
-        self.evaluate_subset(model, tasks)
+        return self.evaluate_subset(model, tasks)
 
     def evaluate_subset(self, model: Model, tasks: list[Task], subset_size=None):
         """evaluates a given model on the given tasks, but only on a given size.
         :param model : the model that will infer on the given tasks
         :param tasks : the tasks to be evaluated on
         :param subset_size : the size of the subset to be evaluated"""
-        self.last_predictions = {}
+        predictions = []
         for task in tasks:
             if subset_size is None:
                 prompts = task.dataset.prompts[0:]
             else:
                 prompts = task.dataset.prompts[0:subset_size]
             if task.task_type == Tasktype.INFERENCE:
-                preds = model.infer(prompts, task.dataset.possible_ground_thruths)
+                task_predictions = model.infer(
+                    prompts, task.dataset.possible_ground_thruths
+                )
             elif task.task_type == Tasktype.GENERATIVE:
-                preds = model.generate(prompts)
-            else :
+                task_predictions = model.generate(prompts)
+            else:
                 logging.error(f"unknown task type {task.task_type}")
-                preds = None
-            self.last_predictions[task.task_name] = preds
+                task_predictions = None
+            task_predictions = {task.task_name: task_predictions}
+            predictions.append(task_predictions)
         self.last_predictions = {
             "model_name": model.name,
             "model_url": "No URL provided",
-            "tasks": self.last_predictions,
+            "tasks": predictions,
         }
         self.last_model_name = model.name
         return self.last_predictions
@@ -76,7 +93,7 @@ class ModelEvaluator:
         if self.last_model_name is None:
             logging.error("Please evaluate before saving results")
             return
-        self.save_object(
+        return self.save_object(
             save_path,
             self.last_predictions,
             f"{self.last_model_name.replace('/', '_')}_{datetime.now().strftime("%Y%m%d-%H%M")}.json",
@@ -92,3 +109,4 @@ class ModelEvaluator:
             logging.info(f"Results saved to {save_path}")
         except Exception as e:
             logging.error(f"Failed to save object: {e}")
+        return full_path

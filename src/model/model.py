@@ -47,8 +47,10 @@ class Model:
         self, prompt: str | list[str], possible_answers, conditions=None
     ) -> str | list[str]:
         return ["0" for _ in range(len(prompt))]
+
     @abstractmethod
     def generate(self, prompt: str, conditions=None) -> str | list[str]:
         raise NotImplementedError()
+
     def unload_model(self):
         pass

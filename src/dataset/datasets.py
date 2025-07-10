@@ -37,7 +37,6 @@ datasets = {
         )
         .build(),
         line_to_data_fn=lambda line: line["sentence"],
-
     ),
     "qfrblimp": Dataset(
         "qfrblimp",
@@ -48,17 +47,13 @@ datasets = {
         line_to_thruth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Cette phrase est-elle grammaticalement correcte ?")
-        .add_data(
-             {line["ungrammatical"],["grammatical"]}
-        )
+        .add_data({line["ungrammatical"], ["grammatical"]})
         .add_end(
             "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon."
         )
         .build(),
-        line_to_data_fn=lambda line: {["ungrammatical"],["grammatical"]
-        },
+        line_to_data_fn=lambda line: {["ungrammatical"], ["grammatical"]},
     ),
-
     "gqnli": Dataset(
         "gqnli",
         "desc",
@@ -131,16 +126,12 @@ datasets = {
         },
     ),
     "piaf": Dataset(
-    "piaf",
-    "desc",
-    [],
-    COLLE_REPOSITORY_NAME,
-
-        line_to_thruth_fn=lambda line:
-            line["answers"],
-
-
-    line_to_prompt_fn=lambda line: PromptBuilder()
+        "piaf",
+        "desc",
+        [],
+        COLLE_REPOSITORY_NAME,
+        line_to_thruth_fn=lambda line: line["answers"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Tu vas recevoir un contexte et une question.\n"
             "→ Donne **exactement** le passage du contexte qui répond à la question.\n"
@@ -150,38 +141,32 @@ datasets = {
         .add_data(f"Question : {line['question']}")
         .add_end("Réponse :")
         .build(),
-
-    line_to_data_fn=lambda line: {
-        "context":  line["context"],
-        "question": line["question"],
-    },
-),
+        line_to_data_fn=lambda line: {
+            "context": line["context"],
+            "question": line["question"],
+        },
+    ),
     "fquad": Dataset(
-    "fquad",
-    "desc",
-
-    [],
-    COLLE_REPOSITORY_NAME,
-    line_to_thruth_fn=lambda line:
-         line["answers"],
-
-    line_to_prompt_fn=lambda line: PromptBuilder()
+        "fquad",
+        "desc",
+        [],
+        COLLE_REPOSITORY_NAME,
+        line_to_thruth_fn=lambda line: line["answers"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Tu vas recevoir un contexte et une question.\n"
             "→ Donne **exactement** le passage du contexte qui répond à la question.\n"
             "→ Immédiatement après, mets trois barres verticales `|||` puis le nombre de caractères qui le précèdent.\n"
-
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")
         .add_end("Réponse :")
         .build(),
-    line_to_data_fn=lambda line: {
-        "context":  line["context"],
-        "question": line["question"],
-    },
-),
-
+        line_to_data_fn=lambda line: {
+            "context": line["context"],
+            "question": line["question"],
+        },
+    ),
     "sickfr": Dataset(
         "sickfr",
         "desc",

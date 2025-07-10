@@ -49,10 +49,11 @@ args = parser.parse_args()
 utils.hugging_face_login(args.token)
 
 
-tasks = tasks_factory([
-
-    "piaf",
-])
+tasks = tasks_factory(
+    [
+        "piaf",
+    ]
+)
 
 models = []
 if args.models_name is not None:
