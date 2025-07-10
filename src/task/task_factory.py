@@ -4,14 +4,16 @@ from typing import Dict, List
 from src.task.task import Task
 
 
-def tasks_factory(dictionary: Dict) -> List[Task]:
+def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
     """
     Factory method to create a list of Task objects from a dictionary of task names and their predictions.
     """
     tasks = []
+    if isinstance(task_names, Dict):
+        tasks_names = task_names.get("tasks")
+        task_names = [list(task.keys())[0] for task in tasks_names]
 
-    for task in dictionary.get("tasks"):
-        task_name = list(task.keys())[0]
+    for task_name in task_names:
         match task_name:
             case "allocine":
                 tasks.append(

@@ -157,7 +157,6 @@ datasets = {
     "fquad": Dataset(
         "fquad",
         "desc",
-
         "line['answers']['answer_start']",
         COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: "line['answers']['answer_start'][0]",
@@ -188,8 +187,7 @@ datasets = {
             "À quel point, de 0 à 5, les 2 phrases suivantes sont-elles similaires ?"
         )
         .add_data(
-            f"sentence_A    : {line['sentence_A']}\n"
-            f"sentence_B: {line['sentence_B']}"
+            f"sentence_A : {line['sentence_A']}\n" f"sentence_B: {line['sentence_B']}"
         )
         .add_end(
             (
@@ -213,8 +211,7 @@ datasets = {
             "En scorant de 0 à 5, à quel point les phrases suivants sont-elles similaires ?"
         )
         .add_data(
-            f"sentence 1: {line['sentence1']}\n"
-            f"sentence 2: {line['sentence2']}"
+            f"sentence 1: {line['sentence1']}\n" f"sentence 2: {line['sentence2']}"
         )
         .add_end(
             (

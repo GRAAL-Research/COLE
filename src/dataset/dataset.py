@@ -2,8 +2,6 @@ from datasets import load_dataset
 from src.task import COLLE_REPOSITORY_NAME
 from predictions.utils import hugging_face_login
 
-hugging_face_login()
-
 
 class Dataset:
     """class representing a usable dataset. Allows dataset to be expressed as multiple forms, including as prompts,data or answers
