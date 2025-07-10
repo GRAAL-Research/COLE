@@ -1,8 +1,12 @@
 import logging
+from enum import Enum
 from typing import Dict, Union, Tuple, Callable, List
 from src.metrics.metric_factory import metric_factory
 from src.dataset.datasets import datasets
 
+class Tasktype(Enum):
+    GENERATIVE = 0
+    INFERENCE = 1
 
 class Task:
     """
@@ -19,12 +23,14 @@ class Task:
         metric: str,
         ground_truths_column_name: str,
         llm_prompt_building_fn: Callable = None,
+        task_type: Tasktype = Tasktype.INFERENCE,
     ) -> None:
         self._metric_name = metric
         self._metric_computer = metric_factory(metric_name=self.metric_name)
         self.task_name = task_name
         self.dataset = datasets[task_name]
         self._ground_truths = self.dataset.ground_truths
+        self.task_type = task_type
 
     @property
     def metric_name(self) -> str:

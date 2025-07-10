@@ -22,7 +22,7 @@ def omit_none(**kwargs):
 
 class HFModel(Model):
     """
-    Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained models and uses it for inference.
+    Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained models and uses it for inference and generation.
     """
 
     def __init__(
@@ -32,6 +32,7 @@ class HFModel(Model):
         token=None,
         lazy_load=True,
         batch_size=8,
+
     ):
         super().__init__(model_name)
         self.model_name = model_name
@@ -41,7 +42,6 @@ class HFModel(Model):
         self.batch_size = batch_size
         if not lazy_load:
             self.load_model(model_name, task=task, token=token)
-
     def create_model(self, model_name, token=None):
         """creates the model by fetching by name on Hugging Face"""
         args = self.get_model_args(token)
@@ -118,6 +118,7 @@ class HFLLMModelGenerative(HFModel):
         batch_size=8,
         task="text-generation",
         max_gen_length=3,
+
     ):
         super().__init__(model_name, task, token, batch_size=batch_size)
         self.max_gen_length = max_gen_length
@@ -127,7 +128,7 @@ class HFLLMModelGenerative(HFModel):
         model = AutoModelForCausalLM.from_pretrained(model_name, **args)
         return model
 
-    def infer(self, prompts: str | list[str], possible_answers, conditions=None):
+    def generate(self, prompts: str | list[str], conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
         if not self.loaded:
             self.load_model(self.model_name, task=self.task, token=self.token)
@@ -138,7 +139,6 @@ class HFLLMModelGenerative(HFModel):
             try:
                 batch_outputs = self.pipe(
                     sub_batch,
-                    candidate_labels=possible_answers,
                     max_new_tokens=self.max_gen_length,
                 )
             except Exception as e:
@@ -156,6 +156,25 @@ class HFLLMModelGenerative(HFModel):
                     all_texts.append(text)
         return all_texts
 
+    def infer(self, prompts: str | list[str], possible_answers, conditions=None):
+        """Takes a list of prompts as input and uses its loaded model to generate predictions."""
+        if not self.loaded:
+            self.load_model(self.model_name, task=self.task, token=self.token)
+        if isinstance(prompts, str):
+            prompts = [prompts]
+        all_answers = []
+        for sub_batch in chunk_list(prompts, self.batch_size):
+            try:
+
+                labels = batch_score_labels(
+                    sub_batch, possible_answers, self.model, self.tokenizer
+                )
+                all_answers.extend(labels)
+            except Exception as e:
+                logging.error("error occure", e)
+                batch_outputs = [{} for _ in sub_batch]
+
+        return all_answers
 
 class HFLLMModelClassifier(HFLLMModelGenerative):
     """

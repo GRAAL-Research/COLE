@@ -3,7 +3,7 @@ import logging
 import os
 from datetime import datetime
 from src.model.model import Model
-from src.task.task import Task
+from src.task.task import Task,Tasktype
 from src.task.task_factory import tasks_factory
 
 
@@ -18,7 +18,7 @@ class ModelEvaluator:
     def compute_metrics(self):
         """compute metrics over last tested model's predictions, must have called one the evaluate functions before"""
         metrics = {}
-        for key, value in self.last_predictions.items():
+        for key, value in self.last_predictions["tasks"].items():
             tasks = tasks_factory({"tasks": [{key: value}]})
             metrics[key] = tasks[0].compute(value)
         self.last_metrics = metrics
@@ -54,9 +54,19 @@ class ModelEvaluator:
                 prompts = task.dataset.prompts[0:]
             else:
                 prompts = task.dataset.prompts[0:subset_size]
-            preds = model.infer(prompts, task.dataset.possible_ground_thruths)
-
+            if task.task_type == Tasktype.INFERENCE:
+                preds = model.infer(prompts, task.dataset.possible_ground_thruths)
+            elif task.task_type == Tasktype.GENERATIVE:
+                preds = model.generate(prompts)
+            else :
+                logging.error(f"unknown task type {task.task_type}")
+                preds = None
             self.last_predictions[task.task_name] = preds
+        self.last_predictions = {
+            "model_name": model.name,
+            "model_url": "No URL provided",
+            "tasks": self.last_predictions,
+        }
         self.last_model_name = model.name
         return self.last_predictions
 
