@@ -1,33 +1,37 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import {
-  normalizeBenchmarkName,
-  computeAverageScore,
-} from "./util";
+'use client';
+
+import '../i18n';
+import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
+import { normalizeBenchmarkName, computeAverageScore } from './util';
+import { useParams } from 'next/navigation';
 
 const allowedMetrics = [
-  "acc",
-  "accuracy",
-  "f1",
-  "pearson",
-  "pearsonr",
-  "spearman",
+  'acc',
+  'accuracy',
+  'f1',
+  'pearson',
+  'pearsonr',
+  'spearman',
 ];
 
-const headerLabels = {
-  model: "Model Name",
-  overall: "Overall",
-};
-
 export default function LeaderboardPage() {
+  const { t } = useTranslation();
+  const { id: _ } = useParams(); // unused here
   const [entries, setEntries] = useState([]);
   const [benchmarks, setBenchmarks] = useState([]);
-  const [sortCol, setSortCol] = useState("overall");
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortCol, setSortCol] = useState('overall');
+  const [sortOrder, setSortOrder] = useState('desc');
   const [selectedEntry, setSelectedEntry] = useState(null);
 
+  // Build header labels with translations
+  const headerLabels = {
+    model: t('leaderboard_modelHeader'),
+    overall: t('leaderboard_overallHeader'),
+  };
+
   useEffect(() => {
-    fetch("http://localhost:8000/leaderboard")
+    fetch('http://localhost:8000/leaderboard')
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
@@ -47,12 +51,12 @@ export default function LeaderboardPage() {
         });
         setBenchmarks(Array.from(allBench));
       })
-      .catch((err) => console.error("Failed to load leaderboard:", err));
+      .catch((err) => console.error('Failed to load leaderboard:', err));
   }, []);
 
   const getCellValue = (entry, col) => {
-    if (col === "model") return entry.display_name;
-    if (col === "overall") return entry.averageScore ?? null;
+    if (col === 'model') return entry.display_name;
+    if (col === 'overall') return entry.averageScore ?? null;
 
     const pair = Object.entries(entry.results || {}).find(
       ([rawName]) => normalizeBenchmarkName(rawName) === col
@@ -60,70 +64,77 @@ export default function LeaderboardPage() {
     if (!pair) return null;
 
     const rawValues = [];
-    const taskData = pair[1];
-    Object.values(taskData).forEach((metricGroup) => {
-      if (metricGroup && typeof metricGroup === "object") {
-        Object.entries(metricGroup).forEach(
-          ([metricName, metricValue]) => {
-            if (
-              !metricName.includes("_warning") &&
-              typeof metricValue === "number" &&
-              allowedMetrics.includes(metricName.toLowerCase())
-            ) {
-              rawValues.push(metricValue);
-            }
+    Object.values(pair[1]).forEach((metricGroup) => {
+      if (metricGroup && typeof metricGroup === 'object') {
+        Object.entries(metricGroup).forEach(([metricName, metricValue]) => {
+          if (
+            !metricName.includes('_warning') &&
+            typeof metricValue === 'number' &&
+            allowedMetrics.includes(metricName.toLowerCase())
+          ) {
+            rawValues.push(metricValue);
           }
-        );
+        });
       }
     });
     if (rawValues.length === 0) return null;
-
     const normalized = rawValues.map((v) => (v > 1 ? v / 100 : v));
-    const sum = normalized.reduce((a, b) => a + b, 0);
-    return sum / normalized.length;
+    return normalized.reduce((a, b) => a + b, 0) / normalized.length;
   };
 
   const sorted = [...entries].sort((a, b) => {
     const va = getCellValue(a, sortCol);
     const vb = getCellValue(b, sortCol);
-    if (sortCol === "model") {
+    if (sortCol === 'model') {
       if (va == null) return 1;
       if (vb == null) return -1;
-      return sortOrder === "asc"
+      return sortOrder === 'asc'
         ? va.localeCompare(vb)
         : vb.localeCompare(va);
     }
     const na = va ?? -Infinity;
     const nb = vb ?? -Infinity;
-    return sortOrder === "asc" ? na - nb : nb - na;
+    return sortOrder === 'asc' ? na - nb : nb - na;
   });
 
   const handleSort = (col) => {
     if (sortCol === col) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
       setSortCol(col);
-      setSortOrder("desc");
+      setSortOrder('desc');
     }
   };
 
   const renderHeader = (col) => {
     const baseLabel = headerLabels[col] ?? col;
-    const arrow = sortCol === col ? (sortOrder === "asc" ? " ▲" : " ▼") : "";
+    const arrow = sortCol === col ? (sortOrder === 'asc' ? ' ▲' : ' ▼') : '';
 
-    if (col === "overall") {
+    if (col === 'overall') {
       return (
-        <>
+        <div>
           <div onClick={() => handleSort(col)} className="cursor-pointer">
             {baseLabel}
             {arrow}
           </div>
-          <div className="text-xs text-gray-600 text-center">(avg score)</div>
-        </>
+          <div className="text-xs text-gray-600 text-center">
+            {t('leaderboard_avgScoreLabel')}
+          </div>
+        </div>
       );
     }
 
-    let metricText = "";
+    if (col === 'model') {
+      return (
+        <div onClick={() => handleSort(col)} className="cursor-pointer">
+          {baseLabel}
+          {arrow}
+        </div>
+      );
+    }
+
+    // For individual benchmarks: show the metric key in parentheses
+    let metricText = '';
     const sample = entries[0];
     if (sample && sample.results) {
       const p = Object.entries(sample.results).find(
@@ -151,7 +162,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Leaderboard</h1>
+      <h1 className="text-2xl font-bold mb-4">{t('leaderboard_title')}</h1>
       <div className="overflow-auto">
         <table className="min-w-full border-collapse">
           <thead>
@@ -178,8 +189,8 @@ export default function LeaderboardPage() {
                 </td>
                 <td className="border border-gray-300 px-2 py-1 text-center">
                   {entry.averageScore == null
-                    ? "NS"
-                    : (entry.averageScore * 100).toFixed(1) + "%"}
+                    ? t('leaderboard_notSpecified')
+                    : (entry.averageScore * 100).toFixed(1) + '%'}
                 </td>
                 {benchmarks.map((b) => {
                   const val = getCellValue(entry, b);
@@ -189,8 +200,8 @@ export default function LeaderboardPage() {
                       className="border border-gray-200 px-2 py-1 text-center text-purple-700"
                     >
                       {val == null
-                        ? "NS"
-                        : (val * 100).toFixed(1) + "%"}
+                        ? t('leaderboard_notSpecified')
+                        : (val * 100).toFixed(1) + '%'}
                     </td>
                   );
                 })}
@@ -204,36 +215,47 @@ export default function LeaderboardPage() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-2xl shadow-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
             <h3 className="text-xl font-semibold text-gray-800 mb-4">
-              Results for {selectedEntry.display_name}
+              {t('leaderboard_modalTitle', {
+                name: selectedEntry.display_name,
+              })}
             </h3>
-            {Object.entries(selectedEntry.results || {}).map(([taskKey, metricsObj]) => {
-              const prettyName = taskKey.split("|")[1] || taskKey;
-              const [metricType, values] = Object.entries(metricsObj)[0];
-              return (
-                <div key={taskKey} className="mb-4">
-                  <h4 className="font-medium text-blue-700">{prettyName}</h4>
-                  <ul className="list-disc list-inside text-gray-700">
-                    {Object.entries(values)
-                      .filter(([k]) => !k.endsWith("_warning"))
-                      .map(([metricKey, value]) => (
-                        <li key={metricKey}>
-                          <strong>{metricKey.replace(/_/g, ' ')}</strong>: {typeof value === 'number' ? (value > 1 ? (value).toFixed(1) + '%' : (value*100).toFixed(1) + '%') : value}
-                        </li>
-                      ))}
-                  </ul>
-                  {values[`${metricType}_warning`] && (
-                    <p className="text-sm text-yellow-700 mt-2">
-                      ⚠️ {values[`${metricType}_warning`]}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
+            {Object.entries(selectedEntry.results || {}).map(
+              ([taskKey, metricsObj]) => {
+                const prettyName = taskKey.split('|')[1] || taskKey;
+                const [metricType, values] = Object.entries(metricsObj)[0];
+                return (
+                  <div key={taskKey} className="mb-4">
+                    <h4 className="font-medium text-blue-700">
+                      {prettyName}
+                    </h4>
+                    <ul className="list-disc list-inside text-gray-700">
+                      {Object.entries(values)
+                        .filter(([k]) => !k.endsWith('_warning'))
+                        .map(([metricKey, value]) => (
+                          <li key={metricKey}>
+                            <strong>{metricKey.replace(/_/g, ' ')}</strong>:{' '}
+                            {typeof value === 'number'
+                              ? (value > 1
+                                  ? value.toFixed(1) + '%'
+                                  : (value * 100).toFixed(1) + '%')
+                              : value}
+                          </li>
+                        ))}
+                    </ul>
+                    {values[`${metricType}_warning`] && (
+                      <p className="text-sm text-yellow-700 mt-2">
+                        ⚠️ {values[`${metricType}_warning`]}
+                      </p>
+                    )}
+                  </div>
+                );
+              }
+            )}
             <button
               className="mt-4 px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300"
               onClick={() => setSelectedEntry(null)}
             >
-              Close
+              {t('leaderboard_closeButton')}
             </button>
           </div>
         </div>

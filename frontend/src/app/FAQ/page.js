@@ -1,18 +1,12 @@
 'use client';
-import { useState } from 'react';
 
-const faqs = [
-  {
-    question: "How can I evaluate my model?",
-    answer: "You can upload your model outputs in JSON format on the website. The system will automatically evaluate them, and you can view the results in the evaluation interface.",
-  },
-  {
-    question: "Is COLLE multilingual?",
-    answer: "No, COLLE is available only in French. The benchmark is specifically designed to evaluate NLU models in the French language.",
-  },
-];
+import '../i18n';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function FAQ() {
+  const { t } = useTranslation();
+  const faqs = t('faqs', { returnObjects: true });
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggle = (index) => {
@@ -22,7 +16,7 @@ export default function FAQ() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-3">
       <h2 className="text-3xl font-bold text-center text-blue-700 border-b pb-4 mb-10">
-        Frequently Asked Questions
+        {t('faq_title')}
       </h2>
 
       <div className="space-y-4">
