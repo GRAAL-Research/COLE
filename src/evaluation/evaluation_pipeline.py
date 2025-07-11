@@ -1,7 +1,7 @@
 from predictions import utils
 import logging
 from predictions.all_llms import llms
-from src.model.hugging_face_model import HFLLMModelClassifier
+from src.model.hugging_face_model import  HFLLMModel
 from src.evaluation.model_evaluator import ModelEvaluator
 from src.task.task_factory import tasks_factory
 import argparse
@@ -64,7 +64,7 @@ if args.models_name is not None:
 
 logging.warning("starting Evaluation")
 for model_name in models:
-    model = HFLLMModelClassifier(model_name, batch_size=args.batch_size)
+    model = HFLLMModel(model_name, batch_size=args.batch_size)
     logging.warning("creating model")
     evaluator = ModelEvaluator()
     logging.warning("evaluating model")

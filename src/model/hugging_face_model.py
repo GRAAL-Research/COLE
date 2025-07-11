@@ -106,7 +106,7 @@ class HFModel(Model):
         self.loaded = False
 
 
-class HFLLMModelGenerative(HFModel):
+class HFLLMModel(HFModel):
     """
     Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses it for inference.
     """
@@ -117,7 +117,7 @@ class HFLLMModelGenerative(HFModel):
         token=None,
         batch_size=8,
         task="text-generation",
-        max_gen_length=3,
+        max_gen_length=5,
     ):
         super().__init__(model_name, task, token, batch_size=batch_size)
         self.max_gen_length = max_gen_length
@@ -154,37 +154,6 @@ class HFLLMModelGenerative(HFModel):
                     )
                     all_texts.append(text)
         return all_texts
-
-    def infer(self, prompts: str | list[str], possible_answers, conditions=None):
-        """Takes a list of prompts as input and uses its loaded model to generate predictions."""
-        if not self.loaded:
-            self.load_model(self.model_name, task=self.task, token=self.token)
-        if isinstance(prompts, str):
-            prompts = [prompts]
-        all_answers = []
-        for sub_batch in chunk_list(prompts, self.batch_size):
-            try:
-
-                labels = batch_score_labels(
-                    sub_batch, possible_answers, self.model, self.tokenizer
-                )
-                all_answers.extend(labels)
-            except Exception as e:
-                logging.error("error occure", e)
-                batch_outputs = [{} for _ in sub_batch]
-
-        return all_answers
-
-
-class HFLLMModelClassifier(HFLLMModelGenerative):
-    """
-    Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses it for inference.
-    """
-
-    def __init__(self, model_name, token=None, batch_size=8):
-        super().__init__(
-            model_name, token, batch_size=batch_size, task="text-generation"
-        )
 
     def infer(self, prompts: str | list[str], possible_answers, conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
