@@ -20,7 +20,7 @@ class ModelEvaluator:
         metrics = []
         for task_dict in self.last_predictions["tasks"]:
             task_name, preds = list(task_dict.items())[0]
-            if preds is None:
+            if preds == []:
                 logging.warning(f"Task '{task_name}' ignored due to no predictions")
                 continue
             try:
