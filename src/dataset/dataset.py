@@ -24,12 +24,20 @@ class Dataset:
         line_to_prompt_fn,
         line_to_data_fn,
     ):
-        self.dataset = load_dataset(f"{huggingFace_repo}", name=name, split="test")
+        self._dataset = None
+        self.name = name
         self.description = description
+        self.huggingFace_repo = huggingFace_repo
         self.possible_ground_thruths = possible_ground_thruths
         self.line_to_prompt_fn = line_to_prompt_fn
         self.line_to_thruth_fn = line_to_thruth_fn
         self.line_to_data_fn = line_to_data_fn
+
+    @property
+    def dataset(self):
+        if self._dataset is None:
+            self._dataset = load_dataset(self.huggingFace_repo, name=self.name, split="test")
+        return self._dataset
 
     @property
     def ground_truths(self):
