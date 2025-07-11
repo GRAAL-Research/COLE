@@ -5,11 +5,7 @@ import torch
 
 from transformers import AutoModel, pipeline, AutoTokenizer, AutoModelForCausalLM
 
-
 from src.model.model import Model
-
-MODEL_CACHE = "./Loaded_Models"
-
 
 def chunk_list(lst, chunk_size):
     for i in range(0, len(lst), chunk_size):
@@ -188,12 +184,13 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
         full_prompts = [p.rstrip() + label_str for p in prompts]
 
         # Tokenize original prompts to get lengths
+        n_positions = getattr(model.config, "n_positions", None) or getattr(model.config, "max_position_embeddings", None)
         prompt_inputs = tokenizer(
             prompts,
             return_tensors="pt",
             padding=True,
             truncation=True,
-            max_length=model.config.n_positions,
+            max_length=n_positions,
         ).to(device)
 
         full_inputs = tokenizer(
@@ -201,7 +198,7 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
             return_tensors="pt",
             padding=True,
             truncation=True,
-            max_length=model.config.n_positions,
+            max_length=n_positions,
         ).to(device)
 
         with torch.no_grad():
