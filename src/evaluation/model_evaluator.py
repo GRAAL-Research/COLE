@@ -35,7 +35,6 @@ class ModelEvaluator:
         metrics = self.last_predictions
         metrics["tasks"] = self.last_metrics
         self.last_metrics = metrics
-        print("metrics", metrics)
         return metrics
 
     def save_metrics(self, save_path):

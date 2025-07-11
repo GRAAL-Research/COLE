@@ -262,7 +262,7 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
 
         all_scores.append(batch_scores)
 
-    scores_tensor = torch.tensor(all_scores, device=device).T  # shape: [batch, labels]
+    scores_tensor = torch.tensor(all_scores, device=device).mT  # shape: [batch, labels]
     top_indices = torch.argmax(scores_tensor, dim=1)
     predicted = [candidate_labels[i] for i in top_indices]
 

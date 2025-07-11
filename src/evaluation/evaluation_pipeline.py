@@ -51,7 +51,7 @@ utils.hugging_face_login(args.token)
 
 tasks = tasks_factory(
     [
-        "piaf",
+        "piaf","qfrblimp"
     ]
 )
 

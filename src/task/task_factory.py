@@ -62,6 +62,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                         task_name=task_name,
                         metric="fquad",
                         ground_truths_column_name="answers",
+                        task_type=Tasktype.GENERATIVE,
                     )
                 )
             case "qfrblimp":
