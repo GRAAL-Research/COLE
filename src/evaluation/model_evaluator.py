@@ -20,13 +20,23 @@ class ModelEvaluator:
         metrics = []
         for task_dict in self.last_predictions["tasks"]:
             task_name, preds = list(task_dict.items())[0]
-            tasks = tasks_factory([task_name])
-            task = tasks[0]
-            metric_score, warning = task.compute(preds)
+            if preds is None:
+                logging.warning(f"Task '{task_name}' ignored due to no predictions")
+                continue
+            try:
+                tasks = tasks_factory([task_name])
+                task = tasks[0]
+                metric_score, warning = task.compute(preds)
+            except Exception as e:
+                logging.error(f"error while calculating metrics'{task_name}' : {e}")
+                continue
             metric_name = task.metric_name
             task_entry = {
                 task_name: {
-                    metric_name: {**metric_score, f"{metric_name}_warning": warning}
+                    metric_name: {
+                        **metric_score,
+                        f"{metric_name}_warning": warning
+                    }
                 }
             }
             metrics.append(task_entry)
@@ -63,21 +73,26 @@ class ModelEvaluator:
         :param subset_size : the size of the subset to be evaluated"""
         predictions = []
         for task in tasks:
-            if subset_size is None:
-                prompts = task.dataset.prompts[0:]
-            else:
-                prompts = task.dataset.prompts[0:subset_size]
-            if task.task_type == Tasktype.INFERENCE:
-                task_predictions = model.infer(
-                    prompts, task.dataset.possible_ground_thruths
-                )
-            elif task.task_type == Tasktype.GENERATIVE:
-                task_predictions = model.generate(prompts)
-            else:
-                logging.error(f"unknown task type {task.task_type}")
-                task_predictions = None
-            task_predictions = {task.task_name: task_predictions}
-            predictions.append(task_predictions)
+            try:
+                if subset_size is None:
+                    prompts = task.dataset.prompts[:]
+                else:
+                    prompts = task.dataset.prompts[:subset_size]
+
+                if task.task_type == Tasktype.INFERENCE:
+                    task_predictions = model.infer(prompts, task.dataset.possible_ground_thruths)
+                elif task.task_type == Tasktype.GENERATIVE:
+                    task_predictions = model.generate(prompts)
+                else:
+                    logging.error(f"unknown task type {task.task_type}")
+                    task_predictions = None
+
+                task_predictions = {task.task_name: task_predictions}
+                predictions.append(task_predictions)
+
+            except Exception as e:
+                logging.error(f"Tâche '{task.task_name}' échouée : {e}")
+                continue
         self.last_predictions = {
             "model_name": model.name,
             "model_url": "No URL provided",

@@ -64,12 +64,16 @@ if args.models_name is not None:
 
 logging.warning("starting Evaluation")
 for model_name in models:
-    model = HFLLMModel(model_name, batch_size=args.batch_size)
-    logging.warning("creating model")
-    evaluator = ModelEvaluator()
-    logging.warning("evaluating model")
-    evaluator.evaluate_subset(model, tasks, args.max_examples)
-    logging.warning("saving results")
-    evaluator.save_results("./results")
-    evaluator.compute_metrics()
-    evaluator.save_metrics("./results")
+    try:
+      model = HFLLMModel(model_name, batch_size=args.batch_size)
+      logging.warning("creating model")
+      evaluator = ModelEvaluator()
+      logging.warning("evaluating model")
+      evaluator.evaluate_subset(model, tasks, args.max_examples)
+      logging.warning("saving results")
+      evaluator.save_results("./results")
+      evaluator.compute_metrics()
+      evaluator.save_metrics("./results")
+    except Exception as e:
+      logging.error(f"Evaluation failed for model {model_name}: {e}")
+      continue
