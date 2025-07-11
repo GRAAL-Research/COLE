@@ -134,8 +134,8 @@ datasets = {
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Tu vas recevoir un contexte et une question.\n"
-            "→ Donne **exactement** le passage du contexte qui répond à la question.\n"
-            "→ Immédiatement après, mets trois barres verticales `|||` puis le nombre de caractères qui le précèdent.\n"
+            "→ Donne exactement le passage du contexte qui répond à la question.\n"
+
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")
@@ -155,8 +155,8 @@ datasets = {
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Tu vas recevoir un contexte et une question.\n"
-            "→ Donne **exactement** le passage du contexte qui répond à la question.\n"
-            "→ Immédiatement après, mets trois barres verticales `|||` puis le nombre de caractères qui le précèdent.\n"
+            "→ Donne exactement le passage du contexte qui répond à la question.\n"
+
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")
