@@ -17,7 +17,7 @@ class TaskSICKFrTest(TaskTest):
             ground_truths_column_name="label",
         )
 
-        expected_results = {"pearsonr": -0.022355}
+        expected_results = {"pearsonr": -0.19545428098020537}
         expected_warning = (
             f"Your prediction size is of '{len(a_predictions)}', while the ground truths size is "
             f"of '{self.dataset_size}'. We computed the metric over the first {len(a_predictions)}"

@@ -45,13 +45,16 @@ datasets = {
         COLLE_REPOSITORY_NAME,
         # label renvoyé comme chaîne
         line_to_thruth_fn=lambda line: str(line["label"]),
-        line_to_prompt_fn=lambda line: (PromptBuilder()
-        .add_premise("Laquelle de ces phrases est grammaticalement correcte ?")
-        .add_data(f"Phrase 0:{line["sentence_a"]}").add_data(f"Phrase 1:{line["sentence_b"]}")
-        .add_end(
-            "Réponds avec seulement 0 si la phrase 0 est grammaticalement correcte, et uniquement 1 si la phrase 1 est grammaticalement correcte."
-        )
-        .build()),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise("Laquelle de ces phrases est grammaticalement correcte ?")
+            .add_data(f"Phrase 0:{line["sentence_a"]}")
+            .add_data(f"Phrase 1:{line["sentence_b"]}")
+            .add_end(
+                "Réponds avec seulement 0 si la phrase 0 est grammaticalement correcte, et uniquement 1 si la phrase 1 est grammaticalement correcte."
+            )
+            .build()
+        ),
         line_to_data_fn=lambda line: {["sentence_a"], ["sentence_b"]},
     ),
     "gqnli": Dataset(
@@ -135,7 +138,6 @@ datasets = {
         .add_premise(
             "Tu vas recevoir un contexte et une question.\n"
             "→ Donne exactement le passage du contexte qui répond à la question.\n"
-
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")
@@ -156,7 +158,6 @@ datasets = {
         .add_premise(
             "Tu vas recevoir un contexte et une question.\n"
             "→ Donne exactement le passage du contexte qui répond à la question.\n"
-
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")

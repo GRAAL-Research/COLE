@@ -1,7 +1,7 @@
 from predictions import utils
 import logging
 from predictions.all_llms import llms
-from src.model.hugging_face_model import  HFLLMModel
+from src.model.hugging_face_model import HFLLMModel
 from src.evaluation.model_evaluator import ModelEvaluator
 from src.task.task_factory import tasks_factory
 import argparse
@@ -51,7 +51,17 @@ utils.hugging_face_login(args.token)
 
 tasks = tasks_factory(
     [
-        "piaf","qfrblimp","allocine","qfrcola", "gqnli","opus_parcus","paws_x","fquad","sickfr","sts22","xnli"
+        "piaf",
+        "qfrblimp",
+        "allocine",
+        "qfrcola",
+        "gqnli",
+        "opus_parcus",
+        "paws_x",
+        "fquad",
+        "sickfr",
+        "sts22",
+        "xnli",
     ]
 )
 
@@ -65,15 +75,15 @@ if args.models_name is not None:
 logging.warning("starting Evaluation")
 for model_name in models:
     try:
-      model = HFLLMModel(model_name, batch_size=args.batch_size)
-      logging.warning("creating model")
-      evaluator = ModelEvaluator()
-      logging.warning("evaluating model")
-      evaluator.evaluate_subset(model, tasks, args.max_examples)
-      logging.warning("saving results")
-      evaluator.save_results("./results")
-      evaluator.compute_metrics()
-      evaluator.save_metrics("./results")
+        model = HFLLMModel(model_name, batch_size=args.batch_size)
+        logging.warning("creating model")
+        evaluator = ModelEvaluator()
+        logging.warning("evaluating model")
+        evaluator.evaluate_subset(model, tasks, args.max_examples)
+        logging.warning("saving results")
+        evaluator.save_results("./results")
+        evaluator.compute_metrics()
+        evaluator.save_metrics("./results")
     except Exception as e:
-      logging.error(f"Evaluation failed for model {model_name}: {e}")
-      continue
+        logging.error(f"Evaluation failed for model {model_name}: {e}")
+        continue

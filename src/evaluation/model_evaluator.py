@@ -12,15 +12,18 @@ class ModelEvaluator:
 
     def __init__(self):
         self.last_predictions = {}
-        self.last_model_name = None
+
         self.last_metrics = {}
 
     def compute_metrics(self):
-        """compute metrics over last tested model's predictions, must have called one the evaluate functions before"""
+        """compute metrics over last tested model's predictions,
+        must have called one the evaluate functions before or loaded predictions with load_predictions_from_file
+        """
         metrics = []
+
         for task_dict in self.last_predictions["tasks"]:
             task_name, preds = list(task_dict.items())[0]
-            if preds == []:
+            if not preds:
                 logging.warning(f"Task '{task_name}' ignored due to no predictions")
                 continue
             try:
@@ -33,10 +36,7 @@ class ModelEvaluator:
             metric_name = task.metric_name
             task_entry = {
                 task_name: {
-                    metric_name: {
-                        **metric_score,
-                        f"{metric_name}_warning": warning
-                    }
+                    metric_name: {**metric_score, f"{metric_name}_warning": warning}
                 }
             }
             metrics.append(task_entry)
@@ -46,6 +46,19 @@ class ModelEvaluator:
         metrics["tasks"] = self.last_metrics
         self.last_metrics = metrics
         return metrics
+
+    def load_predictions_from_file(self, file_path):
+        """load predictions from file to compute metrics :param file_path:path to the predictions file"""
+
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                self.last_predictions = json.load(f)
+        except FileNotFoundError:
+            print(f"File not found: {file_path}")
+            self.last_predictions = None
+        except json.JSONDecodeError:
+            print(f"Invalid JSON in file: {file_path}")
+            self.last_predictions = None
 
     def save_metrics(self, save_path):
         """saves computed metrics to a json file
@@ -80,7 +93,9 @@ class ModelEvaluator:
                     prompts = task.dataset.prompts[:subset_size]
 
                 if task.task_type == Tasktype.INFERENCE:
-                    task_predictions = model.infer(prompts, task.dataset.possible_ground_thruths)
+                    task_predictions = model.infer(
+                        prompts, task.dataset.possible_ground_thruths
+                    )
                 elif task.task_type == Tasktype.GENERATIVE:
                     task_predictions = model.generate(prompts)
                 else:
