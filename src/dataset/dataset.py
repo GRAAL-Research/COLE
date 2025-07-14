@@ -1,5 +1,4 @@
 from typing import Callable, Any
-
 from datasets import load_dataset
 from src.task import COLLE_REPOSITORY_NAME
 from predictions.utils import hugging_face_login

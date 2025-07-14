@@ -244,4 +244,32 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
+    "expressions_quebecoises": Dataset(
+        name="expressions_quebecoises",
+        description="desc",
+        possible_ground_thruths=[str(i) for i in range(11)],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_thruth_fn=lambda line: str(line["correct_index"]),
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            f"Qu'est-ce que ça veut dire cette expression québécoise «{line['expression']}» ?"
+        )
+        .add_data(
+            "\n".join(
+                f"{idx} — {definition}"
+                for idx, definition in enumerate(line["choices"])
+            )
+        )
+        .add_end(
+            (
+                "Réponds **uniquement** par l'index (un entier 0-based) "
+                "de la bonne définition parmi la liste ci-dessus."
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "expression": line["expression"],
+            "choices": line["choices"],
+        },
+    ),
 }

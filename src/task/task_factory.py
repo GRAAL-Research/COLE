@@ -105,6 +105,14 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                         ground_truths_column_name="label",
                     )
                 )
+            case "expressions_quebecoises":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
+                        ground_truths_column_name="correct_index",
+                    )
+                )
             case _:
                 error = f"Unknown task {task_name}."
                 logging.error(error)
