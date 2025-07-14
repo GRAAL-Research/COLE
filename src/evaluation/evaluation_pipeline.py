@@ -1,10 +1,14 @@
-from predictions import utils
+import argparse
 import logging
+import gc
+from datetime import datetime
+import torch
+from predictions import utils
 from predictions.all_llms import llms
 from src.model.hugging_face_model import HFLLMModel
 from src.evaluation.model_evaluator import ModelEvaluator
 from src.task.task_factory import tasks_factory
-import argparse
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -42,13 +46,10 @@ parser.add_argument(
     default=8,
 )
 
-
 parser.add_argument("--max_seq_length", type=int, default=4096)
 args = parser.parse_args()
 
-
 utils.hugging_face_login(args.token)
-
 
 tasks = tasks_factory(
     [
@@ -68,23 +69,41 @@ tasks = tasks_factory(
 
 models = []
 if args.models_name is not None:
-    if args.models_name in llms.keys():
+    if args.models_name in llms:
         models = llms[args.models_name]
     else:
         models = args.models_name.split(",")
 
 logging.warning("starting Evaluation")
+
+time_start = datetime.now()
+
 for model_name in models:
     try:
         model = HFLLMModel(model_name, batch_size=args.batch_size)
-        logging.warning("creating model")
+        logging.info("creating model")
         evaluator = ModelEvaluator()
-        logging.warning("evaluating model")
+        logging.info("evaluating model")
         evaluator.evaluate_subset(model, tasks, args.max_examples)
-        logging.warning("saving results")
+        logging.info("saving results")
         evaluator.save_results("./results")
         evaluator.compute_metrics()
         evaluator.save_metrics("./results")
     except Exception as e:
-        logging.error(f"Evaluation failed for model {model_name}: {e}")
+        error_message = f"Evaluation failed for model {model_name}: {e}"
+        logging.error(error_message)
         continue
+    finally:
+        if "model" in locals():
+            del model
+        if "evaluator" in locals():
+            del evaluator
+        gc.collect()
+        torch.cuda.empty_cache()
+
+time_end = datetime.now()
+info_message = f"End time: {time_end}"
+logging.info(info_message)
+elapsed_time = time_end - time_start
+info_message = f"Elapsed time: {elapsed_time}"
+logging.info(info_message)

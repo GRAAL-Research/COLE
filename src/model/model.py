@@ -7,22 +7,19 @@ from anthropic import Anthropic
 
 from dotenv import load_dotenv
 
-
-from src.task import task_factory
-from src.task.task import Task
-
 env_path = Path(__file__).resolve().parents[2] / ".env"
 load_dotenv(dotenv_path=env_path)
 
 api_key = os.getenv("ANTHROPIC_API_KEY")
 if api_key is None:
-    logging.warning(f"Couldn't find an API key for Anthropic API")
+    warning_message = "Couldn't find an API key for Anthropic API"
+    logging.warning(warning_message)
 else:
     claude_client = Anthropic(api_key=api_key)
 
 
 def make_claude_inference(model_name: str):
-    def infer(prompt: str, conditions=None) -> str:
+    def infer(prompt: str) -> str:
         response = claude_client.messages.create(
             model=model_name,
             messages=[{"role": "user", "content": prompt}],
@@ -49,7 +46,7 @@ class Model:
         return ["0" for _ in range(len(prompt))]
 
     @abstractmethod
-    def generate(self, prompt: str, conditions=None) -> str | list[str]:
+    def generate(self, prompts: list[str], conditions=None) -> str | list[str]:
         raise NotImplementedError()
 
     def unload_model(self):

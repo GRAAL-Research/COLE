@@ -3,6 +3,7 @@ import json
 import logging
 import sys
 import uuid
+from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Any
 
@@ -18,11 +19,12 @@ from src.backend.validation_tools import (
     validate_submission_json,
     validate_submission_template,
 )
+from src.evaluation.evaluation_pipeline import info_message
 from src.task.task import Task
 from src.task.task_factory import (
     tasks_factory,
 )
-from functools import lru_cache
+
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 SRC_DIR = BASE_DIR / "src"
@@ -48,7 +50,8 @@ async def submit(
     predictions_zip: UploadFile = File(...),
     display_name: str = Form(...),
 ):
-    logging.info(f"Submission from {email!r} as {display_name!r}.")
+    info_message = f"Submission from {email!r} as {display_name!r}."
+    logging.info(info_message)
     zip_bytes = await predictions_zip.read()
     submission_json = unzip_predictions_from_zip(zip_bytes)
 
@@ -103,7 +106,8 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
             entries.append(entry)
 
         except Exception as e:
-            logging.error(f"Error processing file {filepath}: {e}")
+            error_message =f"Error processing file {filepath}: {e}"
+            logging.error(error_message)
             continue
 
     return entries

@@ -14,7 +14,6 @@ class TaskOpusParcusTest(TaskTest):
         task = Task(
             task_name="opus_parcus",
             metric="pearson",
-            ground_truths_column_name="quality",
         )
 
         expected_results = {"pearsonr": -0.3592}
@@ -39,7 +38,6 @@ class TaskOpusParcusTest(TaskTest):
         task = Task(
             task_name="opus_parcus",
             metric="pearson",
-            ground_truths_column_name="quality",
         )
 
         expected_results = {"pearsonr": -0.0013261}
@@ -56,7 +54,6 @@ class TaskOpusParcusTest(TaskTest):
         task = Task(
             task_name="opus_parcus",
             metric="pearson",
-            ground_truths_column_name="quality",
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)

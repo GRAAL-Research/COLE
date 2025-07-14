@@ -13,7 +13,6 @@ class TaskXNLITest(TaskTest):
         task = Task(
             task_name="xnli",
             metric="accuracy",
-            ground_truths_column_name="label",
         )
 
         expected_results = {"accuracy": 0.4}
@@ -36,7 +35,6 @@ class TaskXNLITest(TaskTest):
         task = Task(
             task_name="xnli",
             metric="accuracy",
-            ground_truths_column_name="label",
         )
 
         expected_results = {"accuracy": 0.333333}
@@ -53,7 +51,6 @@ class TaskXNLITest(TaskTest):
         task = Task(
             task_name="xnli",
             metric="accuracy",
-            ground_truths_column_name="label",
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)

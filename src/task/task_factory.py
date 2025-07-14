@@ -20,7 +20,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
+
                     )
                 )
             case "fquad":
@@ -28,7 +28,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="fquad",
-                        ground_truths_column_name="answers",
+
                         task_type=Tasktype.GENERATIVE,
                     )
                 )
@@ -37,7 +37,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
+
                     )
                 )
             case "opus_parcus":
@@ -45,7 +45,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
-                        ground_truths_column_name="quality",
+
                     )
                 )
             case "paws_x":
@@ -53,7 +53,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
+
                     )
                 )
             case "piaf":
@@ -61,7 +61,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="fquad",
-                        ground_truths_column_name="answers",
+
                         task_type=Tasktype.GENERATIVE,
                     )
                 )
@@ -70,7 +70,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
+
                     )
                 )
             case "qfrcola":
@@ -78,7 +78,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
+
                     )
                 )
             case "sickfr":
@@ -86,7 +86,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
-                        ground_truths_column_name="label",
+
                     )
                 )
             case "sts22":
@@ -94,7 +94,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
-                        ground_truths_column_name="score",
+
                     )
                 )
             case "xnli":
@@ -102,7 +102,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
+
                     )
                 )
             case "expressions_quebecoises":
@@ -110,7 +110,7 @@ def tasks_factory(task_names: Dict | list[str]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="correct_index",
+
                     )
                 )
             case _:

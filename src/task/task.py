@@ -23,8 +23,6 @@ class Task:
         self,
         task_name: str,
         metric: str,
-        ground_truths_column_name: str,
-        llm_prompt_building_fn: Callable = None,
         task_type: Tasktype = Tasktype.INFERENCE,
     ) -> None:
         self._metric_name = metric

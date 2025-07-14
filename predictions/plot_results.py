@@ -1,7 +1,7 @@
+import math
 import matplotlib.pyplot as plt
 import numpy as np
 from predictions.convert_results_to_md import results_data
-import math
 
 
 def extract_plot_task_data(all_tasks_data, task):
@@ -11,7 +11,7 @@ def extract_plot_task_data(all_tasks_data, task):
     for model, model_metrics in task_data.items():
         models.append(model)
         for metric, results in model_metrics.items():
-            if metric in task_metrics.keys():
+            if metric in task_metrics:
                 task_metrics[metric].append(results)
             else:
                 task_metrics[metric] = [results]
@@ -20,7 +20,6 @@ def extract_plot_task_data(all_tasks_data, task):
 
 
 def extract_data_by_tasks():
-    labels = []
     all_tasks = {}
     datas = results_data()
     for data in datas:
@@ -28,7 +27,7 @@ def extract_data_by_tasks():
         for task in data["tasks"]:
             for task_name, metrics_values in task.items():
                 for metric_name, metric_values in metrics_values.items():
-                    if task_name not in all_tasks.keys():
+                    if task_name not in all_tasks:
                         all_tasks[task_name] = {
                             model_name: {
                                 metric_key: metric_value
@@ -79,9 +78,9 @@ for i, dataset_name in enumerate(all_tasks.keys()):
     ax.set_xticklabels(labels, rotation=-45)
     ax.legend(fontsize=7)
 
-# Hide unused subplots if any
-for j in range(i + 1, len(axs)):
-    fig.delaxes(axs[j])
+    # Hide unused subplots if any
+    for j in range(i + 1, len(axs)):
+        fig.delaxes(axs[j])
 
 plt.tight_layout()
 plt.show()

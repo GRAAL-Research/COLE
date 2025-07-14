@@ -1,10 +1,6 @@
 import logging
-
-import numpy as np
 import torch
-
 from transformers import AutoModel, pipeline, AutoTokenizer, AutoModelForCausalLM
-
 from src.model.model import Model
 
 
@@ -19,8 +15,12 @@ def omit_none(**kwargs):
 
 class HFModel(Model):
     """
-    Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained models and uses it for inference and generation.
+    Model based on Hugging Face Transformers and pipeline mechanism,
+     loads pretrained models and uses it for inference and generation.
     """
+
+    def generate(self, prompt: str, conditions=None) -> str | list[str]:
+        raise ValueError("This Model can't generate text.")
 
     def __init__(
         self,
@@ -73,18 +73,21 @@ class HFModel(Model):
             try:
                 outputs = self.pipe(sub_batch)
             except Exception as e:
-                logging.error(f" Échec inference batch {sub_batch[:2]} : {e}")
+                error_message = f" Échec inference batch {sub_batch[:2]} : {e}"
+                logging.error(error_message)
                 outputs = [{} for _ in sub_batch]
             all_outputs.extend(outputs)
 
         return all_outputs
 
     def change_task(self, task):
-        """changes the inside pipeline task, to see available tasks go to https://huggingface.co/docs/transformers/main_classes/pipelines"""
+        """changes the inside pipeline task, to see available
+        tasks go to https://huggingface.co/docs/transformers/main_classes/pipelines"""
         try:
             self.pipe.task = task
         except Exception:
-            logging.error(f"Failed to change task to {task}")
+            error_messsage = f"Failed to change task to {task}"
+            logging.error(error_messsage)
 
     def create_pipeline(self, model_name, task, token):
         try:
@@ -98,7 +101,8 @@ class HFModel(Model):
             )
             self.loaded = True
         except Exception as e:
-            logging.error(f"️ Impossible de charger le modèle {model_name} : {e}")
+            error_message = f"️ Impossible de charger le modèle {model_name} : {e}"
+            logging.error(error_message)
             self.loaded = False
 
     def unload_model(self):
@@ -108,7 +112,8 @@ class HFModel(Model):
 
 class HFLLMModel(HFModel):
     """
-    LLM Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses it for inference.
+    LLM Model based on Hugging Face Transformers
+    and pipeline mechanism, loads pretrained LLM models and uses it for inference.
     """
 
     def __init__(
@@ -173,8 +178,7 @@ class HFLLMModel(HFModel):
                 )
                 all_answers.extend(labels)
             except Exception as e:
-                logging.error("error occure", e)
-                batch_outputs = [{} for _ in sub_batch]
+                logging.error("error occured while processing batch", e)
 
         return all_answers
 

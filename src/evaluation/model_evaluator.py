@@ -24,14 +24,16 @@ class ModelEvaluator:
         for task_dict in self.last_predictions["tasks"]:
             task_name, preds = list(task_dict.items())[0]
             if not preds:
-                logging.warning(f"Task '{task_name}' ignored due to no predictions")
+                warning_message = f"Task '{task_name}' ignored due to no predictions"
+                logging.warning(warning_message)
                 continue
             try:
                 tasks = tasks_factory([task_name])
                 task = tasks[0]
                 metric_score, warning = task.compute(preds)
             except Exception as e:
-                logging.error(f"error while calculating metrics'{task_name}' : {e}")
+                error_message = f"error while calculating metrics'{task_name}' : {e}"
+                logging.error(error_message)
                 continue
             metric_name = task.metric_name
             task_entry = {
@@ -65,12 +67,11 @@ class ModelEvaluator:
         :param save_path : the path to which the json file will be saved"""
         if self.last_metrics is None:
             logging.info("No metrics saved")
-            return
-        else:
-            return self.save_object(
-                save_path,
-                self.last_metrics,
-                f"{self.last_model_name.replace('/', '_')}_metrics.json",
+            return None
+        return self.save_object(
+            save_path,
+            self.last_metrics,
+            f"{self.last_model_name.replace('/', '_')}_metrics.json",
             )
 
     def evaluate(self, model: Model, tasks: list[Task]):
@@ -106,7 +107,8 @@ class ModelEvaluator:
                 predictions.append(task_predictions)
 
             except Exception as e:
-                logging.error(f"Tâche '{task.task_name}' échouée : {e}")
+                error_message = f"Tâche '{task.task_name}' échouée : {e}"
+                logging.error(error_message)
                 continue
         self.last_predictions = {
             "model_name": model.name,
@@ -133,9 +135,11 @@ class ModelEvaluator:
         os.makedirs(save_dir_path, exist_ok=True)
         full_path = os.path.join(save_dir_path, filename)
         try:
-            with open(full_path, "w") as f:
+            with open(full_path, "w", encoding="utf-8") as f:
                 json.dump(saved_object, f, indent=2)
-            logging.info(f"Results saved to {save_dir_path}")
+            info_message = f"Results saved to {save_dir_path}"
+            logging.info(info_message)
         except Exception as e:
-            logging.error(f"Failed to save object: {e}")
+            error_message = f"Failed to save object: {e}"
+            logging.error(error_message)
         return full_path

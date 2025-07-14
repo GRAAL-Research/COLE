@@ -20,7 +20,6 @@ class TaskPIAFTest(TaskTest):
         task = Task(
             task_name="piaf",
             metric="fquad",
-            ground_truths_column_name="answers",
         )
 
         expected_results = {"exact_match": 20.0, "f1": 20.0}
@@ -45,7 +44,6 @@ class TaskPIAFTest(TaskTest):
         task = Task(
             task_name="piaf",
             metric="fquad",
-            ground_truths_column_name="answers",
         )
 
         expected_results = {"exact_match": 0.25, "f1": 0.49026015}
@@ -64,7 +62,7 @@ class TaskPIAFTest(TaskTest):
         task = Task(
             task_name="piaf",
             metric="fquad",
-            ground_truths_column_name="answers",
+
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)

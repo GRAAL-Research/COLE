@@ -1,7 +1,4 @@
-import json
 from unittest import TestCase
-
-from src.dataset.dataset import Dataset
 from src.evaluation.model_evaluator import ModelEvaluator
 from src.model.model import Model
 from src.task.task_factory import tasks_factory
@@ -43,7 +40,10 @@ class ModelEvaluatorTest(TestCase):
                     "qfrcola": {
                         "accuracy": {
                             "accuracy": 0.5,
-                            f"accuracy_warning": f"Your prediction size is of '{len(preds)}', while the ground truths size is of '{len(self.tasks[0].dataset.ground_truths)}'. We computed the metric over the first {len(preds)} elements.",
+                            f"accuracy_warning": f"Your prediction size is of '{len(preds)}', "
+                            "while the ground truths size is of "
+                            f"'{len(self.tasks[0].dataset.ground_truths)}'. "
+                            f"We computed the metric over the first {len(preds)} elements.",
                         }
                     }
                 }

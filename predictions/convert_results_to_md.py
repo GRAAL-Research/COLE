@@ -1,7 +1,5 @@
 import json
 from pathlib import Path
-
-from pandas.core.dtypes.inference import is_number
 from tabulate import tabulate
 
 
@@ -10,10 +8,10 @@ RESULTS_DIRECTORY = "../results"
 
 def results_data(results_dir=RESULTS_DIRECTORY):
     datas = []
-    directory = Path(RESULTS_DIRECTORY)
+    directory = Path(results_dir)
     file_path_list = [f for f in directory.rglob("*metrics.json") if f.is_file()]
     for file_path in file_path_list:
-        with open(file_path) as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             datas.append(json.load(file))
     return datas
 

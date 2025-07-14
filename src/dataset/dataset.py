@@ -5,7 +5,8 @@ from predictions.utils import hugging_face_login
 
 
 class Dataset:
-    """Class representing a usable dataset. Allows dataset to be expressed as multiple forms, including as prompts,data or answers
+    """Class representing a usable dataset.
+    Allows dataset to be expressed as multiple forms, including as prompts,data or answers
     :param name : name of the dataset
     :param description : description of the dataset
     :param possible_ground_thruths : the form that could be taken by ground thruths
