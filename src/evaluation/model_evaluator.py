@@ -100,7 +100,8 @@ class ModelEvaluator:
                 elif task.task_type == Tasktype.GENERATIVE:
                     task_predictions = model.generate(prompts)
                 else:
-                    logging.error(f"unknown task type {task.task_type}")
+                    error_message=f"unknown task type {task.task_type}"
+                    logging.error(error_message)
                     task_predictions = None
 
                 task_predictions = {task.task_name: task_predictions}
@@ -123,7 +124,7 @@ class ModelEvaluator:
         :param save_path : the path to which the json file will be saved"""
         if self.last_model_name is None:
             logging.error("Please evaluate before saving results")
-            return
+            return None
         return self.save_object(
             save_path,
             self.last_predictions,

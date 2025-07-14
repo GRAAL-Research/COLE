@@ -1,6 +1,6 @@
 import logging
 from enum import Enum
-from typing import Dict, Union, Tuple, Callable, List
+from typing import Dict, Union, Tuple, List
 from src.metrics.metric_factory import metric_factory
 from src.dataset.datasets import datasets
 

@@ -40,7 +40,7 @@ class ModelEvaluatorTest(TestCase):
                     "qfrcola": {
                         "accuracy": {
                             "accuracy": 0.5,
-                            f"accuracy_warning": f"Your prediction size is of '{len(preds)}', "
+                            "accuracy_warning": f"Your prediction size is of '{len(preds)}', "
                             "while the ground truths size is of "
                             f"'{len(self.tasks[0].dataset.ground_truths)}'. "
                             f"We computed the metric over the first {len(preds)} elements.",

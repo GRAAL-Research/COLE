@@ -51,11 +51,12 @@ datasets = {
             .add_data(f"Phrase 0:{line["sentence_a"]}")
             .add_data(f"Phrase 1:{line["sentence_b"]}")
             .add_end(
-                "Réponds avec seulement 0 si la phrase 0 est grammaticalement correcte, et uniquement 1 si la phrase 1 est grammaticalement correcte."
+                "Réponds avec seulement 0 si la phrase 0 "
+                "est grammaticalement correcte, et uniquement 1 si la phrase 1 est grammaticalement correcte."
             )
             .build()
         ),
-        line_to_data_fn=lambda line: {["sentence_a"], ["sentence_b"]},
+        line_to_data_fn=lambda line: {line["sentence_a"], line["sentence_b"]},
     ),
     "gqnli": Dataset(
         name="gqnli",
@@ -207,7 +208,8 @@ datasets = {
         )
         .add_end(
             (
-                "Réponds seulement avec un nombre de 0 à 5, où 5 signifie que les 2 phrases veulent dire exactement la même chose. La réponse est :"
+                "Réponds seulement avec un nombre de 0 à 5, "
+                "où 5 signifie que les 2 phrases veulent dire exactement la même chose. La réponse est :"
             )
         )
         .build(),

@@ -47,6 +47,6 @@ llms = {
     ],
     "all": [],
 }
-for key in llms:
+for key in llms.items():
     if isinstance(llms[key], list) and key != "all":
         llms["all"].extend(llms[key])

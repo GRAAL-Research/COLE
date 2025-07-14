@@ -19,7 +19,6 @@ from src.backend.validation_tools import (
     validate_submission_json,
     validate_submission_template,
 )
-from src.evaluation.evaluation_pipeline import info_message
 from src.task.task import Task
 from src.task.task_factory import (
     tasks_factory,

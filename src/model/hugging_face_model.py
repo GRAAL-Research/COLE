@@ -1,4 +1,6 @@
 import logging
+from typing import Union
+
 import torch
 from transformers import AutoModel, pipeline, AutoTokenizer, AutoModelForCausalLM
 from src.model.model import Model
@@ -19,7 +21,7 @@ class HFModel(Model):
      loads pretrained models and uses it for inference and generation.
     """
 
-    def generate(self, prompt: str, conditions=None) -> str | list[str]:
+    def generate(self, prompts: str, conditions=None) -> Union[str , list[str]]:
         raise ValueError("This Model can't generate text.")
 
     def __init__(
@@ -132,7 +134,7 @@ class HFLLMModel(HFModel):
         model = AutoModelForCausalLM.from_pretrained(model_name, **args)
         return model
 
-    def generate(self, prompts: str | list[str], conditions=None):
+    def generate(self, prompts: Union[str , list[str]], conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
 
         if not self.loaded:
@@ -163,7 +165,7 @@ class HFLLMModel(HFModel):
                     all_texts.append(text)
         return all_texts
 
-    def infer(self, prompts: str | list[str], possible_answers, conditions=None):
+    def infer(self, prompts: Union[str , list[str]], possible_answers, conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
         if not self.loaded:
             self.create_pipeline(self.model_name, task=self.task, token=self.token)
@@ -178,7 +180,8 @@ class HFLLMModel(HFModel):
                 )
                 all_answers.extend(labels)
             except Exception as e:
-                logging.error("error occured while processing batch", e)
+                error_message = f"error occured while processing batch : {e}"
+                logging.error(error_message)
 
         return all_answers
 

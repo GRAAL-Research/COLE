@@ -1,7 +1,6 @@
-from typing import Callable, Any
+from typing import Callable, Any, Union
 from datasets import load_dataset
-from src.task import COLLE_REPOSITORY_NAME
-from predictions.utils import hugging_face_login
+
 
 
 class Dataset:
@@ -20,7 +19,7 @@ class Dataset:
         self,
         name: str,
         description: str,
-        possible_ground_thruths: list[str | int | float],
+        possible_ground_thruths: Union[list[str],list[int],list[float]],
         hugging_face_repo: str,
         line_to_thruth_fn: Callable,
         line_to_prompt_fn: Callable,
@@ -44,7 +43,7 @@ class Dataset:
         return self._dataset
 
     @property
-    def ground_truths(self) -> list[str | int | float]:
+    def ground_truths(self) -> Union[list[str],list[int],list[float]]:
         """The dataset's ground truths as a list"""
         return [self.line_to_thruth_fn(line) for line in self.dataset]
 

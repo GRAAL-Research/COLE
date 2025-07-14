@@ -20,15 +20,15 @@ def extract_plot_task_data(all_tasks_data, task):
 
 
 def extract_data_by_tasks():
-    all_tasks = {}
+    all_tasks_data = {}
     datas = results_data()
     for data in datas:
         model_name = data["model_name"]
         for task in data["tasks"]:
             for task_name, metrics_values in task.items():
-                for metric_name, metric_values in metrics_values.items():
+                for metric_values in metrics_values.values():
                     if task_name not in all_tasks:
-                        all_tasks[task_name] = {
+                        all_tasks_data[task_name] = {
                             model_name: {
                                 metric_key: metric_value
                                 for metric_key, metric_value in metric_values.items()

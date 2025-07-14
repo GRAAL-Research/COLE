@@ -2,6 +2,7 @@ import logging
 import os
 from abc import abstractmethod
 from pathlib import Path
+from typing import Union
 
 from anthropic import Anthropic
 
@@ -41,12 +42,12 @@ class Model:
 
     @abstractmethod
     def infer(
-        self, prompt: str | list[str], possible_answers, conditions=None
-    ) -> str | list[str]:
-        return ["0" for _ in range(len(prompt))]
+        self, prompts:Union[ str , list[str]], possible_answers, conditions=None
+    ) -> Union[str,list[str]]:
+        return ["0" for _ in range(len(prompts))]
 
     @abstractmethod
-    def generate(self, prompts: list[str], conditions=None) -> str | list[str]:
+    def generate(self, prompts: list[str], conditions=None) -> Union[str , list[str]]:
         raise NotImplementedError()
 
     def unload_model(self):
