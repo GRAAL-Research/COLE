@@ -7,9 +7,10 @@ from transformers import AutoModel, pipeline, AutoTokenizer, AutoModelForCausalL
 
 from src.model.model import Model
 
+
 def chunk_list(lst, chunk_size):
     for i in range(0, len(lst), chunk_size):
-        yield lst[i : i + chunk_size]
+        yield lst[i: i + chunk_size]
 
 
 def omit_none(**kwargs):
@@ -22,12 +23,12 @@ class HFModel(Model):
     """
 
     def __init__(
-        self,
-        model_name,
-        task="text-generation",
-        token=None,
-        lazy_load=True,
-        batch_size=8,
+            self,
+            model_name,
+            task="text-generation",
+            token=None,
+            lazy_load=True,
+            batch_size=8,
     ):
         super().__init__(model_name)
         self.model_name = model_name
@@ -46,7 +47,7 @@ class HFModel(Model):
 
     def get_model_args(self, token):
         return omit_none(
-            use_auth_token=token, cache_dir=MODEL_CACHE, trust_remote_code=True
+            use_auth_token=token, trust_remote_code=True
         )
 
     def create_tokenizer(self, model_name, token=None):
@@ -108,12 +109,12 @@ class HFLLMModel(HFModel):
     """
 
     def __init__(
-        self,
-        model_name,
-        token=None,
-        batch_size=8,
-        task="text-generation",
-        max_gen_length=5,
+            self,
+            model_name,
+            token=None,
+            batch_size=8,
+            task="text-generation",
+            max_gen_length=5,
     ):
         super().__init__(model_name, task, token, batch_size=batch_size)
         self.max_gen_length = max_gen_length
@@ -124,7 +125,11 @@ class HFLLMModel(HFModel):
         return model
 
     def generate(self, prompts: str | list[str], conditions=None):
+
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
+
+        if not self.loaded:
+            self.load_model(self.model_name, task=self.task, token=self.token)
         if not self.loaded:
             self.load_model(self.model_name, task=self.task, token=self.token)
         if isinstance(prompts, str):
@@ -184,7 +189,8 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
         full_prompts = [p.rstrip() + label_str for p in prompts]
 
         # Tokenize original prompts to get lengths
-        n_positions = getattr(model.config, "n_positions", None) or getattr(model.config, "max_position_embeddings", None)
+        n_positions = getattr(model.config, "n_positions", None) or getattr(model.config, "max_position_embeddings",
+                                                                            None)
         prompt_inputs = tokenizer(
             prompts,
             return_tensors="pt",
@@ -233,6 +239,5 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
     predicted = [candidate_labels[i] for i in top_indices]
 
     return predicted
-
 
 # Usage example:
