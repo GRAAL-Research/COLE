@@ -37,7 +37,7 @@ class Dataset:
     def dataset(self):
         if self._dataset is None:
             self._dataset = load_dataset(
-                self.huggingFace_repo, name=self.name, split="test"
+                self.hugging_face_repo, name=self.name, split="test"
             )
         return self._dataset
 
