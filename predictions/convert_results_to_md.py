@@ -17,8 +17,9 @@ def results_data(results_dir=RESULTS_DIRECTORY):
             datas.append(json.load(file))
     return datas
 
+
 def format_as_small_rows():
-    headers = ["Model", "Task","Metric", "Results"]
+    headers = ["Model", "Task", "Metric", "Results"]
     rows = []
     for data in results_data():
         model_name = data["model_name"]
@@ -26,9 +27,12 @@ def format_as_small_rows():
             for task_name, metrics_values in task.items():
                 for metric_name, metric_values in metrics_values.items():
                     formatted_metrics = "||".join(
-                    [f"{key}:{value:.4f}" for key, value in metric_values.items() if isinstance(value, (int, float))]
+                        [
+                            f"{key}:{value:.4f}"
+                            for key, value in metric_values.items()
+                            if isinstance(value, (int, float))
+                        ]
                     )
-                    rows.append([model_name, task_name,metric_name ,formatted_metrics])
+                    rows.append([model_name, task_name, metric_name, formatted_metrics])
     markdown_tb = tabulate(rows, headers=headers, tablefmt="github")
     return markdown_tb
-

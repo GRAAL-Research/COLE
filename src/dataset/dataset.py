@@ -1,14 +1,16 @@
+from typing import Callable, Any
+
 from datasets import load_dataset
 from src.task import COLLE_REPOSITORY_NAME
 from predictions.utils import hugging_face_login
 
 
 class Dataset:
-    """class representing a usable dataset. Allows dataset to be expressed as multiple forms, including as prompts,data or answers
+    """Class representing a usable dataset. Allows dataset to be expressed as multiple forms, including as prompts,data or answers
     :param name : name of the dataset
     :param description : description of the dataset
     :param possible_ground_thruths : the form that could be taken by ground thruths
-    :param huggingFace_repo : where to download the dataset on huggingFace
+    :param hugging_face_repo : where to download the dataset on huggingFace
     :param line_to_thruth_fn : a function converting a dataset line to its truth value.
     :param line_to_prompt_fn : a function converting a dataset line to a prompt for LLM inference.
     :param line_to_data_fn : a function converting a dataset line to its data value for non LLM inference.
@@ -16,18 +18,18 @@ class Dataset:
 
     def __init__(
         self,
-        name,
-        description,
-        possible_ground_thruths,
-        huggingFace_repo,
-        line_to_thruth_fn,
-        line_to_prompt_fn,
-        line_to_data_fn,
+        name: str,
+        description: str,
+        possible_ground_thruths: list[str | int | float],
+        hugging_face_repo: str,
+        line_to_thruth_fn: Callable,
+        line_to_prompt_fn: Callable,
+        line_to_data_fn: Callable,
     ):
         self._dataset = None
         self.name = name
         self.description = description
-        self.huggingFace_repo = huggingFace_repo
+        self.hugging_face_repo = hugging_face_repo
         self.possible_ground_thruths = possible_ground_thruths
         self.line_to_prompt_fn = line_to_prompt_fn
         self.line_to_thruth_fn = line_to_thruth_fn
@@ -42,22 +44,22 @@ class Dataset:
         return self._dataset
 
     @property
-    def ground_truths(self):
+    def ground_truths(self) -> list[str | int | float]:
         """The dataset's ground truths as a list"""
         return [self.line_to_thruth_fn(line) for line in self.dataset]
 
     @property
-    def prompts(self):
+    def prompts(self) -> list[str]:
         """The dataset's prompts as a list"""
         return [self.line_to_prompt_fn(line) for line in self.dataset]
 
     @property
-    def data(self):
+    def data(self) -> list[str]:
         """The dataset's data as a list"""
         return [self.line_to_data_fn(line) for line in self.dataset]
 
     @property
-    def metadata(self):
+    def metadata(self) -> dict[str, Any]:
         """The dataset's metadata as a dict"""
         return {
             "description": self.description,

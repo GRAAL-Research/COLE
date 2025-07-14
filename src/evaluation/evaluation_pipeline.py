@@ -9,34 +9,35 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--test",
-    help="if set to true, the system will default to testing only a small model with a few examples",
+    help="If set to true, the system will default to testing only a small model with a few examples.",
     default=False,
     type=bool,
 )
 parser.add_argument(
     "--max_examples",
     "-m",
-    help="the maximum number of examples to use, defaults to None",
+    help="The maximum number of examples to use, defaults to None.",
     type=int,
     default=None,
 )
 parser.add_argument(
     "--token",
     "-t",
-    help="input your HuggingFace token to fetch models",
+    help="Input your HuggingFace token to fetch models.",
     type=str,
     default=None,
 )
 parser.add_argument(
     "--models_name",
     "-mn",
-    help="the name of the model(s) to load",
+    help="The name of the model(s) to load.",
     type=str,
     default=None,
 )
 
 parser.add_argument(
     "--batch_size",
+    help="The batch size to use during the evaluation.",
     type=int,
     default=8,
 )

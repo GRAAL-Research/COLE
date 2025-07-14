@@ -4,10 +4,10 @@ from src.task import COLLE_REPOSITORY_NAME
 
 datasets = {
     "allocine": Dataset(
-        "allocine",
-        "desc",
-        ["0", "1"],
-        COLLE_REPOSITORY_NAME,
+        name="allocine",
+        description="desc",
+        possible_ground_thruths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Cette phrase possède-t-elle un sentiment positif ou négatif ?")
@@ -22,10 +22,10 @@ datasets = {
         line_to_data_fn=lambda line: line["review"],
     ),
     "qfrcola": Dataset(
-        "qfrcola",
-        "desc",
-        ["0", "1"],
-        COLLE_REPOSITORY_NAME,
+        name="qfrcola",
+        description="desc",
+        possible_ground_thruths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Juge si cette phrase est grammaticalement correcte :")
@@ -39,10 +39,10 @@ datasets = {
         line_to_data_fn=lambda line: line["sentence"],
     ),
     "qfrblimp": Dataset(
-        "qfrblimp",
-        "desc",
-        ["0", "1"],
-        COLLE_REPOSITORY_NAME,
+        name="qfrblimp",
+        description="desc",
+        possible_ground_thruths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         # label renvoyé comme chaîne
         line_to_thruth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: (
@@ -58,10 +58,10 @@ datasets = {
         line_to_data_fn=lambda line: {["sentence_a"], ["sentence_b"]},
     ),
     "gqnli": Dataset(
-        "gqnli",
-        "desc",
-        ["0", "1", "2"],
-        COLLE_REPOSITORY_NAME,
+        name="gqnli",
+        description="desc",
+        possible_ground_thruths=["0", "1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -85,10 +85,10 @@ datasets = {
         },
     ),
     "opus_parcus": Dataset(
-        "opus_parcus",
-        "desc",
-        [str(i) for i in range(0, 101, 5)],
-        COLLE_REPOSITORY_NAME,
+        name="opus_parcus",
+        description="desc",
+        possible_ground_thruths=[str(i) for i in range(0, 101, 5)],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: line["quality"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -106,10 +106,10 @@ datasets = {
         line_to_data_fn=lambda line: {"sent1": line["sent1"], "sent2": line["sent2"]},
     ),
     "paws_x": Dataset(
-        "paws_x",
-        "desc",
-        ["0", "1"],
-        COLLE_REPOSITORY_NAME,
+        name="paws_x",
+        description="desc",
+        possible_ground_thruths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -129,10 +129,10 @@ datasets = {
         },
     ),
     "piaf": Dataset(
-        "piaf",
-        "desc",
-        [],
-        COLLE_REPOSITORY_NAME,
+        name="piaf",
+        description="desc",
+        possible_ground_thruths=[],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: line["answers"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -149,10 +149,10 @@ datasets = {
         },
     ),
     "fquad": Dataset(
-        "fquad",
-        "desc",
-        [],
-        COLLE_REPOSITORY_NAME,
+        name="fquad",
+        description="desc",
+        possible_ground_thruths=[],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: line["answers"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -169,10 +169,10 @@ datasets = {
         },
     ),
     "sickfr": Dataset(
-        "sickfr",
-        "desc",
-        [i * 0.1 for i in range(0, 51)],
-        COLLE_REPOSITORY_NAME,
+        name="sickfr",
+        description="desc",
+        possible_ground_thruths=[i * 0.1 for i in range(0, 51)],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: float(line["relatedness_score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -193,10 +193,10 @@ datasets = {
         },
     ),
     "sts22": Dataset(
-        "sts22",
-        "desc",
-        [i * 0.1 for i in range(0, 51)],
-        COLLE_REPOSITORY_NAME,
+        name="sts22",
+        description="desc",
+        possible_ground_thruths=[i * 0.1 for i in range(0, 51)],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: float(line["score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -217,10 +217,10 @@ datasets = {
         },
     ),
     "xnli": Dataset(
-        "xnli",
-        "desc",
-        ["0", "1", "2"],
-        COLLE_REPOSITORY_NAME,
+        name="xnli",
+        description="desc",
+        possible_ground_thruths=["0", "1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_thruth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(

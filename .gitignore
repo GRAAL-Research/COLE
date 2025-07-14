@@ -60,4 +60,4 @@ next-env.d.ts
 /src/light_eval_custom/results
 /offline_evaluation/results
 /frontend/node_modules
-/.idea
+/.idea/*

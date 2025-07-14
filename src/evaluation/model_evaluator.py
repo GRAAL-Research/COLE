@@ -8,7 +8,7 @@ from src.task.task_factory import tasks_factory
 
 
 class ModelEvaluator:
-    """The model evaluator acts as a pipeline for evaluation models on tasks available from tasks_factory"""
+    """The model evaluator acts as a pipeline for evaluation models on tasks available from tasks_factory."""
 
     def __init__(self):
         self.last_predictions = {}
@@ -16,8 +16,8 @@ class ModelEvaluator:
         self.last_metrics = {}
 
     def compute_metrics(self):
-        """compute metrics over last tested model's predictions,
-        must have called one the evaluate functions before or loaded predictions with load_predictions_from_file
+        """Compute metrics over the last tested model's predictions,
+        must have called one the evaluate functions before or loaded predictions with load_predictions_from_file.
         """
         metrics = []
 
@@ -48,7 +48,7 @@ class ModelEvaluator:
         return metrics
 
     def load_predictions_from_file(self, file_path):
-        """load predictions from file to compute metrics :param file_path:path to the predictions file"""
+        """Load predictions from file to compute metrics :param file_path:path to the predictions file."""
 
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -61,7 +61,7 @@ class ModelEvaluator:
             self.last_predictions = None
 
     def save_metrics(self, save_path):
-        """saves computed metrics to a json file
+        """Saves computed metrics to a json file.
         :param save_path : the path to which the json file will be saved"""
         if self.last_metrics is None:
             logging.info("No metrics saved")
@@ -74,13 +74,13 @@ class ModelEvaluator:
             )
 
     def evaluate(self, model: Model, tasks: list[Task]):
-        """evaluates a given model on the given tasks
+        """Evaluates a given model on the given tasks.
         :param model : the model that will infer on the given tasks
         :param tasks : the tasks to be evaluated on"""
         return self.evaluate_subset(model, tasks)
 
     def evaluate_subset(self, model: Model, tasks: list[Task], subset_size=None):
-        """evaluates a given model on the given tasks, but only on a given size.
+        """Evaluates a given model on the given tasks, but only on a given size.
         :param model : the model that will infer on the given tasks
         :param tasks : the tasks to be evaluated on
         :param subset_size : the size of the subset to be evaluated"""
@@ -117,7 +117,7 @@ class ModelEvaluator:
         return self.last_predictions
 
     def save_results(self, save_path):
-        """saves inferred metrics to a json file
+        """Saves inferred metrics to a json file.
         :param save_path : the path to which the json file will be saved"""
         if self.last_model_name is None:
             logging.error("Please evaluate before saving results")
@@ -128,14 +128,14 @@ class ModelEvaluator:
             f"{self.last_model_name.replace('/', '_')}_{datetime.now().strftime("%Y%m%d-%H%M")}.json",
         )
 
-    def save_object(self, save_path, saved_object, filename):
-        """Utility method to save the given object into a json file"""
-        os.makedirs(save_path, exist_ok=True)
-        full_path = os.path.join(save_path, filename)
+    def save_object(self, save_dir_path, saved_object, filename):
+        """Utility method to save the given object into a json file."""
+        os.makedirs(save_dir_path, exist_ok=True)
+        full_path = os.path.join(save_dir_path, filename)
         try:
             with open(full_path, "w") as f:
                 json.dump(saved_object, f, indent=2)
-            logging.info(f"Results saved to {save_path}")
+            logging.info(f"Results saved to {save_dir_path}")
         except Exception as e:
             logging.error(f"Failed to save object: {e}")
         return full_path

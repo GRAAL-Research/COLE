@@ -10,7 +10,7 @@ from src.model.model import Model
 
 def chunk_list(lst, chunk_size):
     for i in range(0, len(lst), chunk_size):
-        yield lst[i: i + chunk_size]
+        yield lst[i : i + chunk_size]
 
 
 def omit_none(**kwargs):
@@ -23,12 +23,12 @@ class HFModel(Model):
     """
 
     def __init__(
-            self,
-            model_name,
-            task="text-generation",
-            token=None,
-            lazy_load=True,
-            batch_size=8,
+        self,
+        model_name,
+        task="text-generation",
+        token=None,
+        lazy_load=True,
+        batch_size=8,
     ):
         super().__init__(model_name)
         self.model_name = model_name
@@ -37,7 +37,7 @@ class HFModel(Model):
         self.token = token
         self.batch_size = batch_size
         if not lazy_load:
-            self.load_model(model_name, task=task, token=token)
+            self.create_pipeline(model_name, task=task, token=token)
 
     def create_model(self, model_name, token=None):
         """creates the model by fetching by name on Hugging Face"""
@@ -47,7 +47,10 @@ class HFModel(Model):
 
     def get_model_args(self, token):
         return omit_none(
-            use_auth_token=token, trust_remote_code=True
+            use_auth_token=token,
+            trust_remote_code=True,
+            torch_dtype=torch.float16,
+            device_map="auto",
         )
 
     def create_tokenizer(self, model_name, token=None):
@@ -61,7 +64,7 @@ class HFModel(Model):
     def infer(self, prompts: str, possible_answers, conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
         if not self.loaded:
-            self.load_model(self.model_name, task=self.task, token=self.token)
+            self.create_pipeline(self.model_name, task=self.task, token=self.token)
         if isinstance(prompts, str):
             prompts = [prompts]
 
@@ -83,7 +86,7 @@ class HFModel(Model):
         except Exception:
             logging.error(f"Failed to change task to {task}")
 
-    def load_model(self, model_name, task, token):
+    def create_pipeline(self, model_name, task, token):
         try:
             self.model = self.create_model(model_name, token)
             self.tokenizer = self.create_tokenizer(model_name, token)
@@ -105,16 +108,16 @@ class HFModel(Model):
 
 class HFLLMModel(HFModel):
     """
-    Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses it for inference.
+    LLM Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses it for inference.
     """
 
     def __init__(
-            self,
-            model_name,
-            token=None,
-            batch_size=8,
-            task="text-generation",
-            max_gen_length=5,
+        self,
+        model_name,
+        token=None,
+        batch_size=8,
+        task="text-generation",
+        max_gen_length=5,
     ):
         super().__init__(model_name, task, token, batch_size=batch_size)
         self.max_gen_length = max_gen_length
@@ -125,13 +128,12 @@ class HFLLMModel(HFModel):
         return model
 
     def generate(self, prompts: str | list[str], conditions=None):
-
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
 
         if not self.loaded:
-            self.load_model(self.model_name, task=self.task, token=self.token)
+            self.create_pipeline(self.model_name, task=self.task, token=self.token)
         if not self.loaded:
-            self.load_model(self.model_name, task=self.task, token=self.token)
+            self.create_pipeline(self.model_name, task=self.task, token=self.token)
         if isinstance(prompts, str):
             prompts = [prompts]
         all_texts = []
@@ -159,7 +161,7 @@ class HFLLMModel(HFModel):
     def infer(self, prompts: str | list[str], possible_answers, conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
         if not self.loaded:
-            self.load_model(self.model_name, task=self.task, token=self.token)
+            self.create_pipeline(self.model_name, task=self.task, token=self.token)
         if isinstance(prompts, str):
             prompts = [prompts]
         all_answers = []
@@ -189,8 +191,9 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
         full_prompts = [p.rstrip() + label_str for p in prompts]
 
         # Tokenize original prompts to get lengths
-        n_positions = getattr(model.config, "n_positions", None) or getattr(model.config, "max_position_embeddings",
-                                                                            None)
+        n_positions = getattr(model.config, "n_positions", None) or getattr(
+            model.config, "max_position_embeddings", None
+        )
         prompt_inputs = tokenizer(
             prompts,
             return_tensors="pt",
@@ -239,5 +242,6 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
     predicted = [candidate_labels[i] for i in top_indices]
 
     return predicted
+
 
 # Usage example:

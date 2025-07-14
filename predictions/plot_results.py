@@ -18,6 +18,7 @@ def extract_plot_task_data(all_tasks_data, task):
 
     return models, task_metrics
 
+
 def extract_data_by_tasks():
     labels = []
     all_tasks = {}
@@ -28,12 +29,23 @@ def extract_data_by_tasks():
             for task_name, metrics_values in task.items():
                 for metric_name, metric_values in metrics_values.items():
                     if task_name not in all_tasks.keys():
-                        all_tasks[task_name] = {model_name: {metric_key: metric_value for metric_key,metric_value in metric_values.items() if isinstance(metric_value, (int, float))}}
+                        all_tasks[task_name] = {
+                            model_name: {
+                                metric_key: metric_value
+                                for metric_key, metric_value in metric_values.items()
+                                if isinstance(metric_value, (int, float))
+                            }
+                        }
                     else:
-                        all_tasks[task_name][model_name] = {metric_key: metric_value for metric_key,metric_value in metric_values.items() if isinstance(metric_value, (int, float))}
+                        all_tasks[task_name][model_name] = {
+                            metric_key: metric_value
+                            for metric_key, metric_value in metric_values.items()
+                            if isinstance(metric_value, (int, float))
+                        }
 
     print(all_tasks)
     return all_tasks
+
 
 all_tasks = extract_data_by_tasks()
 
