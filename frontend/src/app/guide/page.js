@@ -25,7 +25,7 @@ export default function Guide() {
         </a>. We recommend using Hugging Face’s libraries to simplify the process.
           </p>
           <p className="text-gray-700 mt-4">
-            To test a model, you also need to fetch the data in the same way. Once done, your model should infer predictions for each line in the test split. Our repository includes benchmark evaluation scripts for each dataset. You only need to plug in your model's inference method using HuggingFace Model interface. Our inference script are available on our <a
+            To test a model, you also need to fetch the data in the same way. Once done, your model should infer predictions for each line in the test split. Our repository includes benchmark evaluation scripts for each dataset. You only need to plug in your model&#39;s inference method using HuggingFace Model interface. Our inference script are available on our <a
           href="https://github.com/GRAAL-Research/colle"
           target="_blank"
           rel="noopener noreferrer"
@@ -34,7 +34,7 @@ export default function Guide() {
           </a>.
           </p>
           <p className="text-gray-700 mt-4">
-            If you prefer to run inference separately, please ensure that the predictions are formatted correctly before submitting them for evaluation (see our "Formatting the Dataset" section).
+            If you prefer to run inference separately, please ensure that the predictions are formatted correctly before submitting them for evaluation (see our &#34;Formatting the Dataset&#34; section).
           </p>
 
           <h3 className="text-2xl font-semibold text-gray-900 mb-4 border-l-4 border-blue-600 pl-4">

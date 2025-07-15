@@ -8,7 +8,7 @@ evaluate
 
 # Web backend (si tu utilises FastAPI/Flask, sinon à ignorer)
 fastapi
-
+uvicorn
 # Optional: pretty printing, progress bars, etc.
 tqdm
 aenum
