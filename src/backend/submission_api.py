@@ -86,28 +86,34 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
     entries: List[Dict[str, Any]] = []
 
     for filepath in glob.glob(str(RESULTS_DIR / "*.json")):
-        try:
-            with open(filepath, encoding="utf-8") as f:
-                data = json.load(f)
+            try:
+                with open(filepath, encoding="utf-8") as f:
+                    data = json.load(f)
 
-            results = {}
-            for task_obj in data.get("tasks", []):
-                for task_name, metrics in task_obj.items():
-                    results[task_name] = metrics
+                # Ne traiter que si model_name et tasks existent
+                if "model_name" not in data or "tasks" not in data:
+                    continue
 
-            entry = {
-                "submission_id": data["submission_id"],
-                "display_name": data["display_name"],
-                "email": data.get("email"),
-                "results": results,
-            }
+                results = {}
+                for task_obj in data["tasks"]:
+                    for task_name, values in task_obj.items():
+                        results[task_name] = values
 
-            entries.append(entry)
+                if not results:
+                    continue  # ignorer les fichiers sans résultats
 
-        except Exception as e:
-            error_message =f"Error processing file {filepath}: {e}"
-            logging.error(error_message)
-            continue
+                entry = {
+                    "submission_id": data.get("submission_id") or str(uuid.uuid4()),
+                    "display_name": data.get("display_name") or data.get("model_name") or "Unnamed Model",
+                    "email": data.get("email", "N/A"),
+                    "results": results,
+                }
+
+                entries.append(entry)
+
+            except Exception as e:
+                logging.error(f"Error processing file {filepath}: {e}")
+                continue
 
     return entries
 
