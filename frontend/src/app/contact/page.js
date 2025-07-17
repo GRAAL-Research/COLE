@@ -10,7 +10,7 @@ export default function Contact() {
 
         <p className="text-gray-700 mb-4 leading-relaxed">
           If you have any questions, feedback, or suggestions regarding the COLLE benchmark, feel free to reach out to us.
-          We're happy to help — please note that response times may vary.
+          We are happy to help — please note that response times may vary.
         </p>
 
         <div className="bg-gray-50 p-4 rounded-md border border-dashed border-blue-400">

@@ -31,12 +31,16 @@ sys.path.insert(0, str(SRC_DIR))
 
 RESULTS_DIR = BASE_DIR / "src" / "backend" / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-
+FRONTEND_DIR = BASE_DIR / "frontend"
 app = FastAPI()
 app.mount("/results", StaticFiles(directory=str(RESULTS_DIR)), name="results")
+print(FRONTEND_DIR)
+
+app.mount("/", StaticFiles(directory=str(FRONTEND_DIR),html=True), name="frontend")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:7860"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

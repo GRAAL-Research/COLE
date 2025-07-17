@@ -4,6 +4,7 @@ import "./globals.css";
 import Taskbar from "./components/taskbar";
 import Modal from "./components/Modal";
 import ModalManager from "./components/ModalManager";
+import {Suspense} from "react";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,7 +34,10 @@ export default function RootLayout({ children }) {
         </div>
         
         </main>
-        <ModalManager/>
+        <Suspense fallback={null}>
+          <ModalManager/>
+        </Suspense>
+
       </body>
     </html>
   );

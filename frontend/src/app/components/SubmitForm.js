@@ -39,6 +39,7 @@ export default function SubmitForm() {
       const res = await fetch("http://localhost:8000/submit", {
         method: "POST",
         body: formData,
+        credentials: "include"
       });
       if (!res.ok) {
         const err = await res.json().catch(() => null);
