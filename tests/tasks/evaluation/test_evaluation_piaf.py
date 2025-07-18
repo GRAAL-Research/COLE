@@ -62,7 +62,6 @@ class TaskPIAFTest(TaskTest):
         task = Task(
             task_name="piaf",
             metric="fquad",
-
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)

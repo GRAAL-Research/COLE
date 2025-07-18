@@ -4,7 +4,7 @@ from typing import Dict, List, Union
 from src.task.task import Task, Tasktype
 
 
-def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
+def tasks_factory(task_names: Union[Dict, list[str]]) -> List[Task]:
     """
     Factory method to create a list of Task objects from a dictionary of task names and their predictions.
     """
@@ -20,7 +20,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-
                     )
                 )
             case "fquad":
@@ -28,7 +27,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="fquad",
-
                         task_type=Tasktype.GENERATIVE,
                     )
                 )
@@ -37,7 +35,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-
                     )
                 )
             case "opus_parcus":
@@ -45,7 +42,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
-
                     )
                 )
             case "paws_x":
@@ -53,7 +49,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-
                     )
                 )
             case "piaf":
@@ -61,7 +56,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="fquad",
-
                         task_type=Tasktype.GENERATIVE,
                     )
                 )
@@ -70,7 +64,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-
                     )
                 )
             case "qfrcola":
@@ -78,7 +71,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-
                     )
                 )
             case "sickfr":
@@ -86,7 +78,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
-
                     )
                 )
             case "sts22":
@@ -94,7 +85,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
-
                     )
                 )
             case "xnli":
@@ -102,7 +92,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-
                     )
                 )
             case "expressions_quebecoises":
@@ -110,7 +99,6 @@ def tasks_factory(task_names: Union[Dict , list[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-
                     )
                 )
             case _:

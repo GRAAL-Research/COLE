@@ -1,0 +1,2 @@
+const BACKEND_ADDRESS = "/api"
+export {BACKEND_ADDRESS}

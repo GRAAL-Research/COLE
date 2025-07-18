@@ -72,7 +72,7 @@ class ModelEvaluator:
             save_path,
             self.last_metrics,
             f"{self.last_model_name.replace('/', '_')}_metrics.json",
-            )
+        )
 
     def evaluate(self, model: Model, tasks: list[Task]):
         """Evaluates a given model on the given tasks.
@@ -100,7 +100,7 @@ class ModelEvaluator:
                 elif task.task_type == Tasktype.GENERATIVE:
                     task_predictions = model.generate(prompts)
                 else:
-                    error_message=f"unknown task type {task.task_type}"
+                    error_message = f"unknown task type {task.task_type}"
                     logging.error(error_message)
                     task_predictions = None
 

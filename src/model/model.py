@@ -42,12 +42,12 @@ class Model:
 
     @abstractmethod
     def infer(
-        self, prompts:Union[ str , list[str]], possible_answers, conditions=None
-    ) -> Union[str,list[str]]:
+        self, prompts: Union[str, list[str]], possible_answers, conditions=None
+    ) -> Union[str, list[str]]:
         return ["0" for _ in range(len(prompts))]
 
     @abstractmethod
-    def generate(self, prompts: list[str], conditions=None) -> Union[str , list[str]]:
+    def generate(self, prompts: list[str], conditions=None) -> Union[str, list[str]]:
         raise NotImplementedError()
 
     def unload_model(self):

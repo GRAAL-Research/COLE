@@ -1,10 +1,13 @@
 "use client";
 
+
 import React, { useEffect, useState } from "react";
 import {
   normalizeBenchmarkName,
   computeAverageScore,
 } from "./util";
+
+import {BACKEND_ADDRESS} from "@/app/resources/ResourcesPaths";
 
 const allowedMetrics = [
   "acc",
@@ -27,7 +30,7 @@ export default function LeaderboardPage() {
   const [sortOrder, setSortOrder] = useState("desc");
 
   useEffect(() => {
-    fetch("http://localhost:8000/leaderboard")
+    fetch(`${BACKEND_ADDRESS}/leaderboard`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();

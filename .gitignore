@@ -61,3 +61,4 @@ next-env.d.ts
 /offline_evaluation/results
 /frontend/node_modules
 /.idea/*
+/frontend/.next

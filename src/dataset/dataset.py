@@ -2,7 +2,6 @@ from typing import Callable, Any, Union
 from datasets import load_dataset
 
 
-
 class Dataset:
     """Class representing a usable dataset.
     Allows dataset to be expressed as multiple forms, including as prompts,data or answers
@@ -19,7 +18,7 @@ class Dataset:
         self,
         name: str,
         description: str,
-        possible_ground_thruths: Union[list[str],list[int],list[float]],
+        possible_ground_thruths: Union[list[str], list[int], list[float]],
         hugging_face_repo: str,
         line_to_thruth_fn: Callable,
         line_to_prompt_fn: Callable,
@@ -36,14 +35,17 @@ class Dataset:
 
     @property
     def dataset(self):
+        self.load_data()
+        return self._dataset
+
+    def load_data(self):
         if self._dataset is None:
             self._dataset = load_dataset(
                 self.hugging_face_repo, name=self.name, split="test"
             )
-        return self._dataset
 
     @property
-    def ground_truths(self) -> Union[list[str],list[int],list[float]]:
+    def ground_truths(self) -> Union[list[str], list[int], list[float]]:
         """The dataset's ground truths as a list"""
         return [self.line_to_thruth_fn(line) for line in self.dataset]
 

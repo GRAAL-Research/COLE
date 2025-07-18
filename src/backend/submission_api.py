@@ -3,6 +3,7 @@ import json
 import logging
 import sys
 import uuid
+from contextlib import asynccontextmanager
 from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Any
@@ -14,6 +15,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from src.backend.evaluation import compute_tasks_ratings
 from src.backend.submit_tools import unzip_predictions_from_zip
+from src.dataset.datasets import preload_all_datasets
 from src.backend.validation_tools import (
     validate_submission_tasks_name,
     validate_submission_json,
@@ -32,16 +34,23 @@ sys.path.insert(0, str(SRC_DIR))
 RESULTS_DIR = BASE_DIR / "src" / "backend" / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 FRONTEND_DIR = BASE_DIR / "frontend"
-app = FastAPI()
+
+
+@asynccontextmanager
+async def lifespan(application: FastAPI = None):
+    # Load the ML model
+    preload_all_datasets()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 app.mount("/results", StaticFiles(directory=str(RESULTS_DIR)), name="results")
 print(FRONTEND_DIR)
 
-app.mount("/", StaticFiles(directory=str(FRONTEND_DIR),html=True), name="frontend")
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:7860"],
     allow_credentials=True,
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -90,34 +99,37 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
     entries: List[Dict[str, Any]] = []
 
     for filepath in glob.glob(str(RESULTS_DIR / "*.json")):
-            try:
-                with open(filepath, encoding="utf-8") as f:
-                    data = json.load(f)
+        try:
+            with open(filepath, encoding="utf-8") as f:
+                data = json.load(f)
 
-                # Ne traiter que si model_name et tasks existent
-                if "model_name" not in data or "tasks" not in data:
-                    continue
-
-                results = {}
-                for task_obj in data["tasks"]:
-                    for task_name, values in task_obj.items():
-                        results[task_name] = values
-
-                if not results:
-                    continue  # ignorer les fichiers sans résultats
-
-                entry = {
-                    "submission_id": data.get("submission_id") or str(uuid.uuid4()),
-                    "display_name": data.get("display_name") or data.get("model_name") or "Unnamed Model",
-                    "email": data.get("email", "N/A"),
-                    "results": results,
-                }
-
-                entries.append(entry)
-
-            except Exception as e:
-                logging.error(f"Error processing file {filepath}: {e}")
+            # Ne traiter que si model_name et tasks existent
+            if "model_name" not in data or "tasks" not in data:
                 continue
+
+            results = {}
+            for task_obj in data["tasks"]:
+                for task_name, values in task_obj.items():
+                    results[task_name] = values
+
+            if not results:
+                continue  # ignorer les fichiers sans résultats
+
+            entry = {
+                "submission_id": data.get("submission_id") or str(uuid.uuid4()),
+                "display_name": data.get("display_name")
+                or data.get("model_name")
+                or "Unnamed Model",
+                "email": data.get("email", "N/A"),
+                "results": results,
+            }
+
+            entries.append(entry)
+
+        except Exception as e:
+            error_message = f"Error processing file {filepath}: {e}"
+            logging.error(error_message)
+            continue
 
     return entries
 
@@ -131,3 +143,8 @@ async def leaderboard() -> List[Dict[str, Any]]:
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "message": "API is running."}
+
+
+@app.get("/")
+async def home():
+    return {"status": "working"}

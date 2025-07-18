@@ -21,7 +21,7 @@ class HFModel(Model):
      loads pretrained models and uses it for inference and generation.
     """
 
-    def generate(self, prompts: str, conditions=None) -> Union[str , list[str]]:
+    def generate(self, prompts: str, conditions=None) -> Union[str, list[str]]:
         raise ValueError("This Model can't generate text.")
 
     def __init__(
@@ -134,7 +134,7 @@ class HFLLMModel(HFModel):
         model = AutoModelForCausalLM.from_pretrained(model_name, **args)
         return model
 
-    def generate(self, prompts: Union[str , list[str]], conditions=None):
+    def generate(self, prompts: Union[str, list[str]], conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
 
         if not self.loaded:
@@ -165,7 +165,7 @@ class HFLLMModel(HFModel):
                     all_texts.append(text)
         return all_texts
 
-    def infer(self, prompts: Union[str , list[str]], possible_answers, conditions=None):
+    def infer(self, prompts: Union[str, list[str]], possible_answers, conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
         if not self.loaded:
             self.create_pipeline(self.model_name, task=self.task, token=self.token)

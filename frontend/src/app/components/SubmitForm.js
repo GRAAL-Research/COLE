@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import BigBlueButton from "./BigBlueButton";
 import ErrorMessage from "./ErrorMessage";
+import {BACKEND_ADDRESS} from "@/app/resources/ResourcesPaths";
 
 export default function SubmitForm() {
   const router = useRouter();
@@ -36,10 +37,9 @@ export default function SubmitForm() {
     formData.append("predictions_zip", file);
 
     try {
-      const res = await fetch("http://localhost:8000/submit", {
+      const res = await fetch(`${BACKEND_ADDRESS}/submit`, {
         method: "POST",
         body: formData,
-        credentials: "include"
       });
       if (!res.ok) {
         const err = await res.json().catch(() => null);
@@ -102,7 +102,7 @@ export default function SubmitForm() {
       </div>
 
       <ErrorMessage condition={requiredVisible}>
-        ⚠️ Email, display name & ZIP are requis.
+        ⚠️ Email, display name & ZIP are required.
       </ErrorMessage>
 
       <BigBlueButton onClick={submitResults} disabled={isSubmitting}>

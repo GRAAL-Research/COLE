@@ -275,3 +275,8 @@ datasets = {
         },
     ),
 }
+
+
+def preload_all_datasets():
+    for dataset in datasets.values():
+        dataset.load_data()

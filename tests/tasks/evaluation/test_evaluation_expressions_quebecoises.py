@@ -13,7 +13,6 @@ class TaskexpressionsquebecoisesTest(TaskTest):
         task = Task(
             task_name="expressions_quebecoises",
             metric="accuracy",
-
         )
 
         expected_results = {"accuracy": 0.6}
@@ -36,7 +35,6 @@ class TaskexpressionsquebecoisesTest(TaskTest):
         task = Task(
             task_name="expressions_quebecoises",
             metric="accuracy",
-
         )
 
         expected_results = {"accuracy": 0.09570957095709572}
@@ -53,7 +51,6 @@ class TaskexpressionsquebecoisesTest(TaskTest):
         task = Task(
             task_name="expressions_quebecoises",
             metric="accuracy",
-
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)
