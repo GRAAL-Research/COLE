@@ -147,7 +147,6 @@ class HFLLMModel(HFModel):
         """
         Takes a list of prompts as input and uses its loaded model to generate predictions.
         """
-        self.model.eval()
         if not self.loaded:
             self.create_pipeline()
         if isinstance(prompts, str):
@@ -178,7 +177,6 @@ class HFLLMModel(HFModel):
         """
         Takes a list of prompts as input and uses its loaded model to generate predictions.
         """
-        self.model.eval()
         if not self.loaded:
             self.create_pipeline()
         if isinstance(prompts, str):
@@ -199,6 +197,7 @@ class HFLLMModel(HFModel):
 
 
 def batch_score_labels(prompts, candidate_labels, model, tokenizer):
+    model.eval()
     device = model.device
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
