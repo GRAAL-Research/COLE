@@ -100,7 +100,7 @@ datasets = {
         .add_end(
             (
                 "Réponds seulement avec un chiffre entre 60 et 100 où 100"
-                " signifie que les deux phrases veulent dire exactement la même chose."
+                " signifie que les deux phrases veulent dire exactement la même chose. La réponse est :"
             )
         )
         .build(),
