@@ -5,7 +5,6 @@ from datetime import datetime
 import torch
 from tqdm import tqdm
 
-from predictions import utils
 from predictions.all_llms import llms
 from src.model.hugging_face_model import HFLLMModel
 from src.evaluation.model_evaluator import ModelEvaluator

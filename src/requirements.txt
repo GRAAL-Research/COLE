@@ -16,6 +16,8 @@ aenum
 
 torch
 transformers
+accelerate
+bitsandbytes
 
 # Pour compatibilité ancienne
 protobuf<=3.20.3
