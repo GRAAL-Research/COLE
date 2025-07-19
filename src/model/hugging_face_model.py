@@ -70,7 +70,6 @@ class HFModel(Model, abc.ABC):
         try:
             self.model, self.tokenizer = model_tokenizer_factory(
                 model_name=self._model_name,
-                max_seq_length=4096,
                 huggingface_token=self._token,
             )
 
