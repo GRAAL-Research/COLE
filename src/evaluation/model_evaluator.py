@@ -96,7 +96,7 @@ class ModelEvaluator:
 
                 if task.task_type == Tasktype.INFERENCE:
                     task_predictions = model.infer(
-                        prompts, task.dataset.possible_ground_thruths
+                        prompts, task.dataset.possible_ground_truths
                     )
                 elif task.task_type == Tasktype.GENERATIVE:
                     task_predictions = model.generate(prompts)

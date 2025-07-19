@@ -6,9 +6,9 @@ datasets = {
     "allocine": Dataset(
         name="allocine",
         description="desc",
-        possible_ground_thruths=["0", "1"],
+        possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: line["label"],
+        line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Cette phrase possède-t-elle un sentiment positif ou négatif ?")
         .add_data(line["review"])
@@ -24,9 +24,9 @@ datasets = {
     "qfrcola": Dataset(
         name="qfrcola",
         description="desc",
-        possible_ground_thruths=["0", "1"],
+        possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: line["label"],
+        line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Juge si cette phrase est grammaticalement correcte :")
         .add_data(line["sentence"])
@@ -41,9 +41,9 @@ datasets = {
     "qfrblimp": Dataset(
         name="qfrblimp",
         description="desc",
-        possible_ground_thruths=["0", "1"],
+        possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: str(
+        line_to_truth_fn=lambda line: str(
             line["label"]
         ),  # The label is return as a string.
         line_to_prompt_fn=lambda line: (
@@ -63,9 +63,9 @@ datasets = {
     "gqnli": Dataset(
         name="gqnli",
         description="desc",
-        possible_ground_thruths=["0", "1", "2"],
+        possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: line["label"],
+        line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Quelle est la relation de la deuxième phrase par rapport à la première ?"
@@ -90,9 +90,9 @@ datasets = {
     "opus_parcus": Dataset(
         name="opus_parcus",
         description="desc",
-        possible_ground_thruths=[str(i) for i in range(0, 101, 5)],
+        possible_ground_truths=[str(i) for i in range(0, 101, 5)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: line["quality"],
+        line_to_truth_fn=lambda line: line["quality"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Les deux phrases suivantes expriment-elles la même idée ou sont-elles différentes ?"
@@ -111,9 +111,9 @@ datasets = {
     "paws_x": Dataset(
         name="paws_x",
         description="desc",
-        possible_ground_thruths=["0", "1"],
+        possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: line["label"],
+        line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Les deux phrases suivantes veulent-elles dire la même chose, ou ont-elles des significations différentes ?"
@@ -134,9 +134,9 @@ datasets = {
     "piaf": Dataset(
         name="piaf",
         description="desc",
-        possible_ground_thruths=[],
+        possible_ground_truths=[],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: line["answers"],
+        line_to_truth_fn=lambda line: line["answers"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Tu vas recevoir un contexte et une question. "
@@ -154,9 +154,9 @@ datasets = {
     "fquad": Dataset(
         name="fquad",
         description="desc",
-        possible_ground_thruths=[],
+        possible_ground_truths=[],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: line["answers"],
+        line_to_truth_fn=lambda line: line["answers"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Tu vas recevoir un contexte et une question. "
@@ -174,9 +174,9 @@ datasets = {
     "sickfr": Dataset(
         name="sickfr",
         description="desc",
-        possible_ground_thruths=[i * 0.1 for i in range(0, 51)],
+        possible_ground_truths=[i * 0.1 for i in range(0, 51)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: float(line["relatedness_score"]),
+        line_to_truth_fn=lambda line: float(line["relatedness_score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "À quel point, de 0 à 5, les 2 phrases suivantes sont-elles similaires ?"
@@ -199,9 +199,9 @@ datasets = {
     "sts22": Dataset(
         name="sts22",
         description="desc",
-        possible_ground_thruths=[i * 0.1 for i in range(0, 51)],
+        possible_ground_truths=[i * 0.1 for i in range(0, 51)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: float(line["score"]),
+        line_to_truth_fn=lambda line: float(line["score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "À quel point, de 0 à 5, les 2 phrases suivantes sont-elles similaires ?"
@@ -225,9 +225,9 @@ datasets = {
     "xnli": Dataset(
         name="xnli",
         description="desc",
-        possible_ground_thruths=["0", "1", "2"],
+        possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: str(line["label"]),
+        line_to_truth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Quelle est la relation de la deuxième phrase par rapport à la première ?"
@@ -251,9 +251,9 @@ datasets = {
     "expressions_quebecoises": Dataset(
         name="expressions_quebecoises",
         description="desc",
-        possible_ground_thruths=[str(i) for i in range(11)],
+        possible_ground_truths=[str(i) for i in range(11)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: str(line["correct_index"]),
+        line_to_truth_fn=lambda line: str(line["correct_index"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             f"Qu'est-ce que ça veut dire cette expression québécoise « {line['expression']} » ?"

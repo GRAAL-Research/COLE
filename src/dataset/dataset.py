@@ -7,9 +7,9 @@ class Dataset:
     Allows dataset to be expressed as multiple forms, including as prompts, data or answers.
     :param name : name of the dataset.
     :param description : description of the dataset.
-    :param possible_ground_thruths : the form that could be taken by ground truths.
+    :param possible_ground_truths : the form that could be taken by ground truths.
     :param hugging_face_repo : where to download the dataset on HuggingFace.
-    :param line_to_thruth_fn : a function converting a dataset line to its truth value.
+    :param line_to_truth_fn : a function converting a dataset line to its truth value.
     :param line_to_prompt_fn : a function converting a dataset line to a prompt for LLM inference.
     :param line_to_data_fn : a function converting a dataset line to its data value for non LLM inference.
     """
@@ -18,9 +18,9 @@ class Dataset:
         self,
         name: str,
         description: str,
-        possible_ground_thruths: Union[list[str], list[int], list[float]],
+        possible_ground_truths: Union[list[str], list[int], list[float]],
         hugging_face_repo: str,
-        line_to_thruth_fn: Callable,
+        line_to_truth_fn: Callable,
         line_to_prompt_fn: Callable,
         line_to_data_fn: Callable,
     ):
@@ -28,9 +28,9 @@ class Dataset:
         self.name = name
         self.description = description
         self.hugging_face_repo = hugging_face_repo
-        self.possible_ground_thruths = possible_ground_thruths
+        self.possible_ground_truths = possible_ground_truths
         self.line_to_prompt_fn = line_to_prompt_fn
-        self.line_to_thruth_fn = line_to_thruth_fn
+        self.line_to_truth_fn = line_to_truth_fn
         self.line_to_data_fn = line_to_data_fn
 
     @property
@@ -47,7 +47,7 @@ class Dataset:
     @property
     def ground_truths(self) -> Union[list[str], list[int], list[float]]:
         """The dataset's ground truths as a list"""
-        return [self.line_to_thruth_fn(line) for line in self.dataset]
+        return [self.line_to_truth_fn(line) for line in self.dataset]
 
     @property
     def prompts(self) -> list[str]:
@@ -64,5 +64,5 @@ class Dataset:
         """The dataset's metadata as a dict"""
         return {
             "description": self.description,
-            "possible_ground_thruths": str(self.possible_ground_thruths),
+            "possible_ground_truths": str(self.possible_ground_truths),
         }
