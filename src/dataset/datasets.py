@@ -43,13 +43,12 @@ datasets = {
         description="desc",
         possible_ground_thruths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        # label renvoyé comme chaîne
-        line_to_thruth_fn=lambda line: str(line["label"]),
+        line_to_thruth_fn=lambda line: str(line["label"]),  # The label is return as a string.
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
             .add_premise("Laquelle de ces phrases est grammaticalement correcte ?")
-            .add_data(f"Phrase 0:{line["sentence_a"]}")
-            .add_data(f"Phrase 1:{line["sentence_b"]}")
+            .add_data(f"Phrase 0:{line['sentence_a']}")
+            .add_data(f"Phrase 1:{line['sentence_b']}")
             .add_end(
                 "Réponds avec seulement 0 si la phrase 0 "
                 "est grammaticalement correcte, et uniquement 1 si la phrase 1 est grammaticalement correcte. La réponse est :"
@@ -184,7 +183,8 @@ datasets = {
         )
         .add_end(
             (
-                "Réponds avec seulement un nombre de 0 à 5, où 5 signifie une très grande similarité entre les phrases et 0 aucune similarité entre les phrases. La réponse est :"
+                "Réponds avec seulement un nombre de 0 à 5, où 5 signifie une très grande similarité entre "
+                "les phrases et 0 aucune similarité entre les phrases. La réponse est :"
             )
         )
         .build(),
@@ -209,7 +209,8 @@ datasets = {
         .add_end(
             (
                 "Réponds seulement avec un nombre de 0 à 5, "
-                "où 5 signifie que les 2 phrases veulent dire exactement la même chose et 0 qu'elle ne veule pas dire la même chose. La réponse est :"
+                "où 5 signifie que les 2 phrases veulent dire exactement la même chose et 0 qu'elles ne veulent "
+                "pas dire la même chose. La réponse est :"
             )
         )
         .build(),
@@ -265,7 +266,8 @@ datasets = {
         .add_end(
             (
                 "Réponds uniquement par l'index, débutant à zéro,  "
-                "de la bonne définition parmi la liste ci-dessus. Par exemple, si c'est le troisième phrase, la réponse sera 2. La réponse est :"
+                "de la bonne définition parmi la liste ci-dessus. Par exemple, si c'est la "
+                "troisième phrase, la réponse sera 2. La réponse est :"
             )
         )
         .build(),
