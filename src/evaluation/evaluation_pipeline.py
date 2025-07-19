@@ -1,15 +1,16 @@
 import argparse
-import logging
 import gc
+import logging
 from datetime import datetime
+
 import torch
+import wandb
 from tqdm import tqdm
 
 from predictions.all_llms import llms
-from src.model.hugging_face_model import HFLLMModel
 from src.evaluation.model_evaluator import ModelEvaluator
+from src.model.hugging_face_model import HFLLMModel
 from src.task.task_factory import tasks_factory
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -44,27 +45,26 @@ parser.add_argument(
     "--batch_size",
     help="The batch size to use during the evaluation.",
     type=int,
-    default=8,
+    default=16,
 )
 
 parser.add_argument("--max_seq_length", type=int, default=4096)
 args = parser.parse_args()
 
-tasks = tasks_factory(
-    [
-        "piaf",
-        "qfrblimp",
-        "allocine",
-        "qfrcola",
-        "gqnli",
-        "opus_parcus",
-        "paws_x",
-        "fquad",
-        "sickfr",
-        "sts22",
-        "xnli",
-    ]
-)
+tasks_names = [
+    "piaf",
+    "qfrblimp",
+    "allocine",
+    "qfrcola",
+    "gqnli",
+    "opus_parcus",
+    "paws_x",
+    "fquad",
+    "sickfr",
+    "sts22",
+    "xnli",
+]
+tasks = tasks_factory(tasks_names)
 
 models = []
 if args.models_name is not None:
@@ -87,11 +87,26 @@ for model_name in tqdm(
         logging.info("Creating model")
         evaluator = ModelEvaluator()
         logging.info("Evaluating model")
-        evaluator.evaluate_subset(model, tasks, args.max_examples)
+
+        exp_name = f"{model_name}"
+        wandb.init(
+            project=f"COLLE",
+            config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
+            name=exp_name,
+        )
+
+        predictions_payload = evaluator.evaluate_subset(model, tasks, args.max_examples)
+        wandb.log(predictions_payload)
+
         logging.info("Saving results")
         evaluator.save_results("./results")
-        evaluator.compute_metrics()
+
+        metrics_payload = evaluator.compute_metrics()
         evaluator.save_metrics("./results")
+        wandb.log(metrics_payload)
+
+        wandb.finish(exit_code=0)
+
     except Exception as e:
         error_message = f"Evaluation failed for model {model_name}: {e}"
         logging.error(error_message)

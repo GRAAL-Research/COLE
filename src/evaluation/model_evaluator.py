@@ -2,6 +2,7 @@ import json
 import logging
 import os
 from datetime import datetime
+from typing import Dict
 
 from tqdm import tqdm
 
@@ -22,7 +23,7 @@ class ModelEvaluator:
 
         self.last_model_name = None
 
-    def compute_metrics(self):
+    def compute_metrics(self) -> Dict:
         """
         Compute metrics over the last tested model's predictions,
         must have called one the evaluate functions before or loaded predictions with load_predictions_from_file.
@@ -96,7 +97,9 @@ class ModelEvaluator:
         """
         return self.evaluate_subset(model, tasks)
 
-    def evaluate_subset(self, model: Model, tasks: list[Task], subset_size=None):
+    def evaluate_subset(
+        self, model: Model, tasks: list[Task], subset_size=None
+    ) -> Dict:
         """
         Evaluates a given model on the given tasks, but only on a given size.
         :param model : the model that will infer on the given tasks.
