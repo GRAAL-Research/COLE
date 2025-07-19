@@ -3,16 +3,27 @@ from src.evaluation.model_evaluator import ModelEvaluator
 from src.model.model import Model
 from src.task.task_factory import tasks_factory
 
-MODEL_NAME = "a model"
+MODEL_NAME = "a_model"
 preds = ["0", "0", "0", "0"]
 gen = ["1", "1", "1", "1"]
 BASE_TASK_NAME = "qfrcola"
 
 
+class ForTestModel(Model):
+    def infer(self, prompts, possible_answers, conditions=None):
+        return ["0" for _ in range(len(prompts))]
+
+    def generate(self, prompts, conditions=None):
+        raise NotImplementedError
+
+    def unload_model(self):
+        pass
+
+
 class ModelEvaluatorTest(TestCase):
 
     def setUp(self):
-        self.model = Model(MODEL_NAME)
+        self.model = ForTestModel(MODEL_NAME)
         self.model.infer = lambda *args, **kwargs: preds
         self.model.generate = lambda *args, **kwargs: gen
         self.tester = ModelEvaluator()
@@ -23,7 +34,7 @@ class ModelEvaluatorTest(TestCase):
 
         assert ret == {
             "model_name": MODEL_NAME,
-            "model_url": "No URL provided",
+            "model_url": "https://huggingface.co/a_model",
             "tasks": [{"qfrcola": preds}],
         }
 
@@ -34,7 +45,7 @@ class ModelEvaluatorTest(TestCase):
         print(metrics)
         assert metrics == {
             "model_name": MODEL_NAME,
-            "model_url": "No URL provided",
+            "model_url": "https://huggingface.co/a_model",
             "tasks": [
                 {
                     "qfrcola": {
