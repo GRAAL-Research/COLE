@@ -14,5 +14,8 @@ uvicorn
 tqdm
 aenum
 
+pytorch
+transformers
+
 # Pour compatibilité ancienne
 protobuf<=3.20.3
