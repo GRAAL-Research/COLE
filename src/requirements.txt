@@ -22,7 +22,6 @@ unsloth
 unsloth-zoo
 flash-attn
 wheel
-vllm
 
 wandb
 
