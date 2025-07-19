@@ -136,7 +136,7 @@ datasets = {
         description="desc",
         possible_ground_truths=[],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: line["answers"]["text"],
+        line_to_truth_fn=lambda line: line["answers"]["text"][0],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Tu vas recevoir un contexte et une question. "
