@@ -53,7 +53,8 @@ datasets = {
             .add_data(f"Phrase 1:{line['sentence_b']}")
             .add_end(
                 "Réponds avec seulement 0 si la phrase 0 "
-                "est grammaticalement correcte, et uniquement 1 si la phrase 1 est grammaticalement correcte. La réponse est :"
+                "est grammaticalement correcte, et uniquement 1 si la phrase 1 est grammaticalement "
+                "correcte. La réponse est :"
             )
             .build()
         ),
