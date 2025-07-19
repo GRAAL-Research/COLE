@@ -43,7 +43,9 @@ datasets = {
         description="desc",
         possible_ground_thruths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_thruth_fn=lambda line: str(line["label"]),  # The label is return as a string.
+        line_to_thruth_fn=lambda line: str(
+            line["label"]
+        ),  # The label is return as a string.
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
             .add_premise("Laquelle de ces phrases est grammaticalement correcte ?")
@@ -229,9 +231,7 @@ datasets = {
         .add_premise(
             "Quelle est la relation de la deuxième phrase par rapport à la première ?"
         )
-        .add_data(
-            fr"premise : {line['premise']}\n" f"sentence 2: {line['hypothesis']}"
-        )
+        .add_data(rf"premise : {line['premise']}\n" f"sentence 2: {line['hypothesis']}")
         .add_end(
             (
                 r"Réponds uniquement par :\n"
