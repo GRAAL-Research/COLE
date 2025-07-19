@@ -4,7 +4,7 @@ from datasets import load_dataset
 
 class Dataset:
     """Class representing a usable dataset.
-    Allows dataset to be expressed as multiple forms, including as prompts,data or answers
+    Allows dataset to be expressed as multiple forms, including as prompts, data or answers.
     :param name : name of the dataset.
     :param description : description of the dataset.
     :param possible_ground_thruths : the form that could be taken by ground truths.
