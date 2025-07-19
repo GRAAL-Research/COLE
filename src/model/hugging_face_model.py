@@ -3,7 +3,13 @@ import logging
 from typing import Union
 
 import torch
-from transformers import AutoModel, pipeline, AutoTokenizer, AutoModelForCausalLM
+from transformers import (
+    AutoModel,
+    pipeline,
+    AutoTokenizer,
+    AutoModelForCausalLM,
+    BitsAndBytesConfig,
+)
 from src.model.model import Model
 
 
@@ -50,11 +56,13 @@ class HFModel(Model, abc.ABC):
         return new_model
 
     def get_model_args(self):
+        quant_config = BitsAndBytesConfig(load_in_8bit=True)
         return omit_none(
             use_auth_token=self._token,
             trust_remote_code=True,
-            torch_dtype=torch.float16,
+            quantization_config=quant_config,
             device_map="auto",
+            attn_implementation="flash_attention_2",
         )
 
     def create_tokenizer(self):
@@ -132,11 +140,14 @@ class HFLLMModel(HFModel):
     def create_model(self):
         args = self.get_model_args()
         model = AutoModelForCausalLM.from_pretrained(self._model_name, **args)
+        model.eval()
         return model
 
     def generate(self, prompts: Union[str, list[str]], conditions=None):
-        """Takes a list of prompts as input and uses its loaded model to generate predictions."""
-
+        """
+        Takes a list of prompts as input and uses its loaded model to generate predictions.
+        """
+        self.model.eval()
         if not self.loaded:
             self.create_pipeline()
         if isinstance(prompts, str):
@@ -164,7 +175,10 @@ class HFLLMModel(HFModel):
         return all_texts
 
     def infer(self, prompts: Union[str, list[str]], possible_answers, conditions=None):
-        """Takes a list of prompts as input and uses its loaded model to generate predictions."""
+        """
+        Takes a list of prompts as input and uses its loaded model to generate predictions.
+        """
+        self.model.eval()
         if not self.loaded:
             self.create_pipeline()
         if isinstance(prompts, str):

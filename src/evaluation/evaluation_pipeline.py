@@ -51,8 +51,6 @@ parser.add_argument(
 parser.add_argument("--max_seq_length", type=int, default=4096)
 args = parser.parse_args()
 
-utils.hugging_face_login(args.token)
-
 tasks = tasks_factory(
     [
         "piaf",
@@ -75,8 +73,10 @@ if args.models_name is not None:
         models = llms[args.models_name]
     else:
         models = args.models_name.split(",")
+else:
+    models = llms["all"]
 
-logging.warning("starting Evaluation")
+logging.info("Starting Evaluation")
 
 time_start = datetime.now()
 
