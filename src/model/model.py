@@ -1,3 +1,5 @@
+# pylint: disable=method-hidden
+
 from abc import abstractmethod, ABC
 from typing import Union
 

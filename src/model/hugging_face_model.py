@@ -1,6 +1,6 @@
 import abc
 import logging
-from typing import Union, Optional
+from typing import Union
 
 import torch
 from transformers import AutoModel, pipeline, AutoTokenizer, AutoModelForCausalLM

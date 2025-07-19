@@ -42,7 +42,7 @@ class ModelEvaluatorTest(TestCase):
         self.tester.last_model_name = "test/model"
         self.tester.evaluate(self.model, self.tasks)
         metrics = self.tester.compute_metrics()
-        print(metrics)
+
         assert metrics == {
             "model_name": MODEL_NAME,
             "model_url": "https://huggingface.co/a_model",

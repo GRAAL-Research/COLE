@@ -37,7 +37,7 @@ FRONTEND_DIR = BASE_DIR / "frontend"
 
 
 @asynccontextmanager
-async def lifespan(application: FastAPI = None):
+async def lifespan(application: FastAPI = None):  # pylint: disable=unused-argument
     # Load the ML model
     preload_all_datasets()
     yield
@@ -45,7 +45,8 @@ async def lifespan(application: FastAPI = None):
 
 app = FastAPI(lifespan=lifespan)
 app.mount("/results", StaticFiles(directory=str(RESULTS_DIR)), name="results")
-print(FRONTEND_DIR)
+front_end_info_message = f"The Front-end directory is: {FRONTEND_DIR}"
+logging.info(front_end_info_message)
 
 app.add_middleware(
     CORSMiddleware,
@@ -87,7 +88,6 @@ async def submit(
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(submission_response, f, ensure_ascii=False, indent=2)
 
-    # <-- c’est bien ici qu’on clear le cache
     get_leaderboard_entries.cache_clear()
 
     return JSONResponse(content=submission_response)
