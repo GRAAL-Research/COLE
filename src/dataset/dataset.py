@@ -5,10 +5,10 @@ from datasets import load_dataset
 class Dataset:
     """Class representing a usable dataset.
     Allows dataset to be expressed as multiple forms, including as prompts,data or answers
-    :param name : name of the dataset
-    :param description : description of the dataset
-    :param possible_ground_thruths : the form that could be taken by ground thruths
-    :param hugging_face_repo : where to download the dataset on huggingFace
+    :param name : name of the dataset.
+    :param description : description of the dataset.
+    :param possible_ground_thruths : the form that could be taken by ground truths.
+    :param hugging_face_repo : where to download the dataset on HuggingFace.
     :param line_to_thruth_fn : a function converting a dataset line to its truth value.
     :param line_to_prompt_fn : a function converting a dataset line to a prompt for LLM inference.
     :param line_to_data_fn : a function converting a dataset line to its data value for non LLM inference.
