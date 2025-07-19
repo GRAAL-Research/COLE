@@ -83,7 +83,7 @@ for model_name in tqdm(
     models, total=len(models), desc="Processing LLM inference on tasks."
 ):
     try:
-        model = HFLLMModel(model_name, batch_size=args.batch_size)
+        model = HFLLMModel(model_name=model_name, batch_size=args.batch_size)
         logging.info("Creating model")
         evaluator = ModelEvaluator()
         logging.info("Evaluating model")
