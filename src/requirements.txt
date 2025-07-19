@@ -14,7 +14,7 @@ uvicorn
 tqdm
 aenum
 
-pytorch
+torch
 transformers
 
 # Pour compatibilité ancienne
