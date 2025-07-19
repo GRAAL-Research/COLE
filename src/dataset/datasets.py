@@ -32,7 +32,7 @@ datasets = {
         .add_data(line["sentence"])
         .add_end(
             (
-                "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon."
+                "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon. La réponse est :"
             )
         )
         .build(),
