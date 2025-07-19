@@ -72,10 +72,10 @@ datasets = {
         .add_data(line["hypothesis"])
         .add_end(
             (
-                "Réponds uniquement par :\n"
-                "0 — si la deuxième phrase implique la première,\n"
-                "1 — si la relation est neutre,\n"
-                "2 — s'il y a contradiction.\n"
+                r"Réponds uniquement par :\n"
+                r"0 — si la deuxième phrase implique la première,\n"
+                r"1 — si la relation est neutre,\n"
+                r"2 — s'il y a contradiction.\n"
                 "Réponds uniquement par 0, 1 ou 2."
             )
         )
