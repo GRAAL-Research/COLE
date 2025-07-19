@@ -18,6 +18,9 @@ torch
 transformers
 accelerate
 bitsandbytes
+unsloth
+unsloth-zoo
+flash-attn
 
 wandb
 

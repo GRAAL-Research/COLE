@@ -4,13 +4,11 @@ from typing import Union
 
 import torch
 from transformers import (
-    AutoModel,
     pipeline,
-    AutoTokenizer,
-    AutoModelForCausalLM,
-    BitsAndBytesConfig,
 )
+
 from src.model.model import Model
+from src.model.model_factory import model_tokenizer_factory
 
 
 def chunk_list(lst, chunk_size):
@@ -49,32 +47,10 @@ class HFModel(Model, abc.ABC):
     def generate(self, prompts: str, conditions=None) -> Union[str, list[str]]:
         raise NotImplementedError
 
-    def create_model(self):
-        """creates the model by fetching by name on Hugging Face"""
-        args = self.get_model_args()
-        new_model = AutoModel.from_pretrained(self._model_name, **args)
-        return new_model
-
-    def get_model_args(self):
-        quant_config = BitsAndBytesConfig(load_in_8bit=True)
-        return omit_none(
-            use_auth_token=self._token,
-            trust_remote_code=True,
-            quantization_config=quant_config,
-            device_map="auto",
-            attn_implementation="flash_attention_2",
-        )
-
-    def create_tokenizer(self):
-        """Creates an adapted tokenizer from Hugging Face"""
-        args = omit_none(
-            use_auth_token=self._token,
-        )
-        tokenizer = AutoTokenizer.from_pretrained(self._model_name, **args)
-        return tokenizer
-
     def infer(self, prompts: str, possible_answers, conditions=None):
-        """Takes a list of prompts as input and uses its loaded model to generate predictions."""
+        """
+        Takes a list of prompts as input and uses its loaded model to generate predictions.
+        """
         if not self.loaded:
             self.create_pipeline()
         if isinstance(prompts, str):
@@ -93,8 +69,10 @@ class HFModel(Model, abc.ABC):
         return all_outputs
 
     def change_task(self, task):
-        """changes the inside pipeline task, to see available
-        tasks go to https://huggingface.co/docs/transformers/main_classes/pipelines"""
+        """
+        changes the inside pipeline task, to see available
+        tasks go to https://huggingface.co/docs/transformers/main_classes/pipelines
+        """
         try:
             self.pipe.task = task
         except Exception:
@@ -103,9 +81,13 @@ class HFModel(Model, abc.ABC):
 
     def create_pipeline(self):
         try:
-            self.model = self.create_model()
+            self.model, self.tokenizer = model_tokenizer_factory(
+                model_name=self._model_name,
+                max_seq_length=4096,
+                huggingface_token=self._token,
+                gpu_memory_utilization=0.75,
+            )
 
-            self.tokenizer = self.create_tokenizer()
             self.pipe = pipeline(
                 task=self._task,
                 model=self.model,
@@ -136,12 +118,6 @@ class HFLLMModel(HFModel):
     ):
         super().__init__(**kwargs)
         self.max_gen_length = max_gen_length
-
-    def create_model(self):
-        args = self.get_model_args()
-        model = AutoModelForCausalLM.from_pretrained(self._model_name, **args)
-        model.eval()
-        return model
 
     def generate(self, prompts: Union[str, list[str]], conditions=None):
         """
@@ -197,7 +173,6 @@ class HFLLMModel(HFModel):
 
 
 def batch_score_labels(prompts, candidate_labels, model, tokenizer):
-    model.eval()
     device = model.device
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token

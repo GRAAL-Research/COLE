@@ -48,7 +48,6 @@ parser.add_argument(
     default=16,
 )
 
-parser.add_argument("--max_seq_length", type=int, default=4096)
 args = parser.parse_args()
 
 tasks_names = [
