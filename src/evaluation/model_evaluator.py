@@ -2,13 +2,18 @@ import json
 import logging
 import os
 from datetime import datetime
+
+from tqdm import tqdm
+
 from src.model.model import Model
 from src.task.task import Task, Tasktype
 from src.task.task_factory import tasks_factory
 
 
 class ModelEvaluator:
-    """The model evaluator acts as a pipeline for evaluation models on tasks available from tasks_factory."""
+    """
+    The model evaluator acts as a pipeline for evaluation models on tasks available from tasks_factory.
+    """
 
     def __init__(self):
         self.last_predictions = {}
@@ -97,7 +102,11 @@ class ModelEvaluator:
         :param subset_size : the size of the subset to be evaluated.
         """
         predictions = []
-        for task in tasks:
+        for task in tqdm(tasks, desc="Evaluating model on tasks", total=len(tasks)):
+            info_log = (
+                f"-----Doing task '{task.task_name}' with model '{model.name}-----'."
+            )
+            logging.info(info_log)
             try:
                 if subset_size is None:
                     prompts = task.dataset.prompts[:]
@@ -131,8 +140,10 @@ class ModelEvaluator:
         return self.last_predictions
 
     def save_results(self, save_path):
-        """Saves inferred metrics to a json file.
-        :param save_path : the path to which the json file will be saved"""
+        """
+        Saves inferred metrics to a json file.
+        :param save_path : the path to which the json file will be saved.
+        """
         if self.last_model_name is None:
             logging.error("Please evaluate before saving results")
             return None
@@ -144,7 +155,9 @@ class ModelEvaluator:
         )
 
     def save_object(self, save_dir_path, saved_object, filename):
-        """Utility method to save the given object into a json file."""
+        """
+        Utility method to save the given object into a json file.
+        """
         os.makedirs(save_dir_path, exist_ok=True)
         full_path = os.path.join(save_dir_path, filename)
         try:

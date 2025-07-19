@@ -103,7 +103,6 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
             with open(filepath, encoding="utf-8") as f:
                 data = json.load(f)
 
-            # Ne traiter que si model_name et tasks existent
             if "model_name" not in data or "tasks" not in data:
                 continue
 
@@ -113,7 +112,7 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
                     results[task_name] = values
 
             if not results:
-                continue  # ignorer les fichiers sans résultats
+                continue
 
             entry = {
                 "submission_id": data.get("submission_id") or str(uuid.uuid4()),

@@ -3,6 +3,8 @@ import logging
 import gc
 from datetime import datetime
 import torch
+from tqdm import tqdm
+
 from predictions import utils
 from predictions.all_llms import llms
 from src.model.hugging_face_model import HFLLMModel
@@ -78,14 +80,16 @@ logging.warning("starting Evaluation")
 
 time_start = datetime.now()
 
-for model_name in models:
+for model_name in tqdm(
+    models, total=len(models), desc="Processing LLM inference on tasks."
+):
     try:
         model = HFLLMModel(model_name, batch_size=args.batch_size)
-        logging.info("creating model")
+        logging.info("Creating model")
         evaluator = ModelEvaluator()
-        logging.info("evaluating model")
+        logging.info("Evaluating model")
         evaluator.evaluate_subset(model, tasks, args.max_examples)
-        logging.info("saving results")
+        logging.info("Saving results")
         evaluator.save_results("./results")
         evaluator.compute_metrics()
         evaluator.save_metrics("./results")
@@ -94,6 +98,7 @@ for model_name in models:
         logging.error(error_message)
         continue
     finally:
+        # Memory cleaning
         if "model" in locals():
             del model
         if "evaluator" in locals():
