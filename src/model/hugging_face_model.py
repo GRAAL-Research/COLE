@@ -157,7 +157,7 @@ class HFLLMModel(HFModel):
 
 
 def batch_score_labels(prompts, candidate_labels, model, tokenizer):
-    device = model.device
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
