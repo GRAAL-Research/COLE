@@ -1,4 +1,4 @@
-from typing import Callable, Any, Union
+from typing import Callable, Any, Union, List
 from datasets import load_dataset
 
 
@@ -18,7 +18,7 @@ class Dataset:
         self,
         name: str,
         description: str,
-        possible_ground_truths: Union[list[str], list[int], list[float]],
+        possible_ground_truths: Union[List[str], List[int], List[float]],
         hugging_face_repo: str,
         line_to_truth_fn: Callable,
         line_to_prompt_fn: Callable,
@@ -45,17 +45,17 @@ class Dataset:
             )
 
     @property
-    def ground_truths(self) -> Union[list[str], list[int], list[float]]:
+    def ground_truths(self) -> Union[List[str], List[int], List[float]]:
         """The dataset's ground truths as a list"""
         return [self.line_to_truth_fn(line) for line in self.dataset]
 
     @property
-    def prompts(self) -> list[str]:
+    def prompts(self) -> List[str]:
         """The dataset's prompts as a list"""
         return [self.line_to_prompt_fn(line) for line in self.dataset]
 
     @property
-    def data(self) -> list[str]:
+    def data(self) -> List[str]:
         """The dataset's data as a list"""
         return [self.line_to_data_fn(line) for line in self.dataset]
 
