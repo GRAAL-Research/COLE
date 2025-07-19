@@ -16,7 +16,8 @@ class ModelEvaluator:
         self.last_metrics = {}
 
     def compute_metrics(self):
-        """Compute metrics over the last tested model's predictions,
+        """
+        Compute metrics over the last tested model's predictions,
         must have called one the evaluate functions before or loaded predictions with load_predictions_from_file.
         """
         metrics = []

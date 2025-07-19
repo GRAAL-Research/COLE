@@ -137,8 +137,8 @@ datasets = {
         line_to_thruth_fn=lambda line: line["answers"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "Tu vas recevoir un contexte et une question.\n"
-            "→ Donne exactement le passage du contexte qui répond à la question.\n"
+            "Tu vas recevoir un contexte et une question. "
+            "Donne exactement le passage du contexte qui répond à la question. La réponse est :"
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")
@@ -157,8 +157,8 @@ datasets = {
         line_to_thruth_fn=lambda line: line["answers"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "Tu vas recevoir un contexte et une question.\n"
-            "→ Donne exactement le passage du contexte qui répond à la question.\n"
+            "Tu vas recevoir un contexte et une question. "
+            "Donne exactement le passage du contexte qui répond à la question. La réponse est :"
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")
@@ -184,7 +184,7 @@ datasets = {
         )
         .add_end(
             (
-                "Réponds avec seulement un nombre de 0 à 5, où 5 signifie une très grande similarité entre les phrases."
+                "Réponds avec seulement un nombre de 0 à 5, où 5 signifie une très grande similarité entre les phrases et 0 aucune similarité entre les phrases. La réponse est :"
             )
         )
         .build(),
@@ -201,7 +201,7 @@ datasets = {
         line_to_thruth_fn=lambda line: float(line["score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "En scorant de 0 à 5, à quel point les phrases suivants sont-elles similaires ?"
+            "À quel point, de 0 à 5, les 2 phrases suivantes sont-elles similaires ?"
         )
         .add_data(
             f"sentence 1: {line['sentence1']}\n" f"sentence 2: {line['sentence2']}"
@@ -209,7 +209,7 @@ datasets = {
         .add_end(
             (
                 "Réponds seulement avec un nombre de 0 à 5, "
-                "où 5 signifie que les 2 phrases veulent dire exactement la même chose. La réponse est :"
+                "où 5 signifie que les 2 phrases veulent dire exactement la même chose et 0 qu'elle ne veule pas dire la même chose. La réponse est :"
             )
         )
         .build(),
@@ -229,15 +229,15 @@ datasets = {
             "Quelle est la relation de la deuxième phrase par rapport à la première ?"
         )
         .add_data(
-            f"premise    : {line['premise']}\n" f"sentence 2: {line['hypothesis']}"
+            fr"premise : {line['premise']}\n" f"sentence 2: {line['hypothesis']}"
         )
         .add_end(
             (
-                "Réponds uniquement par :\n"
-                "0 — si la deuxième phrase implique la première,\n"
-                "1 — si la relation est neutre,\n"
-                "2 — s'il y a contradiction.\n"
-                "Réponds uniquement par 0, 1 ou 2."
+                r"Réponds uniquement par :\n"
+                r"0 — si la deuxième phrase implique la première,\n"
+                r"1 — si la relation est neutre,\n"
+                r"2 — s'il y a contradiction.\n"
+                r"Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
         .build(),
@@ -254,7 +254,7 @@ datasets = {
         line_to_thruth_fn=lambda line: str(line["correct_index"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            f"Qu'est-ce que ça veut dire cette expression québécoise «{line['expression']}» ?"
+            f"Qu'est-ce que ça veut dire cette expression québécoise « {line['expression']} » ?"
         )
         .add_data(
             "\n".join(
@@ -264,8 +264,8 @@ datasets = {
         )
         .add_end(
             (
-                "Réponds **uniquement** par l'index (un entier 0-based) "
-                "de la bonne définition parmi la liste ci-dessus."
+                "Réponds uniquement par l'index, débutant à zéro,  "
+                "de la bonne définition parmi la liste ci-dessus. Par exemple, si c'est le troisième phrase, la réponse sera 2. La réponse est :"
             )
         )
         .build(),
