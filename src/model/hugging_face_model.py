@@ -18,7 +18,7 @@ def omit_none(**kwargs):
 class HFModel(Model):
     """
     Model based on Hugging Face Transformers and pipeline mechanism,
-     loads pretrained models and uses it for inference and generation.
+    loads pretrained models and uses them for inference and generation.
     """
 
     def generate(self, prompts: str, conditions=None) -> Union[str, list[str]]:
