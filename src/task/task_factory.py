@@ -4,7 +4,7 @@ from typing import Dict, List, Union
 from src.task.task import Task, Tasktype
 
 
-def tasks_factory(task_names: Union[Dict, list[str]]) -> List[Task]:
+def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
     """
     Factory method to create a list of Task objects from a dictionary of task names and their predictions.
     """

@@ -1,7 +1,7 @@
 # pylint: disable=method-hidden
 
 from abc import abstractmethod, ABC
-from typing import Union
+from typing import Union, List
 
 
 class Model(ABC):
@@ -13,10 +13,10 @@ class Model(ABC):
 
     @abstractmethod
     def infer(
-        self, prompts: Union[str, list[str]], possible_answers, conditions=None
-    ) -> Union[str, list[str]]:
+        self, prompts: Union[str, List[str]], possible_answers, conditions=None
+    ) -> Union[str, List[str]]:
         raise NotImplementedError
 
     @abstractmethod
-    def generate(self, prompts: list[str], conditions=None) -> Union[str, list[str]]:
+    def generate(self, prompts: List[str], conditions=None) -> Union[str, List[str]]:
         raise NotImplementedError

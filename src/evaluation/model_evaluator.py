@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from datetime import datetime
-from typing import Dict
+from typing import Dict, List
 
 from tqdm import tqdm
 
@@ -89,7 +89,7 @@ class ModelEvaluator:
             f"{self.last_model_name.replace('/', '_')}_metrics.json",
         )
 
-    def evaluate(self, model: Model, tasks: list[Task]):
+    def evaluate(self, model: Model, tasks: List[Task]):
         """
         Evaluates a given model on the given tasks.
         :param model : the model that will infer on the given tasks.
@@ -98,7 +98,7 @@ class ModelEvaluator:
         return self.evaluate_subset(model, tasks)
 
     def evaluate_subset(
-        self, model: Model, tasks: list[Task], subset_size=None
+        self, model: Model, tasks: List[Task], subset_size=None
     ) -> Dict:
         """
         Evaluates a given model on the given tasks, but only on a given size.

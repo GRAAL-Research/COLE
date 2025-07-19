@@ -1,8 +1,11 @@
+from typing import List
+
+
 class PromptBuilder:
     def __init__(self):
-        self.premise: list[str] = []
-        self.end: list[str] = []
-        self.data: list[str] = []
+        self.premise: List[str] = []
+        self.end: List[str] = []
+        self.data: List[str] = []
         self.data_only = False
 
     def add_data(self, data):
