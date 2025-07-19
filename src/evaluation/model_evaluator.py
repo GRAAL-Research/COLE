@@ -33,7 +33,7 @@ class ModelEvaluator:
                 task = tasks[0]
                 metric_score, warning = task.compute(preds)
             except Exception as e:
-                error_message = f"error while calculating metrics'{task_name}' : {e}"
+                error_message = f"Error while calculating metrics'{task_name}' : {e}"
                 logging.error(error_message)
                 continue
             metric_name = task.metric_name
@@ -50,22 +50,28 @@ class ModelEvaluator:
         self.last_metrics = metrics
         return metrics
 
-    def load_predictions_from_file(self, file_path):
-        """Load predictions from file to compute metrics :param file_path:path to the predictions file."""
+    def load_predictions_from_file(self, file_path: str) -> None:
+        """
+        Load predictions from file to compute metrics :param file_path:path to the predictions file.
+        """
 
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 self.last_predictions = json.load(f)
         except FileNotFoundError:
-            print(f"File not found: {file_path}")
+            error = f"File not found: {file_path}"
+            logging.error(error)
             self.last_predictions = None
         except json.JSONDecodeError:
-            print(f"Invalid JSON in file: {file_path}")
+            error = f"Invalid JSON in file: {file_path}"
+            logging.error(error)
             self.last_predictions = None
 
     def save_metrics(self, save_path):
-        """Saves computed metrics to a json file.
-        :param save_path : the path to which the json file will be saved"""
+        """
+        Saves computed metrics to a json file.
+        :param save_path : the path to which the json file will be saved.
+        """
         if self.last_metrics is None:
             logging.info("No metrics saved")
             return None
@@ -76,16 +82,20 @@ class ModelEvaluator:
         )
 
     def evaluate(self, model: Model, tasks: list[Task]):
-        """Evaluates a given model on the given tasks.
-        :param model : the model that will infer on the given tasks
-        :param tasks : the tasks to be evaluated on"""
+        """
+        Evaluates a given model on the given tasks.
+        :param model : the model that will infer on the given tasks.
+        :param tasks : the tasks to be evaluated on.
+        """
         return self.evaluate_subset(model, tasks)
 
     def evaluate_subset(self, model: Model, tasks: list[Task], subset_size=None):
-        """Evaluates a given model on the given tasks, but only on a given size.
-        :param model : the model that will infer on the given tasks
-        :param tasks : the tasks to be evaluated on
-        :param subset_size : the size of the subset to be evaluated"""
+        """
+        Evaluates a given model on the given tasks, but only on a given size.
+        :param model : the model that will infer on the given tasks.
+        :param tasks : the tasks to be evaluated on.
+        :param subset_size : the size of the subset to be evaluated.
+        """
         predictions = []
         for task in tasks:
             try:
