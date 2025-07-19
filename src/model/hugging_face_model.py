@@ -1,5 +1,6 @@
+import abc
 import logging
-from typing import Union
+from typing import Union, Optional
 
 import torch
 from transformers import AutoModel, pipeline, AutoTokenizer, AutoModelForCausalLM
@@ -15,67 +16,68 @@ def omit_none(**kwargs):
     return {k: v for k, v in kwargs.items() if v is not None}
 
 
-class HFModel(Model):
+class HFModel(Model, abc.ABC):
     """
     Model based on Hugging Face Transformers and pipeline mechanism,
     loads pretrained models and uses them for inference and generation.
     """
 
-    def generate(self, prompts: str, conditions=None) -> Union[str, list[str]]:
-        raise ValueError("This Model can't generate text.")
-
     def __init__(
         self,
-        model_name,
-        task="text-generation",
-        token=None,
-        lazy_load=True,
-        batch_size=8,
+        model_name: str,
+        task: str = "text-generation",
+        token: Union[str, None] = None,
+        lazy_load: bool = True,
+        batch_size: int = 8,
     ):
         super().__init__(model_name)
-        self.model_name = model_name
+        self._model_name = model_name
         self.model, self.tokenizer, self.pipe, self.loaded = None, None, None, False
-        self.task = task
-        self.token = token
-        self.batch_size = batch_size
+        self._task = task
+        self._token = token
+        self._batch_size = batch_size
         if not lazy_load:
-            self.create_pipeline(model_name, task=task, token=token)
+            self.create_pipeline()
 
-    def create_model(self, model_name, token=None):
+    @abc.abstractmethod
+    def generate(self, prompts: str, conditions=None) -> Union[str, list[str]]:
+        raise NotImplementedError
+
+    def create_model(self):
         """creates the model by fetching by name on Hugging Face"""
-        args = self.get_model_args(token)
-        new_model = AutoModel.from_pretrained(model_name, **args)
+        args = self.get_model_args()
+        new_model = AutoModel.from_pretrained(self._model_name, **args)
         return new_model
 
-    def get_model_args(self, token):
+    def get_model_args(self):
         return omit_none(
-            use_auth_token=token,
+            use_auth_token=self._token,
             trust_remote_code=True,
             torch_dtype=torch.float16,
             device_map="auto",
         )
 
-    def create_tokenizer(self, model_name, token=None):
+    def create_tokenizer(self):
         """Creates an adapted tokenizer from Hugging Face"""
         args = omit_none(
-            use_auth_token=token,
+            use_auth_token=self._token,
         )
-        tokenizer = AutoTokenizer.from_pretrained(model_name, **args)
+        tokenizer = AutoTokenizer.from_pretrained(self._model_name, **args)
         return tokenizer
 
     def infer(self, prompts: str, possible_answers, conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
         if not self.loaded:
-            self.create_pipeline(self.model_name, task=self.task, token=self.token)
+            self.create_pipeline()
         if isinstance(prompts, str):
             prompts = [prompts]
 
         all_outputs = []
-        for sub_batch in chunk_list(prompts, self.batch_size):
+        for sub_batch in chunk_list(prompts, self._batch_size):
             try:
                 outputs = self.pipe(sub_batch)
             except Exception as e:
-                error_message = f" Échec inference batch {sub_batch[:2]} : {e}"
+                error_message = f"Error during inference {sub_batch[:2]} : {e}"
                 logging.error(error_message)
                 outputs = [{} for _ in sub_batch]
             all_outputs.extend(outputs)
@@ -88,22 +90,22 @@ class HFModel(Model):
         try:
             self.pipe.task = task
         except Exception:
-            error_messsage = f"Failed to change task to {task}"
-            logging.error(error_messsage)
+            error_message = f"Failed to change task to {task}"
+            logging.error(error_message)
 
-    def create_pipeline(self, model_name, task, token):
+    def create_pipeline(self):
         try:
-            self.model = self.create_model(model_name, token)
-            self.tokenizer = self.create_tokenizer(model_name, token)
+            self.model = self.create_model()
+            self.tokenizer = self.create_tokenizer()
             self.pipe = pipeline(
-                task=task,
+                task=self._task,
                 model=self.model,
                 tokenizer=self.tokenizer,
                 return_full_text=False,
             )
             self.loaded = True
         except Exception as e:
-            error_message = f"️ Impossible de charger le modèle {model_name} : {e}"
+            error_message = f"️ Impossible de charger le modèle {self._model_name} : {e}"
             logging.error(error_message)
             self.loaded = False
 
@@ -114,37 +116,32 @@ class HFModel(Model):
 
 class HFLLMModel(HFModel):
     """
-    LLM Model based on Hugging Face Transformers
-    and pipeline mechanism, loads pretrained LLM models and uses it for inference.
+    LLM Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses
+    it for inference.
     """
 
     def __init__(
         self,
-        model_name,
-        token=None,
-        batch_size=8,
-        task="text-generation",
         max_gen_length=5,
+        **kwargs,
     ):
-        super().__init__(model_name, task, token, batch_size=batch_size)
+        super().__init__(**kwargs)
         self.max_gen_length = max_gen_length
 
-    def create_model(self, model_name, token=None):
-        args = self.get_model_args(token)
-        model = AutoModelForCausalLM.from_pretrained(model_name, **args)
+    def create_model(self):
+        args = self.get_model_args()
+        model = AutoModelForCausalLM.from_pretrained(self._model_name, **args)
         return model
 
     def generate(self, prompts: Union[str, list[str]], conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
 
         if not self.loaded:
-            self.create_pipeline(self.model_name, task=self.task, token=self.token)
-        if not self.loaded:
-            self.create_pipeline(self.model_name, task=self.task, token=self.token)
+            self.create_pipeline()
         if isinstance(prompts, str):
             prompts = [prompts]
         all_texts = []
-        for sub_batch in chunk_list(prompts, self.batch_size):
+        for sub_batch in chunk_list(prompts, self._batch_size):
             try:
                 batch_outputs = self.pipe(
                     sub_batch,
@@ -168,11 +165,11 @@ class HFLLMModel(HFModel):
     def infer(self, prompts: Union[str, list[str]], possible_answers, conditions=None):
         """Takes a list of prompts as input and uses its loaded model to generate predictions."""
         if not self.loaded:
-            self.create_pipeline(self.model_name, task=self.task, token=self.token)
+            self.create_pipeline()
         if isinstance(prompts, str):
             prompts = [prompts]
         all_answers = []
-        for sub_batch in chunk_list(prompts, self.batch_size):
+        for sub_batch in chunk_list(prompts, self._batch_size):
             try:
 
                 labels = batch_score_labels(
@@ -180,7 +177,7 @@ class HFLLMModel(HFModel):
                 )
                 all_answers.extend(labels)
             except Exception as e:
-                error_message = f"error occured while processing batch : {e}"
+                error_message = f"Error occurred while processing batch : {e}"
                 logging.error(error_message)
 
         return all_answers
@@ -249,6 +246,3 @@ def batch_score_labels(prompts, candidate_labels, model, tokenizer):
     predicted = [candidate_labels[i] for i in top_indices]
 
     return predicted
-
-
-# Usage example:
