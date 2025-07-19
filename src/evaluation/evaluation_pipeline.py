@@ -109,6 +109,7 @@ for model_name in tqdm(
     except Exception as e:
         error_message = f"Evaluation failed for model {model_name}: {e}"
         logging.error(error_message)
+        wandb.finish(exit_code=1)
         continue
     finally:
         # Memory cleaning

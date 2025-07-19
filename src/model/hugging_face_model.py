@@ -1,6 +1,6 @@
 import abc
 import logging
-from typing import Union
+from typing import Union, List
 
 import torch
 from transformers import (
@@ -29,7 +29,6 @@ class HFModel(Model, abc.ABC):
     def __init__(
         self,
         model_name: str,
-        task: str = "text-generation",
         token: Union[str, None] = None,
         lazy_load: bool = True,
         batch_size: int = 8,
@@ -37,14 +36,13 @@ class HFModel(Model, abc.ABC):
         super().__init__(model_name)
         self._model_name = model_name
         self.model, self.tokenizer, self.pipe, self.loaded = None, None, None, False
-        self._task = task
         self._token = token
         self._batch_size = batch_size
         if not lazy_load:
             self.create_pipeline()
 
     @abc.abstractmethod
-    def generate(self, prompts: str, conditions=None) -> Union[str, list[str]]:
+    def generate(self, prompts: str, conditions=None) -> Union[str, List[str]]:
         raise NotImplementedError
 
     def infer(self, prompts: str, possible_answers, conditions=None):
@@ -68,17 +66,6 @@ class HFModel(Model, abc.ABC):
 
         return all_outputs
 
-    def change_task(self, task):
-        """
-        changes the inside pipeline task, to see available
-        tasks go to https://huggingface.co/docs/transformers/main_classes/pipelines
-        """
-        try:
-            self.pipe.task = task
-        except Exception:
-            error_message = f"Failed to change task to {task}"
-            logging.error(error_message)
-
     def create_pipeline(self):
         try:
             self.model, self.tokenizer = model_tokenizer_factory(
@@ -89,14 +76,13 @@ class HFModel(Model, abc.ABC):
             )
 
             self.pipe = pipeline(
-                task=self._task,
+                task="text-generation",
                 model=self.model,
                 tokenizer=self.tokenizer,
-                return_full_text=False,
             )
             self.loaded = True
         except Exception as e:
-            error_message = f"️ Impossible de charger le modèle {self._model_name} : {e}"
+            error_message = f"️ Impossible to load model {self._model_name} : {e}"
             logging.error(error_message)
             self.loaded = False
 
@@ -119,7 +105,7 @@ class HFLLMModel(HFModel):
         super().__init__(**kwargs)
         self.max_gen_length = max_gen_length
 
-    def generate(self, prompts: Union[str, list[str]], conditions=None):
+    def generate(self, prompts: Union[str, List[str]], conditions=None):
         """
         Takes a list of prompts as input and uses its loaded model to generate predictions.
         """
@@ -149,7 +135,7 @@ class HFLLMModel(HFModel):
                     all_texts.append(text)
         return all_texts
 
-    def infer(self, prompts: Union[str, list[str]], possible_answers, conditions=None):
+    def infer(self, prompts: Union[str, List[str]], possible_answers, conditions=None):
         """
         Takes a list of prompts as input and uses its loaded model to generate predictions.
         """
