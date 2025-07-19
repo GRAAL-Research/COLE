@@ -21,6 +21,7 @@ bitsandbytes
 unsloth
 unsloth-zoo
 flash-attn
+wheel
 
 wandb
 
