@@ -29,7 +29,6 @@ class Task:
         self._metric_computer = metric_factory(metric_name=self.metric_name)
         self.task_name = task_name
         self.dataset = datasets[task_name]
-        self._ground_truths = self.dataset.ground_truths
         self.task_type = task_type
 
     @property
@@ -45,20 +44,20 @@ class Task:
 
         sample_size = len(predictions)
 
-        if sample_size < len(self._ground_truths):
+        if sample_size < len(self.dataset):
             # Means we have a sample of the prediction
-            ground_truths = self._ground_truths[:sample_size]
+            ground_truths = self.dataset[:sample_size]
             warning = (
                 f"Your prediction size is of '{sample_size}', while the ground truths size is "
-                f"of '{len(self._ground_truths)}'. We computed the metric over the first "
+                f"of '{len(self.dataset)}'. We computed the metric over the first "
                 f"{sample_size} elements."
             )
-        elif sample_size > len(self._ground_truths):
+        elif sample_size > len(self.dataset):
             error = "There are more predictions than ground truths."
             logging.error(error)
             raise ValueError(error)
         else:
-            ground_truths = self._ground_truths
+            ground_truths = self.dataset.ground_truths
 
         metric_score = self._metric_computer.compute(
             predictions=predictions, references=ground_truths

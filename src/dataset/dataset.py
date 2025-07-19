@@ -66,3 +66,14 @@ class Dataset:
             "description": self.description,
             "possible_ground_truths": str(self.possible_ground_truths),
         }
+
+    def __len__(self):
+        return len(self.ground_truths)
+
+    def __getitem__(self, index: Union[int, slice]):
+        if isinstance(index, slice):
+            get_item_data = self.ground_truths[index.start : index.stop]
+        else:
+            get_item_data = self.ground_truths[index]
+
+        return get_item_data
