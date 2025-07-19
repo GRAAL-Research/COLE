@@ -20,6 +20,8 @@ class ModelEvaluator:
 
         self.last_metrics = {}
 
+        self.last_model_name = None
+
     def compute_metrics(self):
         """
         Compute metrics over the last tested model's predictions,
@@ -120,7 +122,7 @@ class ModelEvaluator:
                 elif task.task_type == Tasktype.GENERATIVE:
                     task_predictions = model.generate(prompts)
                 else:
-                    error_message = f"unknown task type {task.task_type}"
+                    error_message = f"Unknown task type {task.task_type}"
                     logging.error(error_message)
                     task_predictions = None
 
@@ -128,12 +130,12 @@ class ModelEvaluator:
                 predictions.append(task_predictions)
 
             except Exception as e:
-                error_message = f"Tâche '{task.task_name}' échouée : {e}"
+                error_message = f"Task '{task.task_name}' has failed : {e}"
                 logging.error(error_message)
                 continue
         self.last_predictions = {
             "model_name": model.name,
-            "model_url": "No URL provided",
+            "model_url": f"https://huggingface.co/{model.name}",
             "tasks": predictions,
         }
         self.last_model_name = model.name

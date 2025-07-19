@@ -96,6 +96,7 @@ class HFModel(Model, abc.ABC):
     def create_pipeline(self):
         try:
             self.model = self.create_model()
+
             self.tokenizer = self.create_tokenizer()
             self.pipe = pipeline(
                 task=self._task,
