@@ -72,7 +72,6 @@ class HFModel(Model, abc.ABC):
                 model_name=self._model_name,
                 max_seq_length=4096,
                 huggingface_token=self._token,
-                gpu_memory_utilization=0.75,
             )
 
             self.pipe = pipeline(
@@ -118,7 +117,6 @@ class HFLLMModel(HFModel):
             try:
                 batch_outputs = self.pipe(
                     sub_batch,
-                    max_new_tokens=self.max_gen_length,
                 )
             except Exception as e:
                 logging.error(e)

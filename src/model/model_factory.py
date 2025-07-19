@@ -12,7 +12,6 @@ def model_tokenizer_factory(
     model_name,
     max_seq_length: int,
     huggingface_token: str,
-    gpu_memory_utilization: float,
 ):
     load_in_4bit = True
 
@@ -56,8 +55,6 @@ def model_tokenizer_factory(
             dtype=None,
             load_in_4bit=load_in_4bit,
             token=huggingface_token,
-            gpu_memory_utilization=gpu_memory_utilization,
-            fast_inference=True,
         )
 
     model.eval()
