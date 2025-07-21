@@ -111,6 +111,13 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                         task_type=TaskType.INFERENCE,
                     )
                 )
+            case "termes_quebecoises":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
+                    )
+                )
             case _:
                 error = f"Unknown task {task_name}."
                 logging.error(error)
