@@ -51,17 +51,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 tasks_names = [
-    "piaf",
-    "qfrblimp",
-    "allocine",
-    "qfrcola",
-    "gqnli",
-    "opus_parcus",
-    "paws_x",
-    "fquad",
-    "sickfr",
-    "sts22",
-    "xnli",
+    "termes_quebecoises",
 ]
 tasks = tasks_factory(tasks_names)
 

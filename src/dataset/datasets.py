@@ -305,7 +305,7 @@ datasets = {
             "choices": line["choices"],
         },
     ),
-        "daccord": Dataset(
+    "daccord": Dataset(
         name="daccord",
         description="desc",
         possible_ground_truths=["0", "1"],
@@ -326,7 +326,7 @@ datasets = {
         ),
         line_to_data_fn=lambda line: {
             "premise": line["premise"],
-            "hypothesis": line["hypothesis"]
+            "hypothesis": line["hypothesis"],
         },
     ),
 }
