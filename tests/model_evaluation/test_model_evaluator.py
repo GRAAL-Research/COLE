@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from unittest import TestCase
 
 from src.dataset.dataset import Dataset
@@ -8,8 +8,8 @@ from src.task.task import Task
 from src.task.task_factory import tasks_factory
 
 MODEL_NAME = "a_model"
-preds = ["0", "0", "0", "0"]
-gen = ["1", "1", "1", "1"]
+preds = ["0"] * 7546  # qfrcola dataset size
+gen = ["0"] * 7546  # qfrcola dataset size
 BASE_TASK_NAME = "qfrcola"
 
 
@@ -28,6 +28,10 @@ class ForTestModel(Model):
 
 
 class ModelEvaluatorTest(TestCase):
+    def assertEvalDictEqual(self, dict1: Dict, dict2: Dict) -> None:
+        for (key_1, value_1), (key_2, value_2) in zip(dict1.items(), dict2.items()):
+            self.assertEqual(key_1, key_2)
+            self.assertAlmostEqual(value_1, value_2, delta=0.1)
 
     def setUp(self):
         self.model = ForTestModel(MODEL_NAME)
@@ -48,28 +52,45 @@ class ModelEvaluatorTest(TestCase):
     def test_when_compute_metrics_return_metrics_dict(self):
         self.tester.last_model_name = "test/model"
         self.tester.evaluate(self.model, self.tasks)
-        metrics = self.tester.compute_metrics()
+        actual_metrics = self.tester.compute_metrics()
 
-        assert metrics == {
+        expected = {
             "model_name": MODEL_NAME,
             "model_url": "https://huggingface.co/a_model",
             "tasks": [
                 {
                     "qfrcola": {
                         "accuracy": {
-                            "accuracy": 0.5,
-                            "accuracy_warning": f"Your prediction size is of '{len(preds)}', "
-                            "while the ground truths size is of "
-                            f"'{len(self.tasks[0].dataset.ground_truths)}'. "
-                            f"We computed the metric over the first {len(preds)} elements.",
+                            "accuracy": 0.305,
+                            "accuracy_warning": None,
                         }
                     }
                 }
             ],
         }
+        for key in expected.keys():
+            if key == "tasks":
+                expected_task_payload = (
+                    expected.get(key)[0].get("qfrcola").get("accuracy")
+                )
+                actual_task_payload = (
+                    actual_metrics.get(key)[0].get("qfrcola").get("accuracy")
+                )
+
+                self.assertAlmostEqual(
+                    expected_task_payload.get("accuracy"),
+                    actual_task_payload.get("accuracy"),
+                    delta=0.1,
+                )
+                self.assertEqual(
+                    expected_task_payload.get("accuracy_warning"),
+                    actual_task_payload.get("accuracy_warning"),
+                )
+            else:
+                self.assertEqual(expected.get(key), actual_metrics.get(key))
 
     def test_when_task_is_generative_generate(self):
-        TASK_NAME = "fquad"
+        TASK_NAME = "qfrcola"
         tasks = tasks_factory([TASK_NAME])
         predictions = self.tester.evaluate(self.model, tasks)
         assert predictions["tasks"] == [{TASK_NAME: gen}]

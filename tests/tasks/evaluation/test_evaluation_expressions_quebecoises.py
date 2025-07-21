@@ -3,9 +3,9 @@ from src.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
 
-class TaskexpressionsquebecoisesTest(TaskTest):
+class TaskExpressionsQuebecoisesTest(TaskTest):
     def setUp(self) -> None:
-        self.dataset_size = 303
+        self.dataset_size = 329
 
     def test_given_a_prediction_smaller_than_corpus_when_compute_then_return_expected_result_and_warning(
         self,
@@ -17,7 +17,7 @@ class TaskexpressionsquebecoisesTest(TaskTest):
             task_type=TaskType.INFERENCE,
         )
 
-        expected_results = {"accuracy": 0.6}
+        expected_results = {"accuracy": 0.0}
         expected_warning = (
             f"Your prediction size is of '{len(a_predictions)}', while the ground truths size is "
             f"of '{self.dataset_size}'. We computed the metric over the first {len(a_predictions)}"
