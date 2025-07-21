@@ -277,6 +277,35 @@ datasets = {
             "choices": line["choices"],
         },
     ),
+    "termes_quebecoises": Dataset(
+        name="termes_quebecoises",
+        description="desc",
+        possible_ground_truths=[str(i) for i in range(11)],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["correct_index"]),
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            f"Qu'est-ce que ça veut dire ce terme québécois« {line['expression']} » ?"
+        )
+        .add_data(
+            "\n".join(
+                f"{idx} — {definition}"
+                for idx, definition in enumerate(line["choices"])
+            )
+        )
+        .add_end(
+            (
+                "Réponds uniquement par l'index, débutant à zéro,  "
+                "de la bonne définition parmi la liste ci-dessus."
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "terme": line["terme"],
+            "choices": line["choices"],
+        },
+    ),
+
 }
 
 

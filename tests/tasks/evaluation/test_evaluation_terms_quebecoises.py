@@ -2,20 +2,20 @@ from src.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
 
-class TaskexpressionsquebecoisesTest(TaskTest):
+class TasktermesquebecoisesTest(TaskTest):
     def setUp(self) -> None:
-        self.dataset_size = 329
+        self.dataset_size = 201
 
-    def test_given_a_prediction_smaller_than_corpus_when_compute_then_return_expected_result_and_warning(
+    def test_given_a_prediction_smaller_than_corpu2s_when_compute_then_return_expected_result_and_warning(
         self,
     ):
-        a_predictions = [9, 9, 9, 9, 9]
+        a_predictions = [9, 6, 8, 9, 9]
         task = Task(
-            task_name="expressions_quebecoises",
+            task_name="termes_quebecoises",
             metric="accuracy",
         )
 
-        expected_results = {"accuracy": 0.2}
+        expected_results = {"accuracy": 0.6}
         expected_warning = (
             f"Your prediction size is of '{len(a_predictions)}', while the ground truths size is "
             f"of '{self.dataset_size}'. We computed the metric over the first {len(a_predictions)}"
@@ -33,7 +33,7 @@ class TaskexpressionsquebecoisesTest(TaskTest):
     ):
         a_predictions = [1] * self.dataset_size
         task = Task(
-            task_name="expressions_quebecoises",
+            task_name="termes_quebecoises",
             metric="accuracy",
         )
 
@@ -49,7 +49,7 @@ class TaskexpressionsquebecoisesTest(TaskTest):
     def test_given_a_prediction_larger_than_ground_truth_raise_error(self):
         a_predictions = [1] * (self.dataset_size + 1)
         task = Task(
-            task_name="expressions_quebecoises",
+            task_name="termes_quebecoises",
             metric="accuracy",
         )
 
