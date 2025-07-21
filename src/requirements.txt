@@ -20,6 +20,8 @@ accelerate
 bitsandbytes
 flash-attn
 wheel
+unsloth
+unsloth-zoo
 
 wandb
 
