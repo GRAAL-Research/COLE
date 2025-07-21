@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ErrorMessage from "./ErrorMessage";
-import {BACKEND_ADDRESS} from "@/app/resources/ResourcesPaths";
+import { BACKEND_ADDRESS } from "@/app/resources/ResourcesPaths";
 import { Trans } from 'react-i18next';
 import BigBlueButton from "./BigBlueButton";
 import { useTranslation } from 'react-i18next';
@@ -75,12 +75,12 @@ export default function SubmitForm() {
               {t('submit_successTitle')}
             </h3>
             <p className="mt-2">{t('submit_successMessage')}</p>
-            <button
+            <BigBlueButton
               className="mt-4 px-4 py-2 rounded-full shadow hover:shadow-md"
               onClick={() => router.push(`/results/${submissionId}`)}
             >
               {t('submit_checkResults')}
-            </button>
+            </BigBlueButton>
           </div>
         </div>
       );
@@ -145,10 +145,33 @@ export default function SubmitForm() {
           />
         </div>
 
-      <ErrorMessage condition={requiredVisible}>
-        ⚠️ Email, display name & ZIP are required.
-      </ErrorMessage>
-      {renderModal()}
+        <div className="space-y-2">
+          <label htmlFor="zipfile" className="block text-sm font-medium text-gray-700">
+            {t('submit_labelZip')}
+          </label>
+          <input
+            id="zipfile"
+            type="file"
+            accept=".zip"
+            onChange={handleFileChange}
+            className="border border-gray-300 p-3 rounded-md w-full focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <ErrorMessage condition={requiredVisible}>
+          ⚠️ Email, display name & ZIP are required.
+        </ErrorMessage>
+
+        <button
+          onClick={submitResults}
+          disabled={isSubmitting}
+          className="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 mt-4"
+        >
+          {isSubmitting ? t('submit_submitting') : t('submit_button')}
+        </button>
+
+        {renderModal()}
+      </div>
     </div>
-    </div>
-  );}
+  );
+}
