@@ -14,9 +14,9 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y nginx \
     && rm -rf /var/lib/apt/lists/*
 
-COPY src/requirements.txt /app/src/
-RUN pip install torch
-RUN pip install -r /app/src/requirements.txt
+COPY src/docker_requirements.txt /app/src/
+RUN pip install -r /app/src/docker_requirements.txt && \
+    rm -rf ~/.cache/pip
 COPY src/ /app/src/
 
 # Copy Nginx config (adjust path if needed)

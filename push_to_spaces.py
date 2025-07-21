@@ -8,5 +8,4 @@ upload_folder(
     folder_path=local_dir,
     repo_type="space",  # Important: this tells HF it's a Space
     commit_message="Initial snapshot upload",
-
 )

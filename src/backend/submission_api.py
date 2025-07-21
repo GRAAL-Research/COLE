@@ -1,6 +1,7 @@
 import glob
 import json
 import logging
+import os
 import sys
 import uuid
 from contextlib import asynccontextmanager
@@ -8,9 +9,11 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Any
 
+import huggingface_hub
 from fastapi import FastAPI, UploadFile, Form, File
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+
 from starlette.middleware.cors import CORSMiddleware
 
 from src.backend.evaluation import compute_tasks_ratings
@@ -39,7 +42,14 @@ FRONTEND_DIR = BASE_DIR / "frontend"
 @asynccontextmanager
 async def lifespan(application: FastAPI = None):  # pylint: disable=unused-argument
     # Load the ML model
-    preload_all_datasets()
+    try:
+        token = os.environ.get("HF_TOKEN")
+        huggingface_hub.login(token=token)
+        preload_all_datasets()
+    except Exception as e:
+        error_message = f"The datasets could not be loaded : {e}"
+        logging.critical(error_message)
+
     yield
 
 
