@@ -1,6 +1,10 @@
+from typing import List
 from unittest import TestCase
+
+from src.dataset.dataset import Dataset
 from src.evaluation.model_evaluator import ModelEvaluator
 from src.model.model import Model
+from src.task.task import Task
 from src.task.task_factory import tasks_factory
 
 MODEL_NAME = "a_model"
@@ -10,10 +14,13 @@ BASE_TASK_NAME = "qfrcola"
 
 
 class ForTestModel(Model):
-    def infer(self, prompts, possible_answers, conditions=None):
-        return ["0" for _ in range(len(prompts))]
+    def predict(self, evaluation_dataset: Dataset, task: Task):
+        return ["0" for _ in range(len(evaluation_dataset))]
 
-    def generate(self, prompts, conditions=None):
+    def infer(self, rows: List[str]):
+        return ["0" for _ in range(len(rows))]
+
+    def generate(self, rows: List[str]):
         raise NotImplementedError
 
     def unload_model(self):

@@ -1,3 +1,4 @@
+from src.task.task import TaskType
 from src.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
@@ -19,6 +20,7 @@ class TaskFQUADTest(TaskTest):
         task = Task(
             task_name="fquad",
             metric="fquad",
+            task_type=TaskType.INFERENCE,
         )
 
         expected_results = {"exact_match": 20.0, "f1": 25.333333}
@@ -41,6 +43,7 @@ class TaskFQUADTest(TaskTest):
         task = Task(
             task_name="fquad",
             metric="fquad",
+            task_type=TaskType.INFERENCE,
         )
 
         expected_results = {"exact_match": 0.25, "f1": 5.9855542}
@@ -57,6 +60,7 @@ class TaskFQUADTest(TaskTest):
         task = Task(
             task_name="fquad",
             metric="fquad",
+            task_type=TaskType.INFERENCE,
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)

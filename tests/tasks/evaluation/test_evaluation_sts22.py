@@ -1,3 +1,4 @@
+from src.task.task import TaskType
 from src.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
@@ -14,6 +15,7 @@ class TaskSTS22Test(TaskTest):
         task = Task(
             task_name="sts22",
             metric="pearson",
+            task_type=TaskType.INFERENCE,
         )
 
         expected_results = {"pearsonr": -0.2273955}
@@ -36,6 +38,7 @@ class TaskSTS22Test(TaskTest):
         task = Task(
             task_name="sts22",
             metric="pearson",
+            task_type=TaskType.INFERENCE,
         )
 
         expected_results = {"pearsonr": 0.29421966}
@@ -52,6 +55,7 @@ class TaskSTS22Test(TaskTest):
         task = Task(
             task_name="sts22",
             metric="pearson",
+            task_type=TaskType.INFERENCE,
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)

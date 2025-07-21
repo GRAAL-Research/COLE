@@ -1,3 +1,4 @@
+from src.task.task import TaskType
 from src.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
@@ -14,6 +15,7 @@ class TaskSICKFrTest(TaskTest):
         task = Task(
             task_name="sickfr",
             metric="pearson",
+            task_type=TaskType.INFERENCE,
         )
 
         expected_results = {"pearsonr": -0.19545428098020537}
@@ -36,6 +38,7 @@ class TaskSICKFrTest(TaskTest):
         task = Task(
             task_name="sickfr",
             metric="pearson",
+            task_type=TaskType.INFERENCE,
         )
 
         expected_results = {"pearsonr": -0.0013261}
@@ -52,6 +55,7 @@ class TaskSICKFrTest(TaskTest):
         task = Task(
             task_name="sickfr",
             metric="pearson",
+            task_type=TaskType.INFERENCE,
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)
