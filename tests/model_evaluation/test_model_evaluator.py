@@ -68,7 +68,7 @@ class ModelEvaluatorTest(TestCase):
                 }
             ],
         }
-        for key in expected.keys():
+        for key in expected:
             if key == "tasks":
                 expected_task_payload = (
                     expected.get(key)[0].get("qfrcola").get("accuracy")
