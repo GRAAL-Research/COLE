@@ -1,4 +1,6 @@
+
 # Core
+torch
 python-dotenv
 numpy
 scipy
@@ -13,15 +15,11 @@ uvicorn
 # Optional: pretty printing, progress bars, etc.
 tqdm
 aenum
-
-torch
 transformers
 accelerate
 bitsandbytes
 flash-attn
 wheel
-
 wandb
-
 # Pour compatibilité ancienne
 protobuf<=3.20.3

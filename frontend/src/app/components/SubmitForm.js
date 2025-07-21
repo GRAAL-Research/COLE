@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import BigBlueButton from "./BigBlueButton";
 import ErrorMessage from "./ErrorMessage";
 import {BACKEND_ADDRESS} from "@/app/resources/ResourcesPaths";
+import { Trans } from 'react-i18next';
 
 export default function SubmitForm() {
   const { t } = useTranslation();
@@ -148,5 +148,5 @@ export default function SubmitForm() {
       </ErrorMessage>
       {renderModal()}
     </div>
-  );
-}
+    </div>
+  );}

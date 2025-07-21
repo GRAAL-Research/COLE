@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y nginx \
     && rm -rf /var/lib/apt/lists/*
 
 COPY src/requirements.txt /app/src/
+RUN pip install torch
 RUN pip install -r /app/src/requirements.txt
 COPY src/ /app/src/
 
