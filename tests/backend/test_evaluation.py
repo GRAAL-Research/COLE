@@ -4,6 +4,7 @@ from unittest import TestCase
 from unittest.mock import ANY
 
 from src.backend.evaluation import compute_tasks_ratings
+from src.task.task import TaskType
 from src.task.task_factory import Task
 
 
@@ -31,10 +32,12 @@ class ComputeTasksRatingsTest(TestCase):
             Task(
                 task_name="allocine",
                 metric="accuracy",
+                task_type=TaskType.INFERENCE,
             ),
             Task(
                 task_name="fquad",
                 metric="fquad",
+                task_type=TaskType.INFERENCE,
             ),
         ]
 

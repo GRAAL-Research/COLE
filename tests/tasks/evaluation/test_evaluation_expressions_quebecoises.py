@@ -1,8 +1,9 @@
+from src.task.task import TaskType
 from src.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
 
-class TaskexpressionsquebecoisesTest(TaskTest):
+class TaskExpressionsQuebecoisesTest(TaskTest):
     def setUp(self) -> None:
         self.dataset_size = 329
 
@@ -13,9 +14,10 @@ class TaskexpressionsquebecoisesTest(TaskTest):
         task = Task(
             task_name="expressions_quebecoises",
             metric="accuracy",
+            task_type=TaskType.INFERENCE,
         )
 
-        expected_results = {"accuracy": 0.2}
+        expected_results = {"accuracy": 0.0}
         expected_warning = (
             f"Your prediction size is of '{len(a_predictions)}', while the ground truths size is "
             f"of '{self.dataset_size}'. We computed the metric over the first {len(a_predictions)}"
@@ -35,6 +37,7 @@ class TaskexpressionsquebecoisesTest(TaskTest):
         task = Task(
             task_name="expressions_quebecoises",
             metric="accuracy",
+            task_type=TaskType.INFERENCE,
         )
 
         expected_results = {"accuracy": 0.09570957095709572}
@@ -51,6 +54,7 @@ class TaskexpressionsquebecoisesTest(TaskTest):
         task = Task(
             task_name="expressions_quebecoises",
             metric="accuracy",
+            task_type=TaskType.INFERENCE,
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)

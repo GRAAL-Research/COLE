@@ -4,10 +4,10 @@ import os
 from datetime import datetime
 from typing import Dict, List
 
-from tqdm import tqdm
+from datasets import Dataset
 
 from src.model.model import Model
-from src.task.task import Task, Tasktype
+from src.task.task import Task
 from src.task.task_factory import tasks_factory
 
 
@@ -107,7 +107,7 @@ class ModelEvaluator:
         :param subset_size : the size of the subset to be evaluated.
         """
         predictions = []
-        for task in tqdm(tasks, desc="Evaluating model on tasks", total=len(tasks)):
+        for task in tasks:
             info_log = (
                 f"-----Doing task '{task.task_name}' with model '{model.name}-----'."
             )
@@ -118,16 +118,11 @@ class ModelEvaluator:
                 else:
                     prompts = task.dataset.prompts[:subset_size]
 
-                if task.task_type == Tasktype.INFERENCE:
-                    task_predictions = model.infer(
-                        prompts, task.dataset.possible_ground_truths
-                    )
-                elif task.task_type == Tasktype.GENERATIVE:
-                    task_predictions = model.generate(prompts)
-                else:
-                    error_message = f"Unknown task type {task.task_type}"
-                    logging.error(error_message)
-                    task_predictions = None
+                evaluate_dataset = Dataset.from_dict({"text": prompts})
+
+                task_predictions = model.predict(
+                    evaluation_dataset=evaluate_dataset, task=task
+                )
 
                 task_predictions = {task.task_name: task_predictions}
                 predictions.append(task_predictions)
