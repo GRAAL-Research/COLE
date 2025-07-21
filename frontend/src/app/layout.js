@@ -1,10 +1,10 @@
-
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Taskbar from "./components/taskbar";
-import Modal from "./components/Modal";
+
+import ClientHeader from "./components/ClientHeader";
 import ModalManager from "./components/ModalManager";
 import {Suspense} from "react";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -21,23 +21,16 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div><Taskbar></Taskbar></div>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ClientHeader />
         <main className="w-full flex justify-center px-4 pt-8">
-        <div className="w-full max-w-3xl">
-          {children}
-        </div>
-        
+          <div className="w-full max-w-3xl">{children}</div>
         </main>
         <Suspense fallback={null}>
           <ModalManager/>
         </Suspense>
-
       </body>
     </html>
   );

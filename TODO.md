@@ -1,6 +1,6 @@
 # Vos TODO:
 
-1. Le leaderboard ça ne fonctionne pas, ce ne sont pas toujours les mêmes métriques. Il faut trouver un moyen de faire ca adéquatement.
+1. ~~Le leaderboard ça ne fonctionne pas, ce ne sont pas toujours les mêmes métriques. Il faut trouver un moyen de faire ca adéquatement.~~
 2. ~~2. Avoir un gabarit de JSON sur le site Web pour faciliter la soumission~~
 ```json
     submission_json = {
