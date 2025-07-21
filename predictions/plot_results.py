@@ -1,7 +1,7 @@
+import math
 import matplotlib.pyplot as plt
 import numpy as np
-from offline_evaluation.convert_results_to_md import results_data
-import math
+from predictions.convert_results_to_md import results_data
 
 
 def extract_plot_task_data(all_tasks_data, task):
@@ -11,7 +11,7 @@ def extract_plot_task_data(all_tasks_data, task):
     for model, model_metrics in task_data.items():
         models.append(model)
         for metric, results in model_metrics.items():
-            if metric in task_metrics.keys():
+            if metric in task_metrics:
                 task_metrics[metric].append(results)
             else:
                 task_metrics[metric] = [results]
@@ -19,18 +19,36 @@ def extract_plot_task_data(all_tasks_data, task):
     return models, task_metrics
 
 
-labels = []
-all_tasks = {}
-datas = results_data()
-for data in datas:
-    model_name = data["config_general"]["model_name"]
-    for key, value in data["results"].items():
-        if key not in all_tasks.keys():
-            all_tasks[key] = {model_name: value}
-        else:
-            all_tasks[key][model_name] = value
-    print(all_tasks["custom|allocine|0"])
-labels, metrics = extract_plot_task_data(all_tasks, "custom|allocine|0")
+def extract_data_by_tasks():
+    all_tasks_data = {}
+    datas = results_data()
+    for data in datas:
+        model_name = data["model_name"]
+        for task in data["tasks"]:
+            for task_name, metrics_values in task.items():
+                for metric_values in metrics_values.values():
+                    if task_name not in all_tasks:
+                        all_tasks_data[task_name] = {
+                            model_name: {
+                                metric_key: metric_value
+                                for metric_key, metric_value in metric_values.items()
+                                if isinstance(metric_value, (int, float))
+                            }
+                        }
+                    else:
+                        all_tasks[task_name][model_name] = {
+                            metric_key: metric_value
+                            for metric_key, metric_value in metric_values.items()
+                            if isinstance(metric_value, (int, float))
+                        }
+
+    print(all_tasks)
+    return all_tasks
+
+
+all_tasks = extract_data_by_tasks()
+
+labels, metrics = extract_plot_task_data(all_tasks, "piaf")
 print(metrics)
 
 num_plots = len(all_tasks)
@@ -60,9 +78,9 @@ for i, dataset_name in enumerate(all_tasks.keys()):
     ax.set_xticklabels(labels, rotation=-45)
     ax.legend(fontsize=7)
 
-# Hide unused subplots if any
-for j in range(i + 1, len(axs)):
-    fig.delaxes(axs[j])
+    # Hide unused subplots if any
+    for j in range(i + 1, len(axs)):
+        fig.delaxes(axs[j])
 
 plt.tight_layout()
 plt.show()

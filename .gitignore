@@ -56,6 +56,9 @@ next-env.d.ts
 /src/backend/__pycache__
 /archives/Models/__pycache__
 *.pyc
-/src/Benchmarks_data
+/Benchmarks_data
 /src/light_eval_custom/results
 /offline_evaluation/results
+/frontend/node_modules
+/.idea/*
+/frontend/.next

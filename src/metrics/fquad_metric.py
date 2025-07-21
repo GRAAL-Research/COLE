@@ -22,9 +22,6 @@ def normalize_answer(answer: str) -> str:
         exclude = set(string.punctuation)
         return "".join(ch for ch in text if ch not in exclude)
 
-    def lower(text):
-        return text.lower()
-
     answer = str(answer)
     return white_space_fix(remove_articles(remove_punc(answer.lower())))
 

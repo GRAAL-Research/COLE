@@ -13,7 +13,6 @@ class TaskQFrCoLATest(TaskTest):
         task = Task(
             task_name="qfrcola",
             metric="accuracy",
-            ground_truths_column_name="label",
         )
 
         expected_results = {"accuracy": 0.6}
@@ -36,7 +35,6 @@ class TaskQFrCoLATest(TaskTest):
         task = Task(
             task_name="qfrcola",
             metric="accuracy",
-            ground_truths_column_name="label",
         )
 
         expected_results = {"accuracy": 0.694937715}
@@ -53,7 +51,6 @@ class TaskQFrCoLATest(TaskTest):
         task = Task(
             task_name="qfrcola",
             metric="accuracy",
-            ground_truths_column_name="label",
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)

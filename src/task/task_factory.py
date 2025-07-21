@@ -1,24 +1,25 @@
 import logging
-from typing import Dict, List
+from typing import Dict, List, Union
 
-from src.task.task import Task
+from src.task.task import Task, Tasktype
 
 
-def tasks_factory(dictionary: Dict) -> List[Task]:
+def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
     """
     Factory method to create a list of Task objects from a dictionary of task names and their predictions.
     """
     tasks = []
+    if isinstance(task_names, Dict):
+        tasks_names = task_names.get("tasks")
+        task_names = [list(task.keys())[0] for task in tasks_names]
 
-    for task in dictionary.get("tasks"):
-        task_name = list(task.keys())[0]
+    for task_name in task_names:
         match task_name:
             case "allocine":
                 tasks.append(
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
                     )
                 )
             case "fquad":
@@ -26,7 +27,7 @@ def tasks_factory(dictionary: Dict) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="fquad",
-                        ground_truths_column_name="answers",
+                        task_type=Tasktype.GENERATIVE,
                     )
                 )
             case "gqnli":
@@ -34,7 +35,6 @@ def tasks_factory(dictionary: Dict) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
                     )
                 )
             case "opus_parcus":
@@ -42,7 +42,6 @@ def tasks_factory(dictionary: Dict) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
-                        ground_truths_column_name="quality",
                     )
                 )
             case "paws_x":
@@ -50,7 +49,6 @@ def tasks_factory(dictionary: Dict) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
                     )
                 )
             case "piaf":
@@ -58,7 +56,7 @@ def tasks_factory(dictionary: Dict) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="fquad",
-                        ground_truths_column_name="answers",
+                        task_type=Tasktype.GENERATIVE,
                     )
                 )
             case "qfrblimp":
@@ -66,7 +64,6 @@ def tasks_factory(dictionary: Dict) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
                     )
                 )
             case "qfrcola":
@@ -74,7 +71,6 @@ def tasks_factory(dictionary: Dict) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
                     )
                 )
             case "sickfr":
@@ -82,7 +78,6 @@ def tasks_factory(dictionary: Dict) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
-                        ground_truths_column_name="label",
                     )
                 )
             case "sts22":
@@ -90,7 +85,6 @@ def tasks_factory(dictionary: Dict) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
-                        ground_truths_column_name="score",
                     )
                 )
             case "xnli":
@@ -98,7 +92,13 @@ def tasks_factory(dictionary: Dict) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
-                        ground_truths_column_name="label",
+                    )
+                )
+            case "expressions_quebecoises":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
                     )
                 )
             case _:

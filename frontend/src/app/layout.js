@@ -3,6 +3,7 @@ import "./globals.css";
 
 import ClientHeader from "./components/ClientHeader";
 import ModalManager from "./components/ModalManager";
+import {Suspense} from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,9 @@ export default function RootLayout({ children }) {
         <main className="w-full flex justify-center px-4 pt-8">
           <div className="w-full max-w-3xl">{children}</div>
         </main>
-        <ModalManager />
+        <Suspense fallback={null}>
+          <ModalManager/>
+        </Suspense>
       </body>
     </html>
   );

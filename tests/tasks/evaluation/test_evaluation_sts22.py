@@ -14,7 +14,6 @@ class TaskSTS22Test(TaskTest):
         task = Task(
             task_name="sts22",
             metric="pearson",
-            ground_truths_column_name="score",
         )
 
         expected_results = {"pearsonr": -0.2273955}
@@ -37,7 +36,6 @@ class TaskSTS22Test(TaskTest):
         task = Task(
             task_name="sts22",
             metric="pearson",
-            ground_truths_column_name="score",
         )
 
         expected_results = {"pearsonr": 0.29421966}
@@ -54,7 +52,6 @@ class TaskSTS22Test(TaskTest):
         task = Task(
             task_name="sts22",
             metric="pearson",
-            ground_truths_column_name="score",
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)

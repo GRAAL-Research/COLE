@@ -5,13 +5,23 @@ scipy
 pandas
 requests
 evaluate
-
+python-multipart
+scikit-learn
 # Web backend (si tu utilises FastAPI/Flask, sinon à ignorer)
 fastapi
-
+uvicorn
 # Optional: pretty printing, progress bars, etc.
 tqdm
 aenum
+
+torch
+transformers
+accelerate
+bitsandbytes
+flash-attn
+wheel
+
+wandb
 
 # Pour compatibilité ancienne
 protobuf<=3.20.3

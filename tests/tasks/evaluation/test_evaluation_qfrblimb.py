@@ -13,7 +13,6 @@ class TaskQFrBLiMPTest(TaskTest):
         task = Task(
             task_name="qfrblimp",
             metric="accuracy",
-            ground_truths_column_name="label",
         )
 
         expected_results = {"accuracy": 0.6}
@@ -36,7 +35,6 @@ class TaskQFrBLiMPTest(TaskTest):
         task = Task(
             task_name="qfrblimp",
             metric="accuracy",
-            ground_truths_column_name="label",
         )
 
         expected_results = {"accuracy": 0.51984877}
@@ -53,7 +51,6 @@ class TaskQFrBLiMPTest(TaskTest):
         task = Task(
             task_name="qfrblimp",
             metric="accuracy",
-            ground_truths_column_name="label",
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)

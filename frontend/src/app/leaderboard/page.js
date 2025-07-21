@@ -1,10 +1,12 @@
 'use client';
 
-import '../i18n';
-import { useTranslation } from 'react-i18next';
-import React, { useEffect, useState } from 'react';
-import { normalizeBenchmarkName, computeAverageScore } from './util';
-import { useParams } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import {
+  normalizeBenchmarkName,
+  computeAverageScore,
+} from "./util";
+
+import {BACKEND_ADDRESS} from "@/app/resources/ResourcesPaths";
 
 const allowedMetrics = [
   'acc',
@@ -31,7 +33,7 @@ export default function LeaderboardPage() {
   };
 
   useEffect(() => {
-    fetch('http://localhost:8000/leaderboard')
+    fetch(`${BACKEND_ADDRESS}/leaderboard`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();

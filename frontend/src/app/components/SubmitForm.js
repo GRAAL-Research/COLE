@@ -1,11 +1,10 @@
 'use client';
 
-import '../i18n';
-import { useTranslation, Trans } from 'react-i18next';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import BigBlueButton from './BigBlueButton';
-import ErrorMessage from './ErrorMessage';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import BigBlueButton from "./BigBlueButton";
+import ErrorMessage from "./ErrorMessage";
+import {BACKEND_ADDRESS} from "@/app/resources/ResourcesPaths";
 
 export default function SubmitForm() {
   const { t } = useTranslation();
@@ -43,8 +42,8 @@ export default function SubmitForm() {
     formData.append('predictions_zip', file);
 
     try {
-      const res = await fetch('http://localhost:8000/submit', {
-        method: 'POST',
+      const res = await fetch(`${BACKEND_ADDRESS}/submit`, {
+        method: "POST",
         body: formData,
       });
       if (!res.ok) {
@@ -144,28 +143,9 @@ export default function SubmitForm() {
           />
         </div>
 
-        <div className="space-y-2">
-          <label htmlFor="zipfile" className="block text-sm font-medium text-gray-700">
-            {t('submit_labelFile')}
-          </label>
-          <input
-            id="zipfile"
-            type="file"
-            accept=".zip"
-            onChange={handleFileChange}
-            className="border border-gray-300 p-2 rounded-md w-full focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <ErrorMessage condition={requiredVisible}>
-          {t('submit_requiredError')}
-        </ErrorMessage>
-
-        <BigBlueButton onClick={submitResults} disabled={isSubmitting}>
-          {isSubmitting ? t('submit_submitting') : t('submit_button')}
-        </BigBlueButton>
-      </div>
-
+      <ErrorMessage condition={requiredVisible}>
+        ⚠️ Email, display name & ZIP are required.
+      </ErrorMessage>
       {renderModal()}
     </div>
   );

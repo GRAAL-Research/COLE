@@ -37,22 +37,17 @@ export default function Guide() {
           </p>
 
           <p className="text-gray-700 mt-4">
-            <Trans i18nKey="guide_section1_para2">
-              To test a model, you also need to fetch the data in the same way. Once done, your model should infer predictions for each line in the test split. Our repository includes benchmark evaluation scripts for each dataset. You only need to plug in your model’s inference method using the HuggingFace Model interface. Our inference scripts are available on our{' '}
-              <a
-                href="https://github.com/GRAAL-Research/colle"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline hover:text-blue-800"
-              >
-                GitHub Repository
-              </a>
-              .
-            </Trans>
+            To test a model, you also need to fetch the data in the same way. Once done, your model should infer predictions for each line in the test split. Our repository includes benchmark evaluation scripts for each dataset. You only need to plug in your model&#39;s inference method using HuggingFace Model interface. Our inference script are available on our <a
+          href="https://github.com/GRAAL-Research/colle"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline hover:text-blue-800">
+            GitHub Repository
+          </a>.
           </p>
 
           <p className="text-gray-700 mt-4">
-            {t('guide_section1_para3')}
+            If you prefer to run inference separately, please ensure that the predictions are formatted correctly before submitting them for evaluation (see our &#34;Formatting the Dataset&#34; section).
           </p>
 
           {/* SECTION FORMATTING */}

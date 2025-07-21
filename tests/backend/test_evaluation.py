@@ -31,10 +31,10 @@ class ComputeTasksRatingsTest(TestCase):
             Task(
                 task_name="allocine",
                 metric="accuracy",
-                ground_truths_column_name="label",
             ),
             Task(
-                task_name="fquad", metric="fquad", ground_truths_column_name="answers"
+                task_name="fquad",
+                metric="fquad",
             ),
         ]
 

@@ -19,7 +19,6 @@ class TaskFQUADTest(TaskTest):
         task = Task(
             task_name="fquad",
             metric="fquad",
-            ground_truths_column_name="answers",
         )
 
         expected_results = {"exact_match": 20.0, "f1": 25.333333}
@@ -42,7 +41,6 @@ class TaskFQUADTest(TaskTest):
         task = Task(
             task_name="fquad",
             metric="fquad",
-            ground_truths_column_name="answers",
         )
 
         expected_results = {"exact_match": 0.25, "f1": 5.9855542}
@@ -59,7 +57,6 @@ class TaskFQUADTest(TaskTest):
         task = Task(
             task_name="fquad",
             metric="fquad",
-            ground_truths_column_name="answers",
         )
 
         self.assertRaises(ValueError, task.compute, predictions=a_predictions)
