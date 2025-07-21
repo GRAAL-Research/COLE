@@ -2,6 +2,12 @@
 # Start FastAPI
 echo '🔧 Starting backend...'
 uvicorn src.backend.submission_api:app --host 0.0.0.0 --port 8000  &
+
+until curl -s http://localhost:8000/ > /dev/null; do
+    echo "FastAPI not ready yet. Retrying in 1s..."
+    sleep 1
+done
+
 echo '✅ Backend ready'
 ls
 # Start Next.js

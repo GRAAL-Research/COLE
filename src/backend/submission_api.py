@@ -73,6 +73,7 @@ async def submit(
     predictions_zip: UploadFile = File(...),
     display_name: str = Form(...),
 ):
+    logging.log("")
     info_message = f"Submission from {email!r} as {display_name!r}."
     logging.info(info_message)
     zip_bytes = await predictions_zip.read()
