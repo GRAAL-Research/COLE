@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import ErrorMessage from "./ErrorMessage";
 import {BACKEND_ADDRESS} from "@/app/resources/ResourcesPaths";
 import { Trans } from 'react-i18next';
+import BigBlueButton from "./BigBlueButton";
 
 export default function SubmitForm() {
   const { t } = useTranslation();
