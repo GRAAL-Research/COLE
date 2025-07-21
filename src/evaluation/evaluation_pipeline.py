@@ -89,7 +89,7 @@ for model_name in tqdm(
 
         exp_name = f"{model_name}"
         wandb.init(
-            project=f"COLLE",
+            project="COLLE",
             config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
             name=exp_name,
         )
