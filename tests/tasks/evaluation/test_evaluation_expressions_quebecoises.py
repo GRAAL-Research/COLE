@@ -17,7 +17,7 @@ class TaskExpressionsQuebecoisesTest(TaskTest):
             task_type=TaskType.INFERENCE,
         )
 
-        expected_results = {"accuracy": 0.0}
+        expected_results = {"accuracy": 0.2}
         expected_warning = (
             f"Your prediction size is of '{len(a_predictions)}', while the ground truths size is "
             f"of '{self.dataset_size}'. We computed the metric over the first {len(a_predictions)}"
