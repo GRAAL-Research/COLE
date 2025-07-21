@@ -305,6 +305,30 @@ datasets = {
             "choices": line["choices"],
         },
     ),
+        "daccord": Dataset(
+        name="daccord",
+        description="desc",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["label"]),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise("Détermine la relation entre les deux phrases suivantes :")
+            .add_data(f"Première phrase : {line['premise']}")
+            .add_data(f"Deuxième phrase : {line['hypothesis']}")
+            .add_end(
+                "Réponds uniquement par :\n"
+                "0 — si les deux phrases sont compatibles (elles expriment la même information ou sont cohérentes),\n"
+                "1 — s'il y a contradiction entre les deux phrases.\n"
+                "Réponds uniquement par 0 ou 1. La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "premise": line["premise"],
+            "hypothesis": line["hypothesis"]
+        },
+    ),
 }
 
 
