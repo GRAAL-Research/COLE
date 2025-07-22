@@ -340,7 +340,7 @@ datasets = {
             .add_premise(
                 "Lis le passage suivant et réponds à la question en te basant uniquement sur le texte :\n"
                 "- Si le passage permet d'affirmer que la réponse à la question est oui, réponds 1.\n"
-                "- Sinon (si la réponse est non ou que le passage ne permet pas de répondre oui), réponds 0."            )
+                "- Sinon, si la réponse est non ou que le passage ne permet pas de répondre 'oui', réponds 0."            )
             .add_data(f"Passage : {line['passage']}")
             .add_data(f"Question : {line['question']}")
             .add_end(
