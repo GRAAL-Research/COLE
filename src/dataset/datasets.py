@@ -144,7 +144,7 @@ datasets = {
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")
-        .add_end("Réponse :")
+        .add_end("La réponse est :")
         .build(),
         line_to_data_fn=lambda line: {
             "context": line["context"],
@@ -296,7 +296,7 @@ datasets = {
         .add_end(
             (
                 "Réponds uniquement par l'index, débutant à zéro,  "
-                "de la bonne définition parmi la liste ci-dessus."
+                "de la bonne définition parmi la liste ci-dessus. La réponse est :"
             )
         )
         .build(),
@@ -340,7 +340,7 @@ datasets = {
             .add_premise(
                 "Lis le passage suivant et réponds à la question en te basant uniquement sur le texte :\n"
                 "- Si le passage permet d'affirmer que la réponse à la question est oui, réponds 1.\n"
-                "- Sinon, si la réponse est non ou que le passage ne permet pas de répondre 'oui', réponds 0."            )
+                "- Sinon, si la réponse est non ou que le passage ne permet pas de répondre 'oui', réponds 0.")
             .add_data(f"Passage : {line['passage']}")
             .add_data(f"Question : {line['question']}")
             .add_end(
@@ -351,6 +351,33 @@ datasets = {
         line_to_data_fn=lambda line: {
             "question": line["question"],
             "passage": line["passage"],
+        }
+    ),
+    "mnli-nineeleven-fr-mt": Dataset(
+        name="mnli-nineeleven-fr-mt",
+        description="desc",
+        possible_ground_truths=["0", "1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Quelle est la relation de la deuxième phrase par rapport à la première ?"
+        )
+        .add_data(line["premise"])
+        .add_data(line["hypothesis"])
+        .add_end(
+            (
+                r"Réponds uniquement par :\n"
+                r"0 — si la deuxième phrase implique la première,\n"
+                r"1 — si la relation est neutre,\n"
+                r"2 — s'il y a contradiction.\n"
+                "Réponds uniquement par 0, 1 ou 2. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "premise": line["premise"],
+            "hypothesis": line["hypothesis"],
         },
     ),
 }
