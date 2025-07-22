@@ -362,7 +362,8 @@ datasets = {
     ),
     "mnli-nineeleven-fr-mt": Dataset(
         name="mnli-nineeleven-fr-mt",
-        description="desc",
+        description="Tâche NLI (Natural Language Inference) en français : déterminer la relation entre deux phrases. "
+        "0 si la deuxième phrase implique la première, 1 si la relation est neutre, 2 en cas de contradiction.",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
