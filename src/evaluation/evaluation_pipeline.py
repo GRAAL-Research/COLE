@@ -62,6 +62,7 @@ tasks_names = [
     "sickfr",
     "sts22",
     "xnli",
+    "termes_quebecoises",
 ]
 tasks = tasks_factory(tasks_names)
 
