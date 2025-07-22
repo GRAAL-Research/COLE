@@ -5,7 +5,7 @@ from src.task import COLLE_REPOSITORY_NAME
 datasets = {
     "allocine": Dataset(
         name="allocine",
-        description="desc",
+        description="Classification binaire d'avis de films en français : 1 pour avis positif, 0 pour avis négatif.",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -23,7 +23,7 @@ datasets = {
     ),
     "qfrcola": Dataset(
         name="qfrcola",
-        description="desc",
+        description="Jugement grammatical : prédire si une phrase française est grammaticalement correcte (1) ou incorrecte (0).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -40,7 +40,7 @@ datasets = {
     ),
     "qfrblimp": Dataset(
         name="qfrblimp",
-        description="desc",
+        description="Choix forcé entre deux phrases : identifier laquelle est grammaticalement correcte.",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(
@@ -62,7 +62,7 @@ datasets = {
     ),
     "gqnli": Dataset(
         name="gqnli",
-        description="desc",
+        description="Classification NLI (Natural Language Inference) : prédire la relation entre deux phrases (implication, neutre, contradiction).",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -89,7 +89,7 @@ datasets = {
     ),
     "opus_parcus": Dataset(
         name="opus_parcus",
-        description="desc",
+        description="Évaluation de similarité : noter à quel point deux phrases veulent dire la même chose sur une échelle de 60 à 100.",
         possible_ground_truths=[str(i) for i in range(0, 101, 5)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["quality"],
@@ -110,7 +110,7 @@ datasets = {
     ),
     "paws_x": Dataset(
         name="paws_x",
-        description="desc",
+        description="Paraphrase identification : prédire si deux phrases en français ont le même sens (1) ou non (0).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -133,7 +133,7 @@ datasets = {
     ),
     "piaf": Dataset(
         name="piaf",
-        description="desc",
+        description="Question answering en français : extraire la réponse textuelle exacte d'un contexte donné.",
         possible_ground_truths=[],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["answers"],
@@ -144,7 +144,7 @@ datasets = {
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")
-        .add_end("Réponse :")
+        .add_end("La réponse est :")
         .build(),
         line_to_data_fn=lambda line: {
             "context": line["context"],
@@ -153,7 +153,7 @@ datasets = {
     ),
     "fquad": Dataset(
         name="fquad",
-        description="desc",
+        description="Question answering en français : retrouver le passage précis du contexte répondant à une question.",
         possible_ground_truths=[],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["answers"],
@@ -173,7 +173,7 @@ datasets = {
     ),
     "sickfr": Dataset(
         name="sickfr",
-        description="desc",
+        description="Évaluation de similarité sémantique : prédire le score de similarité entre deux phrases françaises (de 0 à 5).",
         possible_ground_truths=[i * 0.1 for i in range(0, 51)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: float(line["relatedness_score"]),
@@ -198,7 +198,7 @@ datasets = {
     ),
     "sts22": Dataset(
         name="sts22",
-        description="desc",
+        description="Tâche de similarité textuelle (STS) : évaluer la similarité entre deux phrases françaises sur une échelle de 0 à 5.",
         possible_ground_truths=[i * 0.1 for i in range(0, 51)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: float(line["score"]),
@@ -224,7 +224,7 @@ datasets = {
     ),
     "xnli": Dataset(
         name="xnli",
-        description="desc",
+        description="NLI multilingue : prédire la relation entre deux phrases en français (implication, neutre, contradiction).",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -250,7 +250,7 @@ datasets = {
     ),
     "expressions_quebecoises": Dataset(
         name="expressions_quebecoises",
-        description="desc",
+        description="Compréhension des expressions québécoises : choisir la bonne définition parmi une liste.",
         possible_ground_truths=[str(i) for i in range(11)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
@@ -279,7 +279,7 @@ datasets = {
     ),
     "termes_quebecoises": Dataset(
         name="termes_quebecoises",
-        description="desc",
+        description="Définition de termes québécois : sélectionner la bonne signification parmi plusieurs choix.",
         possible_ground_truths=[str(i) for i in range(11)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
@@ -296,7 +296,7 @@ datasets = {
         .add_end(
             (
                 "Réponds uniquement par l'index, débutant à zéro,  "
-                "de la bonne définition parmi la liste ci-dessus."
+                "de la bonne définition parmi la liste ci-dessus. La réponse est :"
             )
         )
         .build(),
@@ -307,7 +307,7 @@ datasets = {
     ),
     "daccord": Dataset(
         name="daccord",
-        description="desc",
+        description="Contradiction détection : prédire si deux phrases françaises expriment la même information (0) ou se contredisent (1).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -328,6 +328,30 @@ datasets = {
             "premise": line["premise"],
             "hypothesis": line["hypothesis"],
         },
+    ),
+    "french_boolq": Dataset(
+        name="french_boolq",
+        description="Question answering oui/non : répondre 1 si le passage confirme la réponse 'oui', 0 sinon.",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(int(line["label"])),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise(
+                "Lis le passage suivant et réponds à la question en te basant uniquement sur le texte :\n"
+                "- Si le passage permet d'affirmer que la réponse à la question est oui, réponds 1.\n"
+                "- Sinon, si la réponse est non ou que le passage ne permet pas de répondre 'oui', réponds 0.")
+            .add_data(f"Passage : {line['passage']}")
+            .add_data(f"Question : {line['question']}")
+            .add_end(
+                "La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "question": line["question"],
+            "passage": line["passage"],
+        }
     ),
     "mnli-nineeleven-fr-mt": Dataset(
         name="mnli-nineeleven-fr-mt",
