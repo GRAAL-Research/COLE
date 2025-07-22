@@ -329,6 +329,28 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
+    "french_boolq": Dataset(
+        name="french_boolq",
+        description="desc",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(int(line["label"])),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise("Réponds à la question suivante en te basant uniquement sur le passage.")
+            .add_data(f"Passage : {line['passage']}")
+            .add_data(f"Question : {line['question']}")
+            .add_end(
+            "Réponds uniquement par 1 si la réponse est oui, "
+                "et 0 sinon. La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "question": line["question"],
+            "passage": line["passage"]
+        },
+    ),
 }
 
 
