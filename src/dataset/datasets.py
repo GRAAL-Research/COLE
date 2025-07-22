@@ -23,7 +23,8 @@ datasets = {
     ),
     "qfrcola": Dataset(
         name="qfrcola",
-        description="Jugement grammatical : prédire si une phrase française est grammaticalement correcte (1) ou incorrecte (0).",
+        description="Jugement grammatical : prédire si une phrase française est grammaticalement "
+        "correcte (1) ou incorrecte (0).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -62,7 +63,8 @@ datasets = {
     ),
     "gqnli": Dataset(
         name="gqnli",
-        description="Classification NLI (Natural Language Inference) : prédire la relation entre deux phrases (implication, neutre, contradiction).",
+        description="Classification NLI (Natural Language Inference) : prédire la relation entre "
+        "deux phrases (implication, neutre, contradiction).",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -89,7 +91,8 @@ datasets = {
     ),
     "opus_parcus": Dataset(
         name="opus_parcus",
-        description="Évaluation de similarité : noter à quel point deux phrases veulent dire la même chose sur une échelle de 60 à 100.",
+        description="Évaluation de similarité : noter à quel point deux phrases veulent dire "
+        "la même chose sur une échelle de 60 à 100.",
         possible_ground_truths=[str(i) for i in range(0, 101, 5)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["quality"],
@@ -153,7 +156,8 @@ datasets = {
     ),
     "fquad": Dataset(
         name="fquad",
-        description="Question answering en français : retrouver le passage précis du contexte répondant à une question.",
+        description="Question answering en français : retrouver le passage précis du contexte répondant "
+        "à une question.",
         possible_ground_truths=[],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["answers"],
@@ -173,7 +177,8 @@ datasets = {
     ),
     "sickfr": Dataset(
         name="sickfr",
-        description="Évaluation de similarité sémantique : prédire le score de similarité entre deux phrases françaises (de 0 à 5).",
+        description="Évaluation de similarité sémantique : prédire le score de similarité entre deux phrases "
+        "françaises (de 0 à 5).",
         possible_ground_truths=[i * 0.1 for i in range(0, 51)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: float(line["relatedness_score"]),
@@ -198,7 +203,8 @@ datasets = {
     ),
     "sts22": Dataset(
         name="sts22",
-        description="Tâche de similarité textuelle (STS) : évaluer la similarité entre deux phrases françaises sur une échelle de 0 à 5.",
+        description="Tâche de similarité textuelle (STS) : évaluer la similarité entre deux phrases françaises "
+        "sur une échelle de 0 à 5.",
         possible_ground_truths=[i * 0.1 for i in range(0, 51)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: float(line["score"]),
@@ -224,7 +230,8 @@ datasets = {
     ),
     "xnli": Dataset(
         name="xnli",
-        description="NLI multilingue : prédire la relation entre deux phrases en français (implication, neutre, contradiction).",
+        description="NLI multilingue : prédire la relation entre deux phrases en français (implication,"
+        " neutre, contradiction).",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -307,7 +314,8 @@ datasets = {
     ),
     "daccord": Dataset(
         name="daccord",
-        description="Contradiction détection : prédire si deux phrases françaises expriment la même information (0) ou se contredisent (1).",
+        description="Contradiction détection : prédire si deux phrases françaises expriment la même "
+        "information (0) ou se contredisent (1).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
