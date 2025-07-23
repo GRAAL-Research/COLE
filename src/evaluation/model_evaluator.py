@@ -160,12 +160,25 @@ class ModelEvaluator:
         """
         os.makedirs(save_dir_path, exist_ok=True)
         full_path = os.path.join(save_dir_path, filename)
-        try:
-            with open(full_path, "w", encoding="utf-8") as f:
-                json.dump(saved_object, f, indent=2)
-            info_message = f"Results saved to {save_dir_path}"
-            logging.info(info_message)
-        except Exception as e:
-            error_message = f"Failed to save object: {e}"
-            logging.error(error_message)
+        if os.path.isfile(full_path):
+            try:
+                with open(full_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                data.get("tasks").extend(saved_object.get("tasks"))
+                with open(full_path, "w", encoding="utf-8") as f:
+                    json.dump(data, f, indent=2)
+                info_message = f"Results saved to {save_dir_path}"
+                logging.info(info_message)
+            except Exception as e:
+                error_message = f"Failed to save object: {e}"
+                logging.error(error_message)
+        else:
+            try:
+                with open(full_path, "w", encoding="utf-8") as f:
+                    json.dump(saved_object, f, indent=2)
+                info_message = f"Results saved to {save_dir_path}"
+                logging.info(info_message)
+            except Exception as e:
+                error_message = f"Failed to save object: {e}"
+                logging.error(error_message)
         return full_path
