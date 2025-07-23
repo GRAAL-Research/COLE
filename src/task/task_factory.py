@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, List, Union
 
-from src.task.task import Task, Tasktype
+from src.task.task import Task, TaskType
 
 
 def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
@@ -20,6 +20,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
+                        task_type=TaskType.INFERENCE,
                     )
                 )
             case "fquad":
@@ -27,7 +28,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="fquad",
-                        task_type=Tasktype.GENERATIVE,
+                        task_type=TaskType.GENERATIVE,
                     )
                 )
             case "gqnli":
@@ -35,6 +36,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
+                        task_type=TaskType.INFERENCE,
                     )
                 )
             case "opus_parcus":
@@ -42,6 +44,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
+                        task_type=TaskType.INFERENCE,
                     )
                 )
             case "paws_x":
@@ -49,6 +52,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
+                        task_type=TaskType.INFERENCE,
                     )
                 )
             case "piaf":
@@ -56,7 +60,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="fquad",
-                        task_type=Tasktype.GENERATIVE,
+                        task_type=TaskType.GENERATIVE,
                     )
                 )
             case "qfrblimp":
@@ -64,6 +68,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
+                        task_type=TaskType.INFERENCE,
                     )
                 )
             case "qfrcola":
@@ -71,6 +76,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
+                        task_type=TaskType.INFERENCE,
                     )
                 )
             case "sickfr":
@@ -78,6 +84,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
+                        task_type=TaskType.INFERENCE,
                     )
                 )
             case "sts22":
@@ -85,6 +92,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="pearson",
+                        task_type=TaskType.INFERENCE,
                     )
                 )
             case "xnli":
@@ -92,6 +100,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
+                        task_type=TaskType.INFERENCE,
                     )
                 )
             case "expressions_quebecoises":
@@ -99,6 +108,47 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                     Task(
                         task_name=task_name,
                         metric="accuracy",
+                        task_type=TaskType.INFERENCE,
+                    )
+                )
+            case "termes_quebecoises":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
+                        task_type=TaskType.INFERENCE,
+                    )
+                )
+            case "daccord":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
+                        task_type=TaskType.INFERENCE,
+                    )
+                )
+            case "french_boolq":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
+                        task_type=TaskType.INFERENCE,
+                    )
+                )
+            case "mnli-nineeleven-fr-mt":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
+                        task_type=TaskType.INFERENCE,
+                    )
+                )
+            case "rte3-french":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
+                        task_type=TaskType.INFERENCE,
                     )
                 )
             case _:

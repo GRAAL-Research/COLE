@@ -1,0 +1,418 @@
+from src.dataset.dataset import Dataset
+from src.dataset.prompt_builder import PromptBuilder
+from src.task import COLLE_REPOSITORY_NAME
+
+datasets = {
+    "allocine": Dataset(
+        name="allocine",
+        description="Binary classification on sentiment analysis"
+                    " of movie reviews, with reviews being either positive (1) or negative (0).",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise("Cette phrase possède-t-elle un sentiment positif ou négatif ?")
+        .add_data(line["review"])
+        .add_end(
+            (
+                "Réponds "
+                "uniquement par 1 si la phrase est positive, réponds par 0 sinon. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: line["review"],
+    ),
+    "qfrcola": Dataset(
+        name="qfrcola",
+        description="Binary grammatical judgement : "
+                    "Predicts whether a sentence is grammatically correct (1) or not. (0)",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise("Juge si cette phrase est grammaticalement correcte :")
+        .add_data(line["sentence"])
+        .add_end(
+            (
+                "Réponds avec seulement 1 si la phrase est grammaticalement correcte, 0 sinon. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: line["sentence"],
+    ),
+    "qfrblimp": Dataset(
+        name="qfrblimp",
+        description="Choice task between two sentences : Choose the one which is grammatically correct.",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(
+            line["label"]
+        ),  # The label is return as a string.
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise("Laquelle de ces phrases est grammaticalement correcte ?")
+            .add_data(f"Phrase 0:{line['sentence_a']}")
+            .add_data(f"Phrase 1:{line['sentence_b']}")
+            .add_end(
+                "Réponds avec seulement 0 si la phrase 0 "
+                "est grammaticalement correcte, et uniquement 1 si la phrase 1 est grammaticalement "
+                "correcte. La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {line["sentence_a"], line["sentence_b"]},
+    ),
+    "gqnli": Dataset(
+        name="gqnli",
+        description="Natural language inference task : "
+                    "predict the relation between two sentences (implication, neutral, contradiction)",
+        possible_ground_truths=["0", "1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Quelle est la relation de la deuxième phrase par rapport à la première ?"
+        )
+        .add_data(line["premise"])
+        .add_data(line["hypothesis"])
+        .add_end(
+            (
+                r"Réponds uniquement par :\n"
+                r"0 — si la deuxième phrase implique la première,\n"
+                r"1 — si la relation est neutre,\n"
+                r"2 — s'il y a contradiction.\n"
+                "Réponds uniquement par 0, 1 ou 2. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "premise": line["premise"],
+            "hypothesis": line["hypothesis"],
+        },
+    ),
+    "sickfr": Dataset(
+        name="sickfr",
+        description="Semantic textual similarity task :"
+                    "Predict how similar two sentences are to each other (0 to 5)",
+        possible_ground_truths=[str(i * 0.1) for i in range(0, 51)],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: float(line["relatedness_score"]),
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "À quel point, de 0 à 5, les 2 phrases suivantes sont-elles similaires ?"
+        )
+        .add_data(
+            f"sentence_A : {line['sentence_A']}\n" f"sentence_B: {line['sentence_B']}"
+        )
+        .add_end(
+            (
+                "Réponds avec seulement un nombre de 0 à 5, où 5 signifie une très grande similarité entre "
+                "les phrases et 0 aucune similarité entre les phrases. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "sentence_A ": line["sentence_A"],
+            "sentence_B ": line["sentence_B"],
+        },
+    ),
+    "sts22": Dataset(
+        name="sts22",
+        description="Semantic textual similarity task :"
+                    "Predict how similar two sentences are to each other (0 to 5)",
+        possible_ground_truths=[i * 0.1 for i in range(0, 51)],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: float(line["score"]),
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "À quel point, de 0 à 5, les 2 phrases suivantes sont-elles similaires ?"
+        )
+        .add_data(
+            f"sentence 1: {line['sentence1']}\n" f"sentence 2: {line['sentence2']}"
+        )
+        .add_end(
+            (
+                "Réponds seulement avec un nombre de 0 à 5, "
+                "où 5 signifie que les 2 phrases veulent dire exactement la même chose et 0 qu'elles ne veulent "
+                "pas dire la même chose. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "sentence 1 ": line["sentence1"],
+            "sentence 2 ": line["sentence2"],
+        },
+    ),
+    "paws_x": Dataset(
+        name="paws_x",
+        description="Binary classification task : "
+                    "Predict if two sentences have the same meaning (1) or not (0)",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Les deux phrases suivantes veulent-elles dire la même chose, ou ont-elles des significations différentes ?"
+        )
+        .add_data(line["sentence1"])
+        .add_data(line["sentence1"])
+        .add_end(
+            (
+                "Réponds seulement 1 si les deux phrases ont la même signification, 0 sinon. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "sentence1 ": line["sentence1"],
+            "sentence2 ": line["sentence2"],
+        },
+    ),
+    "piaf": Dataset(
+        name="piaf",
+        description="Extractive question answering task : Extract a question's answer from a given context.",
+        possible_ground_truths=[],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["answers"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Tu vas recevoir un contexte et une question. "
+            "Donne exactement le passage du contexte qui répond à la question. La réponse est :"
+        )
+        .add_data(f"Contexte  : {line['context']}")
+        .add_data(f"Question : {line['question']}")
+        .add_end("La réponse est :")
+        .build(),
+        line_to_data_fn=lambda line: {
+            "context": line["context"],
+            "question": line["question"],
+        },
+    ),
+    "fquad": Dataset(
+        name="fquad",
+        description="Extractive question answering task : Extract a question's answer from a given context.",
+        possible_ground_truths=[],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["answers"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Tu vas recevoir un contexte et une question. "
+            "Donne exactement le passage du contexte qui répond à la question. La réponse est :"
+        )
+        .add_data(f"Contexte  : {line['context']}")
+        .add_data(f"Question : {line['question']}")
+        .add_end("Réponse :")
+        .build(),
+        line_to_data_fn=lambda line: {
+            "context": line["context"],
+            "question": line["question"],
+        },
+    ),
+
+    "xnli": Dataset(
+        name="xnli",
+        description="Natural language inference task : "
+                    "predict the relation between two sentences (implication, neutral, contradiction)",
+        possible_ground_truths=["0", "1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["label"]),
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Quelle est la relation de la deuxième phrase par rapport à la première ?"
+        )
+        .add_data(rf"premise : {line['premise']}\n" f"sentence 2: {line['hypothesis']}")
+        .add_end(
+            (
+                r"Réponds uniquement par :\n"
+                r"0 — si la deuxième phrase implique la première,\n"
+                r"1 — si la relation est neutre,\n"
+                r"2 — s'il y a contradiction.\n"
+                r"Réponds uniquement par 0, 1 ou 2. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "premise ": line["premise"],
+            "hypothesis": line["hypothesis"],
+        },
+    ),
+    "expressions_quebecoises": Dataset(
+        name="expressions_quebecoises",
+        description="Definition matching task : "
+                    "Match the Quebec expression with its definition from a list",
+        possible_ground_truths=[str(i) for i in range(11)],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["correct_index"]),
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            f"Que veut dire cette expression québécoise « {line['expression']} » ?"
+        )
+        .add_data(
+            "\n".join(
+                f"{idx} — {definition}"
+                for idx, definition in enumerate(line["choices"])
+            )
+        )
+        .add_end(
+            (
+                "Réponds uniquement par l'index, débutant à zéro,  "
+                "de la bonne définition parmi la liste ci-dessus. Par exemple, si la "
+                "troisième phrase qui correspond à l'expression, la réponse sera 2. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "expression": line["expression"],
+            "choices": line["choices"],
+        },
+    ),
+    "termes_quebecoises": Dataset(
+        name="termes_quebecoises",
+        description="Definition matching task : "
+                    "Match the Quebec term with its definition from a list",
+        possible_ground_truths=[str(i) for i in range(11)],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["correct_index"]),
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            f"Qu'est-ce que ça veut dire ce terme québécois « {line['expression']} » ?"
+        )
+        .add_data(
+            "\n".join(
+                f"{idx} — {definition}"
+                for idx, definition in enumerate(line["choices"])
+            )
+        )
+        .add_end(
+            (
+                "Réponds uniquement par l'index, débutant à zéro,  "
+                "de la bonne définition parmi la liste ci-dessus. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "terme": line["terme"],
+            "choices": line["choices"],
+        },
+    ),
+    "daccord": Dataset(
+        name="daccord",
+        description="Paraphrase detection task :"
+                    "Predict whether the two sentences express"
+                    " the same idea (1) or contradict each other (0)",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["label"]),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise("Détermine la relation entre les deux phrases suivantes :")
+            .add_data(f"Première phrase : {line['premise']}")
+            .add_data(f"Deuxième phrase : {line['hypothesis']}")
+            .add_end(
+                "Réponds uniquement par :\n"
+                "0 — si les deux phrases sont compatibles (elles expriment la même information ou sont cohérentes),\n"
+                "1 — s'il y a contradiction entre les deux phrases.\n"
+                "Réponds uniquement par 0 ou 1. La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "premise": line["premise"],
+            "hypothesis": line["hypothesis"],
+        },
+    ),
+    "french_boolq": Dataset(
+        name="french_boolq",
+        description="Binary question answering task : "
+                    "Answer whether the context allows answering 'yes' to the question (1)"
+                    "or, if the context only allows answering 'no' "
+                    "to the question or does not answer the question. (0)",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(int(line["label"])),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise(
+                "Lis le passage suivant et réponds à la question en te basant uniquement sur le texte :\n"
+                "- Si le passage permet d'affirmer que la réponse à la question est oui, réponds 1.\n"
+                "- Sinon, si la réponse est non ou que le passage ne permet pas de répondre à la question, réponds 0."
+            )
+            .add_data(f"Passage : {line['passage']}")
+            .add_data(f"Question : {line['question']}")
+            .add_end("La réponse est :")
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "question": line["question"],
+            "passage": line["passage"],
+        },
+    ),
+    "mnli-nineeleven-fr-mt": Dataset(
+        name="mnli-nineeleven-fr-mt",
+        description="Natural language inference task : "
+                    "predict the relation between two sentences (implication, neutral, contradiction)",
+        possible_ground_truths=["0", "1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Quelle est la relation de la deuxième phrase par rapport à la première ?"
+        )
+        .add_data(line["premise"])
+        .add_data(line["hypothesis"])
+        .add_end(
+            (
+                r"Réponds uniquement par :\n"
+                r"0 — si la deuxième phrase implique la première,\n"
+                r"1 — si la relation est neutre,\n"
+                r"2 — s'il y a contradiction.\n"
+                "Réponds uniquement par 0, 1 ou 2. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "premise": line["premise"],
+            "hypothesis": line["hypothesis"],
+        },
+    ),
+    "rte3-french": Dataset(
+        name="rte3-french",
+        description="Natural language inference task : "
+                    "predict the relation between two sentences (implication, neutral, contradiction)",
+        possible_ground_truths=["0", "1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["label"]),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise(
+                "Lis le texte suivant et détermine la relation de l'énoncé par rapport au texte."
+            )
+            .add_data(f"Texte : {line['premise']}")
+            .add_data(f"Énoncé : {line['hypothesis']}")
+            .add_end(
+                "Réponds uniquement par :\n"
+                "0 — si l'énoncé découle logiquement du texte (entailment),\n"
+                "1 — si la relation est neutre,\n"
+                "2 — s'il y a contradiction.\n"
+                "La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "premise": line["premise"],
+            "hypothesis": line["hypothesis"],
+        },
+    ),
+}
+
+
+def preload_all_datasets():
+    """Loads all datasets into cache for later usage"""
+    for dataset in datasets.values():
+        dataset.load_data()
+
+def generate_metadata_dict():
+    """Generates a dictionary with all the datasets metadata information"""
+    metadata_dict = {}
+    for dataset in datasets.values():
+        metadata_dict[dataset.name] = dataset.metadata
+    return metadata_dict

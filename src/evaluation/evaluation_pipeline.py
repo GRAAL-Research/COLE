@@ -56,12 +56,17 @@ tasks_names = [
     "allocine",
     "qfrcola",
     "gqnli",
-    "opus_parcus",
     "paws_x",
     "fquad",
     "sickfr",
     "sts22",
     "xnli",
+    "expressions_quebecoises",
+    "termes_quebecoises",
+    "daccord",
+    "french_boolq",
+    "mnli-nineeleven-fr-mt",
+    "rte3-french",
 ]
 tasks = tasks_factory(tasks_names)
 

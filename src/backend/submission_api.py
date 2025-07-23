@@ -19,7 +19,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from src.backend.evaluation import compute_tasks_ratings
 from src.backend.submit_tools import unzip_predictions_from_zip
-from src.dataset.datasets import preload_all_datasets
+from src.dataset.datasets_data import preload_all_datasets
 from src.backend.validation_tools import (
     validate_submission_tasks_name,
     validate_submission_json,

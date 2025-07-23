@@ -20,6 +20,8 @@ accelerate
 bitsandbytes
 flash-attn
 wheel
+unsloth
+unsloth-zoo
 wandb
 # Pour compatibilité ancienne
 protobuf<=3.20.3

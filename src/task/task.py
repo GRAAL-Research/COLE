@@ -2,10 +2,10 @@ import logging
 from enum import Enum
 from typing import Dict, Union, Tuple, List
 from src.metrics.metric_factory import metric_factory
-from src.dataset.datasets import datasets
+from src.dataset.datasets_data import datasets
 
 
-class Tasktype(Enum):
+class TaskType(Enum):
     GENERATIVE = 0
     INFERENCE = 1
 
@@ -23,7 +23,7 @@ class Task:
         self,
         task_name: str,
         metric: str,
-        task_type: Tasktype = Tasktype.INFERENCE,
+        task_type: TaskType,
     ) -> None:
         self._metric_name = metric
         self._metric_computer = metric_factory(metric_name=self.metric_name)
