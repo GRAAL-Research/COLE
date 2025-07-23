@@ -56,7 +56,6 @@ tasks_names = [
     "allocine",
     "qfrcola",
     "gqnli",
-    "opus_parcus",
     "paws_x",
     "fquad",
     "sickfr",

@@ -143,28 +143,6 @@ datasets = {
             "sentence 2 ": line["sentence2"],
         },
     ),
-    "opus_parcus": Dataset(
-        name="opus_parcus",
-        description="Semantic Textual Similarity task: "
-                    "Predict how similar two sentences are to each other (60 to 100)",
-        possible_ground_truths=[str(i) for i in range(0, 101, 5)],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: line["quality"],
-        line_to_prompt_fn=lambda line: PromptBuilder()
-        .add_premise(
-            "Les deux phrases suivantes expriment-elles la même idée ou sont-elles différentes ?"
-        )
-        .add_data(line["sent1"])
-        .add_data(line["sent2"])
-        .add_end(
-            (
-                "Réponds seulement avec un chiffre entre 60 et 100 où 100"
-                " signifie que les deux phrases veulent dire exactement la même chose. La réponse est :"
-            )
-        )
-        .build(),
-        line_to_data_fn=lambda line: {"sent1": line["sent1"], "sent2": line["sent2"]},
-    ),
     "paws_x": Dataset(
         name="paws_x",
         description="Binary classification task : "
