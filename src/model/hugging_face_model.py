@@ -117,11 +117,10 @@ class HFLLMModel(HFModel):
 
             classifications = []
             for text in texts:
-                outputs = self.pipeline(text, batch_size=1)
-                classification = [
-                    output["labels"][0] for output in outputs
-                ]  # Labels are sorted in likelihood order.
-                classifications.append(classification)
+                output = self.pipeline(text, batch_size=1)
+                classifications.append(
+                    output["labels"][0]
+                )  # Labels are sorted in likelihood order.
 
         return {"prediction": classifications}
 
