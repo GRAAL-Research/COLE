@@ -62,3 +62,4 @@ next-env.d.ts
 /frontend/node_modules
 /.idea/*
 /frontend/.next
+/src/backend/results

@@ -34,7 +34,7 @@ export default function ResultsPage() {
   const handleDownload = async () => {
     if (!data) return;
     try {
-      const res = await fetch(`http://localhost:8000/results/${submissionId}.json`);
+      const res = await fetch(`${BACKEND_ADDRESS}/results/${submissionId}.json`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);

@@ -1,7 +1,7 @@
 name: Sync to Hugging Face Spaces
 on:
   push:
-    branches: [main, dev]
+    branches: [dev]
   workflow_dispatch:
 
 env:
@@ -19,4 +19,4 @@ jobs:
       - name: Push to Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$HF_SPACE_NAME main
+        run: git push --force https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$HF_SPACE_NAME dev

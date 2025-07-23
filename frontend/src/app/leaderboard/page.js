@@ -5,7 +5,8 @@ import {
   normalizeBenchmarkName,
   computeAverageScore,
 } from "./util";
-
+import {useTranslation} from "react-i18next";
+import {useParams} from "next/navigation";
 import {BACKEND_ADDRESS} from "@/app/resources/ResourcesPaths";
 
 const allowedMetrics = [
