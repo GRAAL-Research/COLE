@@ -44,6 +44,7 @@ class HFLLMModel(HFModel):
     def predict(self, evaluation_dataset: Dataset, task: Task) -> List:
         if task.task_type == TaskType.INFERENCE:
             labels = task.dataset.possible_ground_truths
+            self.candidate_labels = labels
             self.pipeline = pipeline(
                 task="zero-shot-classification",
                 model=self.model,
@@ -51,7 +52,6 @@ class HFLLMModel(HFModel):
                 batch_size=self._batch_size,
                 torch_dtype="float16",
                 return_full_text=False,
-                candidate_labels=labels,
                 max_new_tokens=16,
                 padding=True,
                 truncation=True,
@@ -105,7 +105,11 @@ class HFLLMModel(HFModel):
         with torch.no_grad():
             text = rows["text"]
 
-            outputs = self.pipeline(text)
+            candidate_labels = [self.candidate_labels] * len(
+                text
+            )  # To have enough candidate labels for each row
+
+            outputs = self.pipeline(text, candidate_labels=candidate_labels)
             classifications = [
                 output["labels"][0] for output in outputs
             ]  # Labels are sorted in likelihood order.
