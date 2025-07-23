@@ -5,6 +5,7 @@ import os
 import sys
 import uuid
 from contextlib import asynccontextmanager
+from datetime import time, datetime
 from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Any
@@ -73,7 +74,7 @@ async def submit(
     predictions_zip: UploadFile = File(...),
     display_name: str = Form(...),
 ):
-    logging.log("")
+    logging.info("Starting submission")
     info_message = f"Submission from {email!r} as {display_name!r}."
     logging.info(info_message)
     zip_bytes = await predictions_zip.read()
@@ -84,8 +85,12 @@ async def submit(
     validate_submission_json(submission_json)
 
     tasks: List[Task] = tasks_factory(submission_json)
+    logging.info("Computation started")
+    start = datetime.now()
     submission_response = compute_tasks_ratings(tasks=tasks, submission=submission_json)
-
+    computation_time = datetime.now() - start
+    info_message = f"Computation ended in {computation_time}"
+    logging.info(info_message)
     submission_id = str(uuid.uuid4())
     submission_response.update(
         {

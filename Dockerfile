@@ -15,8 +15,9 @@ RUN apt-get update && apt-get install -y nginx \
     && rm -rf /var/lib/apt/lists/*
 
 COPY src/docker_requirements.txt /app/src/
-RUN pip install -r /app/src/docker_requirements.txt && \
-    rm -rf ~/.cache/pip
+RUN pip install --upgrade pip wheel
+RUN pip install --cache-dir=~/.cache/pip --prefer-binary pyarrow pandas numpy scipy fsspec aiohttp tqdm --progress-bar off -v
+RUN pip install --cache-dir=~/.cache/pip -r /app/src/docker_requirements.txt -v --prefer-binary && rm -rf ~/.cache/pip
 COPY src/ /app/src/
 
 # Copy Nginx config (adjust path if needed)
