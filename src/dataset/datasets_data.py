@@ -5,7 +5,8 @@ from src.task import COLLE_REPOSITORY_NAME
 datasets = {
     "allocine": Dataset(
         name="allocine",
-        description="Classification binaire d'avis de films en français : 1 pour avis positif, 0 pour avis négatif.",
+        description="Binary classification on sentiment analysis"
+                    " of movie reviews, with reviews being either positive (1) or negative (0).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -23,8 +24,8 @@ datasets = {
     ),
     "qfrcola": Dataset(
         name="qfrcola",
-        description="Jugement grammatical : prédire si une phrase française est grammaticalement "
-        "correcte (1) ou incorrecte (0).",
+        description="Binary grammatical judgement : "
+                    "Predicts whether a sentence is grammatically correct (1) or not. (0)",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -41,7 +42,7 @@ datasets = {
     ),
     "qfrblimp": Dataset(
         name="qfrblimp",
-        description="Choix forcé entre deux phrases : identifier laquelle est grammaticalement correcte.",
+        description="Choice task between two sentences : Choose the one which is grammatically correct.",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(
@@ -63,8 +64,8 @@ datasets = {
     ),
     "gqnli": Dataset(
         name="gqnli",
-        description="Classification NLI (Natural Language Inference) : prédire la relation entre "
-        "deux phrases (implication, neutre, contradiction).",
+        description="Natural language inference task : "
+                    "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -89,97 +90,11 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
-    "opus_parcus": Dataset(
-        name="opus_parcus",
-        description="Évaluation de similarité : noter à quel point deux phrases veulent dire "
-        "la même chose sur une échelle de 60 à 100.",
-        possible_ground_truths=[str(i) for i in range(0, 101, 5)],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: line["quality"],
-        line_to_prompt_fn=lambda line: PromptBuilder()
-        .add_premise(
-            "Les deux phrases suivantes expriment-elles la même idée ou sont-elles différentes ?"
-        )
-        .add_data(line["sent1"])
-        .add_data(line["sent2"])
-        .add_end(
-            (
-                "Réponds seulement avec un chiffre entre 60 et 100 où 100"
-                " signifie que les deux phrases veulent dire exactement la même chose. La réponse est :"
-            )
-        )
-        .build(),
-        line_to_data_fn=lambda line: {"sent1": line["sent1"], "sent2": line["sent2"]},
-    ),
-    "paws_x": Dataset(
-        name="paws_x",
-        description="Paraphrase identification : prédire si deux phrases en français ont le même sens (1) ou non (0).",
-        possible_ground_truths=["0", "1"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: line["label"],
-        line_to_prompt_fn=lambda line: PromptBuilder()
-        .add_premise(
-            "Les deux phrases suivantes veulent-elles dire la même chose, ou ont-elles des significations différentes ?"
-        )
-        .add_data(line["sentence1"])
-        .add_data(line["sentence1"])
-        .add_end(
-            (
-                "Réponds seulement 1 si les deux phrases ont la même signification, 0 sinon. La réponse est :"
-            )
-        )
-        .build(),
-        line_to_data_fn=lambda line: {
-            "sentence1 ": line["sentence1"],
-            "sentence2 ": line["sentence2"],
-        },
-    ),
-    "piaf": Dataset(
-        name="piaf",
-        description="Question answering en français : extraire la réponse textuelle exacte d'un contexte donné.",
-        possible_ground_truths=[],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: line["answers"],
-        line_to_prompt_fn=lambda line: PromptBuilder()
-        .add_premise(
-            "Tu vas recevoir un contexte et une question. "
-            "Donne exactement le passage du contexte qui répond à la question. La réponse est :"
-        )
-        .add_data(f"Contexte  : {line['context']}")
-        .add_data(f"Question : {line['question']}")
-        .add_end("La réponse est :")
-        .build(),
-        line_to_data_fn=lambda line: {
-            "context": line["context"],
-            "question": line["question"],
-        },
-    ),
-    "fquad": Dataset(
-        name="fquad",
-        description="Question answering en français : retrouver le passage précis du contexte répondant "
-        "à une question.",
-        possible_ground_truths=[],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: line["answers"],
-        line_to_prompt_fn=lambda line: PromptBuilder()
-        .add_premise(
-            "Tu vas recevoir un contexte et une question. "
-            "Donne exactement le passage du contexte qui répond à la question. La réponse est :"
-        )
-        .add_data(f"Contexte  : {line['context']}")
-        .add_data(f"Question : {line['question']}")
-        .add_end("Réponse :")
-        .build(),
-        line_to_data_fn=lambda line: {
-            "context": line["context"],
-            "question": line["question"],
-        },
-    ),
     "sickfr": Dataset(
         name="sickfr",
-        description="Évaluation de similarité sémantique : prédire le score de similarité entre deux phrases "
-        "françaises (de 0 à 5).",
-        possible_ground_truths=[i * 0.1 for i in range(0, 51)],
+        description="Semantic textual similarity task :"
+                    "Predict how similar two sentences are to each other (0 to 5)",
+        possible_ground_truths=[str(i * 0.1) for i in range(0, 51)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: float(line["relatedness_score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
@@ -203,8 +118,8 @@ datasets = {
     ),
     "sts22": Dataset(
         name="sts22",
-        description="Tâche de similarité textuelle (STS) : évaluer la similarité entre deux phrases françaises "
-        "sur une échelle de 0 à 5.",
+        description="Semantic textual similarity task :"
+                    "Predict how similar two sentences are to each other (0 to 5)",
         possible_ground_truths=[i * 0.1 for i in range(0, 51)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: float(line["score"]),
@@ -228,10 +143,97 @@ datasets = {
             "sentence 2 ": line["sentence2"],
         },
     ),
+    "opus_parcus": Dataset(
+        name="opus_parcus",
+        description="Semantic Textual Similarity task: "
+                    "Predict how similar two sentences are to each other (60 to 100)",
+        possible_ground_truths=[str(i) for i in range(0, 101, 5)],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["quality"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Les deux phrases suivantes expriment-elles la même idée ou sont-elles différentes ?"
+        )
+        .add_data(line["sent1"])
+        .add_data(line["sent2"])
+        .add_end(
+            (
+                "Réponds seulement avec un chiffre entre 60 et 100 où 100"
+                " signifie que les deux phrases veulent dire exactement la même chose. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {"sent1": line["sent1"], "sent2": line["sent2"]},
+    ),
+    "paws_x": Dataset(
+        name="paws_x",
+        description="Binary classification task : "
+                    "Predict if two sentences have the same meaning (1) or not (0)",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Les deux phrases suivantes veulent-elles dire la même chose, ou ont-elles des significations différentes ?"
+        )
+        .add_data(line["sentence1"])
+        .add_data(line["sentence1"])
+        .add_end(
+            (
+                "Réponds seulement 1 si les deux phrases ont la même signification, 0 sinon. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "sentence1 ": line["sentence1"],
+            "sentence2 ": line["sentence2"],
+        },
+    ),
+    "piaf": Dataset(
+        name="piaf",
+        description="Extractive question answering task : Extract a question's answer from a given context.",
+        possible_ground_truths=[],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["answers"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Tu vas recevoir un contexte et une question. "
+            "Donne exactement le passage du contexte qui répond à la question. La réponse est :"
+        )
+        .add_data(f"Contexte  : {line['context']}")
+        .add_data(f"Question : {line['question']}")
+        .add_end("La réponse est :")
+        .build(),
+        line_to_data_fn=lambda line: {
+            "context": line["context"],
+            "question": line["question"],
+        },
+    ),
+    "fquad": Dataset(
+        name="fquad",
+        description="Extractive question answering task : Extract a question's answer from a given context.",
+        possible_ground_truths=[],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["answers"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Tu vas recevoir un contexte et une question. "
+            "Donne exactement le passage du contexte qui répond à la question. La réponse est :"
+        )
+        .add_data(f"Contexte  : {line['context']}")
+        .add_data(f"Question : {line['question']}")
+        .add_end("Réponse :")
+        .build(),
+        line_to_data_fn=lambda line: {
+            "context": line["context"],
+            "question": line["question"],
+        },
+    ),
+
     "xnli": Dataset(
         name="xnli",
-        description="NLI multilingue : prédire la relation entre deux phrases en français (implication,"
-        " neutre, contradiction).",
+        description="Natural language inference task : "
+                    "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -257,13 +259,14 @@ datasets = {
     ),
     "expressions_quebecoises": Dataset(
         name="expressions_quebecoises",
-        description="Compréhension des expressions québécoises : choisir la bonne définition parmi une liste.",
+        description="Definition matching task : "
+                    "Match the Quebec expression with its definition from a list",
         possible_ground_truths=[str(i) for i in range(11)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            f"Qu'est-ce que ça veut dire cette expression québécoise « {line['expression']} » ?"
+            f"Que veut dire cette expression québécoise « {line['expression']} » ?"
         )
         .add_data(
             "\n".join(
@@ -274,8 +277,8 @@ datasets = {
         .add_end(
             (
                 "Réponds uniquement par l'index, débutant à zéro,  "
-                "de la bonne définition parmi la liste ci-dessus. Par exemple, si c'est la "
-                "troisième phrase, la réponse sera 2. La réponse est :"
+                "de la bonne définition parmi la liste ci-dessus. Par exemple, si la "
+                "troisième phrase qui correspond à l'expression, la réponse sera 2. La réponse est :"
             )
         )
         .build(),
@@ -286,7 +289,8 @@ datasets = {
     ),
     "termes_quebecoises": Dataset(
         name="termes_quebecoises",
-        description="Définition de termes québécois : sélectionner la bonne signification parmi plusieurs choix.",
+        description="Definition matching task : "
+                    "Match the Quebec term with its definition from a list",
         possible_ground_truths=[str(i) for i in range(11)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
@@ -314,8 +318,9 @@ datasets = {
     ),
     "daccord": Dataset(
         name="daccord",
-        description="Contradiction détection : prédire si deux phrases françaises expriment la même "
-        "information (0) ou se contredisent (1).",
+        description="Paraphrase detection task :"
+                    "Predict whether the two sentences express"
+                    " the same idea (1) or contradict each other (0)",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -339,7 +344,10 @@ datasets = {
     ),
     "french_boolq": Dataset(
         name="french_boolq",
-        description="Question answering oui/non : répondre 1 si le passage confirme la réponse 'oui', 0 sinon.",
+        description="Binary question answering task : "
+                    "Answer whether the context allows answering 'yes' to the question (1)"
+                    "or, if the context only allows answering 'no' "
+                    "to the question or does not answer the question. (0)",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(int(line["label"])),
@@ -348,7 +356,7 @@ datasets = {
             .add_premise(
                 "Lis le passage suivant et réponds à la question en te basant uniquement sur le texte :\n"
                 "- Si le passage permet d'affirmer que la réponse à la question est oui, réponds 1.\n"
-                "- Sinon, si la réponse est non ou que le passage ne permet pas de répondre 'oui', réponds 0."
+                "- Sinon, si la réponse est non ou que le passage ne permet pas de répondre à la question, réponds 0."
             )
             .add_data(f"Passage : {line['passage']}")
             .add_data(f"Question : {line['question']}")
@@ -362,8 +370,8 @@ datasets = {
     ),
     "mnli-nineeleven-fr-mt": Dataset(
         name="mnli-nineeleven-fr-mt",
-        description="Tâche NLI (Natural Language Inference) en français : déterminer la relation entre deux phrases. "
-        "0 si la deuxième phrase implique la première, 1 si la relation est neutre, 2 en cas de contradiction.",
+        description="Natural language inference task : "
+                    "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -390,8 +398,8 @@ datasets = {
     ),
     "rte3-french": Dataset(
         name="rte3-french",
-        description="Tâche de Natural Language Inference (RTE) en français : 0 si l'hypothèse découle du "
-        "texte, 1 si la relation est neutre, 2 en cas de contradiction.",
+        description="Natural language inference task : "
+                    "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -420,5 +428,13 @@ datasets = {
 
 
 def preload_all_datasets():
+    """Loads all datasets into cache for later usage"""
     for dataset in datasets.values():
         dataset.load_data()
+
+def generate_metadata_dict():
+    """Generates a dictionary with all the datasets metadata information"""
+    metadata_dict = {}
+    for dataset in datasets.values():
+        metadata_dict[dataset.name] = dataset.metadata
+    return metadata_dict
