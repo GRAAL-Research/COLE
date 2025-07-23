@@ -23,15 +23,15 @@ COPY src/ /app/src/
 # Copy Nginx config (adjust path if needed)
 COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY --from=frontend-build /app/frontend /app/frontend
-
 # Create non-root user
 RUN useradd -m -u 1000 user
 
 # Create and configure cache directory
 RUN mkdir -p /app/.cache && \
-    chown -R user:user /app
+    chown -R user:user /app \
 
+# Copy frontend files
+COPY --from=frontend-build /app/frontend /app/frontend
 # Environment variables
 ENV HF_HOME=/app/.cache \
     HF_DATASETS_CACHE=/app/.cache \
