@@ -7,5 +7,5 @@ upload_folder(
     repo_id=repo_id,
     folder_path=local_dir,
     repo_type="space",  # Important: this tells HF it's a Space
-    commit_message="Initial snapshot upload",
+    commit_message="Push from a local computer",
 )
