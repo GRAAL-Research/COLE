@@ -388,6 +388,33 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
+    "rte3-french": Dataset(
+        name="rte3-french",
+        description="Tâche de Natural Language Inference (RTE) en français : 0 si l'hypothèse découle du texte, 1 si la relation est neutre, 2 en cas de contradiction.",
+        possible_ground_truths=["0", "1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["label"]),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise(
+                "Lis le texte suivant et détermine la relation de l'énoncé par rapport au texte."
+            )
+            .add_data(f"Texte : {line['premise']}")
+            .add_data(f"Énoncé : {line['hypothesis']}")
+            .add_end(
+                "Réponds uniquement par :\n"
+                "0 — si l'énoncé découle logiquement du texte (entailment),\n"
+                "1 — si la relation est neutre,\n"
+                "2 — s'il y a contradiction.\n"
+                "La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "premise": line["premise"],
+            "hypothesis": line["hypothesis"],
+        },
+    ),
 }
 
 
