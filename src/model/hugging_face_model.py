@@ -44,7 +44,6 @@ class HFLLMModel(HFModel):
     def predict(self, evaluation_dataset: Dataset, task: Task) -> List:
         if task.task_type == TaskType.INFERENCE:
             labels = task.dataset.possible_ground_truths
-            self.candidate_labels = labels
             self.pipeline = pipeline(
                 task="zero-shot-classification",
                 model=self.model,
@@ -56,8 +55,12 @@ class HFLLMModel(HFModel):
                 padding=True,
                 truncation=True,
                 max_length=4096,
+                candidate_labels=labels,
             )
-            inference_fn = self.infer
+            if len(labels) == 2:
+                inference_fn = self.infer_binary
+            else:
+                inference_fn = self.infer
         else:
             self.pipeline = pipeline(
                 task="text-generation",
@@ -100,16 +103,36 @@ class HFLLMModel(HFModel):
 
     def infer(self, rows):
         """
-        Do a classification over a set of rows and extract the generated text and apply string post-processing.
+        Do a zero-shot classification and extract the label using a per-element generation.
+
+        For a fucking strange reason, the pipeline does not work in this case:
+        1. Batched generation of more than one element
+        2. More than 2 labels.
+
+        Thus, we need to loop over the element. Painfull I know.
+        """
+
+        with torch.no_grad():
+            texts = rows["text"]
+
+            classifications = []
+            for text in texts:
+                outputs = self.pipeline(text, batch_size=1)
+                classification = [
+                    output["labels"][0] for output in outputs
+                ]  # Labels are sorted in likelihood order.
+                classifications.append(classification)
+
+        return {"prediction": classifications}
+
+    def infer_binary(self, rows):
+        """
+        Do a binary zero-shot classification and extract the label using a per-element generation.
         """
         with torch.no_grad():
-            text = rows["text"]
+            texts = rows["text"]
 
-            candidate_labels = [self.candidate_labels] * len(
-                text
-            )  # To have enough candidate labels for each row
-
-            outputs = self.pipeline(text, candidate_labels=candidate_labels)
+            outputs = self.pipeline(texts)
             classifications = [
                 output["labels"][0] for output in outputs
             ]  # Labels are sorted in likelihood order.
