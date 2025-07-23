@@ -53,6 +53,9 @@ class HFLLMModel(HFModel):
                 return_full_text=False,
                 candidate_labels=labels,
                 max_new_tokens=16,
+                padding=True,
+                truncation=True,
+                max_length=4096,
             )
             inference_fn = self.infer
         else:
@@ -64,6 +67,9 @@ class HFLLMModel(HFModel):
                 torch_dtype="float16",
                 return_full_text=False,
                 max_new_tokens=64,
+                padding=True,
+                truncation=True,
+                max_length=4096,
             )
             inference_fn = self.generate
 
