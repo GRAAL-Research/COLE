@@ -390,7 +390,8 @@ datasets = {
     ),
     "rte3-french": Dataset(
         name="rte3-french",
-        description="Tâche de Natural Language Inference (RTE) en français : 0 si l'hypothèse découle du texte, 1 si la relation est neutre, 2 en cas de contradiction.",
+        description="Tâche de Natural Language Inference (RTE) en français : 0 si l'hypothèse découle du "
+        "texte, 1 si la relation est neutre, 2 en cas de contradiction.",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
