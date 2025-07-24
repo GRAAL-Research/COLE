@@ -438,7 +438,7 @@ datasets = {
         )
         .add_data(f"Phrase (originale en anglais) : {line['sentence']}")
         .add_data(f"Traduction en français (le pronom est _ ) : {line['translation1']}")
-        .add_data("À quoi renvoie ce pronom ?")
+        .add_data("À quoi renvoie ce pronom ? Voici les choix: ")
         .add_data(f"1 : {line['option1_fr']}")
         .add_data(f"2 : {line['option2_fr']}")
         .add_end("Réponds uniquement par 1 ou 2. La réponse est :")
