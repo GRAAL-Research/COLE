@@ -95,6 +95,7 @@ for model_name in tqdm(
         exp_name = f"{model_name}"
         wandb.init(
             project="COLLE",
+            entity="doctorate",
             config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
             name=exp_name,
         )
@@ -109,8 +110,6 @@ for model_name in tqdm(
         evaluator.save_metrics("./results")
         wandb.log(metrics_payload)
 
-        wandb.finish(exit_code=0)
-
     except Exception as e:
         error_message = f"Evaluation failed for model {model_name}: {e}"
         logging.error(error_message)
@@ -124,6 +123,7 @@ for model_name in tqdm(
             del evaluator
         gc.collect()
         torch.cuda.empty_cache()
+        wandb.finish(exit_code=0)
 
 time_end = datetime.now()
 info_message = f"End time: {time_end}"
