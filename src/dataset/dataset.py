@@ -64,6 +64,7 @@ class Dataset:
     def metadata(self) -> dict[str, Any]:
         """The dataset's metadata as a dict"""
         return {
+            "name": self.name,
             "description": self.description,
             "possible_ground_truths": str(self.possible_ground_truths),
             "Prompt template": self.line_to_prompt_fn(self.EchoDict()),
