@@ -6,7 +6,7 @@ datasets = {
     "allocine": Dataset(
         name="allocine",
         description="Binary classification on sentiment analysis"
-                    " of movie reviews, with reviews being either positive (1) or negative (0).",
+        " of movie reviews, with reviews being either positive (1) or negative (0).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -25,7 +25,7 @@ datasets = {
     "qfrcola": Dataset(
         name="qfrcola",
         description="Binary grammatical judgement : "
-                    "Predicts whether a sentence is grammatically correct (1) or not. (0)",
+        "Predicts whether a sentence is grammatically correct (1) or not. (0)",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -65,7 +65,7 @@ datasets = {
     "gqnli": Dataset(
         name="gqnli",
         description="Natural language inference task : "
-                    "predict the relation between two sentences (implication, neutral, contradiction)",
+        "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -93,7 +93,7 @@ datasets = {
     "sickfr": Dataset(
         name="sickfr",
         description="Semantic textual similarity task :"
-                    "Predict how similar two sentences are to each other (0 to 5)",
+        "Predict how similar two sentences are to each other (0 to 5)",
         possible_ground_truths=[str(i * 0.1) for i in range(0, 51)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: float(line["relatedness_score"]),
@@ -119,7 +119,7 @@ datasets = {
     "sts22": Dataset(
         name="sts22",
         description="Semantic textual similarity task :"
-                    "Predict how similar two sentences are to each other (0 to 5)",
+        "Predict how similar two sentences are to each other (0 to 5)",
         possible_ground_truths=[i * 0.1 for i in range(0, 51)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: float(line["score"]),
@@ -146,7 +146,7 @@ datasets = {
     "paws_x": Dataset(
         name="paws_x",
         description="Binary classification task : "
-                    "Predict if two sentences have the same meaning (1) or not (0)",
+        "Predict if two sentences have the same meaning (1) or not (0)",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -207,11 +207,10 @@ datasets = {
             "question": line["question"],
         },
     ),
-
     "xnli": Dataset(
         name="xnli",
         description="Natural language inference task : "
-                    "predict the relation between two sentences (implication, neutral, contradiction)",
+        "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -238,7 +237,7 @@ datasets = {
     "expressions_quebecoises": Dataset(
         name="expressions_quebecoises",
         description="Definition matching task : "
-                    "Match the Quebec expression with its definition from a list",
+        "Match the Quebec expression with its definition from a list",
         possible_ground_truths=[str(i) for i in range(11)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
@@ -268,7 +267,7 @@ datasets = {
     "termes_quebecoises": Dataset(
         name="termes_quebecoises",
         description="Definition matching task : "
-                    "Match the Quebec term with its definition from a list",
+        "Match the Quebec term with its definition from a list",
         possible_ground_truths=[str(i) for i in range(11)],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
@@ -297,8 +296,8 @@ datasets = {
     "daccord": Dataset(
         name="daccord",
         description="Paraphrase detection task :"
-                    "Predict whether the two sentences express"
-                    " the same idea (1) or contradict each other (0)",
+        "Predict whether the two sentences express"
+        " the same idea (1) or contradict each other (0)",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -323,9 +322,9 @@ datasets = {
     "french_boolq": Dataset(
         name="french_boolq",
         description="Binary question answering task : "
-                    "Answer whether the context allows answering 'yes' to the question (1)"
-                    "or, if the context only allows answering 'no' "
-                    "to the question or does not answer the question. (0)",
+        "Answer whether the context allows answering 'yes' to the question (1)"
+        "or, if the context only allows answering 'no' "
+        "to the question or does not answer the question. (0)",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(int(line["label"])),
@@ -349,7 +348,7 @@ datasets = {
     "mnli-nineeleven-fr-mt": Dataset(
         name="mnli-nineeleven-fr-mt",
         description="Natural language inference task : "
-                    "predict the relation between two sentences (implication, neutral, contradiction)",
+        "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -377,7 +376,7 @@ datasets = {
     "rte3-french": Dataset(
         name="rte3-french",
         description="Natural language inference task : "
-                    "predict the relation between two sentences (implication, neutral, contradiction)",
+        "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -402,6 +401,64 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
+    "wino_x_lm": Dataset(
+        name="wino_x_lm",
+        description=(
+            "Pronom resolution task : predict the correct referent (1 or 2) "
+            "of a pronoun in a sentence by choosing between two candidates."
+        ),
+        possible_ground_truths=["1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["answer"]),
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Voici une phrase contenant un pronom ambigu représenté par un tiret bas (_)."
+        )
+        .add_data(f"Phrase (originale en anglais) : {line['sentence']}")
+        .add_data(f"Traduction en français (le pronom est _ ) : {line['translation1']}")
+        .add_data("À quoi renvoie ce pronom ? Voici les choix: ")
+        .add_data(f"1 : {line['option1_fr']}")
+        .add_data(f"2 : {line['option2_fr']}")
+        .add_end("Réponds uniquement par 1 ou 2. La réponse est :")
+        .build(),
+        line_to_data_fn=lambda line: {
+            "sentence": line["sentence"],
+            "translation": line["translation1"],
+            "referent1": line["option1_fr"],
+            "referent2": line["option2_fr"],
+        },
+    ),
+    "wino_x_mt": Dataset(
+        name="wino_x_mt",
+        description=(
+            "Résolution de pronom à partir de traductions : choisir entre deux traductions françaises "
+            "d'une phrase anglaise avec pronom ambigu. L'objectif est d'identifier laquelle des deux "
+            "traductions utilise le bon pronom (il ou elle) en fonction du référent correct."
+        ),
+        possible_ground_truths=["1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["answer"]),
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Voici deux traductions d’une phrase anglaise contenant un pronom ambigu :"
+        )
+        .add_data(f"Phrase originale : {line['sentence']}")
+        .add_data(f"Traduction 1 (avec '{line['pronoun1']}') : {line['translation1']}")
+        .add_data(f"Traduction 2 (avec '{line['pronoun2']}') : {line['translation2']}")
+        .add_end(
+            "Quelle traduction utilise le bon pronom en fonction du référent visé dans la phrase originale ?\n"
+            "Réponds uniquement par 1 si la traduction 1 est correcte, ou 2 si la traduction 2 est correcte.\n"
+            "La réponse est :"
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "sentence": line["sentence"],
+            "translation1": line["translation1"],
+            "translation2": line["translation2"],
+            "pronoun1": line["pronoun1"],
+            "pronoun2": line["pronoun2"],
+        },
+    ),
 }
 
 
@@ -409,6 +466,7 @@ def preload_all_datasets():
     """Loads all datasets into cache for later usage"""
     for dataset in datasets.values():
         dataset.load_data()
+
 
 def generate_metadata_dict():
     """Generates a dictionary with all the datasets metadata information"""

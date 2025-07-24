@@ -67,8 +67,9 @@ class Dataset:
             "name": self.name,
             "description": self.description,
             "possible_ground_truths": str(self.possible_ground_truths),
-            "Prompt template" : self.line_to_prompt_fn(self.EchoDict()),
+            "Prompt template": self.line_to_prompt_fn(self.EchoDict()),
         }
+
     @property
     def metadata_string(self) -> str:
         """The dataset's metadata as a string"""
@@ -79,6 +80,7 @@ class Dataset:
 
     class EchoDict:
         """Helper class for building prompt templates,always returns the accessed key"""
+
         def __getitem__(self, key):
             return key
 
