@@ -92,55 +92,47 @@ datasets = {
     ),
     "sickfr": Dataset(
         name="sickfr",
-        description="Semantic textual similarity task :"
-        "Predict how similar two sentences are to each other (0 to 5)",
-        possible_ground_truths=[str(i * 0.1) for i in range(0, 51)],
+        description="Natural language inference task : "
+        "predict the relation between two sentences (implication, neutral, contradiction)",
+        possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: float(line["relatedness_score"]),
+        line_to_truth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
-        .add_premise(
-            "À quel point, de 0 à 5, les 2 phrases suivantes sont-elles similaires ?"
-        )
-        .add_data(
-            f"sentence_A : {line['sentence_A']}\n" f"sentence_B: {line['sentence_B']}"
-        )
+        .add_premise("Détermine la relation entre les deux phrases suivantes :")
+        .add_data(f"Phrase A : {line['sentence_A']}\nPhrase B : {line['sentence_B']}")
         .add_end(
-            (
-                "Réponds avec seulement un nombre de 0 à 5, où 5 signifie une très grande similarité entre "
-                "les phrases et 0 aucune similarité entre les phrases. La réponse est :"
-            )
+            "Réponds uniquement par un chiffre :\n"
+            "0 si les phrases se contredisent,\n"
+            "1 si leur relation est neutre,\n"
+            "2 si la deuxième phrase découle logiquement de la première.\n"
+            "La réponse est :"
         )
         .build(),
         line_to_data_fn=lambda line: {
-            "sentence_A ": line["sentence_A"],
-            "sentence_B ": line["sentence_B"],
+            "sentence_A": line["sentence_A"],
+            "sentence_B": line["sentence_B"],
         },
     ),
     "sts22": Dataset(
         name="sts22",
-        description="Semantic textual similarity task :"
+        description="Semantic textual similarity task : "
         "Predict how similar two sentences are to each other (0 to 5)",
-        possible_ground_truths=[i * 0.1 for i in range(0, 51)],
+        possible_ground_truths=[0, 1, 2, 3, 4, 5],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: float(line["score"]),
+        line_to_truth_fn=lambda line: int(line["score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "À quel point, de 0 à 5, les 2 phrases suivantes sont-elles similaires ?"
+            "À quel point les deux phrases suivantes sont-elles similaires ? Donne une note entière de 0 à 5."
         )
-        .add_data(
-            f"sentence 1: {line['sentence1']}\n" f"sentence 2: {line['sentence2']}"
-        )
+        .add_data(f"Phrase 1 : {line['sentence1']}\nPhrase 2 : {line['sentence2']}")
         .add_end(
-            (
-                "Réponds seulement avec un nombre de 0 à 5, "
-                "où 5 signifie que les 2 phrases veulent dire exactement la même chose et 0 qu'elles ne veulent "
-                "pas dire la même chose. La réponse est :"
-            )
+            "Réponds uniquement avec un nombre entier entre 0 (aucune similarité) et 5 (équivalence parfaite). "
+            "La réponse est :"
         )
         .build(),
         line_to_data_fn=lambda line: {
-            "sentence 1 ": line["sentence1"],
-            "sentence 2 ": line["sentence2"],
+            "sentence1": line["sentence1"],
+            "sentence2": line["sentence2"],
         },
     ),
     "paws_x": Dataset(
