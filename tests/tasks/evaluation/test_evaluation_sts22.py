@@ -11,14 +11,14 @@ class TaskSTS22Test(TaskTest):
     def test_given_a_prediction_smaller_than_corpus_when_compute_then_return_expected_result_and_warning(
         self,
     ):
-        a_predictions = [0, 0, 0, 0, 1, 1, 1, 2, 2, 2]
+        a_predictions = [2, 0, 0, 0, 0]
         task = Task(
             task_name="sts22",
-            metric="pearson",
+            metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
 
-        expected_results = {"pearsonr": -0.2273955}
+        expected_results = {"accuracy": 0.2}
         expected_warning = (
             f"Your prediction size is of '{len(a_predictions)}', while the ground truths size is "
             f"of '{self.dataset_size}'. We computed the metric over the first {len(a_predictions)}"
@@ -34,14 +34,14 @@ class TaskSTS22Test(TaskTest):
     def test_given_a_prediction_when_compute_then_return_expected_result_no_warnings(
         self,
     ):
-        a_predictions = [0] * (self.dataset_size // 2) + [1] * (self.dataset_size // 2)
+        a_predictions = [1] * self.dataset_size
         task = Task(
             task_name="sts22",
-            metric="pearson",
+            metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
 
-        expected_results = {"pearsonr": 0.29421966}
+        expected_results = {"accuracy": 0.27}
         expected_warning = None
 
         actual_result, actual_warning = task.compute(predictions=a_predictions)
@@ -54,7 +54,7 @@ class TaskSTS22Test(TaskTest):
         a_predictions = [1] * (self.dataset_size + 1)
         task = Task(
             task_name="sts22",
-            metric="pearson",
+            metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
 

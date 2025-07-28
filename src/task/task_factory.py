@@ -83,7 +83,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                 tasks.append(
                     Task(
                         task_name=task_name,
-                        metric="pearson",
+                        metric="accuracy",
                         task_type=TaskType.INFERENCE,
                     )
                 )
@@ -91,7 +91,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                 tasks.append(
                     Task(
                         task_name=task_name,
-                        metric="pearson",
+                        metric="accuracy",
                         task_type=TaskType.INFERENCE,
                     )
                 )
