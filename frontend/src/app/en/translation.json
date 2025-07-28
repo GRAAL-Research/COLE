@@ -49,8 +49,6 @@
   "benchmark_mnli_nineeleven_fr_mt_description": "Predict the relation between two sentences (entailment, neutral, contradiction).",
   "benchmark_rte3_french_title": "RTE3-French",
   "benchmark_rte3_french_description": "Predict the relation between two sentences (entailment, neutral, contradiction).",
-  "benchmark_fracas_title": "FraCaS - Logic-Based Inference from Sentences",
-  "benchmark_fracas_description": "This dataset is based on the FraCaS test suite, designed to evaluate a model’s ability to perform logical inference from arguments expressed in natural language. The task is to predict whether a hypothesis logically follows from the premise.",
   "benchmark_wino_x_lm_title": "WiNo-X LM - Pronoun Resolution ",
   "benchmark_wino_x_lm_description": "Predict the correct referent (1 or 2) of a pronoun in a sentence by choosing between two candidates.",
   "benchmark_wino_x_mt_title": "WiNo-X MT - Pronoun Resolution ",

@@ -112,12 +112,7 @@ export default function Benchmarks() {
           description={t('benchmark_rte3_french_description')}
           metrics="Accuracy"
         />
-        <Benchmark
-          title={t('benchmark_fracas_title')}
-          link="https://huggingface.co/datasets/maximoss/fracas"
-          description={t('benchmark_fracas_description')}
-          metrics="Accuracy"
-        />
+
         <Benchmark
           title={t('benchmark_wino_x_lm_title')}
           link="https://huggingface.co/datasets/demelin/wino_x/viewer/lm_en_fr?views%5B%5D=lm_en_fr"

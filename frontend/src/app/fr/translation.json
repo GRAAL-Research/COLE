@@ -49,8 +49,6 @@
   "benchmark_mnli_nineeleven_fr_mt_description": "Prédisez la relation entre deux phrases (implication, neutre, contradiction).",
   "benchmark_rte3_french_title": "RTE3-Français",
   "benchmark_rte3_french_description": "Prédisez la relation entre deux phrases (implication, neutre, contradiction).",
-  "benchmark_fracas_title": "FraCaS - Inférence logique basée sur les phrases",
-  "benchmark_fracas_description": "Ce jeu de données est basé sur le test FraCaS, conçu pour évaluer la capacité d’un modèle à effectuer des inférences logiques sur la base d’arguments exprimés en langage naturel. L’objectif est de prédire si une hypothèse est logiquement valide à partir de la prémisse.",
   "benchmark_wino_x_lm_title": "WiNo-X LM - Résolution de pronom ",
   "benchmark_wino_x_lm_description": "Prédire le bon référent (1 ou 2) d’un pronom dans une phrase en choisissant parmi deux candidats.",
   "benchmark_wino_x_mt_title": "WiNo-X MT - Résolution de pronom ",
