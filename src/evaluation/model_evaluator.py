@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from typing import Dict, List
 
+import wandb
 from datasets import Dataset
 
 from src.model.model import Model
@@ -130,7 +131,9 @@ class ModelEvaluator:
             except Exception as e:
                 error_message = f"Task '{task.task_name}' has failed : {e}"
                 logging.error(error_message)
+                wandb.log({task.task_name: "Failed"})
                 continue
+            wandb.log({task.task_name: "Success"})
         self.last_predictions = {
             "model_name": model.name,
             "model_url": f"https://huggingface.co/{model.name}",
