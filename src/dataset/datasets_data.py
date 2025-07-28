@@ -265,7 +265,7 @@ datasets = {
         line_to_truth_fn=lambda line: str(line["correct_index"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            f"Qu'est-ce que ça veut dire ce terme québécois « {line['expression']} » ?"
+            f"Qu'est-ce que ça veut dire ce terme québécois « {line['terme']} » ?"
         )
         .add_data(
             "\n".join(
