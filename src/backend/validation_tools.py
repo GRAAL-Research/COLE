@@ -7,7 +7,6 @@ tasks_name = [
     "allocine",
     "fquad",
     "gqnli",
-    "opus_parcus",
     "paws_x",
     "piaf",
     "qfrblimp",
