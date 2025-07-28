@@ -8,7 +8,6 @@ export default function Benchmarks() {
   const { t } = useTranslation();
 
   return (
-    // On ignore ici toute différence de rendu serveur/client dans ce div
     <div suppressHydrationWarning>
       <div className="max-w-3xl mx-auto px-2 py-3">
         <p className="text-1.5xl text-left text-gray-800">
@@ -33,12 +32,6 @@ export default function Benchmarks() {
           link="https://huggingface.co/datasets/maximoss/gqnli-fr"
           description={t('benchmark_gqnli_description')}
           metrics="Accuracy"
-        />
-        <Benchmark
-          title={t('benchmark_opusParcus_title')}
-          link="https://huggingface.co/datasets/GEM/opusparcus"
-          description={t('benchmark_opusParcus_description')}
-          metrics="Pearson"
         />
         <Benchmark
           title={t('benchmark_paws_title')}
@@ -82,6 +75,62 @@ export default function Benchmarks() {
           description={t('benchmark_xnli_description')}
           metrics="Accuracy"
         />
+
+        <Benchmark
+          title={t('benchmark_expressions_quebecoises_title')}
+          link=""
+          description={t('benchmark_expressions_quebecoises_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_termes_quebecoises_title')}
+          link=""
+          description={t('benchmark_termes_quebecoises_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_daccord_title')}
+          link="https://huggingface.co/datasets/maximoss/daccord-contradictions"
+          description={t('benchmark_daccord_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_french_boolq_title')}
+          link="https://huggingface.co/datasets/manu/french_boolq"
+          description={t('benchmark_french_boolq_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_mnli_nineeleven_fr_mt_title')}
+          link="https://huggingface.co/datasets/manu/french_boolq"
+          description={t('benchmark_mnli_nineeleven_fr_mt_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_rte3_french_title')}
+          link="https://huggingface.co/datasets/maximoss/rte3-french"
+          description={t('benchmark_rte3_french_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_fracas_title')}
+          link="https://huggingface.co/datasets/maximoss/fracas"
+          description={t('benchmark_fracas_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_wino_x_lm_title')}
+          link="https://huggingface.co/datasets/demelin/wino_x/viewer/lm_en_fr?views%5B%5D=lm_en_fr"
+          description={t('benchmark_wino_x_lm_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_wino_x_mt_title')}
+          link="https://huggingface.co/datasets/demelin/wino_x/viewer/mt_en_fr"
+          description={t('benchmark_wino_x_mt_description')}
+          metrics="Accuracy"
+        />
+
       </div>
     </div>
   );
