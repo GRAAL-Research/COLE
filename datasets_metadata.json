@@ -24,11 +24,6 @@
     "license" : "Creative Commons Attribution 4.0",
     "expected_pred_format": "{predictions : [answer1, answer2,...] }"
   },
-  "opus_parcus" : {
-    "origin" :"https://huggingface.co/datasets/GEM/opusparcus" ,
-    "license" : "Creative Commons Attribution Non Commercial 4.0",
-    "expected_pred_format": "{predictions : [answer1, answer2,...] }"
-  },
   "paws_x" : {
     "origin" :"https://huggingface.co/datasets/hgissbkh/paws-x" ,
     "license" : "The dataset may be freely used for any purpose, although acknowledgement of Google LLC (\"Google\") as the data source would be appreciated. The dataset is provided \"AS IS\" without any warranty, express or implied. Google disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.",

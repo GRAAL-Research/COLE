@@ -67,6 +67,8 @@ tasks_names = [
     "french_boolq",
     "mnli-nineeleven-fr-mt",
     "rte3-french",
+    "wino_x_lm",
+    "wino_x_mt",
 ]
 tasks = tasks_factory(tasks_names)
 
