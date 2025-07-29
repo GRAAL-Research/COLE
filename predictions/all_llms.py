@@ -108,6 +108,8 @@ llms = {
         "google/flan-t5-large",
         "google/flan-t5-xl",
         "google/flan-t5-xxl",
+        "google/gemma-3-12b-it",
+        "google/gemma-3-27b-it",
     ],
     "all": [],
 }
