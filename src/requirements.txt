@@ -18,8 +18,8 @@ aenum
 transformers
 accelerate
 bitsandbytes
-flash-attn
 wheel
+flash-attn
 unsloth
 unsloth-zoo
 wandb
