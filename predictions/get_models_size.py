@@ -10,7 +10,7 @@ if __name__ == "__main__":
     model_names = llms["all"]
 
     # We create a new model JSON file to write the number of params.
-    with open("figs/models_size.json", "w", encoding="utf-8") as file:
+    with open("models_size.json", "w", encoding="utf-8") as file:
         json.dump({}, file, ensure_ascii=False)
 
     for model_name in tqdm(model_names):
