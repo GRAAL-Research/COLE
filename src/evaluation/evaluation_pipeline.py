@@ -45,7 +45,7 @@ parser.add_argument(
     "--batch_size",
     help="The batch size to use during the evaluation.",
     type=int,
-    default=16,
+    default=32,
 )
 
 args = parser.parse_args()
@@ -88,6 +88,7 @@ time_start = datetime.now()
 for model_name in tqdm(
     models, total=len(models), desc="Processing LLM inference on tasks."
 ):
+
     try:
         model = HFLLMModel(model_name=model_name, batch_size=args.batch_size)
         logging.info("Creating model")

@@ -27,12 +27,16 @@ class HFModel(Model, abc.ABC):
         super().__init__(model_name)
         self._model_name = model_name
         self._token = token
-        self._batch_size = batch_size
 
         self.model, self.tokenizer = model_tokenizer_factory(
             model_name=self._model_name,
             huggingface_token=self._token,
         )
+
+        num_params = self.model.num_parameters()
+        if num_params >= 32000000000:  # 32B
+            batch_size /= 2
+        self._batch_size = batch_size
 
 
 class HFLLMModel(HFModel):
