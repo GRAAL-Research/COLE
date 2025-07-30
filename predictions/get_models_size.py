@@ -2,8 +2,8 @@ import json
 
 from tqdm import tqdm
 
-from all_llms import llms
-from model_size import model_size
+from predictions.all_llms import llms
+from predictions.model_size import model_size
 
 if __name__ == "__main__":
 
