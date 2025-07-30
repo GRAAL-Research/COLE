@@ -45,7 +45,7 @@ parser.add_argument(
     "--batch_size",
     help="The batch size to use during the evaluation.",
     type=int,
-    default=32,
+    default=64,
 )
 
 args = parser.parse_args()
