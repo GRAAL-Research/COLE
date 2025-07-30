@@ -17,7 +17,6 @@ const allowedMetrics = [
   'pearsonr',
   'spearman',
   'fquad',
-  'exact match',
   'exact_match',
 ];
 

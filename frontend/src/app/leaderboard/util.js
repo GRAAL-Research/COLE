@@ -10,7 +10,6 @@ export const computeAverageScore = (entry) => {
     "acc",
     "accuracy",
     "f1",
-    "exact match",
     "exact_match",
     "fquad",
     "pearson",
