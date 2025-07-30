@@ -1,12 +1,16 @@
-from unsloth import FastLanguageModel
+import os
 
 import torch
+from pydantic import SecretStr
 from transformers import (
     AutoTokenizer,
     BitsAndBytesConfig,
     AutoModelForCausalLM,
     AutoModelForMaskedLM,
 )
+from unsloth import FastLanguageModel
+
+from predictions.all_llms import private_llm
 
 
 def model_tokenizer_factory(
@@ -49,3 +53,43 @@ def model_tokenizer_factory(
 
     model.eval()
     return model, tokenizer
+
+
+def get_api_key(model_name: str) -> SecretStr:
+    if model_name in private_llm["openai"]:
+        key_name = "openai_api_key"
+    elif model_name in private_llm["anthropic"]:
+        key_name = "anthropic_token"
+    elif model_name in private_llm["deepseek"]:
+        key_name = "deepseek_token"
+    elif model_name in private_llm["mistrail"]:
+        key_name = "mistral_token"
+    elif model_name in private_llm["xai"]:
+        key_name = "XAI_API_KEY"
+    elif model_name in private_llm["google"]:
+        key_name = "gcp_key"
+    else:
+        return None
+    api_key = SecretStr(os.getenv(key_name))
+
+    if api_key is None:
+        raise Exception(f"API key {key_name} not found.")
+    else:
+        return api_key
+
+
+def model_params_factory(model_name):
+    if model_name in private_llm["all"]:
+        api_key = get_api_key(model_name)
+
+        if model_name in private_llm["openai"]:
+            client = OpenAI(api_key=api_key)
+
+            if "o1" in model_name and not "o1-mini" in model_name:
+                extra_params = {
+                    "reasoning_effort": "low"
+                }  # Otherwise take too many tokens and stop the process.
+            else:
+                extra_params = {}
+
+    return client, extra_params
