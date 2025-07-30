@@ -1,3 +1,5 @@
+from collections import Counter
+
 llms = {
     "unsloth": [
         "unsloth/Meta-Llama-3.1-8B-bnb-4bit",
@@ -8,8 +10,6 @@ llms = {
         "unsloth/Llama-3.2-1B-Instruct-bnb-4bit",
         "unsloth/Llama-3.2-3B-unsloth-bnb-4bit",
         "unsloth/Llama-3.2-3B-Instruct-unsloth-bnb-4bit",
-        "unsloth/mistral-7b-v0.3-bnb-4bit",
-        "unsloth/mistral-7b-instruct-v0.3-bnb-4bit",
         "unsloth/Phi-3.5-mini-instruct-bnb-4bit",
         "unsloth/phi-4-unsloth-bnb-4bit",
         "unsloth/gemma-2-2b-bnb-4bit",
@@ -41,9 +41,7 @@ llms = {
         "unsloth/Mistral-Small-Instruct-2409-bnb-4bit",
         "unsloth/Mistral-Nemo-Instruct-2407-bnb-4bit",
         "unsloth/granite-3.2-8b-instruct-bnb-4bit",
-        "unsloth/granite-3.2-8b-instruct-bnb-4bit",
         "unsloth/QwQ-32B-unsloth-bnb-4bit",
-        "unsloth/OLMo-2-0325-32B-Instruct-bnb-4bit",
         "unsloth/OLMo-2-0325-32B-Instruct-unsloth-bnb-4bit",
         "unsloth/Mixtral-8x7B-Instruct-v0.1-unsloth-bnb-4bit",
         "unsloth/Mixtral-8x7B-v0.1-unsloth-bnb-4bit",
@@ -64,7 +62,6 @@ llms = {
         "OpenLLM-France/Lucie-7B",
         "OpenLLM-France/Lucie-7B-Instruct-v1.1",
         "OpenLLM-France/Lucie-7B-Instruct-human-data",
-        "OpenLLM-France/Claire-7B-FR-Instruct-0.1",
     ],
     "prithivMLmods": [
         "prithivMLmods/Deepthink-Reasoning-7B",
@@ -75,6 +72,9 @@ llms = {
         "allenai/OLMo-2-1124-13B",
         "allenai/OLMo-2-1124-7B-Instruct",
         "allenai/OLMo-2-1124-7B",
+        "allenai/OLMo-2-0425-1B-Instruct",
+        "allenai/OLMo-2-0425-1B",
+        "allenai/OLMo-2-0325-32B",
     ],
     "simplescaling": [
         "simplescaling/s1.1-32B",
@@ -103,16 +103,19 @@ llms = {
         "CohereForAI/aya-23-8b",
     ],
     "google": [
-        "google/flan-t5-small",
-        "google/flan-t5-base",
-        "google/flan-t5-large",
-        "google/flan-t5-xl",
-        "google/flan-t5-xxl",
         "google/gemma-3-12b-it",
         "google/gemma-3-27b-it",
+    ],
+    "ibm": [
+        "ibm-granite/granite-3.3-8b-base",
+        "ibm-granite/granite-3.3-8b-instruct",
     ],
     "all": [],
 }
 for key in llms.keys():
     if isinstance(llms[key], list) and key != "all":
         llms["all"].extend(llms[key])
+
+# print(len(llms["all"]))
+# print(len(set(llms["all"])))
+# print(Counter(llms["all"]))
