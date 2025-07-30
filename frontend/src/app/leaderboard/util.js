@@ -10,36 +10,39 @@ export const computeAverageScore = (entry) => {
     "acc",
     "accuracy",
     "f1",
+    "exact match",
+    "exact_match",
+    "fquad",
     "pearson",
     "pearsonr",
     "spearman",
   ];
 
-  const rawValues = [];
+  const perTaskAverages = [];
+
   Object.values(entry.results || {}).forEach((taskData) => {
     if (taskData && typeof taskData === "object") {
       Object.values(taskData).forEach((metricGroup) => {
         if (metricGroup && typeof metricGroup === "object") {
-          Object.entries(metricGroup)
-            .filter(([metric]) =>
-              allowedMetrics.includes(metric.toLowerCase())
+          const taskMetrics = Object.entries(metricGroup)
+            .filter(([metric]) => allowedMetrics.includes(metric.toLowerCase()))
+            .map(([, value]) =>
+              typeof value === "number" ? value : null
             )
-            .forEach(([, value]) => {
-              if (typeof value === "number") {
-                rawValues.push(value);
-              }
-            });
+            .filter((v) => v !== null);
+
+          if (taskMetrics.length > 0) {
+            const normalized = taskMetrics.map((v) => v > 1 ? v / 100 : v);
+            const taskAvg = normalized.reduce((a, b) => a + b, 0) / normalized.length;
+            perTaskAverages.push(taskAvg);
+          }
         }
       });
     }
   });
 
-  if (rawValues.length === 0) return null;
+  if (perTaskAverages.length === 0) return null;
 
-
-  const normalized = rawValues.map((v) =>
-    v > 1 ? v / 100 : v
-  );
-  const sum = normalized.reduce((a, b) => a + b, 0);
-  return sum / normalized.length;
+  return perTaskAverages.reduce((a, b) => a + b, 0) / perTaskAverages.length;
 };
+

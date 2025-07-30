@@ -5,9 +5,9 @@ import {
   normalizeBenchmarkName,
   computeAverageScore,
 } from "./util";
-import {useTranslation} from "react-i18next";
-import {useParams} from "next/navigation";
-import {BACKEND_ADDRESS} from "@/app/resources/ResourcesPaths";
+import { useTranslation } from "react-i18next";
+import { useParams } from "next/navigation";
+import { BACKEND_ADDRESS } from "@/app/resources/ResourcesPaths";
 
 const allowedMetrics = [
   'acc',
@@ -16,6 +16,9 @@ const allowedMetrics = [
   'pearson',
   'pearsonr',
   'spearman',
+  'fquad',
+  'exact match',
+  'exact_match',
 ];
 
 export default function LeaderboardPage() {
@@ -27,7 +30,6 @@ export default function LeaderboardPage() {
   const [sortOrder, setSortOrder] = useState('desc');
   const [selectedEntry, setSelectedEntry] = useState(null);
 
-  // Build header labels with translations
   const headerLabels = {
     model: t('leaderboard_modelHeader'),
     overall: t('leaderboard_overallHeader'),
@@ -80,9 +82,11 @@ export default function LeaderboardPage() {
         });
       }
     });
+
     if (rawValues.length === 0) return null;
-    const normalized = rawValues.map((v) => (v > 1 ? v / 100 : v));
-    return normalized.reduce((a, b) => a + b, 0) / normalized.length;
+    const normalized = rawValues.map((v) => v > 1 ? v / 100 : v);
+    const avg = normalized.reduce((a, b) => a + b, 0) / normalized.length;
+    return avg;
   };
 
   const sorted = [...entries].sort((a, b) => {
@@ -136,7 +140,6 @@ export default function LeaderboardPage() {
       );
     }
 
-    // For individual benchmarks: show the metric key in parentheses
     let metricText = '';
     const sample = entries[0];
     if (sample && sample.results) {
@@ -146,10 +149,11 @@ export default function LeaderboardPage() {
       if (p) {
         const grp = Object.values(p[1])[0];
         if (grp) {
-          const m = Object.keys(grp).find((m) =>
-            allowedMetrics.includes(m.toLowerCase())
-          );
-          if (m) metricText = ` (${m})`;
+          const metrics = Object.keys(grp)
+            .filter((m) => allowedMetrics.includes(m.toLowerCase()));
+          if (metrics.length > 0) {
+            metricText = ` (${metrics.join(', ')})`;
+          }
         }
       }
     }
@@ -239,8 +243,8 @@ export default function LeaderboardPage() {
                             <strong>{metricKey.replace(/_/g, ' ')}</strong>:{' '}
                             {typeof value === 'number'
                               ? (value > 1
-                                  ? value.toFixed(1) + '%'
-                                  : (value * 100).toFixed(1) + '%')
+                                ? value.toFixed(1) + '%'
+                                : (value * 100).toFixed(1) + '%')
                               : value}
                           </li>
                         ))}
