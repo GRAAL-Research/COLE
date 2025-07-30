@@ -396,7 +396,7 @@ datasets = {
     "wino_x_lm": Dataset(
         name="wino_x_lm",
         description=(
-            "Pronom resolution task : predict the correct referent (1 or 2) "
+            "Pronoun resolution task : predict the correct referent (1 or 2) "
             "of a pronoun in a sentence by choosing between two candidates."
         ),
         possible_ground_truths=["1", "2"],
@@ -404,10 +404,12 @@ datasets = {
         line_to_truth_fn=lambda line: str(line["answer"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "Voici une phrase contenant un pronom ambigu représenté par un tiret bas (_)."
+            "Voici une phrase contenant un pronom ambigu représenté par un tiret bas '_'."
         )
         .add_data(f"Phrase (originale en anglais) : {line['sentence']}")
-        .add_data(f"Traduction en français (le pronom est _ ) : {line['translation1']}")
+        .add_data(
+            f"Traduction en français (le pronom est caché par '_' ) : {line['context_fr']}"
+        )
         .add_data("À quoi renvoie ce pronom ? Voici les choix: ")
         .add_data(f"1 : {line['option1_fr']}")
         .add_data(f"2 : {line['option2_fr']}")
@@ -415,7 +417,7 @@ datasets = {
         .build(),
         line_to_data_fn=lambda line: {
             "sentence": line["sentence"],
-            "translation": line["translation1"],
+            "translation": line["context_fr"],
             "referent1": line["option1_fr"],
             "referent2": line["option2_fr"],
         },

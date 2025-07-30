@@ -109,7 +109,7 @@ class HFLLMModel(HFModel):
         1. Batched generation of more than one element
         2. More than 2 labels.
 
-        Thus, we need to loop over the element. Painfull I know.
+        Thus, we need to loop over the element. Painful I know.
         """
 
         with torch.no_grad():

@@ -1,5 +1,5 @@
 from typing import List, Dict
-from unittest import TestCase
+from unittest import TestCase, mock
 
 from src.dataset.dataset import Dataset
 from src.evaluation.model_evaluator import ModelEvaluator
@@ -40,7 +40,8 @@ class ModelEvaluatorTest(TestCase):
         self.tester = ModelEvaluator()
         self.tasks = tasks_factory([BASE_TASK_NAME])
 
-    def test_when_evaluating_return_formatted_dict(self):
+    @mock.patch("src.evaluation.model_evaluator.wandb")
+    def test_when_evaluating_return_formatted_dict(self, wandb_mock):
         ret = self.tester.evaluate(self.model, self.tasks)
 
         assert ret == {
@@ -49,7 +50,8 @@ class ModelEvaluatorTest(TestCase):
             "tasks": [{"qfrcola": preds}],
         }
 
-    def test_when_compute_metrics_return_metrics_dict(self):
+    @mock.patch("src.evaluation.model_evaluator.wandb")
+    def test_when_compute_metrics_return_metrics_dict(self, wandb_mock):
         self.tester.last_model_name = "test/model"
         self.tester.evaluate(self.model, self.tasks)
         actual_metrics = self.tester.compute_metrics()
@@ -89,12 +91,14 @@ class ModelEvaluatorTest(TestCase):
             else:
                 self.assertEqual(expected.get(key), actual_metrics.get(key))
 
-    def test_when_task_is_generative_generate(self):
+    @mock.patch("src.evaluation.model_evaluator.wandb")
+    def test_when_task_is_generative_generate(self, wandb_mock):
         TASK_NAME = "qfrcola"
         tasks = tasks_factory([TASK_NAME])
         predictions = self.tester.evaluate(self.model, tasks)
         assert predictions["tasks"] == [{TASK_NAME: gen}]
 
-    def test_when_task_is_inference_infer(self):
+    @mock.patch("src.evaluation.model_evaluator.wandb")
+    def test_when_task_is_inference_infer(self, wandb_mock):
         ret = self.tester.evaluate(self.model, self.tasks)
         assert ret["tasks"] == [{BASE_TASK_NAME: preds}]
