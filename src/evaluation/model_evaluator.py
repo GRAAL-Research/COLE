@@ -147,15 +147,19 @@ class ModelEvaluator:
         Saves inferred metrics to a json file.
         :param save_path : the path to which the json file will be saved.
         """
+
         if self.last_model_name is None:
             logging.error("Please evaluate before saving results")
             return None
-        date_time_stamp = datetime.now().strftime("%Y%m%d-%H%M")
-        return self.save_object(
-            save_path,
-            self.last_predictions,
-            f"{self.last_model_name.replace('/', '_')}_{date_time_stamp}.json",
-        )
+        if self.last_model_name.startswith("baseline_constant_"):
+            filename = f"{self.last_model_name.replace('/', '_')}.json"
+        else:
+            date_time_stamp = datetime.now().strftime("%Y%m%d-%H%M")
+            filename = (
+                f"{self.last_model_name.replace('/', '_')}_{date_time_stamp}.json"
+            )
+
+        return self.save_object(save_path, self.last_predictions, filename)
 
     def save_object(self, save_dir_path, saved_object, filename):
         """
