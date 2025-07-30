@@ -13,7 +13,7 @@ def model_tokenizer_factory(
     model_name,
     huggingface_token: str,
 ):
-    if "chocolatine" in model_name.lower():
+    if "chocolatine" in model_name.lower() or "lucie" in model_name.lower():
 
         compute_dtype = getattr(torch, "bfloat16")
         bnb_configs = BitsAndBytesConfig(
@@ -33,7 +33,6 @@ def model_tokenizer_factory(
         )
 
         tokenizer = AutoTokenizer.from_pretrained(model_name, token=huggingface_token)
-
     elif "bert" in model_name.lower():
         # For Debug.
         model = AutoModelForMaskedLM.from_pretrained(model_name)
