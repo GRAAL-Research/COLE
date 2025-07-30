@@ -1,7 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-from predictions.convert_results_to_md import results_data
+from figs.convert_results_to_md import results_data
 
 
 def extract_plot_task_data(all_tasks_data, task):
