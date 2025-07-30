@@ -14,6 +14,7 @@ if __name__ == "__main__":
         json.dump({}, file, ensure_ascii=False)
 
     for model_name in tqdm(model_names):
+        print(f"------- {model_name} -------")
         num_params = model_size(model_name)
 
         # We load the file to append the new datapoint to it.

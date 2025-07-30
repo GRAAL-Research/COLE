@@ -113,37 +113,56 @@ for key in llms.keys():
     if isinstance(llms[key], list) and key != "all":
         llms["all"].extend(llms[key])
 
+private_llm = {
+    "openai": [
+        "gpt-4.1-2025-04-14",
+        "o4-mini-2025-04-16",
+        "o3-2025-04-16",
+        "gpt-4.1-mini-2025-04-14",
+        "gpt-4.1-nano-2025-04-14",
+        "o1-2024-12-17",
+        "gpt-4.5-preview-2025-02-27",
+        "o3-mini-2025-01-31",
+        "gpt-4-0613",
+        "gpt-4o-2024-08-06",
+        "gpt-4o-mini-2024-07-18",
+        "gpt-3.5-turbo-0125",
+        "o1-mini-2024-09-12",
+    ],
+    "anthropic": [
+        "claude-opus-4-20250514",
+        "claude-sonnet-4-20250514",
+        "claude-3-7-sonnet-20250219",
+    ],
+    "xai": [
+        "grok-3-latest",
+        "grok-3-fast-latest",
+        "grok-3-mini-latest",
+        "grok-3-mini-fast-latest",
+    ],
+    "deepseek": [
+        "deepseek-chat",
+        "deepseek-reasoner",
+    ],
+    "google": [
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
+    ],
+    "mistrail": [
+        "pixtral-large-latest",
+        "mistral-large-latest",
+    ],
+    "all": [],
+}
+
+for key in private_llm.keys():
+    if isinstance(private_llm[key], list) and key != "all":
+        private_llm["all"].extend(private_llm[key])
+
+# import pandas
 # print(len(llms["all"]))
 # print(len(set(llms["all"])))
 # print(Counter(llms["all"]))
-
-
-private_llm = [
-    "gpt-4.1-2025-04-14",
-    "o4-mini-2025-04-16",
-    "o3-2025-04-16",
-    "gpt-4.1-mini-2025-04-14",
-    "gpt-4.1-nano-2025-04-14",
-    "claude-opus-4-20250514",
-    "claude-sonnet-4-20250514",
-    "o1-2024-12-17",
-    "gpt-4.5-preview-2025-02-27",
-    "claude-3-7-sonnet-20250219",
-    "o3-mini-2025-01-31",
-    "gpt-4-0613",
-    "deepseek-chat",
-    "pixtral-large-latest",
-    "mistral-large-latest",
-    "gpt-4o-2024-08-06",
-    "gpt-4o-mini-2024-07-18",
-    "gpt-3.5-turbo-0125",
-    "o1-mini-2024-09-12",
-    "deepseek-reasoner",
-    "gemini-2.5-pro",
-    "gemini-2.5-flash",
-    "grok-3-latest",
-    "grok-3-fast-latest",
-    "grok-3-mini-latest",
-    "grok-3-mini-fast-latest",
-    "chatgpt-4o-latest",
-]
+# print(len(private_llm["all"]))
+# print(pandas.DataFrame({"LLM": [r"\texttt{" + text.capitalize().replace("Gpt", "GPT") + r"}" for text in
+#                                 sorted(private_llm["all"])]}).to_latex(index=False))
