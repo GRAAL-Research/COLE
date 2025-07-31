@@ -139,7 +139,7 @@ export default function Benchmarks() {
           title={t('benchmark_wsd_title')}
           link="https://huggingface.co/datasets/GETALP/flue"
           description={t('benchmark_wsd_description')}
-          metrics="Exact MAtch Ratio"
+          metrics="Exact Match Ratio"
         />
         <Benchmark
           title={t('benchmark_xnli_title')}
