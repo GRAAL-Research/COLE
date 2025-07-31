@@ -136,6 +136,12 @@ export default function Benchmarks() {
           metrics="Accuracy"
         />
         <Benchmark
+          title={t('benchmark_wsd_title')}
+          link="https://huggingface.co/datasets/GETALP/flue"
+          description={t('benchmark_wsd_description')}
+          metrics="Exact MAtch Ratio"
+        />
+        <Benchmark
           title={t('benchmark_xnli_title')}
           link="https://github.com/facebookresearch/XNLI"
           description={t('benchmark_xnli_description')}
