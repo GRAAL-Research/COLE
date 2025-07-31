@@ -531,7 +531,7 @@ datasets = {
         description="Extractive word sense disambiguation : Extract an ambiguous words in a sentence.",
         possible_ground_truths=[],
         hugging_face_repo=COLLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: line["text"],
+        line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Tu vas recevoir une phrase avec un mot ambiguë. "
