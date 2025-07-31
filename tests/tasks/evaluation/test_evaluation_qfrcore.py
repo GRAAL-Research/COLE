@@ -12,7 +12,7 @@ class TaskExpressionsQuebecoisesTest(TaskTest):
     ):
         a_predictions = [9, 9, 9, 9, 9]
         task = Task(
-            task_name="expressions_quebecoises",
+            task_name="qfrcore",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
@@ -35,7 +35,7 @@ class TaskExpressionsQuebecoisesTest(TaskTest):
     ):
         a_predictions = [1] * self.dataset_size
         task = Task(
-            task_name="expressions_quebecoises",
+            task_name="qfrcore",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
@@ -52,7 +52,7 @@ class TaskExpressionsQuebecoisesTest(TaskTest):
     def test_given_a_prediction_larger_than_ground_truth_raise_error(self):
         a_predictions = [1] * (self.dataset_size + 1)
         task = Task(
-            task_name="expressions_quebecoises",
+            task_name="qfrcore",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
