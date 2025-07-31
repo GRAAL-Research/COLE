@@ -79,6 +79,7 @@ tasks_names = [
     "qfrcort",
     "wino_x_lm",
     "wino_x_mt",
+    "wsd_v",
     "xnli",
 ]
 

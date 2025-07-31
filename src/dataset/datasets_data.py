@@ -526,6 +526,24 @@ datasets = {
             "text": line["text"],
         },
     ),
+    "wsd": Dataset(
+        name="wsd",
+        description="Extractive word sense disambiguation : Extract an ambiguous words in a sentence.",
+        possible_ground_truths=[],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["text"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Tu vas recevoir une phrase avec un mot ambiguë. "
+            "Donne exactement le mot qui est ambiguë. La réponse est :"
+        )
+        .add_data(f"Phrase : {line['sentence']}")
+        .add_end("La réponse est :")
+        .build(),
+        line_to_data_fn=lambda line: {
+            "sentence": line["sentence"],
+        },
+    ),
 }
 
 
