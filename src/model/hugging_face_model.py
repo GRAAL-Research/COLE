@@ -36,6 +36,8 @@ class HFModel(Model, abc.ABC):
         num_params = self.model.num_parameters()
 
         # To handle max batch size for these models.
+        if num_params >= 70000000000:  # 70B
+            batch_size = 8
         if num_params >= 32000000000:  # 32B
             batch_size = 16
         elif num_params >= 27000000000:  # 27B
