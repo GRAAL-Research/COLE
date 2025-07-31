@@ -61,7 +61,6 @@ args = parser.parse_args()
 
 tasks_names = list(Tasks)
 
-
 tasks = tasks_factory(tasks_names)
 
 models = []

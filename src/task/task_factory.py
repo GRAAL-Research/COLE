@@ -108,7 +108,7 @@ def tasks_factory(task_names: Union[Dict, List[str], List[Tasks]]) -> List[Task]
                         task_type=TaskType.INFERENCE,
                     )
                 )
-            case Tasks.TERMES_QUEBECOISES:
+            case Tasks.QFRCORT:
                 tasks.append(
                     Task(
                         task_name=task.value,
@@ -187,6 +187,14 @@ def tasks_factory(task_names: Union[Dict, List[str], List[Tasks]]) -> List[Task]
                         task_name=task.value,
                         metric="accuracy",
                         task_type=TaskType.INFERENCE,
+                    )
+                )
+            case Tasks.WSD:
+                tasks.append(
+                    Task(
+                        task_name=task.value,
+                        metric="em",
+                        task_type=TaskType.GENERATIVE,
                     )
                 )
             case _:

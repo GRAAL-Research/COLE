@@ -257,8 +257,8 @@ datasets = {
             "choices": line["choices"],
         },
     ),
-    Tasks.TERMES_QUEBECOISES.value: Dataset(
-        name=Tasks.TERMES_QUEBECOISES.value,
+    Tasks.QFRCORT.value: Dataset(
+        name=Tasks.QFRCORT.value,
         description="Definition matching task : "
         "Match the Quebec term with its definition from a list",
         possible_ground_truths=[str(i) for i in range(11)],
@@ -525,6 +525,25 @@ datasets = {
         .build(),
         line_to_data_fn=lambda line: {
             "text": line["text"],
+        },
+    ),
+    Tasks.WSD.value: Dataset(
+        name=Tasks.WSD.value,
+        description="Extractive word sense disambiguation : Extract an ambiguous words in a sentence.",
+        possible_ground_truths=[],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Tu vas recevoir une phrase avec un mot ambiguë. "
+            "Donne exactement le mot qui est ambiguë. La réponse est un seul mot. "
+            "La réponse est :"
+        )
+        .add_data(f"Phrase : {line['sentence']}")
+        .add_end("La réponse est :")
+        .build(),
+        line_to_data_fn=lambda line: {
+            "sentence": line["sentence"],
         },
     ),
 }

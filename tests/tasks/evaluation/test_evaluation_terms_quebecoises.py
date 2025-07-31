@@ -3,7 +3,7 @@ from src.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
 
-class TasktermesquebecoisesTest(TaskTest):
+class TaskqfrcortTest(TaskTest):
     def setUp(self) -> None:
         self.dataset_size = 201
 
@@ -12,7 +12,7 @@ class TasktermesquebecoisesTest(TaskTest):
     ):
         a_predictions = [9, 6, 8, 9, 9]
         task = Task(
-            task_name="termes_quebecoises",
+            task_name="qfrcort",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
@@ -35,7 +35,7 @@ class TasktermesquebecoisesTest(TaskTest):
     ):
         a_predictions = [1] * self.dataset_size
         task = Task(
-            task_name="termes_quebecoises",
+            task_name="qfrcort",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
@@ -52,7 +52,7 @@ class TasktermesquebecoisesTest(TaskTest):
     def test_given_a_prediction_larger_than_ground_truth_raise_error(self):
         a_predictions = [1] * (self.dataset_size + 1)
         task = Task(
-            task_name="termes_quebecoises",
+            task_name="qfrcort",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )

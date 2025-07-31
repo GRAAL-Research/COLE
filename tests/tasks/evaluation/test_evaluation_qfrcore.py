@@ -3,7 +3,7 @@ from src.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
 
-class TaskExpressionsQuebecoisesTest(TaskTest):
+class TaskQFrCoRETest(TaskTest):
     def setUp(self) -> None:
         self.dataset_size = 4633
 
