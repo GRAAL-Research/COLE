@@ -226,8 +226,8 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
-    "expressions_quebecoises": Dataset(
-        name="expressions_quebecoises",
+    "qfrcore": Dataset(
+        name="qfrcore",
         description="Definition matching task : "
         "Match the Quebec expression with its definition from a list",
         possible_ground_truths=[str(i) for i in range(11)],
@@ -247,7 +247,7 @@ datasets = {
             (
                 "Réponds uniquement par l'index, débutant à zéro,  "
                 "de la bonne définition parmi la liste ci-dessus. Par exemple, si la "
-                "troisième phrase qui correspond à l'expression, la réponse sera 2. La réponse est :"
+                "troisième phrase correspond à l'expression, la réponse sera 2. La réponse est :"
             )
         )
         .build(),

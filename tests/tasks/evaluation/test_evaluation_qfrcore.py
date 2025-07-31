@@ -5,14 +5,14 @@ from tests.tasks.evaluation.task_test_case import TaskTest
 
 class TaskExpressionsQuebecoisesTest(TaskTest):
     def setUp(self) -> None:
-        self.dataset_size = 329
+        self.dataset_size = 4633
 
     def test_given_a_prediction_smaller_than_corpus_when_compute_then_return_expected_result_and_warning(
         self,
     ):
-        a_predictions = [9, 9, 9, 9, 9]
+        a_predictions = [8,8,8,8,8]
         task = Task(
-            task_name="expressions_quebecoises",
+            task_name="qfrcore",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
@@ -35,12 +35,12 @@ class TaskExpressionsQuebecoisesTest(TaskTest):
     ):
         a_predictions = [1] * self.dataset_size
         task = Task(
-            task_name="expressions_quebecoises",
+            task_name="qfrcore",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
 
-        expected_results = {"accuracy": 0.09570957095709572}
+        expected_results = {"accuracy": 0.1}
         expected_warning = None
 
         actual_result, actual_warning = task.compute(predictions=a_predictions)
@@ -52,7 +52,7 @@ class TaskExpressionsQuebecoisesTest(TaskTest):
     def test_given_a_prediction_larger_than_ground_truth_raise_error(self):
         a_predictions = [1] * (self.dataset_size + 1)
         task = Task(
-            task_name="expressions_quebecoises",
+            task_name="qfrcore",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
