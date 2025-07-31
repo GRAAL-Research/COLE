@@ -10,6 +10,7 @@ from tqdm import tqdm
 from predictions.all_llms import llms
 from src.evaluation.model_evaluator import ModelEvaluator
 from src.evaluation.model_factory import model_factory
+from src.evaluation.tools import split_llm_list
 from src.task.task_factory import tasks_factory
 
 parser = argparse.ArgumentParser()
@@ -45,7 +46,14 @@ parser.add_argument(
     "--batch_size",
     help="The batch size to use during the evaluation.",
     type=int,
-    default=256,
+    default=128,
+)
+
+parser.add_argument(
+    "--llm_split",
+    help="The split of the LLMs list to use. It can be '1', '2' or '3'.",
+    type=int,
+    default=None,
 )
 
 args = parser.parse_args()
@@ -82,6 +90,8 @@ if args.models_name is not None:
         models = args.models_name.split(",")
 else:
     models = llms["all"]
+
+models = split_llm_list(models=models, llm_split=args.llm_split)
 
 logging.info("Starting Evaluation")
 
