@@ -103,7 +103,7 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                         task_type=TaskType.INFERENCE,
                     )
                 )
-            case "termes_quebecoises":
+            case "qfrcort":
                 tasks.append(
                     Task(
                         task_name=task_name,

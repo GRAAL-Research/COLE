@@ -76,7 +76,7 @@ tasks_names = [
     "rte3-french",
     "sickfr",
     "sts22",
-    "termes_quebecoises",
+    "qfrcort",
     "wino_x_lm",
     "wino_x_mt",
     "xnli",

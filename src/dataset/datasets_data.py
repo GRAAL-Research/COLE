@@ -256,8 +256,8 @@ datasets = {
             "choices": line["choices"],
         },
     ),
-    "termes_quebecoises": Dataset(
-        name="termes_quebecoises",
+    "qfrcort": Dataset(
+        name="qfrcort",
         description="Definition matching task : "
         "Match the Quebec term with its definition from a list",
         possible_ground_truths=[str(i) for i in range(11)],

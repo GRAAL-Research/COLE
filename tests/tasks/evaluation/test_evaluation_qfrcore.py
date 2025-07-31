@@ -3,14 +3,14 @@ from src.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
 
-class TaskExpressionsQuebecoisesTest(TaskTest):
+class TaskQFrCoRETest(TaskTest):
     def setUp(self) -> None:
         self.dataset_size = 4633
 
     def test_given_a_prediction_smaller_than_corpus_when_compute_then_return_expected_result_and_warning(
         self,
     ):
-        a_predictions = [8,8,8,8,8]
+        a_predictions = [8, 8, 8, 8, 8]
         task = Task(
             task_name="qfrcore",
             metric="accuracy",
