@@ -19,22 +19,22 @@
   "metrics": "Metrics:",
   "benchmark_alloCine_title": "Allo-ciné.ca",
   "benchmark_alloCine_description": "Allo-ciné tests language understanding in sentiment classification by feeding movie reviews which can be either positive and negative. The task consists in giving the correct sentiment for each review.",
-  "benchmark_daccord_title": "D’accord",
+  "benchmark_daccord_title": "DACCORD",
   "benchmark_daccord_description": "Predict whether the two sentences express the same idea (1) or contradict each other (0).",
   "benchmark_fquad_title": "FQuAD - French Question Answering Dataset",
   "benchmark_fquad_description": "FQuAD is question/answer pairs built on high-quality Wikipedia articles. The goal in this task is to accurately predict if the answer to the question can be found in the provided article.",
   "benchmark_french_boolq_title": "French BoolQ",
   "benchmark_french_boolq_description": "Answer whether the context allows answering 'yes' to the question (1) or only 'no' or doesn't answer (0).",
-
-
+  "benchmark_fracas_title": "FraCaS",
+  "benchmark_fracas_description": "Natural language inference task : predict the relation between two sentences (implication, neutral, contradiction).",
   "benchmark_gqnli_title": "GQNLI-Fr - The Generalized Quantifier NLI Challenge Dataset",
   "benchmark_gqnli_description": "The dataset consists of carefully constructed premise-hypothesis pairs. Each hypothesis logically follows from the premise, contradicts it, or is neutral.",
-
-
+  "benchmark_mms_title": "MMS - Massive Multilingual Sentiment Corpora",
+  "benchmark_mms_description": "A massive multilingual sentiment analysis corpus in 27 languages.",
   "benchmark_mnli_nineeleven_fr_mt_title": "MNLI-NineEleven-FR-MT",
   "benchmark_mnli_nineeleven_fr_mt_description": "Predict the relation between two sentences (entailment, neutral, contradiction).",
-
-
+  "benchmark_multiblimp_fr_title": "MultiBLiMP",
+  "benchmark_multiblimp_fr_description": "MultiBLiMP is a massively Multilingual Benchmark for Linguistic Minimal Pairs.",
   "benchmark_paws_title": "PAWS: Paraphrase Adversaries from Word Scrambling",
   "benchmark_paws_description": "This task aims to test paraphrase identification by giving two sentences and having the model define if these sentences are equivalent in meaning or not.",
   "benchmark_piaf_title": "PIAF - The French-Language Dataset of Questions-Answers",
@@ -43,9 +43,9 @@
   "benchmark_qfrblimp_description": "This task gives the model sentence pairs. The goal is to determine if the sentences are semantically equivalent, even with slightly different syntax and words.",
   "benchmark_qfrcola_title": "QFrCoLA - a Quebec-French Corpus of Linguistic Acceptability Judgments",
   "benchmark_qfrcola_description": "QFrCoLA is a French dataset sourced from multiple linguistic sites such as académie-française.fr and vitrinelinguistique.com. It aims to test models’ ability to determine grammatical correctness. The answer is a binary label indicating if the sentence is correct or not.",
-  "benchmark_qfrcore_title": "Quebec-French Corpus of Regional Expressions",
+  "benchmark_qfrcore_title": "QFRCoRE: Quebec-French Corpus of Regional Expressions",
   "benchmark_qfrcore_description": "Match the Quebec expression with its definition from a list.",
-  "benchmark_qfrcort_title": "Quebec-French Corpus of Regional Terms",
+  "benchmark_qfrcort_title": "QFRCoRT: Quebec-French Corpus of Regional Terms",
   "benchmark_qfrcort_description": "Match the Quebec term with its definition from a list.",
   "benchmark_rte3_french_title": "RTE3-French",
   "benchmark_rte3_french_description": "Predict the relation between two sentences (entailment, neutral, contradiction).",
