@@ -61,7 +61,7 @@ args = parser.parse_args()
 tasks_names = [
     "allocine",
     "daccord",
-    "expressions_quebecoises",
+    "qfrcore",
     "fquad",
     "fracas",
     "french_boolq",
