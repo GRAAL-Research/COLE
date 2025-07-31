@@ -107,6 +107,7 @@ llms = {
         "ibm-granite/granite-3.3-8b-base",
         "ibm-granite/granite-3.3-8b-instruct",
     ],
+    "baseline": ["RandomBaselineModel"],
     "all": [],
 }
 for key in llms.keys():

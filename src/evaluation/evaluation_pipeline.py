@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 from predictions.all_llms import llms
 from src.evaluation.model_evaluator import ModelEvaluator
-from src.model.hugging_face_model import HFLLMModel
+from src.evaluation.model_factory import model_factory
 from src.task.task_factory import tasks_factory
 
 parser = argparse.ArgumentParser()
@@ -76,6 +76,8 @@ models = []
 if args.models_name is not None:
     if args.models_name in llms:
         models = llms[args.models_name]
+    elif args.models_name == "RandomBaselineModel":
+        models = ["RandomBaselineModel"]
     else:
         models = args.models_name.split(",")
 else:
@@ -90,7 +92,7 @@ for model_name in tqdm(
 ):
 
     try:
-        model = HFLLMModel(model_name=model_name, batch_size=args.batch_size)
+        model = model_factory(model_name, batch_size=args.batch_size)
         logging.info("Creating model")
         evaluator = ModelEvaluator()
         logging.info("Evaluating model")
