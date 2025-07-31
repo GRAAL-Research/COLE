@@ -69,4 +69,4 @@ df = df[ordered_cols]
 
 os.makedirs("results", exist_ok=True)
 df.to_csv(EXPORT_CSV_PATH, index=False)
-df.to_latex(EXPORT_LATEX_PATH, index=False)
+df.to_latex(EXPORT_LATEX_PATH, index=False, float_format="%.2f")
