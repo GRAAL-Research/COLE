@@ -4,7 +4,7 @@ import pandas as pd
 from collections import defaultdict
 import wandb
 
-PROJECT_PATH = "doctorate/COLLE"
+PROJECT_PATH = "doctorate/COLE"
 MODELS_SIZE_PATH = "models_size.json"
 EXPORT_CSV_PATH = "results/full_results_table.csv"
 EXPORT_LATEX_PATH = "results/full_results_table.tex"

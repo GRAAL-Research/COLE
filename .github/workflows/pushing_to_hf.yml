@@ -6,7 +6,7 @@ on:
 
 env:
   HF_USERNAME: Yurhu
-  HF_SPACE_NAME: colle
+  HF_SPACE_NAME: COLE
 
 jobs:
   sync-to-space:

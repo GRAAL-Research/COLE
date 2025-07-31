@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "COLLE NLU",
-  description: "COLLE : An NLU benchmark",
+  title: "COLE NLU",
+  description: "COLE : An NLU benchmark",
 };
 
 export default function RootLayout({ children }) {

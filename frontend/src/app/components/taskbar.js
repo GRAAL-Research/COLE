@@ -53,7 +53,7 @@ export default function Taskbar() {
           {t('nav_leaderboard')}
         </Link>
         <Link
-          href="https://huggingface.co/datasets/graalul/COLLE-public"
+          href="https://huggingface.co/datasets/graalul/COLE-public"
           className={linkStyle('/hf')}
         >
           {t('nav_datasets')}
