@@ -1,5 +1,5 @@
 {
-  "name": "colle",
+  "name": "cole",
   "version": "1.0.0",
   "main": "index.js",
   "directories": {
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GRAAL-Research/colle.git"
+    "url": "git+https://github.com/GRAAL-Research/COLE.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/GRAAL-Research/colle/issues"
+    "url": "https://github.com/GRAAL-Research/COLE/issues"
   },
-  "homepage": "https://github.com/GRAAL-Research/colle#readme",
+  "homepage": "https://github.com/GRAAL-Research/COLE#readme",
   "description": ""
 }

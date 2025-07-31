@@ -1,6 +1,6 @@
 from huggingface_hub import upload_folder
 
-repo_id = "Yurhu/colle"  # Format: username/space_name
+repo_id = "Yurhu/COLE"  # Format: username/space_name
 local_dir = "./"
 
 upload_folder(

@@ -15,7 +15,7 @@ export default function Home() {
 
       <p className="text-gray-700 mb-4 leading-relaxed space-y-4">
         <Trans i18nKey="home_paragraph1">
-          Colle is a multidisciplinary French Natural Language Understanding benchmark (
+          COLE is a multidisciplinary French Natural Language Understanding benchmark (
           <a
             href="https://en.wikipedia.org/wiki/Natural_language_understanding"
             target="_blank"
