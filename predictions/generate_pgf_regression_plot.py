@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import os
 
 
-def generate_model_size_vs_score_plot(csv_path: str, output_path: str = "results/model_size_vs_score.png") -> None:
+def generate_model_size_vs_score_plot(
+    csv_path: str, output_path: str = "results/model_size_vs_score.png"
+) -> None:
 
     if not os.path.exists(csv_path):
         raise FileNotFoundError(f"❌ File {csv_path} not found. Please check the path.")
@@ -15,7 +17,9 @@ def generate_model_size_vs_score_plot(csv_path: str, output_path: str = "results
     for col in df.columns:
         if "(exact match, f1)" in col:
             base = col.split(" (")[0]
-            df[[f"{base}_exact", f"{base}_f1"]] = df[col].str.split("/", expand=True).astype(float)
+            df[[f"{base}_exact", f"{base}_f1"]] = (
+                df[col].str.split("/", expand=True).astype(float)
+            )
 
     df = df.drop(columns=[col for col in df.columns if "(exact match, f1)" in col])
 
@@ -24,7 +28,11 @@ def generate_model_size_vs_score_plot(csv_path: str, output_path: str = "results
             df[col] = df[col] * 100
 
     exclude_cols = ["model_name", "model_size"]
-    metric_cols = [col for col in df.select_dtypes(include=[float, int]).columns if col not in exclude_cols]
+    metric_cols = [
+        col
+        for col in df.select_dtypes(include=[float, int]).columns
+        if col not in exclude_cols
+    ]
     df["mean_score"] = df[metric_cols].mean(axis=1)
 
     X = np.log10(df["model_size"].values)
@@ -35,9 +43,15 @@ def generate_model_size_vs_score_plot(csv_path: str, output_path: str = "results
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     plt.figure(figsize=(10, 6))
-    plt.scatter(df["model_size"], df["mean_score"], color='blue', label='Models')
-    plt.plot(df["model_size"], regression_line, color='green', linewidth=2, label='Linear regression')
-    plt.axhline(y=50, color='red', linestyle='--', label='Baseline')
+    plt.scatter(df["model_size"], df["mean_score"], color="blue", label="Models")
+    plt.plot(
+        df["model_size"],
+        regression_line,
+        color="green",
+        linewidth=2,
+        label="Linear regression",
+    )
+    plt.axhline(y=50, color="red", linestyle="--", label="Baseline")
 
     plt.xscale("log")
     plt.xlabel("Model size (log)")
@@ -48,8 +62,6 @@ def generate_model_size_vs_score_plot(csv_path: str, output_path: str = "results
     plt.tight_layout()
     plt.savefig(output_path)
     plt.close()
-
-
 
 
 if __name__ == "__main__":
