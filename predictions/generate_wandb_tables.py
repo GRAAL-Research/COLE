@@ -42,15 +42,16 @@ df = pd.DataFrame.from_dict(results_by_model, orient="index", columns=sorted_tas
 df.index.name = "model_name"
 df.reset_index(inplace=True)
 
+
 def find_model_size(model_display_name):
     for full_name, size in model_sizes.items():
         if full_name.endswith(model_display_name):
             return size
     return None
 
+
 df["model_size"] = df["model_name"].map(find_model_size)
 
 os.makedirs("results", exist_ok=True)
 df.to_csv(EXPORT_CSV_PATH, index=False)
 df.to_latex(EXPORT_LATEX_PATH, index=False, float_format="%.2f")
-
