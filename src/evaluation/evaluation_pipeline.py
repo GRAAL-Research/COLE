@@ -9,9 +9,8 @@ from tqdm import tqdm
 
 from predictions.all_llms import llms
 from src.evaluation.model_evaluator import ModelEvaluator
-from src.model.hugging_face_model import HFLLMModel
+from src.evaluation.model_factory import model_factory
 from src.task.task_factory import tasks_factory
-from src.model.baseline_model import ConstantBaselineLLMModel
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -77,8 +76,8 @@ models = []
 if args.models_name is not None:
     if args.models_name in llms:
         models = llms[args.models_name]
-    elif args.models_name == "baseline":
-        models = ["baseline"]
+    elif args.models_name == "RandomBaselineModel":
+        models = ["RandomBaselineModel"]
     else:
         models = args.models_name.split(",")
 else:
@@ -93,60 +92,28 @@ for model_name in tqdm(
 ):
 
     try:
-        if model_name == "baseline":
-            for task in tasks:
-                domain = task.dataset.possible_ground_truths
+        model = model_factory(model_name, batch_size=args.batch_size)
+        logging.info("Creating model")
+        evaluator = ModelEvaluator()
+        logging.info("Evaluating model")
 
-                for val in domain:
-                    model = ConstantBaselineLLMModel(
-                        model_name=f"baseline_constant_{val}", constant_value=val
-                    )
-                    evaluator = ModelEvaluator()
+        exp_name = f"{model_name}"
+        wandb.init(
+            project="COLLE",
+            entity="doctorate",
+            config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
+            name=exp_name,
+        )
 
-                    exp_name = f"baseline_constant_{val}_{task.task_name}"
-                    wandb.init(
-                        project="COLLE",
-                        entity="doctorate",
-                        config={"model_name": model_name, "task": task.task_name},
-                        name=exp_name,
-                    )
+        predictions_payload = evaluator.evaluate_subset(model, tasks, args.max_examples)
+        wandb.log(predictions_payload)
 
-                    predictions_payload = evaluator.evaluate_subset(
-                        model, [task], args.max_examples
-                    )
-                    wandb.log(predictions_payload)
+        evaluator.save_results("./results")
+        metrics_payload = evaluator.compute_metrics()
+        evaluator.save_metrics("./results")
+        wandb.log(metrics_payload)
 
-                    evaluator.save_results("./results")
-                    metrics_payload = evaluator.compute_metrics()
-                    evaluator.save_metrics("./results")
-                    wandb.log(metrics_payload)
-
-                    wandb.finish(exit_code=0)
-        else:
-            model = HFLLMModel(model_name=model_name, batch_size=args.batch_size)
-            logging.info("Creating model")
-            evaluator = ModelEvaluator()
-            logging.info("Evaluating model")
-
-            exp_name = f"{model_name}"
-            wandb.init(
-                project="COLLE",
-                entity="doctorate",
-                config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
-                name=exp_name,
-            )
-
-            predictions_payload = evaluator.evaluate_subset(
-                model, tasks, args.max_examples
-            )
-            wandb.log(predictions_payload)
-
-            logging.info("Saving results")
-            evaluator.save_results("./results")
-
-            metrics_payload = evaluator.compute_metrics()
-            evaluator.save_metrics("./results")
-            wandb.log(metrics_payload)
+        wandb.finish(exit_code=0)
 
     except Exception as e:
         error_message = f"Evaluation failed for model {model_name}: {e}"
