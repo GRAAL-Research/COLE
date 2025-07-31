@@ -167,12 +167,14 @@ datasets = {
         line_to_truth_fn=lambda line: line["answers"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "Tu vas recevoir un contexte et une question. "
-            "Donne exactement le passage du contexte qui répond à la question. La réponse est :"
+            "Tu vas recevoir un contexte suivi d'une question.\n"
+            "Ta tâche est d'extraire **mot pour mot** le passage du contexte qui répond le mieux à la question.\n"
+            "N'invente rien. Ne reformule pas.\n"
+            "Réponds **en copiant uniquement** un extrait exact du texte ci-dessus."
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")
-        .add_end("La réponse est :")
+        .add_end("Réponds uniquement par un passage extrait du contexte. La réponse est :")
         .build(),
         line_to_data_fn=lambda line: {
             "context": line["context"],
@@ -187,12 +189,14 @@ datasets = {
         line_to_truth_fn=lambda line: line["answers"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "Tu vas recevoir un contexte et une question. "
-            "Donne exactement le passage du contexte qui répond à la question. La réponse est :"
+            "Tu vas recevoir un contexte suivi d'une question.\n"
+            "Ta tâche est d'extraire **mot pour mot** le passage du contexte qui répond le mieux à la question.\n"
+            "N'invente rien. Ne reformule pas.\n"
+            "Réponds **en copiant uniquement** un extrait exact du texte ci-dessus."
         )
         .add_data(f"Contexte  : {line['context']}")
         .add_data(f"Question : {line['question']}")
-        .add_end("Réponse :")
+        .add_end("Réponds uniquement par un passage extrait du contexte. La réponse est :")
         .build(),
         line_to_data_fn=lambda line: {
             "context": line["context"],
@@ -534,8 +538,9 @@ datasets = {
         line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "Tu vas recevoir une phrase avec un mot ambiguë. "
-            "Donne exactement le mot qui est ambiguë. La réponse est :"
+            "Tu vas recevoir une phrase contenant un mot ambigu.\n"
+            "Ta tâche est d’indiquer **exactement** ce mot, sans rien ajouter ni reformuler.\n"
+            "Réponds uniquement avec le mot ambigu identifié."
         )
         .add_data(f"Phrase : {line['sentence']}")
         .add_end("La réponse est :")
