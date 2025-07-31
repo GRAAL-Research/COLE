@@ -22,15 +22,51 @@ export default function Benchmarks() {
           metrics="Accuracy"
         />
         <Benchmark
+          title={t('benchmark_daccord_title')}
+          link="https://huggingface.co/datasets/maximoss/daccord-contradictions"
+          description={t('benchmark_daccord_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
           title={t('benchmark_fquad_title')}
           link="https://arxiv.org/pdf/2002.06071"
           description={t('benchmark_fquad_description')}
           metrics="F1 Score, Exact Match Ratio"
         />
         <Benchmark
+          title={t('benchmark_french_boolq_title')}
+          link="https://huggingface.co/datasets/manu/french_boolq"
+          description={t('benchmark_french_boolq_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_fracas_title')}
+          link="https://huggingface.co/datasets/maximoss/fracas"
+          description={t('benchmark_fracas_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
           title={t('benchmark_gqnli_title')}
           link="https://huggingface.co/datasets/maximoss/gqnli-fr"
           description={t('benchmark_gqnli_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_mms_title')}
+          link="https://huggingface.co/datasets/Brand24/mms"
+          description={t('benchmark_mms_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_mnli_nineeleven_fr_mt_title')}
+          link="https://huggingface.co/datasets/maximoss/mnli-nineeleven-fr-mt"
+          description={t('benchmark_mnli_nineeleven_fr_mt_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_multiblimp_title')}
+          link="https://huggingface.co/datasets/jumelet/multiblimp"
+          description={t('benchmark_multiblimp_description')}
           metrics="Accuracy"
         />
         <Benchmark
@@ -46,15 +82,33 @@ export default function Benchmarks() {
           metrics="F1 Score, Exact Match Ratio"
         />
         <Benchmark
+          title={t('benchmark_qfrblimp_title')}
+          link="https://github.com/davebulaval/FrBLiMP"
+          description={t('benchmark_qfrblimp_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
           title={t('benchmark_qfrcola_title')}
           link="https://github.com/davebulaval/qfrcola"
           description={t('benchmark_qfrcola_description')}
           metrics="Accuracy"
         />
         <Benchmark
-          title={t('benchmark_qfrblimp_title')}
-          link="https://github.com/davebulaval/FrBLiMP"
-          description={t('benchmark_qfrblimp_description')}
+          title={t('benchmark_qfrcore_title')}
+          link=""
+          description={t('benchmark_qfrcore_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_qfrcort_title')}
+          link=""
+          description={t('benchmark_qfrcort_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
+          title={t('benchmark_rte3_french_title')}
+          link="https://huggingface.co/datasets/maximoss/rte3-french"
+          description={t('benchmark_rte3_french_description')}
           metrics="Accuracy"
         />
         <Benchmark
@@ -70,50 +124,6 @@ export default function Benchmarks() {
           metrics="Pearson"
         />
         <Benchmark
-          title={t('benchmark_xnli_title')}
-          link="https://github.com/facebookresearch/XNLI"
-          description={t('benchmark_xnli_description')}
-          metrics="Accuracy"
-        />
-
-        <Benchmark
-          title={t('benchmark_qfrcore_title')}
-          link=""
-          description={t('benchmark_qfrcore_description')}
-          metrics="Accuracy"
-        />
-        <Benchmark
-          title={t('benchmark_termes_quebecoises_title')}
-          link=""
-          description={t('benchmark_termes_quebecoises_description')}
-          metrics="Accuracy"
-        />
-        <Benchmark
-          title={t('benchmark_daccord_title')}
-          link="https://huggingface.co/datasets/maximoss/daccord-contradictions"
-          description={t('benchmark_daccord_description')}
-          metrics="Accuracy"
-        />
-        <Benchmark
-          title={t('benchmark_french_boolq_title')}
-          link="https://huggingface.co/datasets/manu/french_boolq"
-          description={t('benchmark_french_boolq_description')}
-          metrics="Accuracy"
-        />
-        <Benchmark
-          title={t('benchmark_mnli_nineeleven_fr_mt_title')}
-          link="https://huggingface.co/datasets/manu/french_boolq"
-          description={t('benchmark_mnli_nineeleven_fr_mt_description')}
-          metrics="Accuracy"
-        />
-        <Benchmark
-          title={t('benchmark_rte3_french_title')}
-          link="https://huggingface.co/datasets/maximoss/rte3-french"
-          description={t('benchmark_rte3_french_description')}
-          metrics="Accuracy"
-        />
-
-        <Benchmark
           title={t('benchmark_wino_x_lm_title')}
           link="https://huggingface.co/datasets/demelin/wino_x/viewer/lm_en_fr?views%5B%5D=lm_en_fr"
           description={t('benchmark_wino_x_lm_description')}
@@ -125,7 +135,12 @@ export default function Benchmarks() {
           description={t('benchmark_wino_x_mt_description')}
           metrics="Accuracy"
         />
-
+        <Benchmark
+          title={t('benchmark_xnli_title')}
+          link="https://github.com/facebookresearch/XNLI"
+          description={t('benchmark_xnli_description')}
+          metrics="Accuracy"
+        />
       </div>
     </div>
   );
