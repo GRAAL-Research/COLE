@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 
-def generate_model_size_vs_score_plot(
+def generate_size_vs_score_plot(
     csv_path: str, output_path: str = "results/model_size_vs_score.png"
 ) -> None:
 
@@ -65,4 +65,4 @@ def generate_model_size_vs_score_plot(
 
 
 if __name__ == "__main__":
-    generate_model_size_vs_score_plot("results/full_results_table.csv")
+    generate_size_vs_score_plot("results/full_results_table.csv")
