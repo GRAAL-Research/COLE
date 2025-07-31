@@ -77,9 +77,9 @@ export default function Benchmarks() {
         />
 
         <Benchmark
-          title={t('benchmark_expressions_quebecoises_title')}
+          title={t('benchmark_qfrcore_title')}
           link=""
-          description={t('benchmark_expressions_quebecoises_description')}
+          description={t('benchmark_qfrcore_description')}
           metrics="Accuracy"
         />
         <Benchmark

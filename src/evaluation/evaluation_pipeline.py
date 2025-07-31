@@ -12,6 +12,7 @@ from src.evaluation.model_evaluator import ModelEvaluator
 from src.evaluation.model_factory import model_factory
 from src.evaluation.tools import split_llm_list
 from src.task.task_factory import tasks_factory
+from src.task.task_names import Tasks
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -58,29 +59,10 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-tasks_names = [
-    "allocine",
-    "daccord",
-    "qfrcore",
-    "fquad",
-    "fracas",
-    "french_boolq",
-    "gqnli",
-    "mms",
-    "mnli-nineeleven-fr-mt",
-    "multiblimp",
-    "paws_x",
-    "piaf",
-    "qfrblimp",
-    "qfrcola",
-    "rte3-french",
-    "sickfr",
-    "sts22",
-    "termes_quebecoises",
-    "wino_x_lm",
-    "wino_x_mt",
-    "xnli",
-]
+tasks_names = list(Tasks)
+
+
+
 
 tasks = tasks_factory(tasks_names)
 
