@@ -535,7 +535,8 @@ datasets = {
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "Tu vas recevoir une phrase avec un mot ambiguë. "
-            "Donne exactement le mot qui est ambiguë. La réponse est :"
+            "Donne exactement le mot qui est ambiguë. La réponse est un seul mot. "
+            "La réponse est :"
         )
         .add_data(f"Phrase : {line['sentence']}")
         .add_end("La réponse est :")
