@@ -108,12 +108,12 @@ for model_name in tqdm(
         predictions_payload = evaluator.evaluate_subset(model, tasks, args.max_examples)
         wandb.log(predictions_payload)
 
+        logging.info("Saving results")
         evaluator.save_results("./results")
+
         metrics_payload = evaluator.compute_metrics()
         evaluator.save_metrics("./results")
         wandb.log(metrics_payload)
-
-        wandb.finish(exit_code=0)
 
     except Exception as e:
         error_message = f"Evaluation failed for model {model_name}: {e}"
