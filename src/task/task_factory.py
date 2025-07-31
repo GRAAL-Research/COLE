@@ -167,6 +167,30 @@ def tasks_factory(task_names: Union[Dict, List[str]]) -> List[Task]:
                         task_type=TaskType.INFERENCE,
                     )
                 )
+            case "multiblimp":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
+                        task_type=TaskType.INFERENCE,
+                    )
+                )
+            case "fracas":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
+                        task_type=TaskType.INFERENCE,
+                    )
+                )
+            case "mms":
+                tasks.append(
+                    Task(
+                        task_name=task_name,
+                        metric="accuracy",
+                        task_type=TaskType.INFERENCE,
+                    )
+                )
             case _:
                 error = f"Unknown task {task_name}."
                 logging.error(error)

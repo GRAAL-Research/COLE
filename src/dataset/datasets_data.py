@@ -453,6 +453,79 @@ datasets = {
             "pronoun2": line["pronoun2"],
         },
     ),
+    "multiblimp": Dataset(
+        name="multiblimp",
+        description="Choice task between two sentences : Choose the one which is grammatically correct.",
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(
+            line["label"]
+        ),  # The label is return as a string.
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise("Laquelle de ces phrases est grammaticalement correcte ?")
+            .add_data(f"Phrase 0:{line['sentence_a']}")
+            .add_data(f"Phrase 1:{line['sentence_b']}")
+            .add_end(
+                "Réponds avec seulement 0 si la phrase 0 "
+                "est grammaticalement correcte, et uniquement 1 si la phrase 1 est grammaticalement "
+                "correcte. La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {line["sentence_a"], line["sentence_b"]},
+    ),
+    "fracas": Dataset(
+        name="fracas",
+        description="Natural language inference task : "
+        "predict the relation between two sentences (implication, neutral, contradiction)",
+        possible_ground_truths=["0", "1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Quelle est la relation de la deuxième phrase par rapport à la première ?"
+        )
+        .add_data(line["premise"])
+        .add_data(line["hypothesis"])
+        .add_end(
+            (
+                r"Réponds uniquement par :\n"
+                r"0 — si la deuxième phrase implique la première,\n"
+                r"1 — si la relation est neutre,\n"
+                r"2 — s'il y a contradiction.\n"
+                "Réponds uniquement par 0, 1 ou 2. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "premise": line["premise"],
+            "hypothesis": line["hypothesis"],
+        },
+    ),
+    "mms": Dataset(
+        name="mms",
+        description="A sentiment analysis task for classifying text as positive (2), negative (0), or neutral (1).",
+        possible_ground_truths=["0", "1", "2"],
+        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise("Quelle est le sentiment de cette phrase?")
+        .add_data(line["text"])
+        .add_end(
+            (
+                r"Réponds uniquement par :\n"
+                r"0 — si la phrase est négative,\n"
+                r"1 — si la phrase est neutre,\n"
+                r"2 — si la phrase est positive.\n"
+                "Réponds uniquement par 0, 1 ou 2. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "text": line["text"],
+        },
+    ),
 }
 
 

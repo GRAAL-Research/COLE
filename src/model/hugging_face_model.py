@@ -41,7 +41,7 @@ class HFModel(Model, abc.ABC):
         if num_params >= 32000000000:  # 32B
             batch_size = 16
         elif num_params >= 27000000000:  # 27B
-            batch_size = 64
+            batch_size = 32
         self._batch_size = batch_size
 
 

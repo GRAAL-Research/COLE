@@ -46,7 +46,7 @@ parser.add_argument(
     "--batch_size",
     help="The batch size to use during the evaluation.",
     type=int,
-    default=128,
+    default=64,
 )
 
 parser.add_argument(
@@ -59,25 +59,29 @@ parser.add_argument(
 args = parser.parse_args()
 
 tasks_names = [
+    "allocine",
+    "daccord",
+    "expressions_quebecoises",
+    "fquad",
+    "fracas",
+    "french_boolq",
+    "gqnli",
+    "mms",
+    "mnli-nineeleven-fr-mt",
+    "multiblimp",
+    "paws_x",
     "piaf",
     "qfrblimp",
-    "allocine",
     "qfrcola",
-    "gqnli",
-    "paws_x",
-    "fquad",
+    "rte3-french",
     "sickfr",
     "sts22",
-    "xnli",
-    "expressions_quebecoises",
     "termes_quebecoises",
-    "daccord",
-    "french_boolq",
-    "mnli-nineeleven-fr-mt",
-    "rte3-french",
     "wino_x_lm",
     "wino_x_mt",
+    "xnli",
 ]
+
 tasks = tasks_factory(tasks_names)
 
 models = []
