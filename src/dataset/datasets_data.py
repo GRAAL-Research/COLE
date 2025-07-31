@@ -1,6 +1,6 @@
 from src.dataset.dataset import Dataset
 from src.dataset.prompt_builder import PromptBuilder
-from src.task import COLLE_REPOSITORY_NAME
+from src.task import COLE_REPOSITORY_NAME
 from src.task.task_names import Tasks
 
 datasets = {
@@ -9,7 +9,7 @@ datasets = {
         description="Binary classification on sentiment analysis"
         " of movie reviews, with reviews being either positive (1) or negative (0).",
         possible_ground_truths=["0", "1"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Cette phrase possède-t-elle un sentiment positif ou négatif ?")
@@ -28,7 +28,7 @@ datasets = {
         description="Binary grammatical judgement : "
         "Predicts whether a sentence is grammatically correct (1) or not. (0)",
         possible_ground_truths=["0", "1"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Juge si cette phrase est grammaticalement correcte :")
@@ -45,7 +45,7 @@ datasets = {
         name=Tasks.QFRBLIMP.value,
         description="Choice task between two sentences : Choose the one which is grammatically correct.",
         possible_ground_truths=["0", "1"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(
             line["label"]
         ),  # The label is return as a string.
@@ -68,7 +68,7 @@ datasets = {
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -96,7 +96,7 @@ datasets = {
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Détermine la relation entre les deux phrases suivantes :")
@@ -119,7 +119,7 @@ datasets = {
         description="Semantic textual similarity task : "
         "Predict how similar two sentences are to each other (0 to 5)",
         possible_ground_truths=[0, 1, 2, 3, 4, 5],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: int(line["score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -141,7 +141,7 @@ datasets = {
         description="Binary classification task : "
         "Predict if two sentences have the same meaning (1) or not (0)",
         possible_ground_truths=["0", "1"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -164,7 +164,7 @@ datasets = {
         name=Tasks.PIAF.value,
         description="Extractive question answering task : Extract a question's answer from a given context.",
         possible_ground_truths=[],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["answers"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -184,7 +184,7 @@ datasets = {
         name=Tasks.FQUAD.value,
         description="Extractive question answering task : Extract a question's answer from a given context.",
         possible_ground_truths=[],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["answers"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -205,7 +205,7 @@ datasets = {
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -232,7 +232,7 @@ datasets = {
         description="Definition matching task : "
         "Match the Quebec expression with its definition from a list",
         possible_ground_truths=[str(i) for i in range(11)],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -262,7 +262,7 @@ datasets = {
         description="Definition matching task : "
         "Match the Quebec term with its definition from a list",
         possible_ground_truths=[str(i) for i in range(11)],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -292,7 +292,7 @@ datasets = {
         "Predict whether the two sentences express"
         " the same idea (1) or contradict each other (0)",
         possible_ground_truths=["0", "1"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
@@ -319,7 +319,7 @@ datasets = {
         "or, if the context only allows answering 'no' "
         "to the question or does not answer the question. (0)",
         possible_ground_truths=["0", "1"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(int(line["label"])),
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
@@ -338,12 +338,12 @@ datasets = {
             "passage": line["passage"],
         },
     ),
-    Tasks.MNLI_NINEELEVEN_FR_MT.value : Dataset(
+    Tasks.MNLI_NINEELEVEN_FR_MT.value: Dataset(
         name=Tasks.MNLI_NINEELEVEN_FR_MT.value,
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -371,7 +371,7 @@ datasets = {
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
@@ -401,7 +401,7 @@ datasets = {
             "of a pronoun in a sentence by choosing between two candidates."
         ),
         possible_ground_truths=["1", "2"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["answer"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -431,7 +431,7 @@ datasets = {
             "traductions utilise le bon pronom (il ou elle) en fonction du référent correct."
         ),
         possible_ground_truths=["1", "2"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["answer"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -458,7 +458,7 @@ datasets = {
         name=Tasks.MULTIBLIMP.value,
         description="Choice task between two sentences : Choose the one which is grammatically correct.",
         possible_ground_truths=["0", "1"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(
             line["label"]
         ),  # The label is return as a string.
@@ -481,7 +481,7 @@ datasets = {
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
@@ -508,7 +508,7 @@ datasets = {
         name=Tasks.MMS.value,
         description="A sentiment analysis task for classifying text as positive (2), negative (0), or neutral (1).",
         possible_ground_truths=["0", "1", "2"],
-        hugging_face_repo=COLLE_REPOSITORY_NAME,
+        hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise("Quelle est le sentiment de cette phrase?")

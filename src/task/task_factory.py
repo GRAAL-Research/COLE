@@ -13,8 +13,10 @@ def tasks_factory(task_names: Union[Dict, List[str], List[Tasks]]) -> List[Task]
     if isinstance(task_names, Dict):
         task_names = task_names.get("tasks")
         task_names = [list(task.keys())[0] for task in task_names]
-    task_names = [Tasks(task_name) if isinstance(task_name, str) else task_name for task_name in task_names]
-
+    task_names = [
+        Tasks(task_name) if isinstance(task_name, str) else task_name
+        for task_name in task_names
+    ]
 
     for task in task_names:
         match task:

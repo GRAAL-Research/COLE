@@ -1,5 +1,5 @@
 ---
-title: colle !
+title: COLE !
 emoji: 🐳
 colorFrom: purple
 colorTo: gray

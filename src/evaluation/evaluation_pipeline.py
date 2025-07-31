@@ -62,8 +62,6 @@ args = parser.parse_args()
 tasks_names = list(Tasks)
 
 
-
-
 tasks = tasks_factory(tasks_names)
 
 models = []
@@ -95,7 +93,7 @@ for model_name in tqdm(
 
         exp_name = f"{model_name}"
         wandb.init(
-            project="COLLE",
+            project="COLE",
             entity="doctorate",
             config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
             name=exp_name,
