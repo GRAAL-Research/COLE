@@ -82,10 +82,6 @@ llms = {
         "CohereForAI/aya-expanse-8b",
         "CohereForAI/aya-23-8b",
     ],
-    "google": [
-        "google/gemma-3-12b-it",
-        "google/gemma-3-27b-it",
-    ],
     "ibm": [
         "ibm-granite/granite-3.3-8b-base",
         "ibm-granite/granite-3.3-8b-instruct",
