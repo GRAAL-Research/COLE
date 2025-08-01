@@ -45,8 +45,6 @@ llms = {
         "unsloth/Qwen3-14B-unsloth-bnb-4bit",
         "unsloth/DeepSeek-R1-0528-Qwen3-8B-unsloth-bnb-4bit",
         "unsloth/Qwen3-14B-Base-unsloth-bnb-4bit",
-        "unsloth/gemma-3-12b-pt-unsloth-bnb-4bit",
-        "unsloth/gemma-3-27b-pt-unsloth-bnb-4bit",
     ],
     "jpacifico": [
         "jpacifico/Chocolatine-14B-Instruct-DPO-v1.2",
