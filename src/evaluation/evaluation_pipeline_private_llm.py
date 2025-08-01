@@ -68,7 +68,7 @@ for model_name in tqdm(
 ):
 
     try:
-        model = model_factory(model_name, batch_size=args.batch_size)
+        model = model_factory(model_name)
         logging.info("Creating model")
         evaluator = ModelEvaluator()
         logging.info("Evaluating model")
