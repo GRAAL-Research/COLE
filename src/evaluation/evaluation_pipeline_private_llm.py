@@ -8,9 +8,11 @@ import wandb
 from tqdm import tqdm
 
 from predictions.all_llms import private_llm
-from src.evaluation.model_evaluator import ModelEvaluator
-from src.model.remote_model import RemoteLLMModel
+from src.evaluation.llm_evaluator import ModelEvaluator
+from src.evaluation.llm_factory import model_factory
+from src.evaluation.tools import split_llm_list
 from src.task.task_factory import tasks_factory
+from src.task.task_names import Tasks
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -27,42 +29,23 @@ parser.add_argument(
     default=None,
 )
 parser.add_argument(
-    "--token",
-    "-t",
-    help="Input your HuggingFace token to fetch models.",
-    type=str,
-    default=None,
-)
-parser.add_argument(
     "--models_name",
     "-mn",
     help="The name of the model(s) to load.",
     type=str,
     default=None,
 )
+parser.add_argument(
+    "--llm_split",
+    help="The split of the LLMs list to use. It can be '1', '2' or '3'.",
+    type=int,
+    default=None,
+)
 
 args = parser.parse_args()
 
-tasks_names = [
-    "piaf",
-    "qfrblimp",
-    "allocine",
-    "qfrcola",
-    "gqnli",
-    "paws_x",
-    "fquad",
-    "sickfr",
-    "sts22",
-    "xnli",
-    "expressions_quebecoises",
-    "termes_quebecoises",
-    "daccord",
-    "french_boolq",
-    "mnli-nineeleven-fr-mt",
-    "rte3-french",
-    "wino_x_lm",
-    "wino_x_mt",
-]
+tasks_names = list(Tasks)
+
 tasks = tasks_factory(tasks_names)
 
 models = []
@@ -74,6 +57,8 @@ if args.models_name is not None:
 else:
     models = private_llm["all"]
 
+models = split_llm_list(models=models, llm_split=args.llm_split)
+
 logging.info("Starting Evaluation")
 
 time_start = datetime.now()
@@ -81,15 +66,16 @@ time_start = datetime.now()
 for model_name in tqdm(
     models, total=len(models), desc="Processing LLM inference on tasks."
 ):
+
     try:
-        model = RemoteLLMModel(model_name=model_name)
+        model = model_factory(model_name, batch_size=args.batch_size)
         logging.info("Creating model")
         evaluator = ModelEvaluator()
         logging.info("Evaluating model")
 
         exp_name = f"{model_name}"
         wandb.init(
-            project="COLLE",
+            project="COLE",
             entity="doctorate",
             config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
             name=exp_name,

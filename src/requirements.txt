@@ -25,3 +25,6 @@ unsloth-zoo
 wandb
 # Pour compatibilité ancienne
 protobuf<=3.20.3
+openai
+anthropic
+mistralai

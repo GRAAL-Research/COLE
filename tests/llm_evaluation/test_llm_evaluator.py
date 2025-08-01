@@ -4,8 +4,8 @@ from typing import List, Dict
 from unittest import TestCase, mock
 
 from src.dataset.dataset import Dataset
-from src.evaluation.model_evaluator import ModelEvaluator
-from src.model.model import Model
+from src.evaluation.llm_evaluator import ModelEvaluator
+from src.language_model.language_model_abstraction import LanguageModel
 from src.task.task import Task
 from src.task.task_factory import tasks_factory
 
@@ -15,7 +15,7 @@ gen = ["0"] * 7546  # qfrcola dataset size
 BASE_TASK_NAME = "qfrcola"
 
 
-class ForTestModel(Model):
+class ForTestModel(LanguageModel):
     def predict(self, evaluation_dataset: Dataset, task: Task):
         return ["0" for _ in range(len(evaluation_dataset))]
 
