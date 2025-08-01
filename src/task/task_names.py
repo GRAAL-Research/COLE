@@ -16,7 +16,7 @@ class Tasks(str, Enum):
     QFRBLIMP = "qfrblimp"
     QFRCOLA = "qfrcola"
     QFRCORE = "qfrcore"
-    QFRCORT = "termes_quebecoises"
+    QFRCORT = "qfrcort"
     RTE3_FRENCH = "rte3-french"
     SICKFR = "sickfr"
     STS22 = "sts22"
