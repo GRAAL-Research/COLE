@@ -23,9 +23,9 @@ export default function Guide() {
 
           <p className="text-gray-700">
             <Trans i18nKey="guide_section1_para1">
-              The COLLE benchmark can be used to train and/or test models on multiple tasks. To train or fine-tune a model, you can fetch the train, validation and test data splits from our{' '}
+              The COLE benchmark can be used to train and/or test models on multiple tasks. To train or fine-tune a model, you can fetch the train, validation and test data splits from our{' '}
               <a
-                href="https://huggingface.co/datasets/graalul/COLLE-public"
+                href="https://huggingface.co/datasets/graalul/COLE-public"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 underline hover:text-blue-800"
@@ -38,7 +38,7 @@ export default function Guide() {
 
           <p className="text-gray-700 mt-4">
             To test a model, you also need to fetch the data in the same way. Once done, your model should infer predictions for each line in the test split. Our repository includes benchmark evaluation scripts for each dataset. You only need to plug in your model&#39;s inference method using HuggingFace Model interface. Our inference script are available on our <a
-          href="https://github.com/GRAAL-Research/colle"
+          href="https://github.com/GRAAL-Research/COLE"
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-600 underline hover:text-blue-800">

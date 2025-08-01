@@ -147,6 +147,7 @@ class ModelEvaluator:
         Saves inferred metrics to a json file.
         :param save_path : the path to which the json file will be saved.
         """
+
         if self.last_model_name is None:
             logging.error("Please evaluate before saving results")
             return None

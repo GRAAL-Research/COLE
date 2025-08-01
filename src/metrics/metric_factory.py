@@ -8,6 +8,7 @@ from src.metrics.metrics_wrapper import (
     AccuracyWrapper,
     Metric,
     F1Score,
+    ExactMatch,
 )
 
 
@@ -25,6 +26,8 @@ def metric_factory(metric_name: str) -> Metric:
             return F1Score()
         case "fquad":
             return FQuAD()
+        case "em":
+            return ExactMatch()
         case _:
             error = f"Unknown metric {metric_name}."
             logging.error(error)

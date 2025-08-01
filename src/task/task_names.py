@@ -1,0 +1,26 @@
+from enum import Enum
+
+
+class Tasks(str, Enum):
+    ALLOCINE = "allocine"
+    DACCORD = "daccord"
+    FQUAD = "fquad"
+    FRENCH_BOOLQ = "french_boolq"
+    FRACAS = "fracas"
+    GQNLI = "gqnli"
+    MMS = "mms"
+    MNLI_NINEELEVEN_FR_MT = "mnli-nineeleven-fr-mt"
+    MULTIBLIMP = "multiblimp"
+    PAWS_X = "paws_x"
+    PIAF = "piaf"
+    QFRBLIMP = "qfrblimp"
+    QFRCOLA = "qfrcola"
+    QFRCORE = "qfrcore"
+    QFRCORT = "qfrcort"
+    RTE3_FRENCH = "rte3-french"
+    SICKFR = "sickfr"
+    STS22 = "sts22"
+    WINO_X_LM = "wino_x_lm"
+    WINO_X_MT = "wino_x_mt"
+    XNLI = "xnli"
+    WSD = "wsd"

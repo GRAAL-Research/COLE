@@ -1,1 +1,1 @@
-REPO_ID = "COLLE-Graal/ColleGraal"
+REPO_ID = "COLE-Graal/COLEGraal"

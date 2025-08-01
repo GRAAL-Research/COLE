@@ -9,8 +9,10 @@ from tqdm import tqdm
 
 from predictions.all_llms import llms
 from src.evaluation.model_evaluator import ModelEvaluator
-from src.model.hugging_face_model import HFLLMModel
+from src.evaluation.model_factory import model_factory
+from src.evaluation.tools import split_llm_list
 from src.task.task_factory import tasks_factory
+from src.task.task_names import Tasks
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -45,41 +47,34 @@ parser.add_argument(
     "--batch_size",
     help="The batch size to use during the evaluation.",
     type=int,
-    default=16,
+    default=64,
+)
+
+parser.add_argument(
+    "--llm_split",
+    help="The split of the LLMs list to use. It can be '1', '2' or '3'.",
+    type=int,
+    default=None,
 )
 
 args = parser.parse_args()
 
-tasks_names = [
-    "piaf",
-    "qfrblimp",
-    "allocine",
-    "qfrcola",
-    "gqnli",
-    "paws_x",
-    "fquad",
-    "sickfr",
-    "sts22",
-    "xnli",
-    "expressions_quebecoises",
-    "termes_quebecoises",
-    "daccord",
-    "french_boolq",
-    "mnli-nineeleven-fr-mt",
-    "rte3-french",
-    "wino_x_lm",
-    "wino_x_mt",
-]
+tasks_names = list(Tasks)
+
 tasks = tasks_factory(tasks_names)
 
 models = []
 if args.models_name is not None:
     if args.models_name in llms:
         models = llms[args.models_name]
+    elif args.models_name == "RandomBaselineModel":
+        models = ["RandomBaselineModel"]
     else:
         models = args.models_name.split(",")
 else:
     models = llms["all"]
+
+models = split_llm_list(models=models, llm_split=args.llm_split)
 
 logging.info("Starting Evaluation")
 
@@ -88,15 +83,16 @@ time_start = datetime.now()
 for model_name in tqdm(
     models, total=len(models), desc="Processing LLM inference on tasks."
 ):
+
     try:
-        model = HFLLMModel(model_name=model_name, batch_size=args.batch_size)
+        model = model_factory(model_name, batch_size=args.batch_size)
         logging.info("Creating model")
         evaluator = ModelEvaluator()
         logging.info("Evaluating model")
 
         exp_name = f"{model_name}"
         wandb.init(
-            project="COLLE",
+            project="COLE",
             entity="doctorate",
             config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
             name=exp_name,

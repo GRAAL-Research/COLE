@@ -1,4 +1,4 @@
-.idea/colle.iml
+.idea/COLE.iml
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/misc.xml
 .idea/modules.xml
@@ -13,10 +13,10 @@ src/config.py
 /hf_data
 
 
-colle_nlu_benchmark_site/node_modules
-colle_nlu_benchmark_site/.pnp
-colle_nlu_benchmark_site/.pnp.*
-colle_nlu_benchmark_site/.yarn/*
+COLE_nlu_benchmark_site/node_modules
+COLE_nlu_benchmark_site/.pnp
+COLE_nlu_benchmark_site/.pnp.*
+COLE_nlu_benchmark_site/.yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
@@ -26,11 +26,11 @@ colle_nlu_benchmark_site/.yarn/*
 /coverage
 
 # next.js
-colle_nlu_benchmark_site/.next/
-colle_nlu_benchmark_site/out/
+COLE_nlu_benchmark_site/.next/
+COLE_nlu_benchmark_site/out/
 
 # production
-colle_nlu_benchmark_site/build
+COLE_nlu_benchmark_site/build
 
 # misc
 .DS_Store

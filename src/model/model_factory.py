@@ -37,6 +37,17 @@ def model_tokenizer_factory(
         )
 
         tokenizer = AutoTokenizer.from_pretrained(model_name, token=huggingface_token)
+    elif "bloom" in model_name.lower():
+        bnb_configs = BitsAndBytesConfig(load_in_8bit=True, low_cpu_mem_usage=True)
+
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            token=huggingface_token,
+            quantization_config=bnb_configs,
+            trust_remote_code=True,
+        )
+
+        tokenizer = AutoTokenizer.from_pretrained(model_name, token=huggingface_token)
     elif "bert" in model_name.lower():
         # For Debug.
         model = AutoModelForMaskedLM.from_pretrained(model_name)
