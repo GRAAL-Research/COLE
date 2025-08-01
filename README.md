@@ -6,3 +6,520 @@ colorTo: gray
 sdk: docker
 app_port: 7860
 ---
+## COLLE Dataset Card
+## Dataset Summary
+
+The COLLE dataset suite hosts multiple French NLP benchmark tasks for evaluating language models. It includes test sets, validation sets, and training sets for tasks such as sentiment analysis, question answering, NLI, and more.
+
+## Task Descriptions
+
+## Allocine.fr :
+Allo-ciné tests language understanding in sentiment classification by feeding movie reviews which can be either positive and negative, the task consists in giving the correct sentiment for each review.
+
+## DACCORD
+Determine if a French sentence makes sense semantically (binary label).
+
+## FQuAD:
+Fquad is question/answer pair built on high-quality wikipedia articles. The goal of the model in this task is to accurately predict if the answer to the question really can be found in the provided answer.
+
+## FraCaS 
+Fracas is a natural language inference (NLI) taskthe where the model must classify the relationship between a premise and a hypothesis—entailment, contradiction, or neutral—based on complex linguistic phenomena such as quantifiers, plurality, anaphora, and ellipsis.
+
+## Fr-BoolQ
+Boolean question answering in French: answer true/false based on context.
+
+## GQNLI-fr: 
+The dataset consists of carefully constructed premise-hypothesis pairs that involve quantifier logic (e.g., most, at least, more than half). The goal is to evaluate the model's ability to reason about these expressions and determine whether the hypothesis logically follows from the premise, contradicts it, or is neutral.
+
+## MMS-fr 
+MMS-fr is a sentiment analysis task where the model classifies a French text as positive (2), neutral (1), or negative (0), assessing its ability to detect sentiment across diverse domains and sources.
+
+## MNLI-nineeleven-Fr-MT 
+French machine-translated version of MNLI using 9/11 context, for entailment classification.
+
+## MultiBLiMP-Fr 
+MultiBLiMP-Fr is a grammatical judgment task where the model must identify the grammatically correct sentence from a minimal pair differing by a single targeted feature, thereby assessing its knowledge of French syntax, morphology, and agreement.
+
+## PAWS-X :
+This task aims to test paraphrase identification by giving two sentences and a label defining if these sentences are equivalent in meaning or not.
+
+## PIAF: 
+This task consists of pairs of questions and text answers with information of where in the answer is the truly relevant information.
+
+## QFrBLiMP:
+This task gives the model sentences pairs, the goal is to determine if the sentences are semantically equivalent, or, put more simply, if they mean the same thing, even with slightly different syntax and words.
+
+## QFrCoLA: 
+QFrCoLA is a french dataset made from multiple french language sites such as académie-française.fr and vitrinelinguistique.com. It aims to tests models ability to determine a sentence's acceptability in french on subjects such as grammar and syntax. The answer is a binary label indicating if the sentence is correct or not.
+
+## QFrCoRE
+QFrCoRE is a definition matching task where the model selects the correct standard French  definition for a Quebec French expression from a list of candidates.
+
+## QFrCoRT
+QFrCoRE is a definition matching task where the model selects the correct standard French  definition for a Quebec French term from a list of candidates.
+
+## RTE3-Fr
+French version of RTE3 for textual entailment recognition.
+
+## SICK-fr :
+This task also has pairs of sentences and notes them on 2 dimensions, relatedness and entailment. While relatedness scales from 1 to 5, entailement is a choice between entails, contradicts or neutral.
+
+## STS22: 
+This task evaluates whether pairs of news articles, written in different languages, cover the same story. It focuses on document-level similarity, where systems rate article pairs on a 4-point scale from most to least similar
+
+## Wino-X-LM
+Pronoun resolution task: choose between two referents in a sentence with an ambiguous pronoun.
+
+## Wino-X-MT
+Translation-based pronoun resolution: choose which of two French translations uses the correct gendered pronoun.
+
+## WSD-Fr
+WSD-Fr is a word sense disambiguation task where the model must identify the correct meaning of an ambiguous verb in context, as part of the FLUE benchmark.
+
+## XNLI-fr:
+This task consists of pairs of sentences where the goal is to determine the relation between the two sentences, this relation can be either entailement, neutral or contradiction.
+
+
+## Language
+The language data in COLE is in French .
+
+### Dataset structure
+
+## Allocine.fr:
+```json
+
+{
+  "review": "Magnifique épopée, une belle histoire, touchante avec des acteurs qui interprètent très bien leur rôles (Mel Gibson, Heath Ledger, Jason Isaacs...), le genre de film qui se savoure en famille! :)",
+  "label": 1
+}
+```
+
+## DACCORD
+```json
+
+{
+  "id": "a001",
+  "premise": "Le camion-remorque de la vidéo transporte un long tube cylindrique, qui est une pièce destinée à une raffinerie de pétrole en Ouzbékistan.",
+  "hypothesis": "Le camion-remorque de la vidéo transporte un missile nucléaire russe.",
+  "label": "1",
+  "label_text": "contradiction",
+  "url": "https://factuel.afp.com/doc.afp.com.32MJ3M7-1",
+  "genre": "conflit ukrainien-russe"
+}
+```
+
+## FQuAD:
+```json
+
+{
+  "title": "pégase_23_3",
+  "context": "D'anciennes théories associent Pégase au combat naval, ou voient en lui un simple navire...",
+  "question": "Quand le théologien Jacques-Paul Migne s'exprime au sujet de Méduse ?",
+  "answers": {
+    "answers_start": [509, 512, 512],
+    "text": ["en 1855", "1855", "1855"]
+  },
+  "is_impossible": false
+}
+```
+## FraCaS
+```json
+
+{
+  "id": "1",
+  "premise": "Un Italien est devenu le plus grand ténor du monde.",
+  "hypothesis": "Il y a eu un Italien qui est devenu le plus grand ténor du monde.",
+  "label": "0",
+  "question": "Y a-t-il eu un Italien qui soit devenu le plus grand ténor du monde ?",
+  "answer": "yes",
+  "premises_original": "An Italian became the world's greatest tenor.",
+  "premise1": "Un Italien est devenu le plus grand ténor du monde.",
+  "premise1_original": "An Italian became the world's greatest tenor.",
+  "premise2": "",
+  "premise2_original": "",
+  "premise3": "",
+  "premise3_original": "",
+  "premise4": "",
+  "premise4_original": "",
+  "premise5": "",
+  "premise5_original": "",
+  "hypothesis_original": "There was an Italian who became the world's greatest tenor.",
+  "question_original": "Was there an Italian who became the world's greatest tenor?",
+  "note": "",
+  "topic": "GENERALIZED QUANTIFIERS"
+}
+```
+## Fr-BoolQ
+```json
+
+{
+  "question": "Jobs avait-il des sautes d'humeur inimaginables durant la période où il dirigeait NeXT ?",
+  "passage": "Il a beaucoup été question de la personnalité agressive et exigeante de Steve Jobs. [...] Dan’l Lewin, déclare dans ce même magazine que Steve Jobs, durant cette période, « avait des sautes d'humeur inimaginables » [...]",
+  "label": 1
+}
+```
+## GQNLI-fr:
+```json
+
+{
+  "uid": 214,
+  "premise": "Il y a six ours. Trois ours marron, un ours noir et un ours blanc courent le long de l'herbe cyan.",
+  "hypothesis": "Un ours beige court.",
+  "label": 1,
+  "label_text": "neutral",
+  "premise_original": "There are six bears...",
+  "hypothesis_original": "One beige bear runs."
+}
+```
+
+## MMS
+```json
+
+{
+  "text": "Cadeaux pour ma fille.",
+  "label": 2
+}
+```
+## MNLI-nineeleven-Fr-MT
+```json
+
+{
+  "premise": "La faillite du nationalisme laïque et autocratique était évidente dans le monde musulman à la fin des années 1970.",
+  "hypothesis": "Les musulmans détestaient le nationalisme autocratique à la fin des années 1970.",
+  "label": "1",
+  "label_text": "neutral",
+  "pairID": "62534e",
+  "promptID": "62534",
+  "premise_original": "The bankruptcy of secular, autocratic nationalism was evident across the Muslim world by the late 1970s.",
+  "hypothesis_original": "Muslims disliked autocratic nationalism by the late 1970s."
+}
+```
+## MultiBLiMP-Fr
+```json
+
+{
+  "sentence_a": "C'est le genre à lequel appartiennent les espèces de kiwi.",
+  "sentence_b": "C'est le genre à lequel appartenez les espèces de kiwi.",
+  "label": 0
+}
+```
+## ```PAWS-X:
+```json
+
+{
+  "id": 12,
+  "sentence1": "La rivière Tabaci est un affluent de la rivière Leurda en Roumanie.",
+  "sentence2": "La rivière Leurda est un affluent de la rivière Tabaci en Roumanie.",
+  "label": 0
+}
+```
+## PIAF
+```json
+
+{
+  "id": "p140295203922856",
+  "title": "Alaungpaya",
+  "context": "Il ne convainquit cependant pas tout le monde. Après la chute d'Ava le 23 mars 1752, son propre père lui conseilla de se soumettre : il lui fit valoir que, bien qu'ayant des quantités de soldats enthousiastes, il manquait de mousquets et que leur petite palissade ne résisterait jamais à une armée bien équipée qui venait de mettre à sac Ava, puissamment fortifiée. Alaungpaya, impavide, déclara : « Quand on combat pour son pays, il importe peu qu'on soit rares ou nombreux. ce qui compte est que vos camarades aient un cœur sincère et des bras forts. » Il prépara sa défense en fortifiant Moksobo (renommé Shwebo), avec une palissade et des douves. Il fit couper la forêt à l'extérieur, détruire les mares et combler les puits.",
+  "question": "De quoi Alaungpaya aurait il eu besoin pour remporter la bataille ?",
+  "answers": {
+    "text": ["de mousquets et que leur petite palissade"],
+    "answer_start": [222]
+  }
+}
+```
+## QFrBLiMP:
+```json
+
+{
+  "id": 250,
+  "label": 0,
+  "ungrammatical": "Cette femme chante très haute.",
+  "source": "https://vitrinelinguistique.oqlf.gouv.qc.ca/...",
+  "category": "morphology",
+  "type": 11,
+  "subcat": 13.0,
+  "grammatical": "Cette femme chante très haut.",
+  "options": [
+    {"id": "1", "text": "La phrase numéro 1"},
+    {"id": "2", "text": "La phrase numéro 2"}
+  ],
+  "answer": "accept"
+}
+```
+## QFrCoLA:
+```json
+
+{
+  "label": 1,
+  "sentence": "Je vous en prie, soyez bref.",
+  "source": "https://vitrinelinguistique.oqlf.gouv.qc.ca/...",
+  "category": "anglicism"
+}
+```
+## QFrCoRE
+```json
+
+{
+  "expression": "Avoir la chienne",
+  "choices": [
+    "Prendre une chaise et s'asseoir.",
+    "Avoir du plaisir, parfois avec une connotation sexuelle.",
+    "Prépare-toi, ça va brasser.",
+    "Tomber amoureux.",
+    "Être en pleine forme.",
+    "Critiquer sévèrement.",
+    "Personne inefficace, qui ne travaille pas bien.",
+    "Il se comporte mal en public.",
+    "Se détendre, arrêter de s'énerver.",
+    "Avoir peur."
+  ],
+  "correct_index": 9,
+  "reference": "https://canada-media.ca/expressions-quebecoises/"
+}
+```
+## QFrCoRT
+```json
+
+{
+  "terme": "Avoir la chienne",
+  "choices": [
+    "Prendre une chaise et s'asseoir.",
+    "Avoir du plaisir, parfois avec une connotation sexuelle.",
+    "Prépare-toi, ça va brasser.",
+    "Tomber amoureux.",
+    "Être en pleine forme.",
+    "Critiquer sévèrement.",
+    "Personne inefficace, qui ne travaille pas bien.",
+    "Il se comporte mal en public.",
+    "Se détendre, arrêter de s'énerver.",
+    "Avoir peur."
+  ],
+  "correct_index": 9,
+  "reference": "https://canada-media.ca/expressions-quebecoises/"
+}
+```
+## RTE3-Fr
+```json
+
+{
+  "id": "1",
+  "language": "fr",
+  "premise": "La vente a été faite pour payer la facture fiscale de 27,5 milliards de dollars de Yukos, Yuganskneftegaz a été vendu à l'origine pour 9,4 milliards de dollars à une entreprise peu connue, Baikalfinansgroup, qui a ensuite été rachetée par la compagnie pétrolière publique russe Rosneft.",
+  "hypothesis": "Baikalfinansgroup a été vendu à Rosneft.",
+  "label": "0",
+  "label_text": "entailment",
+  "task": "IE",
+  "length": "short"
+}
+```
+## SICK-fr:
+```json
+
+{
+  "Unnamed: 0": 5,
+  "label": 2,
+  "relatedness_score": 3.2999999523,
+  "sentence_A": "Deux chiens se battent et se câlinent.",
+  "sentence_B": "Il n'y a pas de lutte et d'étreinte de chiens."
+}
+```
+## STS22:
+```json
+
+{
+  "id": "1559147599_1558534688",
+  "score": 1.0,
+  "sentence1": "KABYLIE (TAMURT) – Les répercussions économiques...",
+  "sentence2": "Le décret n° 2020-293 du 23 mars 2020..."
+}
+```
+## Wino-X-LM
+```json
+
+{
+  "qID": "3UDTAB6HH8D37OQL3O6F3GXEEOF09Z-1",
+  "sentence": "The woman looked for a different vase for the bouquet because it was too small.",
+  "context_en": "The woman looked for a different vase for the bouquet because _ was too small.",
+  "context_fr": "La femme a cherché un vase différent pour le bouquet car _ était trop petit.",
+  "option1_en": "the bouquet",
+  "option2_en": "the vase",
+  "option1_fr": "le bouquet",
+  "option2_fr": "le vase",
+  "answer": 2,
+  "context_referent_of_option1_fr": "bouquet",
+  "context_referent_of_option2_fr": "vase"
+}
+```
+## Wino-X-MT
+```json
+
+{
+  "qID": "3FULMHZ7OUVKJ7S9R0LMS753751M44-1",
+  "sentence": "As the wolf approached the house, the man quickly took the knife and not the gun to defend himself because it was near him.",
+  "translation1": "Alors que le loup s'approchait de la maison, l'homme prit rapidement le couteau et non l'arme pour se défendre car il était près de lui.",
+  "translation2": "Alors que le loup s'approchait de la maison, l'homme prit rapidement le couteau et non l'arme pour se défendre car elle était près de lui.",
+  "answer": 1,
+  "pronoun1": "il",
+  "pronoun2": "elle",
+  "referent1_en": "knife",
+  "referent2_en": "gun",
+  "true_translation_referent_of_pronoun1_fr": "couteau",
+  "true_translation_referent_of_pronoun2_fr": "arme",
+  "false_translation_referent_of_pronoun1_fr": "couteau",
+  "false_translation_referent_of_pronoun2_fr": "arme"
+}
+```
+## WSD-Fr
+```json
+
+{
+  "sentence": "Il rend hommage au roi de France et des négociations aboutissent au traité du Goulet , formalisant la paix entre les deux pays .",
+  "labels_idx": [10],
+  "label": "négociations"
+}
+```
+## XNLI-fr
+```json
+
+{
+  "premise": "Ils m'ont dit qu'à la fin, on m'amènerait un homme pour que je le rencontre.",
+  "hypothesis": "Le gars arriva un peu en retard.",
+  "label": 1
+}
+```
+
+## Allocine.fr
+| split      | # examples |
+|------------|-----------:|
+| train      |             |
+| validation |       20,000 |
+| test       |       20,000 |
+
+## DACCORD
+| split      | # examples |
+|------------|-----------:|
+| test       |       1,034 |
+
+## FQuAD
+| split      | # examples |
+|------------|-----------:|
+| validation |       100 |
+| test       |       400 |
+
+## FraCaS
+| split      | # examples |
+|------------|-----------:|
+| test       |       346 |
+
+## Fr-BoolQ
+| split      | # examples |
+|------------|-----------:|
+| test       |        178 |
+
+## GQNLI-fr
+| split      | # examples |
+|------------|-----------:|
+| train      |       243 |
+| validation |        27 |
+| test       |        30 |
+
+## MMS
+| split      | # examples   |
+|------------|-------------:|
+| train      |      132,696 |
+| validation |       14,745 |
+| test       |       63,190 |
+
+## MNLI-nineeleven-Fr-MT
+| split      | # examples |
+|------------|-----------:|
+| test       |       2,000 |
+
+## MultiBLiMP-Fr
+| split      | # examples |
+|------------|-----------:|
+| train      |        160 |
+| validation |         18 |
+| test       |         77 |
+
+## PAWS-X
+| split      | # examples |
+|------------|-----------:|
+| train      |     49,401  |
+| validation |       2,000 |
+| test       |       2,000 |
+
+## PIAF
+| split      | # examples |
+|------------|-----------:|
+| train      |       3,105 |
+| validation |        346 |
+| test       |        384 |
+
+## QFrBLiMP
+| split      | # examples |
+|------------|-----------:|
+| train      |       NA   |
+| validation |       2,061 |
+| test       |       2,290 |
+
+## QFrCoLA
+| split      | # examples |
+|------------|-----------:|
+| train      |      15,846 |
+| validation |       1,761 |
+| test       |       7,546 |
+
+## QFrCoRE
+| split      | # examples |
+|------------|-----------:|
+| test       |       4,633 |
+
+## QFrCoRT
+| split      | # examples |
+|------------|-----------:|
+| test       |        201 |
+
+## rte3-french
+| split      | # examples   |
+|------------|-------------:|
+| train      |      269,821 |
+| validation |         800 |
+| test       |        3,121 |
+
+## SICK-fr
+| split      | # examples |
+|------------|-----------:|
+| train      |       4,439 |
+| validation |        495 |
+| test       |       4,906 |
+
+## STS22
+| split      | # examples |
+|------------|-----------:|
+| train      |        101 |
+| test       |         72 |
+
+## Wino-X-LM
+| split      | # examples |
+|------------|-----------:|
+| test       |       2,793 |
+
+## Wino-X-MT
+| split      | # examples |
+|------------|-----------:|
+| test       |       2,988 |
+
+## WSD
+| split      | # examples |
+|------------|-----------:|
+| test       |       3,121 |
+| train       |       269,821  |
+
+## XNLI-fr
+| split      | # examples   |
+|------------|-------------:|
+| train      |      393,000 |
+| validation |        2,490 |
+| test       |        5,010 |
+
