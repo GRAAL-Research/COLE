@@ -1,4 +1,3 @@
-import abc
 from typing import Union, List
 
 import torch
@@ -7,15 +6,17 @@ from transformers import (
     pipeline,
 )
 
-from src.model.model import Model
-from src.model.model_factory import model_tokenizer_factory
+from src.language_model.language_model_abstraction import LanguageModel
+from src.language_model.language_model_factory import (
+    hugging_face_language_model_tokenizer_factory,
+)
 from src.task.task import TaskType, Task
 
 
-class HFModel(Model, abc.ABC):
+class HFLLMModel(LanguageModel):
     """
-    Model based on Hugging Face Transformers and pipeline mechanism,
-    loads pretrained models and uses them for inference and generation.
+    LLM Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses
+    it for inference.
     """
 
     def __init__(
@@ -28,7 +29,7 @@ class HFModel(Model, abc.ABC):
         self._model_name = model_name
         self._token = token
 
-        self.model, self.tokenizer = model_tokenizer_factory(
+        self.model, self.tokenizer = hugging_face_language_model_tokenizer_factory(
             model_name=self._model_name,
             huggingface_token=self._token,
         )
@@ -43,13 +44,6 @@ class HFModel(Model, abc.ABC):
         elif num_params >= 27000000000:  # 27B
             batch_size = 32
         self._batch_size = batch_size
-
-
-class HFLLMModel(HFModel):
-    """
-    LLM Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses
-    it for inference.
-    """
 
     def predict(self, evaluation_dataset: Dataset, task: Task) -> List:
         if task.task_type == TaskType.INFERENCE:

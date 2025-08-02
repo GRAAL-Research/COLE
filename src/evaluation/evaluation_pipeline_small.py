@@ -7,10 +7,9 @@ import torch
 import wandb
 from tqdm import tqdm
 
-from predictions.all_llms import llms
+from predictions.all_llms import small_llm
 from src.evaluation.llm_evaluator import ModelEvaluator
 from src.evaluation.llm_factory import model_factory
-from src.evaluation.tools import split_llm_list
 from src.task.task_factory import tasks_factory
 from src.task.task_names import Tasks
 
@@ -29,6 +28,13 @@ parser.add_argument(
     default=None,
 )
 parser.add_argument(
+    "--token",
+    "-t",
+    help="Input your HuggingFace token to fetch models.",
+    type=str,
+    default=None,
+)
+parser.add_argument(
     "--models_name",
     "-mn",
     help="The name of the model(s) to load.",
@@ -40,7 +46,7 @@ parser.add_argument(
     "--batch_size",
     help="The batch size to use during the evaluation.",
     type=int,
-    default=64,
+    default=32,
 )
 
 parser.add_argument(
@@ -48,7 +54,6 @@ parser.add_argument(
     help="The split of the LLMs list to use. It can be '1', '2' or '3'.",
     type=int,
     default=None,
-    choices=[1, 2, 3],
 )
 
 args = parser.parse_args()
@@ -59,14 +64,14 @@ tasks = tasks_factory(tasks_names)
 
 models = []
 if args.models_name is not None:
-    if args.models_name in llms:
-        models = llms[args.models_name]
+    if args.models_name in small_llm:
+        models = small_llm[args.models_name]
+    elif args.models_name == "RandomBaselineModel":
+        models = ["RandomBaselineModel"]
     else:
         models = args.models_name.split(",")
 else:
-    models = llms["all"]
-
-models = split_llm_list(models=models, llm_split=args.llm_split)
+    models = small_llm["all"]
 
 logging.info("Starting Evaluation")
 

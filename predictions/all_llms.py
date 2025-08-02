@@ -16,8 +16,6 @@ llms = {
         "unsloth/gemma-2-9b-it-bnb-4bit",
         "unsloth/gemma-2-27b-bnb-4bit",
         "unsloth/gemma-2-27b-it-bnb-4bit",
-        "unsloth/Qwen2.5-0.5B-bnb-4bit",
-        "unsloth/Qwen2.5-0.5B-Instruct-bnb-4bit",
         "unsloth/Qwen2.5-1.5B-bnb-4bit",
         "unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit",
         "unsloth/Qwen2.5-3B-bnb-4bit",
@@ -47,8 +45,6 @@ llms = {
         "unsloth/Qwen3-14B-unsloth-bnb-4bit",
         "unsloth/DeepSeek-R1-0528-Qwen3-8B-unsloth-bnb-4bit",
         "unsloth/Qwen3-14B-Base-unsloth-bnb-4bit",
-        "unsloth/gemma-3-12b-pt-unsloth-bnb-4bit",
-        "unsloth/gemma-3-27b-pt-unsloth-bnb-4bit",
     ],
     "jpacifico": [
         "jpacifico/Chocolatine-14B-Instruct-DPO-v1.2",
@@ -69,18 +65,46 @@ llms = {
         "allenai/OLMo-2-1124-13B",
         "allenai/OLMo-2-1124-7B-Instruct",
         "allenai/OLMo-2-1124-7B",
-        "allenai/OLMo-2-0425-1B-Instruct",
-        "allenai/OLMo-2-0425-1B",
         "allenai/OLMo-2-0325-32B",
     ],
     "simplescaling": [
         "simplescaling/s1.1-32B",
     ],
     "bigscience": [
+        "bigscience/bloom-7b1",
+    ],
+    "mistralai": [
+        "mistralai/Ministral-8B-Instruct-2410",
+    ],
+    "cohere": [
+        "CohereForAI/aya-expanse-8b",
+        "CohereForAI/aya-23-8b",
+    ],
+    "ibm": [
+        "ibm-granite/granite-3.3-8b-base",
+        "ibm-granite/granite-3.3-8b-instruct",
+    ],
+    "all": [],
+}
+for key in llms.keys():
+    if isinstance(llms[key], list) and key != "all":
+        llms["all"].extend(llms[key])
+
+small_llm = {
+    "unsloth": [
+        "unsloth/Qwen2.5-0.5B-bnb-4bit",
+        "unsloth/Qwen2.5-0.5B-Instruct-bnb-4bit",
+        "unsloth/Qwen2.5-1.5B-bnb-4bit",
+        "unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit",
+    ],
+    "allenAI": [
+        "allenai/OLMo-2-0425-1B-Instruct",
+        "allenai/OLMo-2-0425-1B",
+    ],
+    "bigscience": [
         "bigscience/bloom-560m",
         "bigscience/bloom-1b1",
         "bigscience/bloom-1b7",
-        "bigscience/bloom-7b1",
         "bigscience/bloomz-560m",
         "bigscience/bloomz-1b1",
     ],
@@ -92,27 +116,13 @@ llms = {
         "HuggingFaceTB/SmolLM2-1.7B",
         "HuggingFaceTB/SmolLM2-1.7B-Instruct",
     ],
-    "mistralai": [
-        "mistralai/Ministral-8B-Instruct-2410",
-    ],
-    "cohere": [
-        "CohereForAI/aya-expanse-8b",
-        "CohereForAI/aya-23-8b",
-    ],
-    "google": [
-        "google/gemma-3-12b-it",
-        "google/gemma-3-27b-it",
-    ],
-    "ibm": [
-        "ibm-granite/granite-3.3-8b-base",
-        "ibm-granite/granite-3.3-8b-instruct",
-    ],
     "baseline": ["RandomBaselineModel"],
     "all": [],
 }
-for key in llms.keys():
-    if isinstance(llms[key], list) and key != "all":
-        llms["all"].extend(llms[key])
+
+for key in small_llm.keys():
+    if isinstance(small_llm[key], list) and key != "all":
+        small_llm["all"].extend(small_llm[key])
 
 private_llm = {
     "openai": [
@@ -149,7 +159,7 @@ private_llm = {
         "gemini-2.5-pro",
         "gemini-2.5-flash",
     ],
-    "mistrail": [
+    "mistral": [
         "pixtral-large-latest",
         "mistral-large-latest",
     ],

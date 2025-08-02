@@ -99,6 +99,8 @@ disable=raw-checker-failed,
         too-many-arguments,
         broad-exception-caught,
         import-error,
+        bare-except,
+        eval-used,
         fixme
 
 # Enable the message, report, category or checker with the given id(s). You can

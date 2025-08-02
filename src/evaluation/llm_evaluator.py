@@ -7,7 +7,7 @@ from typing import Dict, List
 import wandb
 from datasets import Dataset
 
-from src.model.model import Model
+from src.language_model.language_model_abstraction import LanguageModel
 from src.task.task import Task
 from src.task.task_factory import tasks_factory
 
@@ -90,7 +90,7 @@ class ModelEvaluator:
             f"{self.last_model_name.replace('/', '_')}_metrics.json",
         )
 
-    def evaluate(self, model: Model, tasks: List[Task]):
+    def evaluate(self, model: LanguageModel, tasks: List[Task]):
         """
         Evaluates a given model on the given tasks.
         :param model : the model that will infer on the given tasks.
@@ -99,7 +99,7 @@ class ModelEvaluator:
         return self.evaluate_subset(model, tasks)
 
     def evaluate_subset(
-        self, model: Model, tasks: List[Task], subset_size=None
+        self, model: LanguageModel, tasks: List[Task], subset_size=None
     ) -> Dict:
         """
         Evaluates a given model on the given tasks, but only on a given size.

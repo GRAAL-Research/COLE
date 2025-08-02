@@ -8,7 +8,7 @@ from datasets import Dataset
 from src.task.task import Task
 
 
-class Model(ABC):
+class LanguageModel(ABC):
     def __init__(self, model_name: str, inference_callback=None, prompt_only=True):
         self.name = model_name
         if inference_callback is not None:

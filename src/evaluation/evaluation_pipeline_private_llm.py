@@ -7,7 +7,7 @@ import torch
 import wandb
 from tqdm import tqdm
 
-from predictions.all_llms import llms
+from predictions.all_llms import private_llm
 from src.evaluation.llm_evaluator import ModelEvaluator
 from src.evaluation.llm_factory import model_factory
 from src.evaluation.tools import split_llm_list
@@ -35,20 +35,13 @@ parser.add_argument(
     type=str,
     default=None,
 )
-
 parser.add_argument(
-    "--batch_size",
-    help="The batch size to use during the evaluation.",
-    type=int,
-    default=64,
-)
-
-parser.add_argument(
-    "--llm_split",
-    help="The split of the LLMs list to use. It can be '1', '2' or '3'.",
-    type=int,
+    "--provider_name",
+    "-pn",
+    help="The name of the LLM provider to load.",
+    type=str,
     default=None,
-    choices=[1, 2, 3],
+    choices=list(private_llm.keys()),
 )
 
 args = parser.parse_args()
@@ -59,14 +52,14 @@ tasks = tasks_factory(tasks_names)
 
 models = []
 if args.models_name is not None:
-    if args.models_name in llms:
-        models = llms[args.models_name]
+    if args.models_name in private_llm:
+        models = private_llm[args.models_name]
     else:
         models = args.models_name.split(",")
+elif args.provider_name is not None:
+    models = private_llm[args.provider_name]
 else:
-    models = llms["all"]
-
-models = split_llm_list(models=models, llm_split=args.llm_split)
+    models = private_llm["all"]
 
 logging.info("Starting Evaluation")
 
@@ -77,7 +70,7 @@ for model_name in tqdm(
 ):
 
     try:
-        model = model_factory(model_name, batch_size=args.batch_size)
+        model = model_factory(model_name)
         logging.info("Creating model")
         evaluator = ModelEvaluator()
         logging.info("Evaluating model")
