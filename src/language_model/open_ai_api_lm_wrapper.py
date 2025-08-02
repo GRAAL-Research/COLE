@@ -22,8 +22,13 @@ class OpenAIAPILMWrapper(ABC):
 
     def init_function_calling(self, labels: List[str], tool_choices: str) -> None:
         if self.use_function_calling:
+            open_ai_call = (
+                "claude" not in self.model_name.lower()
+            )  # False for Anthropic model, True for the rest
             self._extra_params.update(
-                init_function_calling(labels=labels, tool_choices=tool_choices)
+                init_function_calling(
+                    labels=labels, tool_choices=tool_choices, open_ai_call=open_ai_call
+                )
             )
 
     @abstractmethod

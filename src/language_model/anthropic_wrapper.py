@@ -10,6 +10,8 @@ class AnthropicWrapper(OpenAIAPILMWrapper):
         super().__init__(model_name=model_name, extra_params=extra_params)
         self.client = Anthropic(api_key=api_key)
 
+        self.tool_choices = {"type": "tool", "name": "classification"}
+
     def infer(self, text: str) -> Dict:
         prompt = self.format_prompt(text)
         generated_completion = self.language_model_calling(prompt=prompt)
