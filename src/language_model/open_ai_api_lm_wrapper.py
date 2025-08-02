@@ -47,8 +47,8 @@ class OpenAIAPILMWrapper(ABC):
         if retries > self.max_retries:
             return generated_completion
         try:
-            time.sleep(5)
             generated_completion = self._inner_generate_fn(prompt=prompt)
             return generated_completion
         except:
+            time.sleep(5)
             self._try_again(prompt=prompt, retries=retries + 1)
