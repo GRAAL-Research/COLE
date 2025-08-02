@@ -9,7 +9,7 @@ from src.language_model.open_ai_api_lm_wrapper import OpenAIAPILMWrapper
 class MistralWrapper(OpenAIAPILMWrapper):
     def __init__(self, model_name: str, api_key: SecretStr, extra_params: Dict):
         super().__init__(model_name=model_name, extra_params=extra_params)
-        self.client = Mistral(api_key=api_key)
+        self.client = Mistral(api_key=str(api_key))
         self.tool_choices = "any"
 
     def infer(self, text: str) -> Dict:
