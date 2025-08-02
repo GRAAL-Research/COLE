@@ -3,7 +3,6 @@ import gc
 import logging
 from datetime import datetime
 
-import torch
 import wandb
 from tqdm import tqdm
 
@@ -104,7 +103,6 @@ for model_name in tqdm(
         if "evaluator" in locals():
             del evaluator
         gc.collect()
-        torch.cuda.empty_cache()
         wandb.finish(exit_code=0)
 
 time_end = datetime.now()
