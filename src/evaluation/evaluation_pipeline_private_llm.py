@@ -4,6 +4,7 @@ import logging
 from datetime import datetime
 
 import wandb
+from dotenv import load_dotenv
 from tqdm import tqdm
 
 from predictions.all_llms import private_llm
@@ -11,6 +12,8 @@ from src.evaluation.llm_evaluator import ModelEvaluator
 from src.language_model.private_lm import RemoteLLMModel
 from src.task.task_factory import tasks_factory
 from src.task.task_names import Tasks
+
+load_dotenv(".env")
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
