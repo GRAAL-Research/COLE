@@ -10,7 +10,6 @@ from tqdm import tqdm
 from predictions.all_llms import private_llm
 from src.evaluation.llm_evaluator import ModelEvaluator
 from src.evaluation.llm_factory import model_factory
-from src.evaluation.tools import split_llm_list
 from src.task.task_factory import tasks_factory
 from src.task.task_names import Tasks
 
