@@ -1,11 +1,38 @@
+import os
+from typing import Union
+
+from pydantic import SecretStr
+
 from predictions.all_llms import private_llm
 from src.language_model.anthropic_wrapper import AnthropicWrapper
 from src.language_model.deepseek_wrapper import DeepSeekWrapper
 from src.language_model.google_wrapper import GoogleWrapper
-from src.language_model.huggingface_language_model_factory import get_api_key
 from src.language_model.mistral_wrapper import MistralWrapper
 from src.language_model.open_ai_wrapper import OpenAIWrapper
 from src.language_model.xai_wrapper import XAIWrapper
+
+
+def get_api_key(model_name: str) -> Union[SecretStr, None]:
+    if model_name in private_llm["openai"]:
+        key_name = "openai_api_key"
+    elif model_name in private_llm["anthropic"]:
+        key_name = "anthropic_token"
+    elif model_name in private_llm["deepseek"]:
+        key_name = "deepseek_token"
+    elif model_name in private_llm["mistral"]:
+        key_name = "mistral_token"
+    elif model_name in private_llm["xai"]:
+        key_name = "XAI_API_KEY"
+    elif model_name in private_llm["google"]:
+        key_name = "gcp_key"
+    else:
+        raise ValueError(f"Model name {model_name} not found.")
+
+    api_key = SecretStr(os.getenv(key_name))
+
+    if api_key is None:
+        raise ValueError(f"API key {key_name} not found.")
+    return api_key
 
 
 def private_language_model_factory(model_name):

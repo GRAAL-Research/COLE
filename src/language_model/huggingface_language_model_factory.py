@@ -1,8 +1,4 @@
-import os
-from typing import Union
-
 import torch
-from pydantic import SecretStr
 from transformers import (
     AutoTokenizer,
     BitsAndBytesConfig,
@@ -10,8 +6,6 @@ from transformers import (
     AutoModelForMaskedLM,
 )
 from unsloth import FastLanguageModel
-
-from predictions.all_llms import private_llm
 
 
 def hugging_face_language_model_tokenizer_factory(
@@ -70,26 +64,3 @@ def hugging_face_language_model_tokenizer_factory(
 
     model.eval()
     return model, tokenizer
-
-
-def get_api_key(model_name: str) -> Union[SecretStr, None]:
-    if model_name in private_llm["openai"]:
-        key_name = "openai_api_key"
-    elif model_name in private_llm["anthropic"]:
-        key_name = "anthropic_token"
-    elif model_name in private_llm["deepseek"]:
-        key_name = "deepseek_token"
-    elif model_name in private_llm["mistral"]:
-        key_name = "mistral_token"
-    elif model_name in private_llm["xai"]:
-        key_name = "XAI_API_KEY"
-    elif model_name in private_llm["google"]:
-        key_name = "gcp_key"
-    else:
-        raise ValueError(f"Model name {model_name} not found.")
-
-    api_key = SecretStr(os.getenv(key_name))
-
-    if api_key is None:
-        raise ValueError(f"API key {key_name} not found.")
-    return api_key
