@@ -3,6 +3,8 @@
 from typing import List, Dict
 from unittest import TestCase, mock
 
+from datasets.formatting.formatting import LazyRow
+
 from src.dataset.dataset import Dataset
 from src.evaluation.llm_evaluator import ModelEvaluator
 from src.language_model.language_model_abstraction import LanguageModel
@@ -19,10 +21,10 @@ class ForTestModel(LanguageModel):
     def predict(self, evaluation_dataset: Dataset, task: Task):
         return ["0" for _ in range(len(evaluation_dataset))]
 
-    def infer(self, rows: List[str]):
+    def infer(self, rows: LazyRow):
         return ["0" for _ in range(len(rows))]
 
-    def generate(self, rows: List[str]):
+    def generate(self, rows: LazyRow):
         raise NotImplementedError
 
     def unload_model(self):

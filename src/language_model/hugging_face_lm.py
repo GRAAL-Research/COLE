@@ -1,7 +1,8 @@
-from typing import Union, List
+from typing import Union, List, Dict
 
 import torch
 from datasets import Dataset
+from datasets.formatting.formatting import LazyRow
 from transformers import (
     pipeline,
 )
@@ -90,7 +91,7 @@ class HFLLMModel(LanguageModel):
 
         return process_dataset["prediction"]
 
-    def generate(self, rows):
+    def generate(self, rows: LazyRow) -> Dict:
         """
         Do a generation over a set of rows and extract the generated text and apply string post-processing.
         """
@@ -111,7 +112,7 @@ class HFLLMModel(LanguageModel):
 
         return {"prediction": generated_texts}
 
-    def infer(self, rows):
+    def infer(self, rows: LazyRow) -> Dict:
         """
         Do a zero-shot classification and extract the label using a per-element generation.
 
@@ -134,7 +135,7 @@ class HFLLMModel(LanguageModel):
 
         return {"prediction": classifications}
 
-    def infer_binary(self, rows):
+    def infer_binary(self, rows: LazyRow) -> Dict:
         """
         Do a binary zero-shot classification and extract the label using a per-element generation.
         """

@@ -1,4 +1,5 @@
 import numpy as np
+from datasets.formatting.formatting import LazyRow
 
 from src.language_model.language_model_abstraction import LanguageModel
 from src.task.task import Task
@@ -22,10 +23,10 @@ class RandomBaselineModel(LanguageModel):
             predictions = self.random_generator.choice(choices, size=size).tolist()
         return predictions
 
-    def infer(self, rows):
+    def infer(self, rows: LazyRow) -> LazyRow:
         return rows
 
-    def generate(self, rows):
+    def generate(self, rows: LazyRow) -> LazyRow:
         return rows
 
     @property

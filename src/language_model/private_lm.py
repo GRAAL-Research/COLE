@@ -1,6 +1,7 @@
 from typing import Union, List
 
 from datasets import Dataset
+from datasets.formatting.formatting import LazyRow
 
 from src.language_model.language_model_abstraction import LanguageModel
 from src.language_model.private_language_model_factory import (
@@ -14,11 +15,11 @@ class RemoteLLMModel(LanguageModel):
     LLM Model based on private remote LLM provider (e.g. OpenAI) and pipeline mechanism for inference.
     """
 
-    def generate(self, rows: List[str]) -> Union[str, List[str]]:
-        return self.model.generate(rows)
+    def generate(self, rows: LazyRow) -> Union[str, List[str]]:
+        return self.model.generate(rows["text"])
 
-    def infer(self, rows: List[str]) -> Union[str, List[str]]:
-        return self.model.infer(rows)
+    def infer(self, rows: LazyRow) -> Union[str, List[str]]:
+        return self.model.infer(rows["text"])
 
     def __init__(
         self,

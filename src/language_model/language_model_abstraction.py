@@ -1,9 +1,10 @@
 # pylint: disable=method-hidden
 
 from abc import abstractmethod, ABC
-from typing import Union, List
+from typing import List
 
 from datasets import Dataset
+from datasets.formatting.formatting import LazyRow
 
 from src.task.task import Task
 
@@ -20,9 +21,9 @@ class LanguageModel(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def infer(self, rows: List[str]) -> Union[str, List[str]]:
+    def infer(self, rows: LazyRow):
         raise NotImplementedError
 
     @abstractmethod
-    def generate(self, rows: List[str]) -> Union[str, List[str]]:
+    def generate(self, rows: LazyRow):
         raise NotImplementedError
