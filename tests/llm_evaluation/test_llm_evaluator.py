@@ -1,6 +1,6 @@
 # pylint: disable=unused-argument
 
-from typing import List, Dict
+from typing import Dict
 from unittest import TestCase, mock
 
 from datasets.formatting.formatting import LazyRow

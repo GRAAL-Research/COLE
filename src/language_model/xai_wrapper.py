@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 from openai import OpenAI
 
@@ -27,7 +27,7 @@ class XAIWrapper(OpenAIAPILMWrapper):
                 final_prediction = prediction
         return {"prediction": final_prediction}
 
-    def _inner_generate_fn(self, prompt: Dict):
+    def _inner_generate_fn(self, prompt: List):
         return self.client.chat.completions.create(
             model=self.model_name,
             messages=prompt,

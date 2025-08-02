@@ -27,22 +27,24 @@ class OpenAIAPILMWrapper(ABC):
             )
 
     @abstractmethod
-    def _inner_generate_fn(self, prompt: Dict) -> Dict:
+    def _inner_generate_fn(self, prompt: List) -> Dict:
         pass
 
     @staticmethod
-    def format_prompt(text: str) -> Dict:
-        return {
-            "role": "user",
-            "content": [
-                {"type": "text", "text": text},
-            ],
-        }
+    def format_prompt(text: str) -> List:
+        return [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": text},
+                ],
+            }
+        ]
 
-    def language_model_calling(self, prompt: Dict):
+    def language_model_calling(self, prompt: List):
         return self._try_again(prompt=prompt)
 
-    def _try_again(self, prompt: Dict, retries: int = 0):
+    def _try_again(self, prompt: List, retries: int = 0):
         generated_completion = None
         if retries > self.max_retries:
             return generated_completion

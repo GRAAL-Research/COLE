@@ -1,8 +1,6 @@
 import os
 from typing import Union
 
-from pydantic import SecretStr
-
 from predictions.all_llms import private_llm
 from src.language_model.anthropic_wrapper import AnthropicWrapper
 from src.language_model.deepseek_wrapper import DeepSeekWrapper
