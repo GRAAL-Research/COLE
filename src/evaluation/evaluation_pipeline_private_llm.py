@@ -36,10 +36,12 @@ parser.add_argument(
     default=None,
 )
 parser.add_argument(
-    "--llm_split",
-    help="The split of the LLMs list to use. It can be '1', '2' or '3'.",
-    type=int,
+    "--provider_name",
+    "-pn",
+    help="The name of the LLM provider to load.",
+    type=str,
     default=None,
+    choices=list(private_llm.keys()),
 )
 
 args = parser.parse_args()
@@ -54,10 +56,10 @@ if args.models_name is not None:
         models = private_llm[args.models_name]
     else:
         models = args.models_name.split(",")
+elif args.provider_name is not None:
+    models = private_llm[args.provider_name]
 else:
     models = private_llm["all"]
-
-models = split_llm_list(models=models, llm_split=args.llm_split)
 
 logging.info("Starting Evaluation")
 

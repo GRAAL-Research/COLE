@@ -21,10 +21,9 @@ class AnthropicWrapper(OpenAIAPILMWrapper):
             final_prediction = generated_completion.content[0].input.get("category")
         return {"prediction": final_prediction}
 
-    def _inner_generate_fn(self, text: str):
-        return self.client.chat.completions.create(
+    def _inner_generate_fn(self, prompt: Dict):
+        return self.client.messages.create(
             model=self.model_name,
-            messages=text,
-            n=1,
+            messages=prompt,
             **self._extra_params,
         )

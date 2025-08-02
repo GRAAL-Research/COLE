@@ -9,6 +9,7 @@ from transformers import (
     AutoModelForCausalLM,
     AutoModelForMaskedLM,
 )
+
 from unsloth import FastLanguageModel
 
 from predictions.all_llms import private_llm
@@ -86,13 +87,13 @@ def get_api_key(model_name: str) -> Union[SecretStr, None]:
     elif model_name in private_llm["google"]:
         key_name = "gcp_key"
     else:
-        return None
+        raise ValueError(f"Model name {model_name} not found.")
+
     api_key = SecretStr(os.getenv(key_name))
 
     if api_key is None:
-        raise Exception(f"API key {key_name} not found.")
-    else:
-        return api_key
+        raise ValueError(f"API key {key_name} not found.")
+    return api_key
 
 
 def private_language_model_factory(model_name):
@@ -137,4 +138,7 @@ def private_language_model_factory(model_name):
             )
         else:
             raise NotImplementedError("Not implemented yet.")
+    else:
+        raise ValueError(f"Model name {model_name} not found.")
+
     return model

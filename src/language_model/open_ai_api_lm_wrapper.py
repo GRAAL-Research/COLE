@@ -1,3 +1,4 @@
+# pylint: disable=inconsistent-return-statements
 import time
 from abc import ABC, abstractmethod
 from typing import List, Dict

@@ -48,6 +48,7 @@ parser.add_argument(
     help="The split of the LLMs list to use. It can be '1', '2' or '3'.",
     type=int,
     default=None,
+    choices=[1, 2, 3],
 )
 
 args = parser.parse_args()
