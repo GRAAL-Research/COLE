@@ -12,7 +12,7 @@ from src.language_model.open_ai_wrapper import OpenAIWrapper
 from src.language_model.xai_wrapper import XAIWrapper
 
 
-def get_api_key(model_name: str) -> Union[SecretStr, None]:
+def get_api_key(model_name: str) -> Union[str, None]:
     if model_name in private_llm["openai"]:
         key_name = "openai_api_key"
     elif model_name in private_llm["anthropic"]:
@@ -32,7 +32,7 @@ def get_api_key(model_name: str) -> Union[SecretStr, None]:
 
     if api_key is None:
         raise ValueError(f"API key {key_name} not found.")
-    return SecretStr(api_key)
+    return api_key
 
 
 def private_language_model_factory(model_name):

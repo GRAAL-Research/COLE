@@ -1,13 +1,12 @@
 from typing import Dict
 
 from openai import OpenAI
-from pydantic import SecretStr
 
 from src.language_model.open_ai_api_lm_wrapper import OpenAIAPILMWrapper
 
 
 class GoogleWrapper(OpenAIAPILMWrapper):
-    def __init__(self, model_name: str, api_key: SecretStr, extra_params: Dict):
+    def __init__(self, model_name: str, api_key: str, extra_params: Dict):
         super().__init__(model_name=model_name, extra_params=extra_params)
         self.client = OpenAI(
             api_key=api_key,

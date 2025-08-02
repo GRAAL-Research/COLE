@@ -1,7 +1,6 @@
 from typing import Dict
 
 from openai import OpenAI
-from pydantic import SecretStr
 
 from src.language_model.open_ai_api_lm_wrapper import OpenAIAPILMWrapper
 
@@ -10,7 +9,7 @@ class DeepSeekWrapper(OpenAIAPILMWrapper):
     def __init__(
         self,
         model_name: str,
-        api_key: SecretStr,
+        api_key: str,
         extra_params: Dict,
         use_function_calling: bool,
     ):

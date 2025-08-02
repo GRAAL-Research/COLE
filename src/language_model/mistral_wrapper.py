@@ -1,13 +1,12 @@
 from typing import Dict
 
 from mistralai import Mistral
-from pydantic import SecretStr
 
 from src.language_model.open_ai_api_lm_wrapper import OpenAIAPILMWrapper
 
 
 class MistralWrapper(OpenAIAPILMWrapper):
-    def __init__(self, model_name: str, api_key: SecretStr, extra_params: Dict):
+    def __init__(self, model_name: str, api_key: str, extra_params: Dict):
         super().__init__(model_name=model_name, extra_params=extra_params)
         self.client = Mistral(api_key=str(api_key))
         self.tool_choices = "any"
