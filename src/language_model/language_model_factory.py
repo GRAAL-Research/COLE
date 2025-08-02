@@ -79,7 +79,7 @@ def get_api_key(model_name: str) -> Union[SecretStr, None]:
         key_name = "anthropic_token"
     elif model_name in private_llm["deepseek"]:
         key_name = "deepseek_token"
-    elif model_name in private_llm["mistrail"]:
+    elif model_name in private_llm["mistral"]:
         key_name = "mistral_token"
     elif model_name in private_llm["xai"]:
         key_name = "XAI_API_KEY"

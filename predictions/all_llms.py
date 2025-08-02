@@ -159,7 +159,7 @@ private_llm = {
         "gemini-2.5-pro",
         "gemini-2.5-flash",
     ],
-    "mistrail": [
+    "mistral": [
         "pixtral-large-latest",
         "mistral-large-latest",
     ],
