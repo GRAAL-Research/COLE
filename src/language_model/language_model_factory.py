@@ -43,7 +43,7 @@ def hugging_face_language_model_tokenizer_factory(
             torch_dtype=torch.float16,
         )
         if "chocolatine" in model_name.lower():
-            extra_args = {"padding_size": "left"}
+            extra_args = {"padding_side": "left"}
         else:
             extra_args = {}
         tokenizer = AutoTokenizer.from_pretrained(
