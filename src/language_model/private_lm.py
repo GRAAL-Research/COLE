@@ -3,7 +3,9 @@ from typing import Union, List
 from datasets import Dataset
 
 from src.language_model.language_model_abstraction import LanguageModel
-from src.language_model.language_model_factory import private_language_model_factory
+from src.language_model.private_language_model_factory import (
+    private_language_model_factory,
+)
 from src.task.task import Task, TaskType
 
 

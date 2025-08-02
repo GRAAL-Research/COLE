@@ -7,7 +7,7 @@ from transformers import (
 )
 
 from src.language_model.language_model_abstraction import LanguageModel
-from src.language_model.language_model_factory import (
+from src.language_model.huggingface_language_model_factory import (
     hugging_face_language_model_tokenizer_factory,
 )
 from src.task.task import TaskType, Task
