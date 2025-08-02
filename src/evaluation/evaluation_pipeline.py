@@ -51,6 +51,13 @@ parser.add_argument(
     choices=[1, 2, 3],
 )
 
+parser.add_argument(
+    "--skip_first_n",
+    help="The number of LLM to skip in the list of split",
+    type=int,
+    default=None,
+)
+
 args = parser.parse_args()
 
 tasks_names = list(Tasks)
@@ -67,6 +74,9 @@ else:
     models = llms["all"]
 
 models = split_llm_list(models=models, llm_split=args.llm_split)
+
+if args.skip_first_n is not None:
+    models = models[args.skip_first_n :]
 
 logging.info("Starting Evaluation")
 
