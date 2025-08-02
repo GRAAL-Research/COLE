@@ -66,12 +66,6 @@ class HFLLMModel(LanguageModel):
             else:
                 inference_fn = self.infer
         else:
-            if self._model_name.lower() == "chocolatine":
-                # Problem with Phi-4 generation:
-                # https://github.com/huggingface/transformers/issues/36071#issuecomment-3109331152
-                generation_args = {"use_cache": False}
-            else:
-                generation_args = {}
             self.pipeline = pipeline(
                 task="text-generation",
                 model=self.model,
@@ -83,7 +77,6 @@ class HFLLMModel(LanguageModel):
                 padding=True,
                 truncation=True,
                 max_length=4096,
-                generation_args=generation_args,
             )
             inference_fn = self.generate
 
@@ -101,11 +94,17 @@ class HFLLMModel(LanguageModel):
         """
         Do a generation over a set of rows and extract the generated text and apply string post-processing.
         """
+        if self._model_name.lower() == "chocolatine":
+            # Problem with Phi-4 generation:
+            # https://github.com/huggingface/transformers/issues/36071#issuecomment-3109331152
+            generation_args = {"use_cache": False}
+        else:
+            generation_args = {}
 
         with torch.no_grad():
             text = rows["text"]
 
-            outputs = self.pipeline(text)
+            outputs = self.pipeline(text, **generation_args)
             generated_texts = [
                 output[0]["generated_text"].strip() for output in outputs
             ]
