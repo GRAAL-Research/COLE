@@ -31,11 +31,11 @@ def get_api_key(model_name: str) -> Union[SecretStr, None]:
     else:
         raise ValueError(f"Model name {model_name} not found.")
 
-    api_key = SecretStr(os.getenv(key_name))
+    api_key = os.getenv(key_name, None)
 
     if api_key is None:
         raise ValueError(f"API key {key_name} not found.")
-    return api_key
+    return SecretStr(api_key)
 
 
 def private_language_model_factory(model_name):
