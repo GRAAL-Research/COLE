@@ -27,14 +27,24 @@ class DeepSeekWrapper(OpenAIAPILMWrapper):
             final_prediction = None
         elif self.model_name == "deepseek-chat":
             # We extract and parse the response (it is a literal string).
-            prediction = (
-                generated_completion.choices[0].message.tool_calls[0].function.arguments
-            )
             try:
-                final_prediction = eval(prediction).get("category")
+                prediction = (
+                    generated_completion.choices[0]
+                    .message.tool_calls[0]
+                    .function.arguments
+                )
+                try:
+                    final_prediction = eval(prediction).get("category")
+                except:
+                    # Case where the prediction is not a proper dictionary.
+                    final_prediction = prediction
             except:
-                # Case where the prediction is not a proper dictionary.
-                final_prediction = prediction
+                final_prediction = (
+                    generated_completion.choices[0]
+                    .message.content.strip()
+                    .replace(")", "")
+                    .strip()
+                )
         else:
             final_prediction = (
                 generated_completion.choices[0]
