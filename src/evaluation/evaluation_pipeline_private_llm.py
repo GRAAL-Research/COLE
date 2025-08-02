@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 from predictions.all_llms import private_llm
 from src.evaluation.llm_evaluator import ModelEvaluator
-from src.evaluation.llm_factory import model_factory
+from src.language_model.private_lm import RemoteLLMModel
 from src.task.task_factory import tasks_factory
 from src.task.task_names import Tasks
 
@@ -68,7 +68,7 @@ for model_name in tqdm(
 ):
 
     try:
-        model = model_factory(model_name)
+        model = RemoteLLMModel(model_name=model_name)
         logging.info("Creating model")
         evaluator = ModelEvaluator()
         logging.info("Evaluating model")
