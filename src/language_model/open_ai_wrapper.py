@@ -35,5 +35,6 @@ class OpenAIWrapper(OpenAIAPILMWrapper):
             model=self.model_name,
             messages=prompt,
             n=1,
+            stream=False,
             **self._extra_params,
         )

@@ -49,5 +49,6 @@ class DeepSeekWrapper(OpenAIAPILMWrapper):
         return self.client.chat.completions.create(
             model=self.model_name,
             messages=prompt,
+            stream=False,
             **self._extra_params,
         )
