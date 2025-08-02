@@ -38,7 +38,7 @@ class HFLLMModel(LanguageModel):
 
         # To handle max batch size for these models.
         if num_params >= 70000000000:  # 70B
-            batch_size = 8
+            batch_size = 4
         if num_params >= 32000000000:  # 32B
             batch_size = 16
         elif num_params >= 27000000000:  # 27B
@@ -66,6 +66,12 @@ class HFLLMModel(LanguageModel):
             else:
                 inference_fn = self.infer
         else:
+            if self._model_name.lower() == "chocolatine":
+                # Problem with Phi-4 generation:
+                # https://github.com/huggingface/transformers/issues/36071#issuecomment-3109331152
+                generation_args = {"use_cache": False}
+            else:
+                generation_args = {}
             self.pipeline = pipeline(
                 task="text-generation",
                 model=self.model,
@@ -77,6 +83,7 @@ class HFLLMModel(LanguageModel):
                 padding=True,
                 truncation=True,
                 max_length=4096,
+                generation_args=generation_args,
             )
             inference_fn = self.generate
 
