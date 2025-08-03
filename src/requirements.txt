@@ -1,5 +1,7 @@
 
 # Core
+packaging
+wheel
 torch
 python-dotenv
 numpy
@@ -18,8 +20,6 @@ aenum
 transformers
 accelerate
 bitsandbytes
-wheel
-flash-attn
 unsloth
 unsloth-zoo
 wandb
