@@ -95,17 +95,17 @@ class HFLLMModel(LanguageModel):
         """
         Do a generation over a set of rows and extract the generated text and apply string post-processing.
         """
-        if self._model_name.lower() == "chocolatine":
-            # Problem with Phi-4 generation:
-            # https://github.com/huggingface/transformers/issues/36071#issuecomment-3109331152
-            generation_args = {"use_cache": False}
-        else:
-            generation_args = {}
-
         with torch.no_grad():
             text = rows["text"]
 
-            outputs = self.pipeline(text, **generation_args)
+            if self._model_name.lower() == "chocolatine":
+                # Problem with Phi-4 generation:
+                # https://github.com/huggingface/transformers/issues/36071#issuecomment-3109331152
+                generation_args = {"use_cache": False}
+                outputs = self.pipeline(text, **generation_args)
+            else:
+                outputs = self.pipeline(text)
+
             generated_texts = [
                 output[0]["generated_text"].strip() for output in outputs
             ]
