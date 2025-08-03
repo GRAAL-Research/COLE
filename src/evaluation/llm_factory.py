@@ -1,6 +1,6 @@
 from typing import Union
 
-from predictions.all_llms import small_llm, llms, private_llm
+from predictions.all_llms import small_llm, llms, private_llm, small_llm_2
 from src.language_model.baseline import RandomBaselineModel
 from src.language_model.hugging_face_lm import HFLLMModel
 from src.language_model.language_model_abstraction import LanguageModel
@@ -14,7 +14,11 @@ def model_factory(
         model = RandomBaselineModel(model_name="random_baseline")
     elif model_name in private_llm["all"]:
         model = RemoteLLMModel(model_name=model_name)
-    elif model_name in llms["all"] or model_name in small_llm["all"]:
+    elif (
+        model_name in llms["all"]
+        or model_name in small_llm["all"]
+        or model_name in small_llm_2["all"]
+    ):
         model = HFLLMModel(model_name=model_name, batch_size=batch_size)
     else:
         raise ValueError(f"Model {model_name} not supported.")
