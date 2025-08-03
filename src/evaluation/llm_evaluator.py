@@ -1,3 +1,4 @@
+import gc
 import json
 import logging
 import os
@@ -133,6 +134,13 @@ class ModelEvaluator:
                 logging.error(error_message)
                 wandb.log({task.task_name: "Failed"})
                 continue
+            finally:
+                # Memory cleaning
+                if "evaluate_dataset" in locals():
+                    del evaluate_dataset
+                if "prompts" in locals():
+                    del prompts
+                gc.collect()
             wandb.log({task.task_name: "Success"})
         self.last_predictions = {
             "model_name": model.name,
