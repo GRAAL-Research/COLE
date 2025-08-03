@@ -92,8 +92,6 @@ for key in llms.keys():
 
 small_llm = {
     "unsloth": [
-        "unsloth/Qwen2.5-0.5B-bnb-4bit",
-        "unsloth/Qwen2.5-0.5B-Instruct-bnb-4bit",
         "unsloth/Qwen2.5-1.5B-bnb-4bit",
         "unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit",
     ],
@@ -102,27 +100,43 @@ small_llm = {
         "allenai/OLMo-2-0425-1B",
     ],
     "bigscience": [
-        "bigscience/bloom-560m",
         "bigscience/bloom-1b1",
         "bigscience/bloom-1b7",
-        "bigscience/bloomz-560m",
         "bigscience/bloomz-1b1",
     ],
     "huggingface": [
-        "HuggingFaceTB/SmolLM2-360M",
-        "HuggingFaceTB/SmolLM2-360M-Instruct",
-        "HuggingFaceTB/SmolLM2-135M",
-        "HuggingFaceTB/SmolLM2-135M-Instruct",
         "HuggingFaceTB/SmolLM2-1.7B",
         "HuggingFaceTB/SmolLM2-1.7B-Instruct",
     ],
-    "baseline": ["RandomBaselineModel"],
     "all": [],
 }
 
 for key in small_llm.keys():
     if isinstance(small_llm[key], list) and key != "all":
         small_llm["all"].extend(small_llm[key])
+
+small_llm_2 = {
+    "unsloth": [
+        "unsloth/Qwen2.5-0.5B-bnb-4bit",
+        "unsloth/Qwen2.5-0.5B-Instruct-bnb-4bit",
+    ],
+    "bigscience": [
+        "bigscience/bloom-560m",
+        "bigscience/bloomz-560m",
+    ],
+    "huggingface": [
+        "HuggingFaceTB/SmolLM2-360M",
+        "HuggingFaceTB/SmolLM2-360M-Instruct",
+        "HuggingFaceTB/SmolLM2-135M",
+        "HuggingFaceTB/SmolLM2-135M-Instruct",
+    ],
+    "baseline": ["RandomBaselineModel"],
+    "all": [],
+}
+
+for key in small_llm_2.keys():
+    if isinstance(small_llm_2[key], list) and key != "all":
+        small_llm_2["all"].extend(small_llm_2[key])
 
 private_llm = {
     "openai": [
