@@ -1,0 +1,22 @@
+
+# Core
+python-dotenv
+numpy
+scipy
+pandas
+requests
+evaluate
+python-multipart
+scikit-learn
+# Web backend (si tu utilises FastAPI/Flask, sinon à ignorer)
+fastapi
+uvicorn
+# Optional: pretty printing, progress bars, etc.
+tqdm
+aenum
+wandb
+# Pour compatibilité ancienne
+protobuf<=3.20.3
+openai
+anthropic
+mistralai

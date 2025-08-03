@@ -1,5 +1,3 @@
-from unsloth import FastLanguageModel
-
 import torch
 from transformers import (
     AutoTokenizer,
@@ -7,9 +5,10 @@ from transformers import (
     AutoModelForCausalLM,
     AutoModelForMaskedLM,
 )
+from unsloth import FastLanguageModel
 
 
-def model_tokenizer_factory(
+def hugging_face_language_model_tokenizer_factory(
     model_name,
     huggingface_token: str,
 ):
@@ -31,8 +30,13 @@ def model_tokenizer_factory(
             attn_implementation="flash_attention_2",
             torch_dtype=torch.float16,
         )
-
-        tokenizer = AutoTokenizer.from_pretrained(model_name, token=huggingface_token)
+        if "chocolatine" in model_name.lower():
+            extra_args = {"padding_side": "left"}
+        else:
+            extra_args = {}
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_name, token=huggingface_token, **extra_args
+        )
     elif "bloom" in model_name.lower():
         bnb_configs = BitsAndBytesConfig(load_in_8bit=True, low_cpu_mem_usage=True)
 

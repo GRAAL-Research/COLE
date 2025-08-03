@@ -1,21 +1,23 @@
-import abc
-from typing import Union, List
+from typing import Union, List, Dict
 
 import torch
 from datasets import Dataset
+from datasets.formatting.formatting import LazyRow
 from transformers import (
     pipeline,
 )
 
-from src.model.model import Model
-from src.model.model_factory import model_tokenizer_factory
+from src.language_model.language_model_abstraction import LanguageModel
+from src.language_model.huggingface_language_model_factory import (
+    hugging_face_language_model_tokenizer_factory,
+)
 from src.task.task import TaskType, Task
 
 
-class HFModel(Model, abc.ABC):
+class HFLLMModel(LanguageModel):
     """
-    Model based on Hugging Face Transformers and pipeline mechanism,
-    loads pretrained models and uses them for inference and generation.
+    LLM Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses
+    it for inference.
     """
 
     def __init__(
@@ -28,7 +30,7 @@ class HFModel(Model, abc.ABC):
         self._model_name = model_name
         self._token = token
 
-        self.model, self.tokenizer = model_tokenizer_factory(
+        self.model, self.tokenizer = hugging_face_language_model_tokenizer_factory(
             model_name=self._model_name,
             huggingface_token=self._token,
         )
@@ -37,19 +39,12 @@ class HFModel(Model, abc.ABC):
 
         # To handle max batch size for these models.
         if num_params >= 70000000000:  # 70B
-            batch_size = 8
+            batch_size = 4
         if num_params >= 32000000000:  # 32B
             batch_size = 16
         elif num_params >= 27000000000:  # 27B
             batch_size = 32
         self._batch_size = batch_size
-
-
-class HFLLMModel(HFModel):
-    """
-    LLM Model based on Hugging Face Transformers and pipeline mechanism, loads pretrained LLM models and uses
-    it for inference.
-    """
 
     def predict(self, evaluation_dataset: Dataset, task: Task) -> List:
         if task.task_type == TaskType.INFERENCE:
@@ -96,22 +91,28 @@ class HFLLMModel(HFModel):
 
         return process_dataset["prediction"]
 
-    def generate(self, rows):
+    def generate(self, rows: LazyRow) -> Dict:
         """
         Do a generation over a set of rows and extract the generated text and apply string post-processing.
         """
-
         with torch.no_grad():
             text = rows["text"]
 
-            outputs = self.pipeline(text)
+            if self._model_name.lower() == "chocolatine":
+                # Problem with Phi-4 generation:
+                # https://github.com/huggingface/transformers/issues/36071#issuecomment-3109331152
+                generation_args = {"use_cache": False}
+                outputs = self.pipeline(text, **generation_args)
+            else:
+                outputs = self.pipeline(text)
+
             generated_texts = [
                 output[0]["generated_text"].strip() for output in outputs
             ]
 
         return {"prediction": generated_texts}
 
-    def infer(self, rows):
+    def infer(self, rows: LazyRow) -> Dict:
         """
         Do a zero-shot classification and extract the label using a per-element generation.
 
@@ -134,7 +135,7 @@ class HFLLMModel(HFModel):
 
         return {"prediction": classifications}
 
-    def infer_binary(self, rows):
+    def infer_binary(self, rows: LazyRow) -> Dict:
         """
         Do a binary zero-shot classification and extract the label using a per-element generation.
         """

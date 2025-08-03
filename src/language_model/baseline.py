@@ -1,10 +1,11 @@
 import numpy as np
+from datasets.formatting.formatting import LazyRow
 
-from src.model.model import Model
+from src.language_model.language_model_abstraction import LanguageModel
 from src.task.task import Task
 
 
-class RandomBaselineModel(Model):
+class RandomBaselineModel(LanguageModel):
     def __init__(self, model_name: str, seed: int = 42):
         super().__init__(model_name)
         self.random_generator = np.random.RandomState(seed=seed)
@@ -22,10 +23,10 @@ class RandomBaselineModel(Model):
             predictions = self.random_generator.choice(choices, size=size).tolist()
         return predictions
 
-    def infer(self, rows):
+    def infer(self, rows: LazyRow) -> LazyRow:
         return rows
 
-    def generate(self, rows):
+    def generate(self, rows: LazyRow) -> LazyRow:
         return rows
 
     @property

@@ -47,7 +47,7 @@ llms = {
         "unsloth/Qwen3-14B-Base-unsloth-bnb-4bit",
     ],
     "jpacifico": [
-        "jpacifico/Chocolatine-14B-Instruct-DPO-v1.2",
+        "jpacifico/Chocolatine-14B-Instruct-DPO-v1.3",
         "jpacifico/French-Alpaca-Llama3-8B-Instruct-v1.0",
         "jpacifico/Chocolatine-2-14B-Instruct-v2.0.3",
     ],
@@ -92,8 +92,6 @@ for key in llms.keys():
 
 small_llm = {
     "unsloth": [
-        "unsloth/Qwen2.5-0.5B-bnb-4bit",
-        "unsloth/Qwen2.5-0.5B-Instruct-bnb-4bit",
         "unsloth/Qwen2.5-1.5B-bnb-4bit",
         "unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit",
     ],
@@ -102,21 +100,14 @@ small_llm = {
         "allenai/OLMo-2-0425-1B",
     ],
     "bigscience": [
-        "bigscience/bloom-560m",
         "bigscience/bloom-1b1",
         "bigscience/bloom-1b7",
-        "bigscience/bloomz-560m",
         "bigscience/bloomz-1b1",
     ],
     "huggingface": [
-        "HuggingFaceTB/SmolLM2-360M",
-        "HuggingFaceTB/SmolLM2-360M-Instruct",
-        "HuggingFaceTB/SmolLM2-135M",
-        "HuggingFaceTB/SmolLM2-135M-Instruct",
         "HuggingFaceTB/SmolLM2-1.7B",
         "HuggingFaceTB/SmolLM2-1.7B-Instruct",
     ],
-    "baseline": ["RandomBaselineModel"],
     "all": [],
 }
 
@@ -124,26 +115,44 @@ for key in small_llm.keys():
     if isinstance(small_llm[key], list) and key != "all":
         small_llm["all"].extend(small_llm[key])
 
+small_llm_2 = {
+    "unsloth": [
+        "unsloth/Qwen2.5-0.5B-bnb-4bit",
+        "unsloth/Qwen2.5-0.5B-Instruct-bnb-4bit",
+    ],
+    "bigscience": [
+        "bigscience/bloom-560m",
+        "bigscience/bloomz-560m",
+    ],
+    "huggingface": [
+        "HuggingFaceTB/SmolLM2-360M",
+        "HuggingFaceTB/SmolLM2-360M-Instruct",
+        "HuggingFaceTB/SmolLM2-135M",
+        "HuggingFaceTB/SmolLM2-135M-Instruct",
+    ],
+    "baseline": ["RandomBaselineModel"],
+    "all": [],
+}
+
+for key in small_llm_2.keys():
+    if isinstance(small_llm_2[key], list) and key != "all":
+        small_llm_2["all"].extend(small_llm_2[key])
+
 private_llm = {
     "openai": [
-        "gpt-4.1-2025-04-14",
         "o4-mini-2025-04-16",
         "o3-2025-04-16",
-        "gpt-4.1-mini-2025-04-14",
-        "gpt-4.1-nano-2025-04-14",
-        "o1-2024-12-17",
-        "gpt-4.5-preview-2025-02-27",
         "o3-mini-2025-01-31",
-        "gpt-4-0613",
+        "o1-2024-12-17",
+        "o1-mini-2024-09-12",
+        "gpt-4.1-2025-04-14",
         "gpt-4o-2024-08-06",
         "gpt-4o-mini-2024-07-18",
-        "gpt-3.5-turbo-0125",
-        "o1-mini-2024-09-12",
+        "gpt-4.1-mini-2025-04-14",
     ],
     "anthropic": [
         "claude-opus-4-20250514",
         "claude-sonnet-4-20250514",
-        "claude-3-7-sonnet-20250219",
     ],
     "xai": [
         "grok-3-latest",
@@ -159,7 +168,7 @@ private_llm = {
         "gemini-2.5-pro",
         "gemini-2.5-flash",
     ],
-    "mistrail": [
+    "mistral": [
         "pixtral-large-latest",
         "mistral-large-latest",
     ],
