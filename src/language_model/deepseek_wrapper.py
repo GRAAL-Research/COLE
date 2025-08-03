@@ -20,40 +20,6 @@ class DeepSeekWrapper(OpenAIAPILMWrapper):
         )
         self.client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
-    def infer(self, text: str) -> Dict:
-        prompt = self.format_prompt(text)
-        generated_completion = self.language_model_calling(prompt=prompt)
-        if generated_completion is None:
-            final_prediction = None
-        elif self.model_name == "deepseek-chat":
-            # We extract and parse the response (it is a literal string).
-            try:
-                prediction = (
-                    generated_completion.choices[0]
-                    .message.tool_calls[0]
-                    .function.arguments
-                )
-                try:
-                    final_prediction = eval(prediction).get("category")
-                except:
-                    # Case where the prediction is not a proper dictionary.
-                    final_prediction = prediction
-            except:
-                final_prediction = (
-                    generated_completion.choices[0]
-                    .message.content.strip()
-                    .replace(")", "")
-                    .strip()
-                )
-        else:
-            final_prediction = (
-                generated_completion.choices[0]
-                .message.content.strip()
-                .replace(")", "")
-                .strip()
-            )
-        return {"prediction": final_prediction}
-
     def _inner_generate_fn(self, prompt: List):
         return self.client.chat.completions.create(
             model=self.model_name,

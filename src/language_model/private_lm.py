@@ -38,10 +38,7 @@ class RemoteLLMModel(LanguageModel):
             self.model.init_function_calling(
                 labels, tool_choices=self.model.tool_choices
             )
-
-            inference_fn = self.infer
-        else:
-            inference_fn = self.generate
+        inference_fn = self.model.predict
 
         process_dataset = evaluation_dataset.map(
             inference_fn,

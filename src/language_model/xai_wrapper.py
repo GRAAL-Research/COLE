@@ -10,23 +10,6 @@ class XAIWrapper(OpenAIAPILMWrapper):
         super().__init__(model_name=model_name, extra_params=extra_params)
         self.client = OpenAI(api_key=api_key, base_url="https://api.x.ai/v1")
 
-    def infer(self, text: str) -> Dict:
-        prompt = self.format_prompt(text)
-        generated_completion = self.language_model_calling(prompt=prompt)
-        if generated_completion is None:
-            final_prediction = None
-        else:
-            # We extract and parse the response (it is a literal string).
-            prediction = (
-                generated_completion.choices[0].message.tool_calls[0].function.arguments
-            )
-            try:
-                final_prediction = eval(prediction).get("category")
-            except:
-                # Case where the prediction is not a proper dictionary.
-                final_prediction = prediction
-        return {"prediction": final_prediction}
-
     def _inner_generate_fn(self, prompt: List):
         return self.client.chat.completions.create(
             model=self.model_name,

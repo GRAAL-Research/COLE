@@ -12,16 +12,6 @@ class AnthropicWrapper(OpenAIAPILMWrapper):
 
         self.tool_choices = {"type": "tool", "name": "classification"}
 
-    def infer(self, text: str) -> Dict:
-        prompt = self.format_prompt(text)
-        generated_completion = self.language_model_calling(prompt=prompt)
-        if generated_completion is None:
-            final_prediction = None
-        else:
-            # We extract and parse the response (it is a literal string).
-            final_prediction = generated_completion.content[0].input.get("category")
-        return {"prediction": final_prediction}
-
     def _inner_generate_fn(self, prompt: Dict):
         return self.client.messages.create(
             model=self.model_name,
