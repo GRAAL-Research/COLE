@@ -50,8 +50,8 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--llm_split",
-    help="The split of the LLMs list to use. It can be '1', '2' or '3'.",
+    "--skip_first_n",
+    help="The number of LLM to skip in the list of split",
     type=int,
     default=None,
 )
@@ -66,12 +66,13 @@ models = []
 if args.models_name is not None:
     if args.models_name in small_llm:
         models = small_llm[args.models_name]
-    elif args.models_name == "RandomBaselineModel":
-        models = ["RandomBaselineModel"]
     else:
         models = args.models_name.split(",")
 else:
     models = small_llm["all"]
+
+if args.skip_first_n is not None:
+    models = models[args.skip_first_n :]
 
 logging.info("Starting Evaluation")
 
