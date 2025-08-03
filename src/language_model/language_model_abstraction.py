@@ -10,11 +10,8 @@ from src.task.task import Task
 
 
 class LanguageModel(ABC):
-    def __init__(self, model_name: str, inference_callback=None, prompt_only=True):
+    def __init__(self, model_name: str):
         self.name = model_name
-        if inference_callback is not None:
-            self.infer = inference_callback
-        self.prompt_only = prompt_only
 
     @abstractmethod
     def predict(self, evaluation_dataset: Dataset, task: Task) -> List:
