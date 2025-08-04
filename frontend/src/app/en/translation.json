@@ -91,6 +91,7 @@
   "submit_labelDisplayName": "Display Name",
   "submit_placeholderDisplayName": "Leaderboard Name",
   "submit_labelFile": "Predictions ZIP",
+  "submit_labelZip" : "Select your results file",
   "submit_requiredError": "⚠️ Email, display name & ZIP are required.",
   "submit_zipAlert": "Please upload a ZIP (.zip) file.",
   "submit_button": "Submit Your Results",

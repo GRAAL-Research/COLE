@@ -78,11 +78,11 @@
     },
     {
       "question": "COLE est-il multilingue ?",
-      "answer": "Non, COLE est disponible uniquement en français. Le benchmark est spécifiquement conçu pour évaluer les modèles NLU en langue française."
+      "answer": "Non, COLE est disponible uniquement en français. Le benchmark est spécifiquement conçu pour évaluer les modèles en compréhension de la langue française. ( NLU )"
     }
   ],
   "contact_title": "Nous contacter",
-  "contact_paragraph": "Si vous avez des questions, des retours ou des suggestions concernant le benchmark COLE, n’hésitez pas à nous contacter. Nous serons ravis de vous aider — veuillez noter que les délais de réponse peuvent varier.",
+  "contact_paragraph": "Si vous avez des questions, des commentaires ou des suggestions concernant le benchmark COLE, n’hésitez pas à nous contacter. Nous serons ravis de vous aider — veuillez noter que les délais de réponse peuvent varier.",
   "contact_email_label": "Envoyez-nous un email à :",
 
   "submit_formTitle": "Soumettre vos résultats",
@@ -91,6 +91,7 @@
   "submit_labelDisplayName": "Nom affiché",
   "submit_placeholderDisplayName": "Nom au classement",
   "submit_labelFile": "Fichier ZIP de prédictions",
+  "submit_labelZip": "Sélectionnez votre fichier de résultats",
   "submit_requiredError": "⚠️ Email, nom affiché et ZIP sont requis.",
   "submit_zipAlert": "Veuillez téléverser un fichier ZIP (.zip).",
   "submit_button": "Soumettre vos résultats",
