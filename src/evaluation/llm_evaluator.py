@@ -2,6 +2,7 @@ import gc
 import json
 import logging
 import os
+import torch
 from datetime import datetime
 from typing import Dict, List
 
@@ -140,6 +141,7 @@ class ModelEvaluator:
                     del evaluate_dataset
                 if "prompts" in locals():
                     del prompts
+                torch.cuda.empty_cache()
                 gc.collect()
             wandb.log({task.task_name: "Success"})
         self.last_predictions = {
