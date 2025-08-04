@@ -12,7 +12,6 @@ FULL_TABLE_LATEX = "results/full_results_table.tex"
 def main():
     os.makedirs("results", exist_ok=True)
 
-
     api = wandb.Api()
     runs = api.runs(PROJECT_PATH)
 
@@ -36,7 +35,9 @@ def main():
                             em = metrics["exact_match"]
                             f1 = metrics["f1"]
                             key = f"{task_name} (exact_match/f1)"
-                            results_by_model[model_display_name][key] = f"{em:.3f}/{f1:.3f}"
+                            results_by_model[model_display_name][
+                                key
+                            ] = f"{em:.3f}/{f1:.3f}"
                             all_columns.add(key)
                         else:
                             for metric_name, value in metrics.items():
@@ -46,16 +47,21 @@ def main():
                                     all_columns.add(key)
 
     sorted_columns = sorted(all_columns)
-    df = pd.DataFrame.from_dict(results_by_model, orient="index", columns=sorted_columns)
+    df = pd.DataFrame.from_dict(
+        results_by_model, orient="index", columns=sorted_columns
+    )
     df.index.name = "model_name"
     df.reset_index(inplace=True)
-    df["model_name"] = df["model_name"].str.replace("-unsloth-bnb-4bit", "", regex=False)
+    df["model_name"] = df["model_name"].str.replace(
+        "-unsloth-bnb-4bit", "", regex=False
+    )
     df["model_name"] = df["model_name"].str.replace("-bnb-4bit", "", regex=False)
     df["model_name"] = df["model_name"].str.replace("Instruct", "it", regex=False)
     df = df.sort_values("model_name").reset_index(drop=True)
 
     combined_cols = [
-        col for col in df.columns
+        col
+        for col in df.columns
         if df[col].dtype == object and df[col].astype(str).str.contains("/").any()
     ]
     for col in combined_cols:
