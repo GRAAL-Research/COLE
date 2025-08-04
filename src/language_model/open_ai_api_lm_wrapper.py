@@ -68,7 +68,7 @@ class OpenAIAPILMWrapper(ABC):
             time.sleep(5)
             self._try_again(prompt=prompt, retries=retries + 1)
 
-    def _extract_final_prediction(self, generated_completion) -> str:
+    def extract_final_prediction(self, generated_completion) -> str:
         if "claude" in self.model_name.lower():
             if generated_completion is None:
                 final_prediction = None
