@@ -66,9 +66,6 @@ llms = {
     "simplescaling": [
         "simplescaling/s1.1-32B",
     ],
-    "bigscience": [
-        "bigscience/bloom-7b1",
-    ],
     "mistralai": [
         "mistralai/Ministral-8B-Instruct-2410",
     ],
@@ -95,11 +92,6 @@ small_llm = {
         "allenai/OLMo-2-0425-1B-Instruct",
         "allenai/OLMo-2-0425-1B",
     ],
-    "bigscience": [
-        "bigscience/bloom-1b1",
-        "bigscience/bloom-1b7",
-        "bigscience/bloomz-1b1",
-    ],
     "huggingface": [
         "HuggingFaceTB/SmolLM2-1.7B",
         "HuggingFaceTB/SmolLM2-1.7B-Instruct",
@@ -115,10 +107,6 @@ small_llm_2 = {
     "unsloth": [
         "unsloth/Qwen2.5-0.5B-bnb-4bit",
         "unsloth/Qwen2.5-0.5B-Instruct-bnb-4bit",
-    ],
-    "bigscience": [
-        "bigscience/bloom-560m",
-        "bigscience/bloomz-560m",
     ],
     "huggingface": [
         "HuggingFaceTB/SmolLM2-360M",

@@ -46,6 +46,7 @@ def hugging_face_language_model_tokenizer_factory(
 
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
+            max_seq_length=2048,
             token=huggingface_token,
             quantization_config=bnb_configs,
             trust_remote_code=True,
