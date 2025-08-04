@@ -13,71 +13,71 @@ The COLLE dataset suite hosts multiple French NLP benchmark tasks for evaluating
 
 ## Task Descriptions
 
-## Allocine.fr :
-Allo-ciné tests language understanding in sentiment classification by feeding movie reviews which can be either positive and negative, the task consists in giving the correct sentiment for each review.
+- **[Allocine.fr](https://github.com/TheophileBlard/french-sentiment-analysis-with-bert)**  
+  Allo-ciné tests language understanding in sentiment classification by feeding movie reviews which can be either positive and negative, the task consists in giving the correct sentiment for each review.
 
-## DACCORD
-Determine if a French sentence makes sense semantically (binary label).
+- **[DACCORD](https://aclanthology.org/2024.lrec-main.1065/)**  
+  Determine if a French sentence makes sense semantically (binary label).
 
-## FQuAD:
-Fquad is question/answer pair built on high-quality wikipedia articles. The goal of the model in this task is to accurately predict if the answer to the question really can be found in the provided answer.
+- **[FQuAD](https://aclanthology.org/2020.findings-emnlp.107/)**  
+  Fquad is question/answer pair built on high-quality wikipedia articles. The goal of the model in this task is to accurately predict if the answer to the question really can be found in the provided answer.
 
-## FraCaS 
-Fracas is a natural language inference (NLI) taskthe where the model must classify the relationship between a premise and a hypothesis—entailment, contradiction, or neutral—based on complex linguistic phenomena such as quantifiers, plurality, anaphora, and ellipsis.
+- **[FraCaS](https://arxiv.org/abs/2309.10604)**  
+  Fracas is a natural language inference (NLI) taskthe where the model must classify the relationship between a premise and a hypothesis—entailment, contradiction, or neutral—based on complex linguistic phenomena such as quantifiers, plurality, anaphora, and ellipsis.
 
-## Fr-BoolQ
-Boolean question answering in French: answer true/false based on context.
+- **[Fr-BoolQ](https://huggingface.co/datasets/manu/french_boolq)**  
+  Boolean question answering in French: answer true/false based on context.
 
-## GQNLI-fr: 
-The dataset consists of carefully constructed premise-hypothesis pairs that involve quantifier logic (e.g., most, at least, more than half). The goal is to evaluate the model's ability to reason about these expressions and determine whether the hypothesis logically follows from the premise, contradicts it, or is neutral.
+- **[GQNLI-fr](https://aclanthology.org/2024.lrec-main.1065/)**  
+  The dataset consists of carefully constructed premise-hypothesis pairs that involve quantifier logic (e.g. most, at least, more than half). The goal is to evaluate the model's ability to reason about these expressions and determine whether the hypothesis logically follows from the premise, contradicts it, or is neutral.
 
-## MMS-fr 
-MMS-fr is a sentiment analysis task where the model classifies a French text as positive (2), neutral (1), or negative (0), assessing its ability to detect sentiment across diverse domains and sources.
+- **[MMS-fr](https://arxiv.org/abs/2306.07902)**  
+  MMS-fr is a sentiment analysis task where the model classifies a French text as positive (2), neutral (1), or negative (0), assessing its ability to detect sentiment across diverse domains and sources.
 
-## MNLI-nineeleven-Fr-MT 
-French machine-translated version of MNLI using 9/11 context, for entailment classification.
+- **[MNLI-nineeleven-Fr-MT](https://aclanthology.org/N18-1101/)**  
+  French machine-translated version of MNLI using 9/11 context, for entailment classification.
 
-## MultiBLiMP-Fr 
-MultiBLiMP-Fr is a grammatical judgment task where the model must identify the grammatically correct sentence from a minimal pair differing by a single targeted feature, thereby assessing its knowledge of French syntax, morphology, and agreement.
+- **[MultiBLiMP-Fr](https://arxiv.org/abs/2504.02768)**  
+  MultiBLiMP-Fr is a grammatical judgment task where the model must identify the grammatically correct sentence from a minimal pair differing by a single targeted feature, thereby assessing its knowledge of French syntax, morphology, and agreement.
 
-## PAWS-X :
-This task aims to test paraphrase identification by giving two sentences and a label defining if these sentences are equivalent in meaning or not.
+- **[PAWS-X](https://arxiv.org/abs/1908.11828)**  
+  This task aims to test paraphrase identification by giving two sentences and a label defining if these sentences are equivalent in meaning or not.
 
-## PIAF: 
-This task consists of pairs of questions and text answers with information of where in the answer is the truly relevant information.
+- **[PIAF](https://aclanthology.org/2020.lrec-1.673/)**  
+  This task consists of pairs of questions and text answers with information of where in the answer is the truly relevant information.
 
-## QFrBLiMP:
-This task gives the model sentences pairs, the goal is to determine if the sentences are semantically equivalent, or, put more simply, if they mean the same thing, even with slightly different syntax and words.
+- **[QFrBLiMP](https://arxiv.org/abs/2401.67890)**  
+  This task gives the model sentences pairs, the goal is to determine if the sentences are semantically equivalent, or, put more simply, if they mean the same thing, even with slightly different syntax and words.
 
-## QFrCoLA: 
-QFrCoLA is a french dataset made from multiple french language sites such as académie-française.fr and vitrinelinguistique.com. It aims to tests models ability to determine a sentence's acceptability in french on subjects such as grammar and syntax. The answer is a binary label indicating if the sentence is correct or not.
+- **[QFrCoLA](https://vitrinelinguistique.oqlf.gouv.qc.ca/)**  
+  QFrCoLA is a french dataset made from multiple french language sites such as académie-française.fr and vitrinelinguistique.com. It aims to tests models ability to determine a sentence's acceptability in french on subjects such as grammar and syntax. The answer is a binary label indicating if the sentence is correct or not.
 
-## QFrCoRE
-QFrCoRE is a definition matching task where the model selects the correct standard French  definition for a Quebec French expression from a list of candidates.
+- **[QFrCoRE](https://canada-media.ca/expressions-quebecoises/)**  
+  QFrCoRE is a definition matching task where the model selects the correct standard French definition for a Quebec French expression from a list of candidates.
 
-## QFrCoRT
-QFrCoRE is a definition matching task where the model selects the correct standard French  definition for a Quebec French term from a list of candidates.
+- **[QFrCoRT](https://vivreenfrancais.mcgill.ca/capsules-linguistiques/expressions-quebecoises/)**  
+  QFrCoRT is a definition matching task where the model selects the correct standard French definition for a Quebec French term from a list of candidates.
 
-## RTE3-Fr
-French version of RTE3 for textual entailment recognition.
+- **[RTE3-Fr](https://aclanthology.org/2024.lrec-main.1065/)**  
+  French version of RTE3 for textual entailment recognition.
 
-## SICK-fr :
-This task also has pairs of sentences and notes them on 2 dimensions, relatedness and entailment. While relatedness scales from 1 to 5, entailement is a choice between entails, contradicts or neutral.
+- **[SICK-fr](https://huggingface.co/datasets/Lajavaness/SICK-fr)**  
+  This task also has pairs of sentences and notes them on 2 dimensions, relatedness and entailment. While relatedness scales from 1 to 5, entailement is a choice between entails, contradicts or neutral.
 
-## STS22: 
-This task evaluates whether pairs of news articles, written in different languages, cover the same story. It focuses on document-level similarity, where systems rate article pairs on a 4-point scale from most to least similar
+- **[STS22](https://competitions.codalab.org/competitions/33835)**  
+  This task evaluates whether pairs of news articles, written in different languages, cover the same story. It focuses on document-level similarity, where systems rate article pairs on a 4-point scale from most to least similar.
 
-## Wino-X-LM
-Pronoun resolution task: choose between two referents in a sentence with an ambiguous pronoun.
+- **[Wino-X-LM](https://aclanthology.org/2021.emnlp-main.670/)**  
+  Pronoun resolution task: choose between two referents in a sentence with an ambiguous pronoun.
 
-## Wino-X-MT
-Translation-based pronoun resolution: choose which of two French translations uses the correct gendered pronoun.
+- **[Wino-X-MT](https://aclanthology.org/2021.emnlp-main.670/)**  
+  Translation-based pronoun resolution: choose which of two French translations uses the correct gendered pronoun.
 
-## WSD-Fr
-WSD-Fr is a word sense disambiguation task where the model must identify the correct meaning of an ambiguous verb in context, as part of the FLUE benchmark.
+- **[WSD-Fr](https://aclanthology.org/W19-0422/)**  
+  WSD-Fr is a word sense disambiguation task where the model must identify the correct meaning of an ambiguous verb in context, as part of the FLUE benchmark.
 
-## XNLI-fr:
-This task consists of pairs of sentences where the goal is to determine the relation between the two sentences, this relation can be either entailement, neutral or contradiction.
+- **[XNLI-fr](https://aclanthology.org/D18-1269)**  
+  This task consists of pairs of sentences where the goal is to determine the relation between the two sentences, this relation can be either entailement, neutral or contradiction.
 
 
 ## Language
