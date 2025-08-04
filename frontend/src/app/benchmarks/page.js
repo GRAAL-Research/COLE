@@ -168,7 +168,7 @@ function Benchmark({ title, description, metrics, link }) {
       </h3>
       <p className="text-gray-700 mb-2">{description}</p>
       <p className="text-sm text-gray-500">
-        <span className="font-medium">{t('metrics')}</span>: {metrics}
+        <span className="font-medium">{t('metrics')}</span> {metrics}
       </p>
     </div>
   );

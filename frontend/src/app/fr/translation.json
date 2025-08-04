@@ -16,7 +16,7 @@
   "close": "Fermer",
   "details": "Détails",
   "benchmarksIntro": "COLE est constitué de X tâches, chacune visant à tester une ou plusieurs facettes de la compréhension du langage en apprentissage automatique. Ci-dessous, chaque tâche est décrite en détail.",
-  "metrics": "Métriques :",
+  "metrics": "Métrique(s) :",
   "benchmark_alloCine_title": "Allo-ciné.ca",
   "benchmark_alloCine_description": "Allo-ciné teste la compréhension du langage dans la classification des sentiments en fournissant des critiques de films pouvant être positives ou négatives. La tâche consiste à donner le sentiment correct pour chaque critique.",
   "benchmark_daccord_title": "DACCORD",
@@ -59,6 +59,8 @@
   "benchmark_wino_x_mt_description": " Choisir laquelle de deux traductions françaises utilise le bon pronom (il/elle) selon le référent correct de la phrase anglaise.",
   "benchmark_xnli_title": "XNLI - Corpus NLI multilingue",
   "benchmark_xnli_description": "Cette tâche consiste en paires de phrases où l’objectif est de déterminer la relation entre les deux : implication, neutre ou contradiction.",
+  "benchmark_wsd_title": "WSD-Fr : Désambiguïsation lexicale",
+  "benchmark_wsd_description": "WSD-Fr est une tâche de désambiguïsation lexicale dans laquelle le modèle doit identifier le sens correct d’un verbe ambigu en contexte, dans le cadre du benchmark FLUE.",
   "home_whatIsColleTitle": "Qu’est-ce que COLE ?",
   "home_paragraph1": "COLE est un benchmark multidisciplinaire de compréhension du langage naturel en français ( <1>NLU</1> ). Il s’inspire de ses prédécesseurs <3>GLUE</3> et <5>SuperGLUE</5> pour construire un benchmark capable d’évaluer les modèles en langue française sur plusieurs facettes de la compréhension du langage. Consultez <7>notre article</7> pour plus d’informations.",
   "home_paragraph2": "Le benchmark COLE poursuit plusieurs objectifs : d’abord fournir une alternative solide et complète en français pour évaluer les modèles sur des tâches NLU, puis offrir à l’utilisateur plusieurs jeux de données, tous utilisables via les bibliothèques HuggingFace, pour entraîner ou affiner des modèles sur des tâches spécifiques.",
@@ -84,7 +86,6 @@
   "contact_title": "Nous contacter",
   "contact_paragraph": "Si vous avez des questions, des commentaires ou des suggestions concernant le benchmark COLE, n’hésitez pas à nous contacter. Nous serons ravis de vous aider — veuillez noter que les délais de réponse peuvent varier.",
   "contact_email_label": "Envoyez-nous un email à :",
-
   "submit_formTitle": "Soumettre vos résultats",
   "submit_labelEmail": "Votre email",
   "submit_placeholderEmail": "vous@exemple.com",
@@ -102,10 +103,8 @@
   "submit_errorTitle": "Erreur ⚠️",
   "submit_errorMessage": "Erreur de soumission : {{errorMessage}}",
   "submit_closeButton": "Fermer",
-
   "results_default_title": "Pas encore de résultats",
   "results_default_message": "Veuillez soumettre un fichier ZIP pour générer les résultats du benchmark.",
-
   "results_loading": "⏳ Chargement des résultats...",
   "results_page_title": "📊 Résultats pour {{displayName}}",
   "results_download": "Télécharger le JSON",
@@ -127,7 +126,6 @@
   "nav_results": "Résultats",
   "nav_leaderboard": "Classement COLE",
   "nav_datasets": "Nos  données"
-
 }
 
 
