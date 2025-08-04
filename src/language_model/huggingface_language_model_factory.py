@@ -21,13 +21,17 @@ def hugging_face_language_model_tokenizer_factory(
             bnb_4bit_compute_dtype=compute_dtype,
             bnb_4bit_use_double_quant=True,
         )
+        if "chocolatine" in model_name.lower():
+            attn_implementation = "flash_attention_2"
+        else:
+            attn_implementation = "sdpa"
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
             token=huggingface_token,
             quantization_config=bnb_configs,
             load_in_8bit=False,  # Since we use 4bits
             trust_remote_code=True,
-            attn_implementation="flash_attention_2",
+            attn_implementation=attn_implementation,
             torch_dtype=torch.float16,
         )
         if "chocolatine" in model_name.lower():

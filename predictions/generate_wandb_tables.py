@@ -41,10 +41,11 @@ for run in runs:
                         all_columns.add(display_key)
                     else:
                         for metric_name, value in metrics.items():
-                            if isinstance(value, (float, int)):
-                                display_key = f"{task_name} ({metric_name})"
-                                task_data[display_key] = value
-                                all_columns.add(display_key)
+                            if "warning" not in metric_name:
+                                if isinstance(value, (float, int)):
+                                    display_key = f"{task_name} ({metric_name})"
+                                    task_data[display_key] = value * 100
+                                    all_columns.add(display_key)
 
     results_by_model[model_display_name] = task_data
 
