@@ -68,30 +68,47 @@ class OpenAIAPILMWrapper(ABC):
             time.sleep(5)
             self._try_again(prompt=prompt, retries=retries + 1)
 
-    @staticmethod
-    def extract_final_prediction(generated_completion) -> str:
-        # Something the completion is incomplete, thus we validate that components are there.
-        if generated_completion is None:
-            final_prediction = None
-        elif generated_completion.choices is None:
-            final_prediction = None
-        elif generated_completion.choices[0].message is None:
-            final_prediction = None
-        elif generated_completion.choices[0].message.tool_calls is None:
-            # No tools call, but potentially a response in the raw message content.
-            final_prediction = (
-                generated_completion.choices[0]
-                .message.content.strip()
-                .replace(")", "")
-                .strip()
-            )
+    def _extract_final_prediction(self, generated_completion) -> str:
+        if "claude" in self.model_name.lower():
+            if generated_completion is None:
+                final_prediction = None
+            elif generated_completion.content is None:
+                final_prediction = None
+            elif generated_completion.content[0].input is None:
+                final_prediction = None
+            else:
+                try:
+                    final_prediction = generated_completion.content[0].input.get(
+                        "category"
+                    )
+                except:
+                    # Case where the prediction is not a proper dictionary.
+                    final_prediction = generated_completion.content[0].input
         else:
-            prediction = (
-                generated_completion.choices[0].message.tool_calls[0].function.arguments
-            )
-            try:
-                final_prediction = eval(prediction).get("category")
-            except:
-                # Case where the prediction is not a proper dictionary.
-                final_prediction = prediction
+            # Something the completion is incomplete, thus we validate that components are there.
+            if generated_completion is None:
+                final_prediction = None
+            elif generated_completion.choices is None:
+                final_prediction = None
+            elif generated_completion.choices[0].message is None:
+                final_prediction = None
+            elif generated_completion.choices[0].message.tool_calls is None:
+                # No tools call, but potentially a response in the raw message content.
+                final_prediction = (
+                    generated_completion.choices[0]
+                    .message.content.strip()
+                    .replace(")", "")
+                    .strip()
+                )
+            else:
+                prediction = (
+                    generated_completion.choices[0]
+                    .message.tool_calls[0]
+                    .function.arguments
+                )
+                try:
+                    final_prediction = eval(prediction).get("category")
+                except:
+                    # Case where the prediction is not a proper dictionary.
+                    final_prediction = prediction
         return final_prediction
