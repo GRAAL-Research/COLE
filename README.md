@@ -279,23 +279,22 @@ The language data in COLE is in French .
 ```
 ## QFrCoRT
 ```json
-
 {
-  "terme": "Avoir la chienne",
+  "terme": "Adonner",
   "choices": [
-    "Prendre une chaise et s'asseoir.",
-    "Avoir du plaisir, parfois avec une connotation sexuelle.",
-    "Prépare-toi, ça va brasser.",
-    "Tomber amoureux.",
-    "Être en pleine forme.",
-    "Critiquer sévèrement.",
-    "Personne inefficace, qui ne travaille pas bien.",
-    "Il se comporte mal en public.",
-    "Se détendre, arrêter de s'énerver.",
-    "Avoir peur."
+    "se payer du bon temps",
+    "tu sais",
+    "Voici quelques éléments typiques pour décrire l'hiver québécois :La bordée de neige(tempête de neige) de la fin décembre nous a laissédes bancs de neige(congères) sur le bord des rues. Nous avons eu quelques épisodes depoudrerie(blizzard) qui ont rendu les déplacements difficiles, surtout en voiture. Mais c'est vraimentla glace noire(verglas) qui cause le plus d'accidents. Il faudra attendre jusqu'auredoux(remontée des températures) pour que la neige et la glace se transforment ensloche(gadoue constituée de neige fondante et d'eau) puis disparaissent au retour du printemps.",
+    "En hiver, il ne faut pas s'encabaner!Ce joli verbe vient du nom \" cabane \" qui désigne un petit espace de rangement. S'encabaner, c'est donc \" rester dans sa cabane (sa maison), ne pas sortir, rester cloitré chez soi \". Mais comme le disaient les membres du groupe Mes Aïeux dans leur chanson \" Dégénération \" : \" Il ne faut pas rester encabané! \" (surtout en hiver).",
+    "On ne parle pas ici de la neige de la veille.Cette expression signifie \" avoir de l'expérience,voir venir les choses \".",
+    "Ça n'a étrangement absolument rien à voir avec le fait qu'il manque quelque chose. Ben manque se veut plutôt un synonyme de \" peut-être \" , \" sûrement \" ou \" probablement \" . Particulièrement utilisé du côté nord de la Gaspésie et sur la pointe, ben manque que tu risques de l'entendre si tu te promènes dans ces coins-là.",
+    "gant de toilette",
+    "Unpoisson d'avrilest une plaisanterie que l'on fait le 1er avril à une connaissance.",
+    "avoir de la monnaie",
+    "Le verbe \" adonner \" s'utilise pour parler de quelque chose qui se produit de façon fortuite, d'une coïncidence. Il peut avoir différentes nuances de sens selon le contexte.Exemples : \" Tu vas à Québec cette fin de semaine? Ça adonne que moi aussi! Faisons du covoiturage! \"\" Je devais commencer mes cours de zumba ce soir mais ça adonne mal : mon fils est malade! \""
   ],
   "correct_index": 9,
-  "reference": "https://canada-media.ca/expressions-quebecoises/"
+  "reference": "https://vivreenfrancais.mcgill.ca/capsules-linguistiques/expressions-quebecoises/"
 }
 ```
 ## RTE3-Fr
