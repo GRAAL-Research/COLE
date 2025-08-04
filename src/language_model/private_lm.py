@@ -16,10 +16,10 @@ class RemoteLLMModel(LanguageModel):
     """
 
     def generate(self, rows: LazyRow) -> Union[str, List[str]]:
-        return self.model.generate(rows["text"])
+        return self.model.predict(rows["text"])
 
     def infer(self, rows: LazyRow) -> Union[str, List[str]]:
-        return self.model.infer(rows["text"])
+        return self.model.predict(rows["text"])
 
     def __init__(
         self,
@@ -38,7 +38,9 @@ class RemoteLLMModel(LanguageModel):
             self.model.init_function_calling(
                 labels, tool_choices=self.model.tool_choices
             )
-        inference_fn = self.model.predict
+            inference_fn = self.infer
+        else:
+            inference_fn = self.generate
 
         process_dataset = evaluation_dataset.map(
             inference_fn,

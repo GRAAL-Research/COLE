@@ -2,8 +2,6 @@ llms = {
     "unsloth": [
         "unsloth/Meta-Llama-3.1-8B-bnb-4bit",
         "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
-        "unsloth/Meta-Llama-3.1-70B",
-        "unsloth/Meta-Llama-3.1-70B-Instruct",
         "unsloth/Llama-3.2-1B-bnb-4bit",
         "unsloth/Llama-3.2-1B-Instruct-bnb-4bit",
         "unsloth/Llama-3.2-3B-unsloth-bnb-4bit",
@@ -26,8 +24,6 @@ llms = {
         "unsloth/Qwen2.5-14B-Instruct-bnb-4bit",
         "unsloth/Qwen2.5-32B-bnb-4bit",
         "unsloth/Qwen2.5-32B-Instruct-bnb-4bit",
-        "unsloth/Qwen2.5-72B-Instruct-bnb-4bit",
-        "unsloth/Qwen2.5-72B-bnb-4bit",
         "unsloth/DeepSeek-R1-Distill-Qwen-7B-unsloth-bnb-4bit",
         "unsloth/DeepSeek-R1-Distill-Llama-8B-unsloth-bnb-4bit",
         "unsloth/DeepSeek-R1-Distill-Qwen-14B-unsloth-bnb-4bit",
@@ -179,7 +175,10 @@ for key in private_llm.keys():
     if isinstance(private_llm[key], list) and key != "all":
         private_llm["all"].extend(private_llm[key])
 
+# from collections import Counter
+#
 # import pandas
+#
 # print(len(llms["all"]))
 # print(len(set(llms["all"])))
 # print(Counter(llms["all"]))
