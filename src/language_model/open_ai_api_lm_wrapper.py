@@ -63,7 +63,8 @@ class OpenAIAPILMWrapper(ABC):
     def _try_again(self, prompt: List, retries: int = 0):
         generated_completion = None
         if retries > self.max_retries:
-            logging.warning(f"Max retries exceeded: {retries}.")
+            logging_message = f"Max retries exceeded: {retries}."
+            logging.warning(logging_message)
             return generated_completion
         try:
             generated_completion = self._inner_generate_fn(prompt=prompt)
@@ -115,12 +116,22 @@ class OpenAIAPILMWrapper(ABC):
                 except:
                     # Case where the prediction is not a proper dictionary.
                     final_prediction = prediction
-        final_prediction = final_prediction.split(":")[-1].strip().replace(" ", "")
+        if "La réponse est" in final_prediction or ":" in final_prediction:
+            final_prediction = final_prediction.split(":")[-1].strip().replace(" ", "")
 
-        try:
-            final_prediction = int(final_prediction)
-        except:
-            final_prediction = None
+        if (
+            "0" in final_prediction
+            or "1" in final_prediction
+            or "2" in final_prediction
+            or "3" in final_prediction
+            or "4" in final_prediction
+            or "5" in final_prediction
+            or "6" in final_prediction
+        ):
+            try:
+                final_prediction = int(final_prediction)
+            except:
+                final_prediction = None
         if final_prediction is None:
             final_prediction = ""
         return final_prediction

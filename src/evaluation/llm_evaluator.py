@@ -2,10 +2,10 @@ import gc
 import json
 import logging
 import os
-import torch
 from datetime import datetime
 from typing import Dict, List
 
+import torch
 import wandb
 from datasets import Dataset
 from tqdm import tqdm
