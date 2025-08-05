@@ -16,14 +16,14 @@ class Dataset:
     """
 
     def __init__(
-        self,
-        name: str,
-        description: str,
-        possible_ground_truths: Union[List[str], List[int], List[float]],
-        hugging_face_repo: str,
-        line_to_truth_fn: Callable,
-        line_to_prompt_fn: Callable,
-        line_to_data_fn: Callable,
+            self,
+            name: str,
+            description: str,
+            possible_ground_truths: Union[List[str], List[int], List[float]],
+            hugging_face_repo: str,
+            line_to_truth_fn: Callable,
+            line_to_prompt_fn: Callable,
+            line_to_data_fn: Callable,
     ):
         self._dataset = None
         self.name = name
@@ -78,19 +78,19 @@ class Dataset:
             lines.append(f"{key}: {value}")
         return "\n".join(lines)
 
-    class EchoDict:
-        """Helper class for building prompt templates,always returns the accessed key"""
-
-        def __getitem__(self, key):
-            return key
-
     def __len__(self):
         return len(self.ground_truths)
 
     def __getitem__(self, index: Union[int, slice]):
         if isinstance(index, slice):
-            get_item_data = self.ground_truths[index.start : index.stop]
+            get_item_data = self.ground_truths[index.start: index.stop]
         else:
             get_item_data = self.ground_truths[index]
 
         return get_item_data
+
+    class EchoDict:
+        """Helper class for building prompt templates,always returns the accessed key"""
+
+        def __getitem__(self, key):
+            return key

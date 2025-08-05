@@ -9,6 +9,8 @@ from src.task.task_factory import Task
 def compute_tasks_ratings(tasks: List[Task], submission: Dict) -> Dict:
     """
     Method to compute the tasks ratings.
+    :param tasks: list of tasks
+    :param submission: submission dictionary
     """
 
     # We merge the tasks dictionary for simpler handling.
