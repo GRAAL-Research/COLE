@@ -42,6 +42,7 @@ FRONTEND_DIR = BASE_DIR / "frontend"
 
 @asynccontextmanager
 async def lifespan(application: FastAPI = None):  # pylint: disable=unused-argument
+    """Called before the backend comes online, is used to load datasets in memory."""
     # Load the ML model
     try:
         token = os.environ.get("HF_TOKEN")
@@ -74,6 +75,11 @@ async def submit(
     predictions_zip: UploadFile = File(...),
     display_name: str = Form(...),
 ):
+    """Route for making submissions with user generated results.
+    :param email : The email of the user's submission
+    :param predictions_zip : The zip file of the user's predictions'
+    :param display_name : The display name associated with the user's submission'
+    """
     logging.info("Starting submission")
     info_message = f"Submission from {email!r} as {display_name!r}."
     logging.info(info_message)
@@ -111,6 +117,7 @@ async def submit(
 
 @lru_cache(maxsize=1)
 def get_leaderboard_entries() -> List[Dict[str, Any]]:
+    """Returns all entries currently in the leaderboard."""
 
     entries: List[Dict[str, Any]] = []
 

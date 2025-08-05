@@ -18,6 +18,8 @@ tasks_name = [
 
 
 def validate_submission_template(dictionary: Dict) -> None:
+    """Ensures the dictionnary follows the correct format.
+    :param dictionary: Dictionary to validate."""
     if dictionary.get("model_name", None) is None:
         error = "The submission is missing a model name."
         logging.error(error)
@@ -64,6 +66,8 @@ def validate_submission_tasks_name(dictionary: Dict) -> None:
 
 
 def validate_submission_json(dictionary: Dict) -> None:
+    """Validates that the submitted json is in the correct format.
+    :param dictionary: Dictionary to validate."""
     task_payload = dictionary.get("tasks")
 
     for task in task_payload:
