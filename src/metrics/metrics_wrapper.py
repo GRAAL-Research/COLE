@@ -22,7 +22,7 @@ class AccuracyWrapper(Metric):
             # Case where some predictions are longer than two digits (i.e. 10, 11, 1).
             # Thus, we extract the first two characters of the string, strip it and except it to be int.
             predictions = [
-                prediction[:1].strip().replace(" ", "") for prediction in predictions
+                prediction[:2].strip().replace(" ", "") for prediction in predictions
             ]
 
         return self._metric.compute(predictions=predictions, references=references)
@@ -37,7 +37,7 @@ class PearsonCorrelation(Metric):
             # Case where some predictions are longer than two digits (i.e. 10, 11, 1).
             # Thus, we extract the first two characters of the string, strip it and except it to be int.
             predictions = [
-                prediction[:1].strip().replace(" ", "") for prediction in predictions
+                prediction[:2].strip().replace(" ", "") for prediction in predictions
             ]
 
         return self._metric.compute(
