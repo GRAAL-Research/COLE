@@ -179,6 +179,7 @@ class ModelEvaluator:
         os.makedirs(save_dir_path, exist_ok=True)
         full_path = os.path.join(save_dir_path, filename)
         if os.path.isfile(full_path):
+            logging.info("Appending results to previous results file.")
             try:
                 with open(full_path, "r", encoding="utf-8") as f:
                     data = json.load(f)

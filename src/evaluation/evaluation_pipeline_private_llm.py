@@ -85,6 +85,7 @@ for model_name in tqdm(
         )
 
         predictions_payload = evaluator.evaluate_subset(model, tasks, args.max_examples)
+        logging.info("Writing predictions to WandB.")
         wandb.log(predictions_payload)
 
         logging.info("Saving results")
