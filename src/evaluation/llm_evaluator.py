@@ -15,7 +15,7 @@ from src.task.task_factory import tasks_factory
 
 class ModelEvaluator:
     """
-    The model evaluator acts as a pipeline for evaluation models on tasks available from tasks_factory.
+    The model evaluator acts as a pipeline for evaluating models on tasks available from tasks_factory.
     """
 
     def __init__(self):

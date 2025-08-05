@@ -78,12 +78,6 @@ class Dataset:
             lines.append(f"{key}: {value}")
         return "\n".join(lines)
 
-    class EchoDict:
-        """Helper class for building prompt templates,always returns the accessed key"""
-
-        def __getitem__(self, key):
-            return key
-
     def __len__(self):
         return len(self.ground_truths)
 
@@ -94,3 +88,9 @@ class Dataset:
             get_item_data = self.ground_truths[index]
 
         return get_item_data
+
+    class EchoDict:
+        """Helper class for building prompt templates,always returns the accessed key"""
+
+        def __getitem__(self, key):
+            return key
