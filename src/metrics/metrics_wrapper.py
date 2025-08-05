@@ -18,6 +18,13 @@ class AccuracyWrapper(Metric):
         self._metric = load("accuracy")
 
     def compute(self, predictions: List, references: List, **kwargs) -> Dict:
+        if sum([len(prediction.strip()) > 2 for prediction in predictions]) > 0:
+            # Case where some predictions are longer than two digits (i.e. 10, 11, 1).
+            # Thus, we extract the first two characters of the string, strip it and except it to be int.
+            predictions = [
+                prediction[:1].strip().replace(" ", "") for prediction in predictions
+            ]
+
         return self._metric.compute(predictions=predictions, references=references)
 
 
@@ -26,6 +33,13 @@ class PearsonCorrelation(Metric):
         self._metric = load("pearsonr")
 
     def compute(self, predictions: List, references: List) -> Dict:
+        if sum([len(prediction.strip()) > 2 for prediction in predictions]) > 0:
+            # Case where some predictions are longer than two digits (i.e. 10, 11, 1).
+            # Thus, we extract the first two characters of the string, strip it and except it to be int.
+            predictions = [
+                prediction[:1].strip().replace(" ", "") for prediction in predictions
+            ]
+
         return self._metric.compute(
             predictions=predictions, references=references, return_pvalue=False
         )
