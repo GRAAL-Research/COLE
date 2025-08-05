@@ -148,6 +148,7 @@ class ModelEvaluator:
                 torch.cuda.empty_cache()
                 gc.collect()
             wandb.log({task.task_name: "Success"})
+        logging.info("Finished evaluating tasks.")
         self.last_predictions = {
             "model_name": model.name,
             "model_url": f"https://huggingface.co/{model.name}",
