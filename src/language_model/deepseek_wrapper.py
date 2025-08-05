@@ -19,6 +19,7 @@ class DeepSeekWrapper(OpenAIAPILMWrapper):
             use_function_calling=use_function_calling,
         )
         self.client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+        self.tool_choices = "auto"
 
     def _inner_generate_fn(self, prompt: List):
         return self.client.chat.completions.create(
