@@ -6,8 +6,18 @@ from src.language_model.open_ai_api_lm_wrapper import OpenAIAPILMWrapper
 
 
 class OpenAIWrapper(OpenAIAPILMWrapper):
-    def __init__(self, model_name: str, api_key: str, extra_params: Dict):
-        super().__init__(model_name=model_name, extra_params=extra_params)
+    def __init__(
+        self,
+        model_name: str,
+        api_key: str,
+        extra_params: Dict,
+        use_function_calling: bool,
+    ):
+        super().__init__(
+            model_name=model_name,
+            extra_params=extra_params,
+            use_function_calling=use_function_calling,
+        )
         self.client = OpenAI(api_key=api_key)
 
     def _inner_generate_fn(self, prompt: List):

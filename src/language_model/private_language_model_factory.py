@@ -45,8 +45,15 @@ def private_language_model_factory(model_name):
 
             else:
                 extra_params = {}
+            if "mini" in model_name:
+                use_function_calling = False
+            else:
+                use_function_calling = True
             model = OpenAIWrapper(
-                model_name=model_name, api_key=api_key, extra_params=extra_params
+                model_name=model_name,
+                api_key=api_key,
+                extra_params=extra_params,
+                use_function_calling=use_function_calling,
             )
         elif model_name in private_llm["anthropic"]:
             extra_params = {"max_tokens": 5012}

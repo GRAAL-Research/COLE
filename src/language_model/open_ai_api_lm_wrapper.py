@@ -115,4 +115,12 @@ class OpenAIAPILMWrapper(ABC):
                 except:
                     # Case where the prediction is not a proper dictionary.
                     final_prediction = prediction
+        final_prediction = final_prediction.split(":")[-1].strip().replace(" ", "")
+
+        try:
+            final_prediction = int(final_prediction)
+        except:
+            final_prediction = None
+        if final_prediction is None:
+            final_prediction = ""
         return final_prediction
