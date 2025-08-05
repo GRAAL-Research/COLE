@@ -1,6 +1,7 @@
 # pylint: disable=unused-argument
 
 import abc
+import logging
 from abc import ABC
 from typing import List, Dict
 
@@ -21,6 +22,9 @@ class AccuracyWrapper(Metric):
         if sum([len(prediction.strip()) > 2 for prediction in predictions]) > 0:
             # Case where some predictions are longer than two digits (i.e. 10, 11, 1).
             # Thus, we extract the first two characters of the string, strip it and except it to be int.
+            logging.warning(
+                "Applied normalization of predictions due to potential non int response."
+            )
             predictions = [
                 prediction[:2].strip().replace(" ", "") for prediction in predictions
             ]
@@ -34,6 +38,9 @@ class PearsonCorrelation(Metric):
 
     def compute(self, predictions: List, references: List) -> Dict:
         if sum([len(prediction.strip()) > 2 for prediction in predictions]) > 0:
+            logging.warning(
+                "Applied normalization of predictions due to potential non int response."
+            )
             # Case where some predictions are longer than two digits (i.e. 10, 11, 1).
             # Thus, we extract the first two characters of the string, strip it and except it to be int.
             predictions = [
