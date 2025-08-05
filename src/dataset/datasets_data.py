@@ -118,9 +118,9 @@ datasets = {
         name=Tasks.STS22.value,
         description="Semantic textual similarity task : "
         "Predict how similar two sentences are to each other (0 to 5)",
-        possible_ground_truths=[0, 1, 2, 3, 4, 5],
+        possible_ground_truths=["0", "1", "2", "3", "4", "5"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: int(line["score"]),
+        line_to_truth_fn=lambda line: str(line["score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
             "À quel point les deux phrases suivantes sont-elles similaires ? Donne une note entière de 0 à 5."
@@ -328,7 +328,7 @@ datasets = {
         "to the question or does not answer the question. (0)",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
-        line_to_truth_fn=lambda line: str(int(line["label"])),
+        line_to_truth_fn=lambda line: str(line["label"]),
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
             .add_premise(

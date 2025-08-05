@@ -1,4 +1,5 @@
 # pylint: disable=inconsistent-return-statements
+import logging
 import time
 from abc import ABC, abstractmethod
 from typing import List, Dict
@@ -26,12 +27,14 @@ class OpenAIAPILMWrapper(ABC):
 
     def init_function_calling(self, labels: List[str], tool_choices: str) -> None:
         if self.use_function_calling:
-            open_ai_call = (
+            open_ai_api_call = (
                 "claude" not in self.model_name.lower()
             )  # False for Anthropic model, True for the rest
             self._extra_params.update(
                 init_function_calling(
-                    labels=labels, tool_choices=tool_choices, open_ai_call=open_ai_call
+                    labels=labels,
+                    tool_choices=tool_choices,
+                    open_ai_api_call=open_ai_api_call,
                 )
             )
 
@@ -60,6 +63,7 @@ class OpenAIAPILMWrapper(ABC):
     def _try_again(self, prompt: List, retries: int = 0):
         generated_completion = None
         if retries > self.max_retries:
+            logging.warning(f"Max retries exceeded: {retries}.")
             return generated_completion
         try:
             generated_completion = self._inner_generate_fn(prompt=prompt)

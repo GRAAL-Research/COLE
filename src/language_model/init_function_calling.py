@@ -1,8 +1,8 @@
 from typing import List
 
 
-def init_function_calling(labels: List[str], tool_choices: str, open_ai_call: bool):
-    if open_ai_call:
+def init_function_calling(labels: List[str], tool_choices: str, open_ai_api_call: bool):
+    if open_ai_api_call:
         call = {
             "tools": [
                 {
