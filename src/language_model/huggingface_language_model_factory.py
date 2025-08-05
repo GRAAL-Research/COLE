@@ -3,7 +3,6 @@ from transformers import (
     AutoTokenizer,
     BitsAndBytesConfig,
     AutoModelForCausalLM,
-    AutoModelForMaskedLM,
 )
 from unsloth import FastLanguageModel
 

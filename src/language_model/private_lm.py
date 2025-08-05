@@ -49,4 +49,4 @@ class RemoteLLMModel(LanguageModel):
             remove_columns="text",
         )
 
-        return process_dataset["prediction"]
+        return list(process_dataset["prediction"])
