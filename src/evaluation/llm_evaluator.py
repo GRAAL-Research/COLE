@@ -8,6 +8,7 @@ from typing import Dict, List
 
 import wandb
 from datasets import Dataset
+from tqdm import tqdm
 
 from src.language_model.language_model_abstraction import LanguageModel
 from src.task.task import Task
@@ -33,7 +34,9 @@ class ModelEvaluator:
         """
         metrics = []
 
-        for task_dict in self.last_predictions["tasks"]:
+        for task_dict in tqdm(
+            self.last_predictions["tasks"], desc="Computing metrics."
+        ):
             task_name, preds = list(task_dict.items())[0]
             if not preds:
                 warning_message = f"Task '{task_name}' ignored due to no predictions"
