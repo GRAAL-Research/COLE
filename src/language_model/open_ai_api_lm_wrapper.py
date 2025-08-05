@@ -118,20 +118,6 @@ class OpenAIAPILMWrapper(ABC):
                     final_prediction = prediction
         if "La réponse est" in final_prediction or ":" in final_prediction:
             final_prediction = final_prediction.split(":")[-1].strip().replace(" ", "")
-
-        if (
-            "0" in final_prediction
-            or "1" in final_prediction
-            or "2" in final_prediction
-            or "3" in final_prediction
-            or "4" in final_prediction
-            or "5" in final_prediction
-            or "6" in final_prediction
-        ):
-            try:
-                final_prediction = int(final_prediction)
-            except:
-                final_prediction = None
         if final_prediction is None:
             final_prediction = ""
         return final_prediction

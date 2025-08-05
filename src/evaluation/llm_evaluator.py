@@ -35,7 +35,7 @@ class ModelEvaluator:
         metrics = []
 
         for task_dict in tqdm(
-            self.last_predictions["tasks"], desc="Computing metrics."
+            self.last_predictions["tasks"], desc="Computing metrics: "
         ):
             task_name, preds = list(task_dict.items())[0]
             if not preds:
