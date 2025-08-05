@@ -4,6 +4,7 @@ from typing import List
 
 class PromptBuilder:
     """Builder class for creating prompt strings with dynamic data."""
+
     def __init__(self):
         self.premise: List[str] = []
         self.end: List[str] = []
@@ -29,7 +30,9 @@ class PromptBuilder:
     def build(self):
         """Builds and returns the prompt as a string based on data, premise and end that were added to the builder."""
         if len(self.data) == 0:
-            logging.warning("This prompt did not contain any data, was that intentional ?")
+            logging.warning(
+                "This prompt did not contain any data, was that intentional ?"
+            )
 
         data = "/n".join(self.data)
         if self.data_only:
