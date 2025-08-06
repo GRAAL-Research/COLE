@@ -117,18 +117,16 @@ class OpenAIAPILMWrapper(ABC):
                     # Case where the prediction is not a proper dictionary.
                     final_prediction = prediction
 
-        # To handle case where the LLM return the premise to the last query.
-        if "La réponse est" in final_prediction or ":" in final_prediction:
-            final_prediction = final_prediction.split(":")[-1].strip().replace(" ", "")
-
-        # Case were final prediction is None, thus we return -1 to be able to be converted
-        # as int if necessary (infer-case) or left as string (generate-case).
-        # Thus, in both case, it will not yield better results.
         if final_prediction is None:
+            # Case were final prediction is None, thus we return -1 to be able to be converted
+            # as int if necessary (infer-case) or left as string (generate-case).
+            # Thus, in both case, it will not yield better results.
             final_prediction = "-1"
-
-        # Case where the response is accompanied by other string elements, but it should be a single digit.
-        if "0" in final_prediction:
+        elif "La réponse est" in final_prediction or ":" in final_prediction:
+            # To handle case where the LLM return the premise to the last query.
+            final_prediction = final_prediction.split(":")[-1].strip().replace(" ", "")
+        # Cases where the response is accompanied by other string elements, but it should be a single digit.
+        elif "0" in final_prediction:
             final_prediction = "0"
         elif "1" in final_prediction:
             final_prediction = "1"
