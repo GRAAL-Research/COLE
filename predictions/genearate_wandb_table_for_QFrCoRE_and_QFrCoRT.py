@@ -44,7 +44,7 @@ def main():
                     if "accuracy" in metrics or "acc" in metrics:
                         acc_key = "accuracy" if "accuracy" in metrics else "acc"
                         col = f"{task_name} accuracy"
-                        results_by_model[model_display_name][col] = metrics[acc_key]
+                        results_by_model[model_display_name][col] = metrics[acc_key] * 100
 
     df = pd.DataFrame.from_dict(results_by_model, orient="index")
     df.index.name = "model_name"
