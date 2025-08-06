@@ -71,27 +71,22 @@ def generate_size_vs_score_plot(
         if "(accuracy)" in c and df[c].max() <= 1.0:
             df[c] = df[c] * 100
 
-    # Liste des colonnes numériques sauf celles à exclure
     exclude = [model_col, "model_size"]
     metrics = [
         c for c in df.select_dtypes(include=[np.number]).columns if c not in exclude
     ]
 
-    # Calcul de la moyenne générale
     df["mean_score"] = df[metrics].mean(axis=1)
 
-    # Extraire et calculer baseline AVANT de filtrer les modèles sans taille
     baseline_row = df[df[model_col] == "RandomBaselineModel"]
     if not baseline_row.empty:
         baseline_score = baseline_row[metrics].mean(axis=1).iloc[0]
     else:
         baseline_score = None
 
-    # Enlever les modèles sans taille (sauf baseline)
     df = df[df["model_size"].notna()]
     df.sort_values(by=model_col, inplace=True)
 
-    # Tracer
     X = np.log10(df["model_size"])
     Y = df["mean_score"]
     slope, intercept = np.polyfit(X, Y, 1)
@@ -102,7 +97,6 @@ def generate_size_vs_score_plot(
     plt.scatter(df["model_size"], df["mean_score"], color="#1f77b4", label="Models")
     plt.plot(df["model_size"], line, color="#0057a3", label="Linear regression")
 
-    # Ligne horizontale pour le baseline
     if baseline_score is not None:
         plt.axhline(
             baseline_score,
