@@ -79,9 +79,9 @@ datasets = {
         .add_end(
             (
                 r"Réponds uniquement par :\n"
-                r"0 — si la deuxième phrase implique la première,\n"
-                r"1 — si la relation est neutre,\n"
-                r"2 — s'il y a contradiction.\n"
+                r"0 - si la deuxième phrase implique la première,\n"
+                r"1 - si la relation est neutre,\n"
+                r"2 - s'il y a contradiction.\n"
                 "Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
@@ -103,9 +103,9 @@ datasets = {
         .add_data(f"Phrase A : {line['sentence_A']}\nPhrase B : {line['sentence_B']}")
         .add_end(
             "Réponds uniquement par un chiffre :\n"
-            "0 si les phrases se contredisent,\n"
-            "1 si leur relation est neutre,\n"
-            "2 si la deuxième phrase découle logiquement de la première.\n"
+            "0 - si la deuxième phrase découle logiquement de la première,\n"
+            "1 - si leur relation est neutre,\n"
+            "2 - si les phrases se contredisent.\n"
             "La réponse est :"
         )
         .build(),
@@ -223,9 +223,9 @@ datasets = {
         .add_end(
             (
                 r"Réponds uniquement par :\n"
-                r"0 — si la deuxième phrase implique la première,\n"
-                r"1 — si la relation est neutre,\n"
-                r"2 — s'il y a contradiction.\n"
+                r"0 - si la deuxième phrase implique la première,\n"
+                r"1 - si la relation est neutre,\n"
+                r"2 - s'il y a contradiction.\n"
                 r"Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
@@ -248,7 +248,7 @@ datasets = {
         )
         .add_data(
             "\n".join(
-                f"{idx} — {definition}"
+                f"{idx} - {definition}"
                 for idx, definition in enumerate(line["choices"])
             )
         )
@@ -278,7 +278,7 @@ datasets = {
         )
         .add_data(
             "\n".join(
-                f"{idx} — {definition}"
+                f"{idx} - {definition}"
                 for idx, definition in enumerate(line["choices"])
             )
         )
@@ -309,8 +309,8 @@ datasets = {
             .add_data(f"Deuxième phrase : {line['hypothesis']}")
             .add_end(
                 "Réponds uniquement par :\n"
-                "0 — si les deux phrases sont compatibles (elles expriment la même information ou sont cohérentes),\n"
-                "1 — s'il y a contradiction entre les deux phrases.\n"
+                "0 - si les deux phrases sont compatibles (elles expriment la même information ou sont cohérentes),\n"
+                "1 - s'il y a contradiction entre les deux phrases.\n"
                 "Réponds uniquement par 0 ou 1. La réponse est :"
             )
             .build()
@@ -362,9 +362,9 @@ datasets = {
         .add_end(
             (
                 r"Réponds uniquement par :\n"
-                r"0 — si la deuxième phrase implique la première,\n"
-                r"1 — si la relation est neutre,\n"
-                r"2 — s'il y a contradiction.\n"
+                r"0 - si la deuxième phrase implique la première,\n"
+                r"1 - si la relation est neutre,\n"
+                r"2 - s'il y a contradiction.\n"
                 "Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
@@ -390,9 +390,9 @@ datasets = {
             .add_data(f"Énoncé : {line['hypothesis']}")
             .add_end(
                 "Réponds uniquement par :\n"
-                "0 — si l'énoncé découle logiquement du texte (entailment),\n"
-                "1 — si la relation est neutre,\n"
-                "2 — s'il y a contradiction.\n"
+                "0 - si l'énoncé découle logiquement du texte (entailment),\n"
+                "1 - si la relation est neutre,\n"
+                "2 - s'il y a contradiction.\n"
                 "La réponse est :"
             )
             .build()
@@ -500,9 +500,9 @@ datasets = {
         .add_end(
             (
                 r"Réponds uniquement par :\n"
-                r"0 — si la deuxième phrase implique la première,\n"
-                r"1 — si la relation est neutre,\n"
-                r"2 — s'il y a contradiction.\n"
+                r"0 - si la deuxième phrase implique la première,\n"
+                r"1 - si la relation est neutre,\n"
+                r"2 - s'il y a contradiction.\n"
                 "Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
@@ -524,9 +524,9 @@ datasets = {
         .add_end(
             (
                 r"Réponds uniquement par :\n"
-                r"0 — si la phrase est négative,\n"
-                r"1 — si la phrase est neutre,\n"
-                r"2 — si la phrase est positive.\n"
+                r"0 - si la phrase est négative,\n"
+                r"1 - si la phrase est neutre,\n"
+                r"2 - si la phrase est positive.\n"
                 "Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
