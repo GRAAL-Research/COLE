@@ -43,7 +43,9 @@ def main():
                             for metric_name, value in metrics.items():
                                 if isinstance(value, (float, int)):
                                     key = f"{task_name} ({metric_name})"
-                                    results_by_model[model_display_name][key] = value
+                                    results_by_model[model_display_name][key] = (
+                                        value * 100
+                                    )
                                     all_columns.add(key)
 
     sorted_columns = sorted(all_columns)
@@ -72,7 +74,7 @@ def main():
         df.drop(columns=[col], inplace=True)
 
     df.to_csv(FULL_TABLE_CSV, index=False)
-    df.to_latex(FULL_TABLE_LATEX, index=False, float_format="%.3f")
+    df.to_latex(FULL_TABLE_LATEX, index=False, float_format="%.2f")
 
 
 if __name__ == "__main__":
