@@ -16,10 +16,14 @@ class RemoteLLMModel(LanguageModel):
     """
 
     def generate(self, rows: LazyRow) -> Union[str, List[str]]:
-        return self.model.predict(rows["text"])
+        generate = self.model.predict(rows["text"])
+        self.model.print_none()
+        return generate
 
     def infer(self, rows: LazyRow) -> Union[str, List[str]]:
-        return self.model.predict(rows["text"])
+        infer = self.model.predict(rows["text"])
+        self.model.print_none()
+        return infer
 
     def __init__(
         self,

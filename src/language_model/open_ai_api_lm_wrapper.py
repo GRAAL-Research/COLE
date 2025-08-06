@@ -21,6 +21,9 @@ class OpenAIAPILMWrapper(ABC):
         self.use_function_calling = use_function_calling
         self.tool_choices = "required"
 
+        self._none_prediction_counter = 0
+        self._max_retries_counter = 0
+
     @abstractmethod
     def _inner_generate_fn(self, prompt: List) -> Dict:
         pass
@@ -65,6 +68,7 @@ class OpenAIAPILMWrapper(ABC):
         if retries > self.max_retries:
             logging_message = f"Max retries exceeded: {retries}."
             logging.warning(logging_message)
+            self._max_retries_counter += 1
             return generated_completion
         try:
             generated_completion = self._inner_generate_fn(prompt=prompt)
@@ -121,6 +125,7 @@ class OpenAIAPILMWrapper(ABC):
             # Case were final prediction is None, thus we return -1 to be able to be converted
             # as int if necessary (infer-case) or left as string (generate-case).
             # Thus, in both case, it will not yield better results.
+            self._none_prediction_counter += 1
             final_prediction = "-1"
         elif "La réponse est" in final_prediction or ":" in final_prediction:
             # To handle case where the LLM return the premise to the last query.
@@ -152,3 +157,11 @@ class OpenAIAPILMWrapper(ABC):
             final_prediction = "11"
 
         return final_prediction
+
+    def print_none(self) -> None:
+        if self._none_prediction_counter > 0:
+            logging_message = f"Number of None: {self._none_prediction_counter}."
+            logging.warning(logging_message)
+        if self._max_retries_counter > 0:
+            logging_message = f"Number of Mam retries exceeded occurrence: {self._max_retries_counter}."
+            logging.warning(logging_message)
