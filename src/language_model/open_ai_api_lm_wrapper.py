@@ -102,13 +102,16 @@ class OpenAIAPILMWrapper(ABC):
             elif generated_completion.choices[0].message is None:
                 final_prediction = None
             elif generated_completion.choices[0].message.tool_calls is None:
-                # No tools call, but potentially a response in the raw message content.
-                final_prediction = (
-                    generated_completion.choices[0]
-                    .message.content.strip()
-                    .replace(")", "")
-                    .strip()
-                )
+                if generated_completion.choices[0].message.content is None:
+                    final_prediction = None
+                else:
+                    # No tools call, but potentially a response in the raw message content.
+                    final_prediction = (
+                        generated_completion.choices[0]
+                        .message.content.strip()
+                        .replace(")", "")
+                        .strip()
+                    )
             else:
                 prediction = (
                     generated_completion.choices[0]
