@@ -62,7 +62,7 @@ def main():
 
     os.makedirs(os.path.dirname(FULL_TABLE_CSV), exist_ok=True)
     df.to_csv(FULL_TABLE_CSV, index=False)
-    df.to_latex(FULL_TABLE_LATEX, index=False, float_format="%.3f")
+    df.to_latex(FULL_TABLE_LATEX, index=False, float_format="%.2f")
 
 
 if __name__ == "__main__":
