@@ -14,8 +14,6 @@ llms = {
         "unsloth/gemma-2-9b-it-bnb-4bit",
         "unsloth/gemma-2-27b-bnb-4bit",
         "unsloth/gemma-2-27b-it-bnb-4bit",
-        "unsloth/Qwen2.5-1.5B-bnb-4bit",
-        "unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit",
         "unsloth/Qwen2.5-3B-bnb-4bit",
         "unsloth/Qwen2.5-3B-Instruct-bnb-4bit",
         "unsloth/Qwen2.5-7B-bnb-4bit",
@@ -77,6 +75,7 @@ llms = {
         "ibm-granite/granite-3.3-8b-base",
         "ibm-granite/granite-3.3-8b-instruct",
     ],
+    "openai": ["openai/gpt-oss-20b"],
     "all": [],
 }
 for key in llms.keys():
@@ -133,6 +132,9 @@ private_llm = {
         "gpt-4o-2024-08-06",
         "gpt-4o-mini-2024-07-18",
         "gpt-4.1-mini-2025-04-14",
+        "gpt-5-2025-08-07",
+        "gpt-5-mini-2025-08-07",
+        "gpt-oss-120b",
     ],
     "anthropic": [
         "claude-opus-4-20250514",
@@ -163,13 +165,24 @@ for key in private_llm.keys():
     if isinstance(private_llm[key], list) and key != "all":
         private_llm["all"].extend(private_llm[key])
 
-# from collections import Counter
-#
-# import pandas
-#
-# print(len(llms["all"]))
-# print(len(set(llms["all"])))
-# print(Counter(llms["all"]))
-# print(len(private_llm["all"]))
-# print(pandas.DataFrame({"LLM": [r"\texttt{" + text.capitalize().replace("Gpt", "GPT") + r"}" for text in
-#                                 sorted(private_llm["all"])]}).to_latex(index=False))
+from collections import Counter
+
+import pandas
+
+print(
+    len(llms["all"])
+    + len(small_llm["all"])
+    + len(small_llm_2["all"])
+    + len(private_llm["all"])
+)
+print(Counter(llms["all"] + small_llm["all"] + small_llm_2["all"] + private_llm["all"]))
+print(
+    pandas.DataFrame(
+        {
+            "LLM": [
+                r"\texttt{" + text.capitalize().replace("Gpt", "GPT") + r"}"
+                for text in sorted(private_llm["all"])
+            ]
+        }
+    ).to_latex(index=False)
+)
