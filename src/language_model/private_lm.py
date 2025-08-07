@@ -17,12 +17,10 @@ class RemoteLLMModel(LanguageModel):
 
     def generate(self, rows: LazyRow) -> Union[str, List[str]]:
         generate = self.model.predict(rows["text"])
-        self.model.print_none()
         return generate
 
     def infer(self, rows: LazyRow) -> Union[str, List[str]]:
         infer = self.model.predict(rows["text"])
-        self.model.print_none()
         return infer
 
     def __init__(
@@ -52,5 +50,7 @@ class RemoteLLMModel(LanguageModel):
             desc=f"Running evaluation for task: {task.task_name}",
             remove_columns="text",
         )
+
+        self.model.print_none()
 
         return list(process_dataset["prediction"])

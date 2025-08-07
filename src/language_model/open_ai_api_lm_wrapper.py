@@ -166,5 +166,5 @@ class OpenAIAPILMWrapper(ABC):
             logging_message = f"Number of None: {self._none_prediction_counter}."
             logging.warning(logging_message)
         if self._max_retries_counter > 0:
-            logging_message = f"Number of Mam retries exceeded occurrence: {self._max_retries_counter}."
+            logging_message = f"Number of max retries exceeded occurrence: {self._max_retries_counter}."
             logging.warning(logging_message)
