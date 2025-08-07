@@ -59,12 +59,6 @@ def generate_size_vs_score_plot(
         if candidates:
             df.loc[df[model_col] == name, "model_size"] = stripped_dict[candidates[0]]
 
-    still_missing = df[df["model_size"].isna()][model_col].unique()
-    if len(still_missing) > 0:
-        print(f" Toujours sans taille: {list(still_missing)}")
-
-    df = df[df["model_size"].notna()]
-
     em_f1 = [c for c in df.columns if "(exact match, f1)" in c]
     for col in em_f1:
         base = col.split(" (")[0]
@@ -81,8 +75,16 @@ def generate_size_vs_score_plot(
     metrics = [
         c for c in df.select_dtypes(include=[np.number]).columns if c not in exclude
     ]
+
     df["mean_score"] = df[metrics].mean(axis=1)
 
+    baseline_row = df[df[model_col] == "RandomBaselineModel"]
+    if not baseline_row.empty:
+        baseline_score = baseline_row[metrics].mean(axis=1).iloc[0]
+    else:
+        baseline_score = None
+
+    df = df[df["model_size"].notna()]
     df.sort_values(by=model_col, inplace=True)
 
     X = np.log10(df["model_size"])
@@ -92,15 +94,23 @@ def generate_size_vs_score_plot(
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     plt.figure(figsize=(10, 6))
-    plt.scatter(df["model_size"], df["mean_score"], label="Models")
-    plt.plot(df["model_size"], line, label="Linear regression", linewidth=2)
-    plt.axhline(50, linestyle="--", label="Baseline")
+    plt.scatter(df["model_size"], df["mean_score"], color="#1f77b4", label="Models")
+    plt.plot(df["model_size"], line, color="#0057a3", label="Linear regression")
+
+    if baseline_score is not None:
+        plt.axhline(
+            baseline_score,
+            linestyle="--",
+            color="#87CEEB",
+            label="Baseline (RandomBaselineModel)",
+        )
+
     plt.xscale("log")
-    plt.xlabel("Model size")
+    plt.xlabel("Model size (log scale)")
     plt.ylabel("Average score (%)")
     plt.title("Model size vs performance")
-    plt.legend()
     plt.grid(True)
+    plt.legend()
     plt.tight_layout()
     plt.savefig(output_path)
     plt.close()
