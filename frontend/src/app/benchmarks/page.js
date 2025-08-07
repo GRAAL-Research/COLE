@@ -71,7 +71,7 @@ export default function Benchmarks() {
         />
         <Benchmark
           title={t('benchmark_paws_title')}
-          link="https://github.com/google-research-datasets/paws"
+          link="https://huggingface.co/datasets/google-research-datasets/paws-x"
           description={t('benchmark_paws_description')}
           metrics="Accuracy"
         />

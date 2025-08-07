@@ -167,8 +167,9 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">{t('leaderboard_title')}</h1>
+    <div className="space-y-8">
+        <h3 className="text-2xl font-semibold text-gray-900 mb-4 border-l-4 border-blue-600 pl-4">
+        {t('leaderboard_title')}</h3>
       <div className="overflow-auto">
         <table className="min-w-full border-collapse">
           <thead>
