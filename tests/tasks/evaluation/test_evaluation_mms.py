@@ -3,21 +3,21 @@ from src.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
 
-class TaskqfrcortTest(TaskTest):
+class Task_MMS_Test(TaskTest):
     def setUp(self) -> None:
-        self.dataset_size = 201
+        self.dataset_size = 63190
 
-    def test_given_a_prediction_smaller_than_corpu2s_when_compute_then_return_expected_result_and_warning(
+    def test_given_a_prediction_smaller_than_corpus_when_compute_then_return_expected_result_and_warning(
         self,
     ):
-        a_predictions = [9, 6, 8, 9, 9]
+        a_predictions = [1, 1, 1, 1, 1]
         task = Task(
-            task_name="qfrcort",
+            task_name="mms",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
 
-        expected_results = {"accuracy": 0.6}
+        expected_results = {"accuracy": 0.4}
         expected_warning = (
             f"Your prediction size is of '{len(a_predictions)}', while the ground truths size is "
             f"of '{self.dataset_size}'. We computed the metric over the first {len(a_predictions)}"
@@ -35,12 +35,12 @@ class TaskqfrcortTest(TaskTest):
     ):
         a_predictions = [1] * self.dataset_size
         task = Task(
-            task_name="qfrcort",
+            task_name="mms",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )
 
-        expected_results = {"accuracy": 0.09570957095709572}
+        expected_results = {"accuracy": 0.2}
         expected_warning = None
 
         actual_result, actual_warning = task.compute(predictions=a_predictions)
@@ -52,7 +52,7 @@ class TaskqfrcortTest(TaskTest):
     def test_given_a_prediction_larger_than_ground_truth_raise_error(self):
         a_predictions = [1] * (self.dataset_size + 1)
         task = Task(
-            task_name="qfrcort",
+            task_name="mms",
             metric="accuracy",
             task_type=TaskType.INFERENCE,
         )

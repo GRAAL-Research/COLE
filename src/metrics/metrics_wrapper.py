@@ -19,16 +19,17 @@ class AccuracyWrapper(Metric):
         self._metric = load("accuracy")
 
     def compute(self, predictions: List, references: List, **kwargs) -> Dict:
-        if sum([len(prediction.strip()) > 2 for prediction in predictions]) > 0:
+        if sum(isinstance(p, str) and len(p.strip()) > 2 for p in predictions):
             # Case where some predictions are longer than two digits (i.e. 10, 11, 1).
             # Thus, we extract the first two characters of the string, strip it and except it to be int.
             logging.warning(
                 "Applied normalization of predictions due to potential non int response."
             )
-            predictions = [
-                prediction[:2].strip().replace(" ", "") for prediction in predictions
-            ]
 
+            predictions = [
+                p[:2].strip().replace(" ", "") if isinstance(p, str) else p
+                for p in predictions
+            ]
         return self._metric.compute(predictions=predictions, references=references)
 
 
