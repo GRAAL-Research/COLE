@@ -26,10 +26,6 @@ llms = {
         "unsloth/DeepSeek-R1-Distill-Llama-8B-unsloth-bnb-4bit",
         "unsloth/DeepSeek-R1-Distill-Qwen-14B-unsloth-bnb-4bit",
         "unsloth/DeepSeek-R1-Distill-Qwen-32B-unsloth-bnb-4bit",
-        "unsloth/Mistral-7B-v0.3-bnb-4bit",
-        "unsloth/Mistral-7B-Instruct-v0.3-bnb-4bit",
-        "unsloth/Mistral-Small-Instruct-2409-bnb-4bit",
-        "unsloth/Mistral-Nemo-Instruct-2407-bnb-4bit",
         "unsloth/granite-3.2-8b-instruct-bnb-4bit",
         "unsloth/QwQ-32B-unsloth-bnb-4bit",
         "unsloth/OLMo-2-0325-32B-Instruct-unsloth-bnb-4bit",
@@ -39,6 +35,7 @@ llms = {
         "unsloth/Qwen3-14B-unsloth-bnb-4bit",
         "unsloth/DeepSeek-R1-0528-Qwen3-8B-unsloth-bnb-4bit",
         "unsloth/Qwen3-14B-Base-unsloth-bnb-4bit",
+        "unsloth/gpt-oss-20b-unsloth-bnb-4bit",
     ],
     "jpacifico": [
         "jpacifico/Chocolatine-14B-Instruct-DPO-v1.3",
@@ -75,7 +72,6 @@ llms = {
         "ibm-granite/granite-3.3-8b-base",
         "ibm-granite/granite-3.3-8b-instruct",
     ],
-    "openai": ["openai/gpt-oss-20b"],
     "all": [],
 }
 for key in llms.keys():
@@ -165,24 +161,24 @@ for key in private_llm.keys():
     if isinstance(private_llm[key], list) and key != "all":
         private_llm["all"].extend(private_llm[key])
 
-from collections import Counter
-
-import pandas
-
-print(
-    len(llms["all"])
-    + len(small_llm["all"])
-    + len(small_llm_2["all"])
-    + len(private_llm["all"])
-)
-print(Counter(llms["all"] + small_llm["all"] + small_llm_2["all"] + private_llm["all"]))
-print(
-    pandas.DataFrame(
-        {
-            "LLM": [
-                r"\texttt{" + text.capitalize().replace("Gpt", "GPT") + r"}"
-                for text in sorted(private_llm["all"])
-            ]
-        }
-    ).to_latex(index=False)
-)
+# from collections import Counter
+#
+# import pandas
+#
+# print(
+#     len(llms["all"])
+#     + len(small_llm["all"])
+#     + len(small_llm_2["all"])
+#     + len(private_llm["all"])
+# )
+# print(Counter(llms["all"] + small_llm["all"] + small_llm_2["all"] + private_llm["all"]))
+# print(
+#     pandas.DataFrame(
+#         {
+#             "LLM": [
+#                 r"\texttt{" + text.capitalize().replace("Gpt", "GPT") + r"}"
+#                 for text in sorted(private_llm["all"])
+#             ]
+#         }
+#     ).to_latex(index=False)
+# )
