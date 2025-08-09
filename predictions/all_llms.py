@@ -29,8 +29,6 @@ llms = {
         "unsloth/granite-3.2-8b-instruct-bnb-4bit",
         "unsloth/QwQ-32B-unsloth-bnb-4bit",
         "unsloth/OLMo-2-0325-32B-Instruct-unsloth-bnb-4bit",
-        "unsloth/Mixtral-8x7B-Instruct-v0.1-unsloth-bnb-4bit",
-        "unsloth/Mixtral-8x7B-v0.1-unsloth-bnb-4bit",
         "unsloth/reka-flash-3-unsloth-bnb-4bit",
         "unsloth/Qwen3-14B-unsloth-bnb-4bit",
         "unsloth/DeepSeek-R1-0528-Qwen3-8B-unsloth-bnb-4bit",
@@ -63,6 +61,8 @@ llms = {
     ],
     "mistralai": [
         "mistralai/Ministral-8B-Instruct-2410",
+        "mistralai/Mixtral-8x7B-Instruct-v0.1",
+        "mistralai/Mixtral-8x7B-v0.1",
     ],
     "cohere": [
         "CohereForAI/aya-expanse-8b",
