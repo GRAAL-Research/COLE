@@ -8,6 +8,7 @@ import wandb
 from tqdm import tqdm
 
 from predictions.all_llms import llms
+from src import WANDB_PROJECT
 from src.evaluation.llm_evaluator import ModelEvaluator
 from src.evaluation.llm_factory import model_factory
 from src.evaluation.tools import split_llm_list
@@ -94,7 +95,7 @@ for model_name in tqdm(
 
         exp_name = f"{model_name}"
         wandb.init(
-            project="COLE",
+            project=WANDB_PROJECT,
             entity="doctorate",
             config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
             name=exp_name,

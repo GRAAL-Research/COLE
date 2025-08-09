@@ -1,1 +1,2 @@
 REPO_ID = "COLE-Graal/COLEGraal"
+WANDB_PROJECT = "COLE-final"
