@@ -4,6 +4,7 @@ import time
 from abc import ABC, abstractmethod
 from typing import List, Dict
 
+from src import NA_VALUE
 from src.language_model.init_function_calling import init_function_calling
 
 
@@ -129,7 +130,7 @@ class OpenAIAPILMWrapper(ABC):
             # as int if necessary (infer-case) or left as string (generate-case).
             # Thus, in both case, it will not yield better results.
             self._none_prediction_counter += 1
-            final_prediction = "-1"
+            final_prediction = f"{NA_VALUE}"
         elif "La réponse est" in final_prediction or ":" in final_prediction:
             # To handle case where the LLM return the premise to the last query.
             final_prediction = final_prediction.split(":")[-1].strip().replace(" ", "")

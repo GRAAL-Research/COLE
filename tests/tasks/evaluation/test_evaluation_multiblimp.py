@@ -48,11 +48,3 @@ class TaskMULTIBLIMPTest(TaskTest):
         self.assertEvalDictEqual(expected_results, actual_result)
 
         self.assertEqual(expected_warning, actual_warning)
-
-    def test_given_a_prediction_larger_than_ground_truth_raise_error(self):
-        a_predictions = [1] * (self.dataset_size + 1)
-        task = Task(
-            task_name="multiblimp",
-            metric="accuracy",
-            task_type=TaskType.INFERENCE,
-        )
