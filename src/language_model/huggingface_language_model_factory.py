@@ -11,7 +11,11 @@ def hugging_face_language_model_tokenizer_factory(
     model_name,
     huggingface_token: str,
 ):
-    if "chocolatine" in model_name.lower() or "lucie" in model_name.lower():
+    if (
+        "chocolatine" in model_name.lower()
+        or "lucie" in model_name.lower()
+        or "mixtral" in model_name.lower()
+    ):
 
         compute_dtype = getattr(torch, "bfloat16")
         bnb_configs = BitsAndBytesConfig(
@@ -20,7 +24,7 @@ def hugging_face_language_model_tokenizer_factory(
             bnb_4bit_compute_dtype=compute_dtype,
             bnb_4bit_use_double_quant=True,
         )
-        if "chocolatine" in model_name.lower():
+        if "chocolatine" in model_name.lower() or "mixtral" in model_name.lower():
             attn_implementation = "flash_attention_2"
         else:
             attn_implementation = "sdpa"
