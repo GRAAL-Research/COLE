@@ -44,6 +44,9 @@ def hugging_face_language_model_tokenizer_factory(
         tokenizer = AutoTokenizer.from_pretrained(
             model_name, token=huggingface_token, **extra_args
         )
+
+        if tokenizer.pad_token is None:
+            tokenizer.pad_token_id = model.config.eos_token_id
     else:
         model, tokenizer = FastLanguageModel.from_pretrained(
             model_name,
