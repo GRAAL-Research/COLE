@@ -117,17 +117,17 @@ datasets = {
     Tasks.STS22.value: Dataset(
         name=Tasks.STS22.value,
         description="Semantic textual similarity task : "
-        "Predict how similar two sentences are to each other (0 to 5)",
-        possible_ground_truths=["0", "1", "2", "3", "4", "5"],
+        "Predict how similar two sentences are to each other (1 to 4)",
+        possible_ground_truths=["1", "2", "3", "4"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["score"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "À quel point les deux phrases suivantes sont-elles similaires ? Donne une note entière de 0 à 5."
+            "À quel point les deux phrases suivantes sont-elles similaires ? Donne une note entière de 1 à 4."
         )
         .add_data(f"Phrase 1 : {line['sentence1']}\nPhrase 2 : {line['sentence2']}")
         .add_end(
-            "Réponds uniquement avec un nombre entier entre 0 (aucune similarité) et 5 (équivalence parfaite). "
+            "Réponds uniquement avec un nombre entier entre 1 (aucune similarité) et 4 (équivalence parfaite). "
             "La réponse est :"
         )
         .build(),
@@ -148,7 +148,7 @@ datasets = {
             "Les deux phrases suivantes veulent-elles dire la même chose, ou ont-elles des significations différentes ?"
         )
         .add_data(line["sentence1"])
-        .add_data(line["sentence1"])
+        .add_data(line["sentence2"])
         .add_end(
             (
                 "Réponds seulement 1 si les deux phrases ont la même signification, 0 sinon. La réponse est :"
@@ -156,8 +156,8 @@ datasets = {
         )
         .build(),
         line_to_data_fn=lambda line: {
-            "sentence1 ": line["sentence1"],
-            "sentence2 ": line["sentence2"],
+            "sentence1": line["sentence1"],
+            "sentence2": line["sentence2"],
         },
     ),
     Tasks.PIAF.value: Dataset(
@@ -297,8 +297,8 @@ datasets = {
     Tasks.DACCORD.value: Dataset(
         name=Tasks.DACCORD.value,
         description="Paraphrase detection task :"
-        "Predict whether the two sentences express"
-        " the same idea (1) or contradict each other (0)",
+        "Predict whether the two sentences are compatible (0) "
+        "or contradict each other (1).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
