@@ -239,7 +239,7 @@ datasets = {
         name=Tasks.QFRCORE.value,
         description="Definition matching task : "
         "Match the Quebec expression with its definition from a list",
-        possible_ground_truths=[str(i) for i in range(11)],
+        possible_ground_truths=[str(i) for i in range(10)],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
@@ -269,7 +269,7 @@ datasets = {
         name=Tasks.QFRCORT.value,
         description="Definition matching task : "
         "Match the Quebec term with its definition from a list",
-        possible_ground_truths=[str(i) for i in range(11)],
+        possible_ground_truths=[str(i) for i in range(10)],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
