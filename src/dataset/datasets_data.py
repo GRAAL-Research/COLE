@@ -519,7 +519,7 @@ datasets = {
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
-        .add_premise("Quelle est le sentiment de cette phrase?")
+        .add_premise("Quel est le sentiment de cette phrase?")
         .add_data(line["text"])
         .add_end(
             (
@@ -537,7 +537,7 @@ datasets = {
     ),
     Tasks.WSD.value: Dataset(
         name=Tasks.WSD.value,
-        description="Extractive word sense disambiguation : Extract an ambiguous words in a sentence.",
+        description="Extractive word sense disambiguation : Extract an ambiguous word in a sentence.",
         possible_ground_truths=[],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
