@@ -20,7 +20,7 @@
   "benchmark_alloCine_title": "Allo-ciné.ca",
   "benchmark_alloCine_description": "Allo-ciné tests language understanding in sentiment classification by feeding movie reviews which can be either positive and negative. The task consists in giving the correct sentiment for each review.",
   "benchmark_daccord_title": "DACCORD",
-  "benchmark_daccord_description": "Predict whether the two sentences express the same idea (1) or contradict each other (0).",
+  "benchmark_daccord_description":"Predict whether the two sentences are compatible (0) or contradict each other (1).",
   "benchmark_fquad_title": "FQuAD - French Question Answering Dataset",
   "benchmark_fquad_description": "FQuAD is question/answer pairs built on high-quality Wikipedia articles. The goal in this task is to accurately predict if the answer to the question can be found in the provided article.",
   "benchmark_french_boolq_title": "French BoolQ",

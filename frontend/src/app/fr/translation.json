@@ -20,7 +20,7 @@
   "benchmark_alloCine_title": "Allo-ciné.ca",
   "benchmark_alloCine_description": "Allo-ciné teste la compréhension du langage dans la classification des sentiments en fournissant des critiques de films pouvant être positives ou négatives. La tâche consiste à donner le sentiment correct pour chaque critique.",
   "benchmark_daccord_title": "DACCORD",
-  "benchmark_daccord_description": " Prédisez si deux phrases expriment la même idée (1) ou se contredisent (0).",
+  "benchmark_daccord_description": "  Prédisez si les deux phrases sont compatibles (0) ou se contredisent (1). ",
   "benchmark_fquad_title": "FQuAD - Corpus de questions-réponses français",
   "benchmark_fquad_description": "FQuAD est un ensemble de paires question/réponse construit à partir d’articles Wikipédia de haute qualité. L’objectif est de prédire correctement si la réponse à la question se trouve réellement dans l’article fourni.",
   "benchmark_french_boolq_title": "French BoolQ",
