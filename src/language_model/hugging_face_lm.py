@@ -45,7 +45,7 @@ class HFLLMModel(LanguageModel):
         elif num_params >= 27000000000:  # 27B
             batch_size = 32
         if "gpt-oss" in model_name:
-            batch_size = 8
+            batch_size = 4  # Otherwise a lot of OOM
         self._batch_size = batch_size
 
     def predict(self, evaluation_dataset: Dataset, task: Task) -> List:

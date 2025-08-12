@@ -59,15 +59,33 @@ class ExactMatch(Metric):
 
 
 def apply_int_casting(predictions_to_clean: List) -> List:
+    na_value = 0
+    none_value = 0
+    undetected_value = 0
     for idx, prediction in enumerate(predictions_to_clean):
-        if isinstance(prediction, str):
-            logging.warning(
-                "Applied normalization of predictions due to potential non int response."
-            )
+        if isinstance(prediction, int):
+            # Already in the good format.
+            continue
+        elif isinstance(prediction, float):
+            predictions_to_clean[idx] = int(prediction)
+        elif isinstance(prediction, str):
             if prediction.strip().isdigit():
-                predictions_to_clean[idx] = float(prediction)
+                predictions_to_clean[idx] = int(prediction)
             else:
+                na_value += 1
                 predictions_to_clean[idx] = NA_VALUE
         elif prediction is None:
+            none_value += 1
             predictions_to_clean[idx] = NA_VALUE
+        else:
+            undetected_value += 1
+            predictions_to_clean[idx] = NA_VALUE
+    if na_value > 0:
+        logging.warning(f"Number of na_value during int casting: {na_value}")
+    if none_value > 0:
+        logging.warning(f"Number of none_value during int casting: {none_value}")
+    if undetected_value > 0:
+        logging.warning(
+            f"Number of undetected_value during int casting: {undetected_value}"
+        )
     return predictions_to_clean
