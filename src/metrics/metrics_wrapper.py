@@ -64,8 +64,9 @@ def apply_int_casting(predictions_to_clean: List) -> List:
     undetected_value = 0
     for idx, prediction in enumerate(predictions_to_clean):
         if isinstance(prediction, int):
-            # Already in the good format.
-            continue
+            # Case where the prediction is already an int.
+            # We use this branch since we want an else statement to capture undetected type.
+            pass
         elif isinstance(prediction, float):
             predictions_to_clean[idx] = int(prediction)
         elif isinstance(prediction, str):
@@ -81,11 +82,14 @@ def apply_int_casting(predictions_to_clean: List) -> List:
             undetected_value += 1
             predictions_to_clean[idx] = NA_VALUE
     if na_value > 0:
-        logging.warning(f"Number of na_value during int casting: {na_value}")
+        warning_message = f"Number of na_value during int casting: {na_value}"
+        logging.warning(warning_message)
     if none_value > 0:
-        logging.warning(f"Number of none_value during int casting: {none_value}")
+        warning_message = f"Number of none_value during int casting: {none_value}"
+        logging.warning(warning_message)
     if undetected_value > 0:
-        logging.warning(
+        warning_message = (
             f"Number of undetected_value during int casting: {undetected_value}"
         )
+        logging.warning(warning_message)
     return predictions_to_clean

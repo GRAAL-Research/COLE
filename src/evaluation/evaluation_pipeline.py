@@ -97,7 +97,11 @@ for model_name in tqdm(
         wandb.init(
             project=WANDB_PROJECT,
             entity="doctorate",
-            config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
+            config={
+                "model_name": model_name,
+                "tasks": "; ".join(tasks_names),
+                "batch_size": args.batch_size,
+            },
             name=exp_name,
         )
 
