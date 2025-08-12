@@ -231,7 +231,7 @@ datasets = {
         )
         .build(),
         line_to_data_fn=lambda line: {
-            "premise ": line["premise"],
+            "premise": line["premise"],
             "hypothesis": line["hypothesis"],
         },
     ),
