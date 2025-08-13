@@ -413,7 +413,7 @@ datasets = {
         line_to_truth_fn=lambda line: str(line["answer"]),
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "Voici une phrase en anglais contenant le pronom \"it\" dans un sens ambigu et sa traduction en français."
+            'Voici une phrase en anglais contenant le pronom "it" dans un sens ambigu et sa traduction en français.'
         )
         .add_data(f"Phrase (originale en anglais) : {line['sentence']}")
         .add_data(

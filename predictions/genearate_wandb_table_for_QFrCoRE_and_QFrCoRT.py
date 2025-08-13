@@ -1,14 +1,17 @@
 import os
 import re
-import pandas as pd
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Optional
+
+import pandas as pd
 import wandb
 
-PROJECT_PATH = "doctorate/COLE"
-FULL_TABLE_CSV = "results/qfr_accuracy_table.csv"
-FULL_TABLE_LATEX = "results/qfr_accuracy_table.tex"
+from src import WANDB_PROJECT
+
+PROJECT_PATH = f"doctorate/{WANDB_PROJECT}"
+FULL_TABLE_CSV = os.path.join("results", "qfr_accuracy_table.csv")
+FULL_TABLE_LATEX = os.path.join("results", "qfr_accuracy_table.tex")
 
 TARGET_TASKS = {"qfrcore", "qfrcort"}
 

@@ -1,15 +1,18 @@
 import os
 import re
-import pandas as pd
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Optional
+
+import pandas as pd
 import wandb
 
-PROJECT_PATH = "doctorate/COLE"
+from src import WANDB_PROJECT
+
+PROJECT_PATH = f"doctorate/{WANDB_PROJECT}"
 MODELS_SIZE_PATH = "models_size.json"
-FULL_TABLE_CSV = "results/full_results_table.csv"
-FULL_TABLE_LATEX = "results/full_results_table.tex"
+FULL_TABLE_CSV = os.path.join("results", "full_results_table.csv")
+FULL_TABLE_LATEX = os.path.join("results", "full_results_table.tex")
 
 
 @dataclass
