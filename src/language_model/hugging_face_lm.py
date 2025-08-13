@@ -52,7 +52,8 @@ class HFLLMModel(LanguageModel):
         self._batch_size = batch_size
 
     def predict(self, evaluation_dataset: Dataset, task: Task) -> List:
-        if task.task_name == "sts22":
+        if task.task_name == "sts22" and "gpt-oss" in self._model_name:
+            # For sts22, GPT-oss get OOM for batch size higher than 1.
             batch_size = self._batch_size_sts22
         else:
             batch_size = self._batch_size
