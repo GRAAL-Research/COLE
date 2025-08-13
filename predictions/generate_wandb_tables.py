@@ -17,7 +17,7 @@ FULL_TABLE_LATEX = os.path.join("results", "full_results_table.tex")
 
 @dataclass
 class ModelAttributes:
-    phi_models: bool = False
+    upsilon_models: bool = False
     gamma_models: bool = False
     special_formatting: Optional[str] = None
     model_family: Optional[str] = None
@@ -49,7 +49,7 @@ class ModelNameProcessor:
             "gemma-2",
         }
 
-        self.phi_models = {"chocolatine", "french-alpaca", "lucie"}
+        self.upsilon_models = {"chocolatine", "french-alpaca", "lucie"}
 
         self.size_patterns = {
             r"(\d+\.\d+)[bB]": r"$\1$B",
@@ -89,15 +89,15 @@ class ModelNameProcessor:
     def get_model_attributes(self, name: str) -> ModelAttributes:
         name_lower = name.lower()
         gamma_models = any(p in name_lower for p in self.gamma_models)
-        phi_models = any(p in name_lower for p in self.phi_models)
+        upsilon_models = any(p in name_lower for p in self.upsilon_models)
 
         if "french-alpaca" in name_lower:
-            phi_models = True
+            upsilon_models = True
             gamma_models = True
 
         family = self.get_model_family(name)
         return ModelAttributes(
-            phi_models=phi_models, gamma_models=gamma_models, model_family=family
+            upsilon_models=upsilon_models, gamma_models=gamma_models, model_family=family
         )
 
     def normalize_base_name(self, name: str) -> str:
@@ -147,9 +147,9 @@ class ModelNameProcessor:
         if attributes.gamma_models:
             symbols.append(r"$\Gamma$")
         if attributes.phi_models:
-            symbols.append(r"$\Phi$")
+            symbols.append(r"$\Upsilon$")
         if symbols:
-            formatted += " " + "".join(symbols)
+            formatted += " (" + "".join(symbols) + ")"
         return formatted
 
     def process_model_name(self, name: str, for_latex: bool = True) -> str:
