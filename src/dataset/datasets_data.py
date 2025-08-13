@@ -102,7 +102,7 @@ datasets = {
         .add_premise("Détermine la relation entre les deux phrases suivantes :")
         .add_data(f"Phrase A : {line['sentence_A']}\nPhrase B : {line['sentence_B']}")
         .add_end(
-            "Réponds uniquement par un chiffre :\n"
+            "Réponds uniquement par 0, 1 ou 2 :\n"
             "0 - si la deuxième phrase découle logiquement de la première,\n"
             "1 - si leur relation est neutre,\n"
             "2 - si les phrases se contredisent.\n"
@@ -377,7 +377,7 @@ datasets = {
     Tasks.RTE3_FRENCH.value: Dataset(
         name=Tasks.RTE3_FRENCH.value,
         description="Natural language inference task : "
-        "predict the relation between two sentences (implication, neutral, contradiction)",
+        "predict the relation between two sentences (entailment, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -389,7 +389,7 @@ datasets = {
             .add_data(f"Texte : {line['premise']}")
             .add_data(f"Énoncé : {line['hypothesis']}")
             .add_end(
-                "Réponds uniquement par :\n"
+                "Réponds uniquement par 0, 1 ou 2 :\n"
                 "0 - si l'énoncé découle logiquement du texte (entailment),\n"
                 "1 - si la relation est neutre,\n"
                 "2 - s'il y a contradiction.\n"
