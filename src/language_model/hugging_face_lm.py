@@ -40,22 +40,30 @@ class HFLLMModel(LanguageModel):
         # To handle max batch size for these models.
         if num_params >= 70000000000:  # 70B
             batch_size = 2
-        if num_params >= 32000000000:  # 32B
+        elif num_params >= 32000000000:  # 32B
             batch_size = 16
         elif num_params >= 27000000000:  # 27B
             batch_size = 32
-        if "gpt-oss" in model_name:
-            batch_size = 4  # Otherwise a lot of OOM
+        elif "gpt-oss" in self._model_name:
+            batch_size = 8  # Otherwise a lot of OOM
+            self._batch_size_sts22 = (
+                1  # For sts22, GPT-oss get OOM for batch size higher than 1.
+            )
         self._batch_size = batch_size
 
     def predict(self, evaluation_dataset: Dataset, task: Task) -> List:
+        if task.task_name == "sts22":
+            batch_size = self._batch_size_sts22
+        else:
+            batch_size = self._batch_size
+
         if task.task_type == TaskType.INFERENCE:
             labels = task.dataset.possible_ground_truths
             self.pipeline = pipeline(
                 task="zero-shot-classification",
                 model=self.model,
                 tokenizer=self.tokenizer,
-                batch_size=self._batch_size,
+                batch_size=batch_size,
                 torch_dtype="float16",
                 return_full_text=False,
                 max_new_tokens=16,
@@ -73,7 +81,7 @@ class HFLLMModel(LanguageModel):
                 task="text-generation",
                 model=self.model,
                 tokenizer=self.tokenizer,
-                batch_size=self._batch_size,
+                batch_size=batch_size,
                 torch_dtype="float16",
                 return_full_text=False,
                 max_new_tokens=64,
