@@ -34,7 +34,7 @@ class PromptBuilder:
                 "This prompt did not contain any data, was that intentional ?"
             )
 
-        data = "/n".join(self.data)
+        data = "\n".join(self.data)
         if self.data_only:
             return data
 

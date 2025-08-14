@@ -549,7 +549,7 @@ datasets = {
             "Réponds uniquement avec le mot ambigu identifié."
         )
         .add_data(f"Phrase : {line['sentence']}")
-        .add_end(f"Part-of-speech tagging: {line['pos_tag_labels']}")
+        .add_data(f"Part-of-speech tagging: {line['pos_tag_labels']}")
         .add_end("La réponse est :")
         .build(),
         line_to_data_fn=lambda line: {
