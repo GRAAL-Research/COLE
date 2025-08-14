@@ -97,7 +97,9 @@ class ModelNameProcessor:
 
         family = self.get_model_family(name)
         return ModelAttributes(
-            upsilon_models=upsilon_models, gamma_models=gamma_models, model_family=family
+            upsilon_models=upsilon_models,
+            gamma_models=gamma_models,
+            model_family=family,
         )
 
     def normalize_base_name(self, name: str) -> str:
