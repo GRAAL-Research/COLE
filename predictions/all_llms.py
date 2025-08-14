@@ -119,7 +119,6 @@ for key in small_llm_2.keys():
 
 private_llm = {
     "openai": [
-        "o4-mini-2025-04-16",
         "o3-2025-04-16",
         "o3-mini-2025-01-31",
         "o1-2024-12-17",
