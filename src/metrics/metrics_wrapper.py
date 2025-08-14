@@ -52,7 +52,7 @@ class F1Score(Metric):
 class ExactMatch(Metric):
     def compute(self, predictions: List, references: List, **kwargs) -> Dict:
         score = [
-            reference == prediction
+            reference.strip() == prediction.strip()
             for reference, prediction in zip(references, predictions)
         ]
         return {"exact_match": sum(score) / len(score)}
