@@ -78,10 +78,10 @@ datasets = {
         .add_data(line["hypothesis"])
         .add_end(
             (
-                r"Réponds uniquement par :\n"
-                r"0 - si la deuxième phrase implique la première,\n"
-                r"1 - si la relation est neutre,\n"
-                r"2 - s'il y a contradiction.\n"
+                "Réponds uniquement par :\n"
+                "0 - si la deuxième phrase implique la première,\n"
+                "1 - si la relation est neutre,\n"
+                "2 - s'il y a contradiction.\n"
                 "Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
@@ -222,11 +222,11 @@ datasets = {
         .add_data(rf"premise : {line['premise']}\n" f"sentence 2: {line['hypothesis']}")
         .add_end(
             (
-                r"Réponds uniquement par :\n"
-                r"0 - si la deuxième phrase implique la première,\n"
-                r"1 - si la relation est neutre,\n"
-                r"2 - s'il y a contradiction.\n"
-                r"Réponds uniquement par 0, 1 ou 2. La réponse est :"
+                "Réponds uniquement par :\n"
+                "0 - si la deuxième phrase implique la première,\n"
+                "1 - si la relation est neutre,\n"
+                "2 - s'il y a contradiction.\n"
+                "Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
         .build(),
@@ -361,10 +361,10 @@ datasets = {
         .add_data(line["hypothesis"])
         .add_end(
             (
-                r"Réponds uniquement par :\n"
-                r"0 - si la deuxième phrase implique la première,\n"
-                r"1 - si la relation est neutre,\n"
-                r"2 - s'il y a contradiction.\n"
+                "Réponds uniquement par :\n"
+                "0 - si la deuxième phrase implique la première,\n"
+                "1 - si la relation est neutre,\n"
+                "2 - s'il y a contradiction.\n"
                 "Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
@@ -499,10 +499,10 @@ datasets = {
         .add_data(line["hypothesis"])
         .add_end(
             (
-                r"Réponds uniquement par :\n"
-                r"0 - si la deuxième phrase implique la première,\n"
-                r"1 - si la relation est neutre,\n"
-                r"2 - s'il y a contradiction.\n"
+                "Réponds uniquement par :\n"
+                "0 - si la deuxième phrase implique la première,\n"
+                "1 - si la relation est neutre,\n"
+                "2 - s'il y a contradiction.\n"
                 "Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
@@ -523,10 +523,10 @@ datasets = {
         .add_data(line["text"])
         .add_end(
             (
-                r"Réponds uniquement par :\n"
-                r"0 - si la phrase est négative,\n"
-                r"1 - si la phrase est neutre,\n"
-                r"2 - si la phrase est positive.\n"
+                "Réponds uniquement par :\n"
+                "0 - si la phrase est négative,\n"
+                "1 - si la phrase est neutre,\n"
+                "2 - si la phrase est positive.\n"
                 "Réponds uniquement par 0, 1 ou 2. La réponse est :"
             )
         )
