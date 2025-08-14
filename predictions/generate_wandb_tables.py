@@ -148,7 +148,7 @@ class ModelNameProcessor:
         symbols = []
         if attributes.gamma_models:
             symbols.append(r"$\Gamma$")
-        if attributes.phi_models:
+        if attributes.upsilon_models:
             symbols.append(r"$\Upsilon$")
         if symbols:
             formatted += " (" + "".join(symbols) + ")"
