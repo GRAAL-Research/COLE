@@ -543,15 +543,18 @@ datasets = {
         line_to_truth_fn=lambda line: line["label"],
         line_to_prompt_fn=lambda line: PromptBuilder()
         .add_premise(
-            "Tu vas recevoir une phrase contenant un mot ambigu.\n"
-            "Ta tâche est d’indiquer **exactement** ce mot, sans rien ajouter ni reformuler.\n"
+            "Tu vas recevoir une phrase contenant un mot ambigu ainsi que les étiquettes du 'part-of-speech tagging "
+            "(PoS)' pour chaque mot de la phrase. Le mot ambigu peut être un verbe ou un adjectif.\n"
+            "Ta tâche est d’indiquer **exactement** ce mot ambigu dans la phrase, sans rien ajouter ni reformuler.\n"
             "Réponds uniquement avec le mot ambigu identifié."
         )
         .add_data(f"Phrase : {line['sentence']}")
+        .add_end(f"Part-of-speech tagging: {line['pos_tag_labels']}")
         .add_end("La réponse est :")
         .build(),
         line_to_data_fn=lambda line: {
             "sentence": line["sentence"],
+            "pos_tag_labels": line["pos_tag_labels"],
         },
     ),
 }
