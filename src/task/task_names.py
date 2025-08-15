@@ -8,6 +8,7 @@ class Tasks(str, Enum):
     FRENCH_BOOLQ = "french_boolq"
     FRACAS = "fracas"
     GQNLI = "gqnli"
+    LINGNLI = "lingnli"
     MMS = "mms"
     MNLI_NINEELEVEN_FR_MT = "mnli-nineeleven-fr-mt"
     MULTIBLIMP = "multiblimp"

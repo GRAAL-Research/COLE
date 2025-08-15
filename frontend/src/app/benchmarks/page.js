@@ -52,6 +52,12 @@ export default function Benchmarks() {
           metrics="Accuracy"
         />
         <Benchmark
+          title={t('benchmark_lingnli_title')}
+          link="https://huggingface.co/datasets/maximoss/lingnli-multi-mt"
+          description={t('benchmark_lingnli_description')}
+          metrics="Accuracy"
+        />
+        <Benchmark
           title={t('benchmark_mms_title')}
           link="https://huggingface.co/datasets/Brand24/mms"
           description={t('benchmark_mms_description')}

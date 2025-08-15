@@ -19,6 +19,8 @@
   "metrics": "Métrique(s) :",
   "benchmark_alloCine_title": "Allo-ciné.ca",
   "benchmark_alloCine_description": "Allo-ciné teste la compréhension du langage dans la classification des sentiments en fournissant des critiques de films pouvant être positives ou négatives. La tâche consiste à donner le sentiment correct pour chaque critique.",
+  "benchmark_lingnli_title": "LingNLI",
+  "benchmark_lingnli_description": "LingNLI est un corpus d'inférence en langage naturel collecté en faisant appel à un linguiste afin d'introduire de manière dynamique de nouvelles contraintes pendant la collecte des données, dans le but d'atténuer les lacunes et les biais systématiques souvent présents dans les ensembles de données issus du crowdsourcing.",
   "benchmark_daccord_title": "DACCORD",
   "benchmark_daccord_description": "  Prédisez si les deux phrases sont compatibles (0) ou se contredisent (1). ",
   "benchmark_fquad_title": "FQuAD - Corpus de questions-réponses français",

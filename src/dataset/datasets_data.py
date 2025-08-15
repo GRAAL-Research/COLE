@@ -557,6 +557,34 @@ datasets = {
             "pos_tag_labels": line["pos_tag_labels"],
         },
     ),
+    Tasks.LINGNLI.value: Dataset(
+        name=Tasks.LINGNLI.value,
+        description="Natural language inference task : "
+        "predict the relation between two sentences (implication, neutral, contradiction).",
+        possible_ground_truths=["0", "1", "2"],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["label"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            "Quelle est la relation de la deuxième phrase par rapport à la première ?"
+        )
+        .add_data(line["premise"])
+        .add_data(line["hypothesis"])
+        .add_end(
+            (
+                "Réponds uniquement par :\n"
+                "0 - si la deuxième phrase implique la première,\n"
+                "1 - si la relation est neutre,\n"
+                "2 - s'il y a contradiction.\n"
+                "Réponds uniquement par 0, 1 ou 2. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "premise": line["premise"],
+            "hypothesis": line["hypothesis"],
+        },
+    ),
 }
 
 
