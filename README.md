@@ -6,78 +6,82 @@ colorTo: gray
 sdk: docker
 app_port: 7860
 ---
-## COLLE Dataset Card
+
+## COLE Dataset Card
 ## Dataset Summary
 
-The COLLE dataset suite hosts multiple French NLP benchmark tasks for evaluating language models. It includes test sets, validation sets, and training sets for tasks such as sentiment analysis, question answering, NLI, and more.
+The COLE benchmark is a suit of multiple French NLP tasks for evaluating language models. It includes test sets, and some validation, and training sets for tasks such as sentiment analysis, question answering, NLI, and more.
 
 ## Task Descriptions
 
-- **[Allocine.fr](https://github.com/TheophileBlard/french-sentiment-analysis-with-bert)**  
-  Allo-ciné tests language understanding in sentiment classification by feeding movie reviews which can be either positive and negative, the task consists in giving the correct sentiment for each review.
+## Allocine.fr
+Allo-ciné tests language understanding in sentiment classification by feeding movie reviews which can be either positive and negative, the task consists in giving the correct sentiment for each review.
 
-- **[DACCORD](https://aclanthology.org/2024.lrec-main.1065/)**  
-  Determine if a French sentence makes sense semantically (binary label).
+## DACCORD
+Determine if a French sentence makes sense semantically (binary label).
 
-- **[FQuAD](https://aclanthology.org/2020.findings-emnlp.107/)**  
-  Fquad is question/answer pair built on high-quality wikipedia articles. The goal of the model in this task is to accurately predict if the answer to the question really can be found in the provided answer.
+## FQuAD
+Fquad is question/answer pair built on high-quality wikipedia articles. The goal of the model in this task is to accurately predict if the answer to the question really can be found in the provided answer.
 
-- **[FraCaS](https://arxiv.org/abs/2309.10604)**  
-  Fracas is a natural language inference (NLI) taskthe where the model must classify the relationship between a premise and a hypothesis—entailment, contradiction, or neutral—based on complex linguistic phenomena such as quantifiers, plurality, anaphora, and ellipsis.
+## FraCaS 
+Fracas is a natural language inference (NLI) taskthe where the model must classify the relationship between a premise and a hypothesis-entailment, contradiction, or neutral-based on complex linguistic phenomena such as quantifiers, plurality, anaphora, and ellipsis.
 
-- **[Fr-BoolQ](https://huggingface.co/datasets/manu/french_boolq)**  
-  Boolean question answering in French: answer true/false based on context.
+## Fr-BoolQ
+Boolean question answering in French: answer true/false based on context.
 
-- **[GQNLI-fr](https://aclanthology.org/2024.lrec-main.1065/)**  
-  The dataset consists of carefully constructed premise-hypothesis pairs that involve quantifier logic (e.g. most, at least, more than half). The goal is to evaluate the model's ability to reason about these expressions and determine whether the hypothesis logically follows from the premise, contradicts it, or is neutral.
+## GQNLI-fr
+The dataset consists of carefully constructed premise-hypothesis pairs that involve quantifier logic (e.g. most, at least, more than half). The goal is to evaluate the model's ability to reason about these expressions and determine whether the hypothesis logically follows from the premise, contradicts it, or is neutral.
 
-- **[MMS-fr](https://arxiv.org/abs/2306.07902)**  
-  MMS-fr is a sentiment analysis task where the model classifies a French text as positive (2), neutral (1), or negative (0), assessing its ability to detect sentiment across diverse domains and sources.
+## LingNLI
+LingNLI is a NLI corpus collected by putting a linguist 'in the loop' to dynamically introduce novel constraints during data collection, aiming to mitigate the systematic gaps and biases often found in crowdsourced datasets.
 
-- **[MNLI-nineeleven-Fr-MT](https://aclanthology.org/N18-1101/)**  
-  French machine-translated version of MNLI using 9/11 context, for entailment classification.
+## MMS-fr 
+MMS-fr is a sentiment analysis task where the model classifies a French text as positive (2), neutral (1), or negative (0), assessing its ability to detect sentiment across diverse domains and sources.
 
-- **[MultiBLiMP-Fr](https://arxiv.org/abs/2504.02768)**  
-  MultiBLiMP-Fr is a grammatical judgment task where the model must identify the grammatically correct sentence from a minimal pair differing by a single targeted feature, thereby assessing its knowledge of French syntax, morphology, and agreement.
+## MNLI-nineeleven-Fr-MT 
+French machine-translated version of MNLI using 9/11 context, for entailment classification.
 
-- **[PAWS-X](https://arxiv.org/abs/1908.11828)**  
-  This task aims to test paraphrase identification by giving two sentences and a label defining if these sentences are equivalent in meaning or not.
+## MultiBLiMP-Fr 
+MultiBLiMP-Fr is a grammatical judgment task where the model must identify the grammatically correct sentence from a minimal pair differing by a single targeted feature, thereby assessing its knowledge of French syntax, morphology, and agreement.
 
-- **[PIAF](https://aclanthology.org/2020.lrec-1.673/)**  
-  This task consists of pairs of questions and text answers with information of where in the answer is the truly relevant information.
+## PAWS-X
+This task aims to test paraphrase identification by giving two sentences and a label defining if these sentences are equivalent in meaning or not.
 
-- **[QFrBLiMP](https://arxiv.org/abs/2401.67890)**  
-  This task gives the model sentences pairs, the goal is to determine if the sentences are semantically equivalent, or, put more simply, if they mean the same thing, even with slightly different syntax and words.
+## PIAF
+This task consists of pairs of questions and text answers with information of where in the answer is the truly relevant information.
 
-- **[QFrCoLA](https://vitrinelinguistique.oqlf.gouv.qc.ca/)**  
-  QFrCoLA is a french dataset made from multiple french language sites such as académie-française.fr and vitrinelinguistique.com. It aims to tests models ability to determine a sentence's acceptability in french on subjects such as grammar and syntax. The answer is a binary label indicating if the sentence is correct or not.
+## QFrBLiMP
+This task gives the model sentences pairs, the goal is to determine if the sentences are semantically equivalent, or, put more simply, if they mean the same thing, even with slightly different syntax and words.
 
-- **[QFrCoRE](https://canada-media.ca/expressions-quebecoises/)**  
-  QFrCoRE is a definition matching task where the model selects the correct standard French definition for a Quebec French expression from a list of candidates.
+## QFrCoLA 
+QFrCoLA is a french dataset made from multiple french language sites such as académie-française.fr and vitrinelinguistique.com. It aims to tests models ability to determine a sentence's acceptability in french on subjects such as grammar and syntax. The answer is a binary label indicating if the sentence is correct or not.
 
-- **[QFrCoRT](https://vivreenfrancais.mcgill.ca/capsules-linguistiques/expressions-quebecoises/)**  
-  QFrCoRT is a definition matching task where the model selects the correct standard French definition for a Quebec French term from a list of candidates.
+## QFrCoRE
+QFrCoRE is a definition matching task where the model selects the correct standard French  definition for a Quebec French expression from a list of candidates.
 
-- **[RTE3-Fr](https://aclanthology.org/2024.lrec-main.1065/)**  
-  French version of RTE3 for textual entailment recognition.
+## QFrCoRT
+QFrCoRE is a definition matching task where the model selects the correct standard French  definition for a Quebec French term from a list of candidates.
 
-- **[SICK-fr](https://huggingface.co/datasets/Lajavaness/SICK-fr)**  
-  This task also has pairs of sentences and notes them on 2 dimensions, relatedness and entailment. While relatedness scales from 1 to 5, entailement is a choice between entails, contradicts or neutral.
+## RTE3-Fr
+French version of RTE3 for textual entailment recognition.
 
-- **[STS22](https://competitions.codalab.org/competitions/33835)**  
-  This task evaluates whether pairs of news articles, written in different languages, cover the same story. It focuses on document-level similarity, where systems rate article pairs on a 4-point scale from most to least similar.
+## SICK-fr
+This task also has pairs of sentences and notes them on 2 dimensions, relatedness and entailment. While relatedness scales from 1 to 5, entailement is a choice between entails, contradicts or neutral.
 
-- **[Wino-X-LM](https://aclanthology.org/2021.emnlp-main.670/)**  
-  Pronoun resolution task: choose between two referents in a sentence with an ambiguous pronoun.
+## STS22
+This task evaluates whether pairs of news articles, written in different languages, cover the same story. It focuses on document-level similarity, where systems rate article pairs on a 4-point scale from most to least similar
 
-- **[Wino-X-MT](https://aclanthology.org/2021.emnlp-main.670/)**  
-  Translation-based pronoun resolution: choose which of two French translations uses the correct gendered pronoun.
+## Wino-X-LM
+Pronoun resolution task: choose between two referents in a sentence with an ambiguous pronoun.
 
-- **[WSD-Fr](https://aclanthology.org/W19-0422/)**  
-  WSD-Fr is a word sense disambiguation task where the model must identify the correct meaning of an ambiguous verb in context, as part of the FLUE benchmark.
+## Wino-X-MT
+Translation-based pronoun resolution: choose which of two French translations uses the correct gendered pronoun.
 
-- **[XNLI-fr](https://aclanthology.org/D18-1269)**  
-  This task consists of pairs of sentences where the goal is to determine the relation between the two sentences, this relation can be either entailement, neutral or contradiction.
+## WSD-Fr
+WSD-Fr is a word sense disambiguation task where the model must identify the correct meaning of an ambiguous verb in context, as part of the FLUE benchmark.
+
+## XNLI-fr
+This task consists of pairs of sentences where the goal is to determine the relation between the two sentences, this relation can be either entailement, neutral or contradiction.
 
 
 ## Language
@@ -85,7 +89,7 @@ The language data in COLE is in French .
 
 ### Dataset structure
 
-## Allocine.fr:
+## Allocine.fr
 ```json
 
 {
@@ -108,7 +112,7 @@ The language data in COLE is in French .
 }
 ```
 
-## FQuAD:
+## FQuAD
 ```json
 
 {
@@ -122,6 +126,7 @@ The language data in COLE is in French .
   "is_impossible": false
 }
 ```
+
 ## FraCaS
 ```json
 
@@ -149,6 +154,7 @@ The language data in COLE is in French .
   "topic": "GENERALIZED QUANTIFIERS"
 }
 ```
+
 ## Fr-BoolQ
 ```json
 
@@ -158,7 +164,8 @@ The language data in COLE is in French .
   "label": 1
 }
 ```
-## GQNLI-fr:
+
+## GQNLI-Fr
 ```json
 
 {
@@ -172,6 +179,16 @@ The language data in COLE is in French .
 }
 ```
 
+## LingNLI
+```json
+
+{
+  "premise": "La richesse des citations verbatim - constituant un bon tiers de ce livre - améliore également la vraisemblance de Burn Rate.",
+  "hypothesis": "Burn Rate manque de véracité et n'inclut aucune référence à d'autres œuvres d'aucune sorte.",
+  "label": 2
+}
+```
+
 ## MMS
 ```json
 
@@ -180,6 +197,7 @@ The language data in COLE is in French .
   "label": 2
 }
 ```
+
 ## MNLI-nineeleven-Fr-MT
 ```json
 
@@ -194,6 +212,7 @@ The language data in COLE is in French .
   "hypothesis_original": "Muslims disliked autocratic nationalism by the late 1970s."
 }
 ```
+
 ## MultiBLiMP-Fr
 ```json
 
@@ -203,7 +222,8 @@ The language data in COLE is in French .
   "label": 0
 }
 ```
-## ```PAWS-X:
+
+## PAWS-X
 ```json
 
 {
@@ -213,6 +233,7 @@ The language data in COLE is in French .
   "label": 0
 }
 ```
+
 ## PIAF
 ```json
 
@@ -227,7 +248,8 @@ The language data in COLE is in French .
   }
 }
 ```
-## QFrBLiMP:
+
+## QFrBLiMP
 ```json
 
 {
@@ -246,7 +268,8 @@ The language data in COLE is in French .
   "answer": "accept"
 }
 ```
-## QFrCoLA:
+
+## QFrCoLA
 ```json
 
 {
@@ -256,6 +279,7 @@ The language data in COLE is in French .
   "category": "anglicism"
 }
 ```
+
 ## QFrCoRE
 ```json
 
@@ -277,6 +301,7 @@ The language data in COLE is in French .
   "reference": "https://canada-media.ca/expressions-quebecoises/"
 }
 ```
+
 ## QFrCoRT
 ```json
 {
@@ -297,6 +322,7 @@ The language data in COLE is in French .
   "reference": "https://vivreenfrancais.mcgill.ca/capsules-linguistiques/expressions-quebecoises/"
 }
 ```
+
 ## RTE3-Fr
 ```json
 
@@ -311,7 +337,8 @@ The language data in COLE is in French .
   "length": "short"
 }
 ```
-## SICK-fr:
+
+## SICK-Fr
 ```json
 
 {
@@ -322,7 +349,8 @@ The language data in COLE is in French .
   "sentence_B": "Il n'y a pas de lutte et d'étreinte de chiens."
 }
 ```
-## STS22:
+
+## STS22
 ```json
 
 {
@@ -332,6 +360,7 @@ The language data in COLE is in French .
   "sentence2": "Le décret n° 2020-293 du 23 mars 2020..."
 }
 ```
+
 ## Wino-X-LM
 ```json
 
@@ -349,6 +378,7 @@ The language data in COLE is in French .
   "context_referent_of_option2_fr": "vase"
 }
 ```
+
 ## Wino-X-MT
 ```json
 
@@ -368,6 +398,7 @@ The language data in COLE is in French .
   "false_translation_referent_of_pronoun2_fr": "arme"
 }
 ```
+
 ## WSD-Fr
 ```json
 
@@ -377,7 +408,8 @@ The language data in COLE is in French .
   "label": "négociations"
 }
 ```
-## XNLI-fr
+
+## XNLI-Fr
 ```json
 
 {
@@ -415,12 +447,18 @@ The language data in COLE is in French .
 |------------|-----------:|
 | test       |        178 |
 
-## GQNLI-fr
+## GQNLI-Fr
 | split      | # examples |
 |------------|-----------:|
 | train      |       243 |
 | validation |        27 |
 | test       |        30 |
+
+## LingNLI
+| split      | # examples |
+|------------|-----------:|
+| train      |     29,985 |
+| test       |      4,893 |
 
 ## MMS
 | split      | # examples   |
@@ -479,7 +517,7 @@ The language data in COLE is in French .
 |------------|-----------:|
 | test       |        201 |
 
-## rte3-french
+## rte3-Fr
 | split      | # examples   |
 |------------|-------------:|
 | train      |      269,821 |
@@ -515,10 +553,15 @@ The language data in COLE is in French .
 | test       |       3,121 |
 | train       |       269,821  |
 
-## XNLI-fr
+## XNLI-Fr
 | split      | # examples   |
 |------------|-------------:|
 | train      |      393,000 |
 | validation |        2,490 |
 | test       |        5,010 |
 
+
+
+## Citation
+
+TO ADD
