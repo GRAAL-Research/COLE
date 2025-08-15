@@ -15,7 +15,7 @@
   "errorOccurred": "Une erreur est survenue",
   "close": "Fermer",
   "details": "Détails",
-  "benchmarksIntro": "COLE est constitué de 22 tâches, chacune visant à tester une ou plusieurs facettes de la compréhension du langage en apprentissage automatique. Ci-dessous, chaque tâche est décrite en détail.",
+  "benchmarksIntro": "COLE est constitué de 23 tâches, chacune visant à tester une ou plusieurs facettes de la compréhension du langage en apprentissage automatique. Ci-dessous, chaque tâche est décrite en détail.",
   "metrics": "Métrique(s) :",
   "benchmark_alloCine_title": "Allo-ciné.ca",
   "benchmark_alloCine_description": "Allo-ciné teste la compréhension du langage dans la classification des sentiments en fournissant des critiques de films pouvant être positives ou négatives. La tâche consiste à donner le sentiment correct pour chaque critique.",

@@ -15,7 +15,7 @@
   "errorOccurred": "An error occurred",
   "close": "Close",
   "details": "Details",
-  "benchmarksIntro": "COLE is constituted of 22 tasks, each of them aims to test one or more facets of language understanding in machine learning. Below are each of the tasks in more detail.",
+  "benchmarksIntro": "COLE is constituted of 23 tasks, each of them aims to test one or more facets of language understanding in machine learning. Below are each of the tasks in more detail.",
   "metrics": "Metric(s) :",
   "benchmark_alloCine_title": "Allo-ciné.ca",
   "benchmark_alloCine_description": "Allo-ciné tests language understanding in sentiment classification by feeding movie reviews which can be either positive and negative. The task consists in giving the correct sentiment for each review.",
