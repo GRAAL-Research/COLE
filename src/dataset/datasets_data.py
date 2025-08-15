@@ -26,7 +26,7 @@ datasets = {
     Tasks.QFRCOLA.value: Dataset(
         name=Tasks.QFRCOLA.value,
         description="Binary grammatical judgement : "
-        "Predicts whether a sentence is grammatically correct (1) or not. (0)",
+        "Predicts whether a sentence is grammatically correct (1) or not. (0).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -66,7 +66,7 @@ datasets = {
     Tasks.GQNLI.value: Dataset(
         name=Tasks.GQNLI.value,
         description="Natural language inference task : "
-        "predict the relation between two sentences (implication, neutral, contradiction)",
+        "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -94,7 +94,7 @@ datasets = {
     Tasks.SICKFR.value: Dataset(
         name=Tasks.SICKFR.value,
         description="Natural language inference task : "
-        "predict the relation between two sentences (implication, neutral, contradiction)",
+        "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -117,7 +117,7 @@ datasets = {
     Tasks.STS22.value: Dataset(
         name=Tasks.STS22.value,
         description="Semantic textual similarity task : "
-        "Predict how similar two sentences are to each other (1 to 4)",
+        "Predict how similar two sentences are to each other (1 to 4).",
         possible_ground_truths=["1", "2", "3", "4"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["score"]),
@@ -139,7 +139,7 @@ datasets = {
     Tasks.PAWS_X.value: Dataset(
         name=Tasks.PAWS_X.value,
         description="Binary classification task : "
-        "Predict if two sentences have the same meaning (1) or not (0)",
+        "Predict if two sentences have the same meaning (1) or not (0).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -211,7 +211,7 @@ datasets = {
     Tasks.XNLI.value: Dataset(
         name=Tasks.XNLI.value,
         description="Natural language inference task : "
-        "predict the relation between two sentences (implication, neutral, contradiction)",
+        "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -238,7 +238,7 @@ datasets = {
     Tasks.QFRCORE.value: Dataset(
         name=Tasks.QFRCORE.value,
         description="Definition matching task : "
-        "Match the Quebec expression with its definition from a list",
+        "Match the Quebec expression with its definition from a list.",
         possible_ground_truths=[str(i) for i in range(10)],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
@@ -268,7 +268,7 @@ datasets = {
     Tasks.QFRCORT.value: Dataset(
         name=Tasks.QFRCORT.value,
         description="Definition matching task : "
-        "Match the Quebec term with its definition from a list",
+        "Match the Quebec term with its definition from a list.",
         possible_ground_truths=[str(i) for i in range(10)],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["correct_index"]),
@@ -325,7 +325,7 @@ datasets = {
         description="Binary question answering task : "
         "Answer whether the context allows answering 'yes' to the question (1)"
         "or, if the context only allows answering 'no' "
-        "to the question or does not answer the question. (0)",
+        "to the question or does not answer the question. (0).",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: str(line["label"]),
@@ -349,7 +349,7 @@ datasets = {
     Tasks.MNLI_NINEELEVEN_FR_MT.value: Dataset(
         name=Tasks.MNLI_NINEELEVEN_FR_MT.value,
         description="Natural language inference task : "
-        "predict the relation between two sentences (implication, neutral, contradiction)",
+        "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
@@ -434,9 +434,9 @@ datasets = {
     Tasks.WINO_X_MT.value: Dataset(
         name="wino_x_mt",
         description=(
-            "Résolution de pronom à partir de traductions : choisir entre deux traductions françaises "
-            "d'une phrase anglaise avec pronom ambigu. L'objectif est d'identifier laquelle des deux "
-            "traductions utilise le bon pronom (il ou elle) en fonction du référent correct."
+            "Pronoun resolution based on translations: choose between two French translations of an English "
+            "sentence with an ambiguous pronoun. The goal is to identify which of the two translations uses "
+            "the correct pronoun (he or she) based on the correct referent."
         ),
         possible_ground_truths=["1", "2"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
@@ -487,7 +487,7 @@ datasets = {
     Tasks.FRACAS.value: Dataset(
         name=Tasks.FRACAS.value,
         description="Natural language inference task : "
-        "predict the relation between two sentences (implication, neutral, contradiction)",
+        "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["label"],
