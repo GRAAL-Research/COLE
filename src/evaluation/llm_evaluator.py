@@ -57,7 +57,7 @@ class ModelEvaluator:
                 }
             }
             metrics.append(task_entry)
-            wandb.log({metric_name: {**metric_score}})
+            wandb.log({f"{task_name}.{metric_name}": {**metric_score}})
 
         self.last_metrics = metrics
         metrics = self.last_predictions
