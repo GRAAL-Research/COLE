@@ -41,9 +41,9 @@ class HFLLMModel(LanguageModel):
         if num_params >= 70000000000:  # 70B
             batch_size = 2
         elif num_params >= 32000000000:  # 32B
-            batch_size = 16
+            batch_size = 8
         elif num_params >= 27000000000:  # 27B
-            batch_size = 32
+            batch_size = 16
         elif "gpt-oss" in self._model_name:
             batch_size = 8  # Otherwise a lot of OOM
             self._batch_size_sts22 = (
