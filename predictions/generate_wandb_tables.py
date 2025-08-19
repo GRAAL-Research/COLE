@@ -82,6 +82,8 @@ class ModelNameProcessor:
             return "aya"
         if "grok" in name_lower:
             return "grok"
+        if "croissant" in name_lower:
+            return "Croissant"
         if name_lower.startswith(("o1", "o3", "o4")):
             return name_lower.split("-")[0] if "-" in name_lower else name_lower[:2]
         return "unknown"
@@ -187,7 +189,7 @@ def main():
                             key = f"{task_name} (exact_match/f1)"
                             results_by_model[model_display_name][
                                 key
-                            ] = f"{em:.3f}/{f1:.3f}"
+                            ] = f"{em:.2f}/{f1:.2f}"
                             all_columns.add(key)
                         else:
                             for metric_name, value in metrics.items():
