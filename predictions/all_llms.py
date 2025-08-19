@@ -109,6 +109,7 @@ small_llm_2 = {
         "HuggingFaceTB/SmolLM2-135M",
         "HuggingFaceTB/SmolLM2-135M-Instruct",
     ],
+    "croissant": ["croissantllm/CroissantLLMBase"],
     "baseline": ["RandomBaselineModel"],
     "all": [],
 }
