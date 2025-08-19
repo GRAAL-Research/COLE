@@ -130,8 +130,8 @@ private_llm = {
         "gpt-4.1-mini-2025-04-14",
         "gpt-5-2025-08-07",
         "gpt-5-mini-2025-08-07",
-        "gpt-oss-120b",
     ],
+    "openrouter": ["gpt-oss-120b", "qwen/qwen-max"],
     "anthropic": [
         "claude-opus-4-20250514",
         "claude-sonnet-4-20250514",

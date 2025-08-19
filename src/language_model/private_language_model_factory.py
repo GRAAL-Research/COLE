@@ -23,6 +23,8 @@ def get_api_key(model_name: str) -> Union[str, None]:
         key_name = "XAI_API_KEY"
     elif model_name in private_llm["google"]:
         key_name = "gcp_key"
+    elif model_name in private_llm["openrouter"]:
+        key_name = "open_route_api_key"
     else:
         raise ValueError(f"Model name {model_name} not found.")
 
@@ -84,6 +86,17 @@ def private_language_model_factory(model_name):
             extra_params = {}
             model = MistralWrapper(
                 model_name=model_name, api_key=api_key, extra_params=extra_params
+            )
+        elif model_name in private_llm["openrouter"]:
+            extra_params = {}
+            use_function_calling = True
+            model = OpenAIWrapper(
+                model_name=model_name,
+                api_key=api_key,
+                extra_params=extra_params,
+                use_function_calling=use_function_calling,
+                base_url="https://openrouter.ai/api/v1",
+                timeout=480,
             )
         else:
             raise NotImplementedError("Not implemented yet.")
