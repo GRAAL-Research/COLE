@@ -137,6 +137,7 @@ private_llm = {
         "claude-sonnet-4-20250514",
     ],
     "xai": [
+        "grok-4-0709",
         "grok-3-latest",
         "grok-3-fast-latest",
         "grok-3-mini-latest",
