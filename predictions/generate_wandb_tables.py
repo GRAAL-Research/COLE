@@ -48,9 +48,7 @@ class ModelNameProcessor:
             "meta-llama-3.1",
             "gemma-2",
         }
-
         self.upsilon_models = {"chocolatine", "french-alpaca", "lucie"}
-
         self.size_patterns = {
             r"(\d+\.\d+)[bB]": r"$\1$B",
             r"(\d+\.\d+)[mM]": r"$\1$M",
@@ -92,11 +90,9 @@ class ModelNameProcessor:
         name_lower = name.lower()
         gamma_models = any(p in name_lower for p in self.gamma_models)
         upsilon_models = any(p in name_lower for p in self.upsilon_models)
-
         if "french-alpaca" in name_lower:
             upsilon_models = True
             gamma_models = True
-
         family = self.get_model_family(name)
         return ModelAttributes(
             upsilon_models=upsilon_models,
@@ -105,7 +101,6 @@ class ModelNameProcessor:
         )
 
     def normalize_base_name(self, name: str) -> str:
-        """Apply basic normalization to model name."""
         n = name
         n = n.replace("-unsloth-bnb-4bit", "").replace("-bnb-4bit", "")
         n = re.sub(r"(?i)-instruct\b", "-it", n)
@@ -134,19 +129,15 @@ class ModelNameProcessor:
         n = re.sub(r"(?i)^qwq(?=-|$)", "QwQ", n)
         n = re.sub(r"(?i)^meta-llama(?=-|$)", "Meta-Llama", n)
         n = re.sub(r"(?i)^s1\.1(?=-|$)", "S1.1", n)
-
         n = re.sub(r"(\d+\.\d+)", r"$\1$", n)
-
         for pattern, replacement in self.size_patterns.items():
             n = re.sub(pattern, replacement, n)
-
         return n
 
     def format_for_latex(self, name: str) -> str:
         attributes = self.get_model_attributes(name)
         normalized = self.normalize_base_name(name)
         formatted = r"\texttt{" + normalized + "}"
-
         symbols = []
         if attributes.gamma_models:
             symbols.append(r"$\Gamma$")
@@ -162,6 +153,18 @@ class ModelNameProcessor:
         )
 
 
+def _scale_if_fraction(x: float) -> float:
+    """Met à l'échelle x en % si c'est probablement une fraction."""
+    if x is None:
+        return x
+    try:
+        if 0.0 <= float(x) <= 1.001:
+            return float(x) * 100.0
+        return float(x)
+    except Exception:
+        return x
+
+
 def main():
     os.makedirs("results", exist_ok=True)
     api = wandb.Api()
@@ -169,7 +172,7 @@ def main():
 
     processor = ModelNameProcessor()
     results_by_model = defaultdict(dict)
-    all_columns = set()
+    all_columns = []
 
     for run in runs:
         if run.state != "finished":
@@ -184,56 +187,50 @@ def main():
                 for task_name, task_content in task_dict.items():
                     for metrics in task_content.values():
                         if "exact_match" in metrics and "f1" in metrics:
-                            em = metrics["exact_match"]
-                            f1 = metrics["f1"]
-                            key = f"{task_name} (exact_match/f1)"
-                            results_by_model[model_display_name][
-                                key
-                            ] = f"{em:.2f}/{f1:.2f}"
-                            all_columns.add(key)
+                            em = _scale_if_fraction(metrics["exact_match"])
+                            f1 = _scale_if_fraction(metrics["f1"])
+                            key_em = f"{task_name} exact_match"
+                            key_f1 = f"{task_name} f1"
+                            results_by_model[model_display_name][key_em] = em
+                            results_by_model[model_display_name][key_f1] = f1
+                            if key_em not in all_columns:
+                                all_columns.extend([key_em, key_f1])
                         else:
                             for metric_name, value in metrics.items():
                                 if isinstance(value, (float, int)):
                                     key = f"{task_name} ({metric_name})"
+                                    # Les autres métriques sont attendues en %
                                     results_by_model[model_display_name][key] = (
-                                        value * 100
+                                        float(value) * 100.0
                                     )
-                                    all_columns.add(key)
+                                    if key not in all_columns:
+                                        all_columns.append(key)
 
-    sorted_columns = sorted(all_columns)
-    df = pd.DataFrame.from_dict(
-        results_by_model, orient="index", columns=sorted_columns
-    )
+    df = pd.DataFrame.from_dict(results_by_model, orient="index", columns=all_columns)
     df.index.name = "model_name"
     df.reset_index(inplace=True)
-
     df["model_name"] = df["model_name"].apply(
         lambda x: processor.process_model_name(x, for_latex=True)
     )
     df = df.sort_values("model_name").reset_index(drop=True)
 
-    combined_cols = [
-        col
-        for col in df.columns
-        if df[col].dtype == object and df[col].astype(str).str.contains("/").any()
-    ]
-    for col in combined_cols:
-        base = col.split(" (")[0]
-        em_vals, f1_vals = df[col].str.split("/", expand=True).astype(float).T.values
-        df[f"{base} exact_match"] = em_vals
-        df[f"{base} f1"] = f1_vals
-        df.drop(columns=[col], inplace=True)
+    def sort_key(col: str):
+        if col == "model_name":
+            return ("", -1, "")
+        task = col.split(" (")[0].split(" ")[0]
+        if col.endswith(" exact_match"):
+            kind = 0
+        elif col.endswith(" f1"):
+            kind = 1
+        else:
+            kind = 2
+        return (task, kind, col)
+
+    ordered_cols = sorted([c for c in df.columns], key=sort_key)
+    df = df[ordered_cols]
 
     df.to_csv(FULL_TABLE_CSV, index=False)
     df.to_latex(FULL_TABLE_LATEX, index=False, float_format="%.2f", escape=False)
-
-    print("Results saved to:")
-    print(f"  CSV: {FULL_TABLE_CSV}")
-    print(f"  LaTeX: {FULL_TABLE_LATEX}")
-
-    print("\nSample processed model names:")
-    for i, name in enumerate(df["model_name"].head(10)):
-        print(f"  {i + 1}. {name}")
 
 
 if __name__ == "__main__":
