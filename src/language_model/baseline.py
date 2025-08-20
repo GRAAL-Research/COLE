@@ -14,12 +14,23 @@ class RandomBaselineModel(LanguageModel):
         size = len(evaluation_dataset)
         choices = task.dataset.possible_ground_truths
         if len(choices) == 0:
+            # Meaning it is a generation task.
             predictions = []
             for row in evaluation_dataset:
-                choices = range(0, len(row["text"]))
-                prediction = self.random_generator.choice(choices, size=1).tolist()
-                predictions.extend(prediction)
+
+                # Since we work with the prompt, including instruction, we extract the instance sentence after the
+                # "Phrase :", then we remove the trailing Part-of-speech content.
+                instance_sentence = row["text"].split("Phrase : ")[-1].split("\n")[0]
+                whitespace_instance_sentence = instance_sentence.split(" ")
+
+                choices = range(0, len(whitespace_instance_sentence))
+                prediction_idx = self.random_generator.choice(choices, size=1).tolist()[
+                    0
+                ]
+                prediction = whitespace_instance_sentence[prediction_idx]
+                predictions.append(prediction)
         else:
+            # Meaning it is an inference task.
             predictions = self.random_generator.choice(choices, size=size).tolist()
         return predictions
 
