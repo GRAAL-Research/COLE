@@ -135,8 +135,8 @@ private_llm = {
     "openrouter": [
         "gpt-oss-120b",
         "qwen/qwen-max",
-        "gemini-2.5-pro",
-        "gemini-2.5-flash",
+        "google/gemini-2.5-pro",
+        "google/gemini-2.5-flash",
     ],
     "anthropic": [
         "claude-opus-4-20250514",
