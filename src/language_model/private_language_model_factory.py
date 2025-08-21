@@ -21,8 +21,6 @@ def get_api_key(model_name: str) -> Union[str, None]:
         key_name = "mistral_token"
     elif model_name in private_llm["xai"]:
         key_name = "XAI_API_KEY"
-    elif model_name in private_llm["google"]:
-        key_name = "gcp_key"
     elif model_name in private_llm["openrouter"]:
         key_name = "open_route_api_key"
     else:
@@ -75,11 +73,6 @@ def private_language_model_factory(model_name):
         elif model_name in private_llm["xai"]:
             extra_params = {}
             model = XAIWrapper(
-                model_name=model_name, api_key=api_key, extra_params=extra_params
-            )
-        elif model_name in private_llm["google"]:
-            extra_params = {}
-            model = GoogleWrapper(
                 model_name=model_name, api_key=api_key, extra_params=extra_params
             )
         elif model_name in private_llm["mistral"]:
