@@ -131,7 +131,13 @@ private_llm = {
         "gpt-5-2025-08-07",
         "gpt-5-mini-2025-08-07",
     ],
-    "openrouter": ["gpt-oss-120b", "qwen/qwen-max"],
+    # We use Gemini in open router to be not rate limited
+    "openrouter": [
+        "gpt-oss-120b",
+        "qwen/qwen-max",
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
+    ],
     "anthropic": [
         "claude-opus-4-20250514",
         "claude-sonnet-4-20250514",
@@ -146,10 +152,6 @@ private_llm = {
     "deepseek": [
         "deepseek-chat",
         "deepseek-reasoner",
-    ],
-    "google": [
-        "gemini-2.5-pro",
-        "gemini-2.5-flash",
     ],
     "mistral": [
         "pixtral-large-latest",
