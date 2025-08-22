@@ -164,24 +164,29 @@ for key in private_llm.keys():
     if isinstance(private_llm[key], list) and key != "all":
         private_llm["all"].extend(private_llm[key])
 
-# from collections import Counter
-#
-# import pandas
-#
-# print(
-#     len(llms["all"])
-#     + len(small_llm["all"])
-#     + len(small_llm_2["all"])
-#     + len(private_llm["all"])
-# )
-# print(Counter(llms["all"] + small_llm["all"] + small_llm_2["all"] + private_llm["all"]))
-# print(
-#     pandas.DataFrame(
-#         {
-#             "LLM": [
-#                 r"\texttt{" + text.capitalize().replace("Gpt", "GPT") + r"}"
-#                 for text in sorted(private_llm["all"])
-#             ]
-#         }
-#     ).to_latex(index=False)
-# )
+if __name__ == "__main__":
+    from collections import Counter
+
+    import pandas
+
+    print(
+        len(llms["all"])
+        + len(small_llm["all"])
+        + len(small_llm_2["all"])
+        + len(private_llm["all"])
+    )
+    print(
+        Counter(
+            llms["all"] + small_llm["all"] + small_llm_2["all"] + private_llm["all"]
+        )
+    )
+    print(
+        pandas.DataFrame(
+            {
+                "LLM": [
+                    r"\texttt{" + text.capitalize().replace("Gpt", "GPT") + r"}"
+                    for text in sorted(private_llm["all"])
+                ]
+            }
+        ).to_latex(index=False)
+    )
