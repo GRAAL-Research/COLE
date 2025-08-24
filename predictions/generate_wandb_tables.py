@@ -48,7 +48,12 @@ class ModelNameProcessor:
             "meta-llama-3.1",
             "gemma-2",
         }
-        self.upsilon_models = {"chocolatine", "french-alpaca", "lucie"}
+        self.upsilon_models = {
+            "chocolatine",
+            "french-alpaca",
+            "lucie",
+            "croissantllmbase",
+        }
         self.size_patterns = {
             r"(\d+\.\d+)[bB]": r"$\1$B",
             r"(\d+\.\d+)[mM]": r"$\1$M",
