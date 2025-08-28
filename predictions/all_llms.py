@@ -60,7 +60,6 @@ llms = {
         "simplescaling/s1.1-32B",
     ],
     "mistralai": [
-        "mistralai/Ministral-8B-Instruct-2410",
         "mistralai/Mixtral-8x7B-Instruct-v0.1",
         "mistralai/Mixtral-8x7B-v0.1",
     ],

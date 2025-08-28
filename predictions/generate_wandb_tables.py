@@ -7,6 +7,7 @@ from typing import Optional
 import pandas as pd
 import wandb
 
+from predictions.all_llms import llms, small_llm, small_llm_2, private_llm
 from src import WANDB_PROJECT
 
 PROJECT_PATH = f"doctorate/{WANDB_PROJECT}"
@@ -178,6 +179,7 @@ def main():
     processor = ModelNameProcessor()
     results_by_model = defaultdict(dict)
     all_columns = []
+    all_model_names = []
 
     for run in runs:
         if run.state != "finished":
@@ -185,6 +187,7 @@ def main():
         summary = run.summary._json_dict
         config = run.config
         full_model_name = config.get("model_name", "unknown_model")
+        all_model_names.append(full_model_name)
         model_display_name = full_model_name.split("/")[-1]
 
         if "tasks" in summary and isinstance(summary["tasks"], list):
@@ -211,6 +214,11 @@ def main():
                                     if key not in all_columns:
                                         all_columns.append(key)
 
+    print(
+        set(
+            llms["all"] + small_llm["all"] + small_llm_2["all"] + private_llm["all"]
+        ).difference(set(all_model_names))
+    )
     df = pd.DataFrame.from_dict(results_by_model, orient="index", columns=all_columns)
     df.index.name = "model_name"
     df.reset_index(inplace=True)
