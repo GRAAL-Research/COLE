@@ -220,6 +220,7 @@ def main():
         ).difference(set(all_model_names))
     )
     df = pd.DataFrame.from_dict(results_by_model, orient="index", columns=all_columns)
+    df["Composite Score"] = df.mean(axis=1)
     df.index.name = "model_name"
     df.reset_index(inplace=True)
     df["model_name"] = df["model_name"].apply(
