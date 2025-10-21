@@ -205,6 +205,14 @@ def tasks_factory(task_names: Union[Dict, List[str], List[Tasks]]) -> List[Task]
                         task_type=TaskType.INFERENCE,
                     )
                 )
+            case Tasks.TIMELINE:
+                tasks.append(
+                    Task(
+                        task_name=task.value,
+                        metric="accuracy",
+                        task_type=TaskType.INFERENCE,
+                    )
+                )
             case _:
                 error = f"Unknown task {task.value}."
                 logging.error(error)

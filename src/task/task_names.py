@@ -25,3 +25,4 @@ class Tasks(str, Enum):
     WINO_X_MT = "wino_x_mt"
     XNLI = "xnli"
     WSD = "wsd"
+    TIMELINE = "timeline"
