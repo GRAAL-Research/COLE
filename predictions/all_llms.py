@@ -157,6 +157,13 @@ private_llm = {
         "pixtral-large-latest",
         "mistral-large-latest",
     ],
+    "cohere": [
+        "command-a-03-2025",
+        "command-r7b-12-2024",
+        "command-a-reasoning-08-2025",
+        "command-r-08-2024",
+        "command-r-plus-08-2024",
+    ],
     "all": [],
 }
 

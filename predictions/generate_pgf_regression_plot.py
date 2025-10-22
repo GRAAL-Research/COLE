@@ -203,7 +203,6 @@ def generate_size_vs_score_plot(
     plt.xlabel("Model size (log scale)")
     plt.ylabel("Average score (%)")
     plt.title("Model size vs performance")
-    plt.grid(True, which="both", axis="both")
     plt.legend()
     plt.tight_layout()
     plt.savefig(output_path)

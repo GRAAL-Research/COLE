@@ -3,6 +3,7 @@ from typing import Union
 
 from predictions.all_llms import private_llm
 from src.language_model.anthropic_wrapper import AnthropicWrapper
+from src.language_model.cohere_wrapper import CohereWrapper
 from src.language_model.deepseek_wrapper import DeepSeekWrapper
 from src.language_model.google_wrapper import GoogleWrapper
 from src.language_model.mistral_wrapper import MistralWrapper
@@ -23,6 +24,8 @@ def get_api_key(model_name: str) -> Union[str, None]:
         key_name = "XAI_API_KEY"
     elif model_name in private_llm["openrouter"]:
         key_name = "open_route_api_key"
+    elif model_name in private_llm["cohere"]:
+        key_name = "cohere_api_key"
     else:
         raise ValueError(f"Model name {model_name} not found.")
 
@@ -89,6 +92,17 @@ def private_language_model_factory(model_name):
                 extra_params=extra_params,
                 use_function_calling=use_function_calling,
                 base_url="https://openrouter.ai/api/v1",
+                timeout=480,
+            )
+        elif model_name in private_llm["cohere"]:
+            extra_params = {}
+            use_function_calling = True
+            model = CohereWrapper(
+                model_name=model_name,
+                api_key=api_key,
+                extra_params=extra_params,
+                use_function_calling=use_function_calling,
+                base_url="https://api.cohere.ai/compatibility/v1",
                 timeout=480,
             )
         else:

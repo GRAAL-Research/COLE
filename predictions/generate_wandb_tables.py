@@ -14,6 +14,8 @@ PROJECT_PATH = f"doctorate/{WANDB_PROJECT}"
 MODELS_SIZE_PATH = "models_size.json"
 FULL_TABLE_CSV = os.path.join("results", "full_results_table.csv")
 FULL_TABLE_LATEX = os.path.join("results", "full_results_table.tex")
+FULL_TABLE_CSV_short = os.path.join("results", "full_results_table_short.csv")
+FULL_TABLE_LATEX_short = os.path.join("results", "full_results_table_short.tex")
 
 
 @dataclass
@@ -245,6 +247,30 @@ def main():
 
     df.to_csv(FULL_TABLE_CSV, index=False)
     df.to_latex(FULL_TABLE_LATEX, index=False, float_format="%.2f", escape=False)
+
+    df_2 = df[["model_name", "Composite Score"]].sort_values(
+        "Composite Score", ascending=False
+    )[:48]
+    df_2["model_name_2"] = pd.concat(
+        [
+            df[["model_name", "Composite Score"]].sort_values(
+                "Composite Score", ascending=False
+            )[48:]["model_name"],
+            pd.Series([""]),
+        ]
+    ).values
+    df_2["Composite Score_2"] = pd.concat(
+        [
+            df[["model_name", "Composite Score"]].sort_values(
+                "Composite Score", ascending=False
+            )[48:]["Composite Score"],
+            pd.Series([""]),
+        ]
+    ).values
+
+    df_2.to_latex(
+        FULL_TABLE_LATEX_short, index=False, float_format="%.2f", escape=False
+    )
 
 
 if __name__ == "__main__":
