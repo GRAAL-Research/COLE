@@ -135,14 +135,23 @@ private_llm = {
     "openrouter": [
         "gpt-oss-120b",
         "qwen/qwen-max",
+        "qwen/qwen3-235b-a22b-thinking-2507",
+        "qwen/qwen3-235b-a22b",
+        "z-ai/glm-4.6",
+        "z-ai/glm-4.5",
         "google/gemini-2.5-pro",
         "google/gemini-2.5-flash",
     ],
     "anthropic": [
         "claude-opus-4-20250514",
         "claude-sonnet-4-20250514",
+        "claude-sonnet-4-5-20250929",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-1-20250805",
     ],
     "xai": [
+        "grok-4-fast-non-reasoning",
+        "grok-4-fast-reasoning",
         "grok-4-0709",
         "grok-3-latest",
         "grok-3-fast-latest",
