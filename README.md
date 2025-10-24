@@ -7,6 +7,9 @@ sdk: docker
 app_port: 7860
 ---
 
+# COLE Leaderboard
+Here is our website [leaderboard](https://colebenchmark.org/).
+
 ## COLE Dataset Card
 ## Dataset Summary
 
