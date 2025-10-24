@@ -1,1 +1,2 @@
-export const BACKEND_ADDRESS = "http://localhost:8000";
+const BACKEND_ADDRESS = "/api"
+export {BACKEND_ADDRESS}
