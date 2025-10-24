@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime
 from functools import lru_cache
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Union
 
 import huggingface_hub
 from fastapi import FastAPI, UploadFile, Form, File
@@ -122,17 +122,6 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
     et normalise les métriques 'plates' en groupes imbriqués pour le front.
     """
 
-    allowed_metrics = {
-        "acc",
-        "accuracy",
-        "f1",
-        "exact_match",
-        "fquad",
-        "pearson",
-        "pearsonr",
-        "spearman",
-    }
-
     def _wrap_flat_metrics(task_payload: Dict[str, Any]) -> Dict[str, Any]:
         """
         Si task_payload est 'plat' (ex: {"accuracy": 94.2}),
@@ -173,7 +162,7 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
                 data = json.load(f)
 
             # Fonction interne qui traite UNE entrée (dict) au bon format minimal
-            def process_entry(entry: Dict[str, Any]) -> Dict[str, Any] | None:
+            def process_entry(entry: Dict[str, Any]) -> Union[Dict[str, Any], None]:
                 if not isinstance(entry, dict):
                     return None
                 if "model_name" not in entry or "tasks" not in entry:
@@ -212,7 +201,8 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
                     entries.append(processed)
 
         except Exception as e:
-            logging.error(f"Error processing file {filepath}: {e}")
+            logging_message = f"Error processing file '{filepath}': {e}"
+            logging.error(logging_message)
             continue
 
     return entries

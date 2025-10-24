@@ -5,7 +5,6 @@ from predictions.all_llms import private_llm
 from src.language_model.anthropic_wrapper import AnthropicWrapper
 from src.language_model.cohere_wrapper import CohereWrapper
 from src.language_model.deepseek_wrapper import DeepSeekWrapper
-from src.language_model.google_wrapper import GoogleWrapper
 from src.language_model.mistral_wrapper import MistralWrapper
 from src.language_model.open_ai_wrapper import OpenAIWrapper
 from src.language_model.xai_wrapper import XAIWrapper
