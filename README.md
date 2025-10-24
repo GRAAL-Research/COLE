@@ -10,7 +10,7 @@ app_port: 7860
 # COLE Leaderboard
 Here is our website [leaderboard](https://colebenchmark.org/).
 
-## COLE Dataset Card
+# COLE Dataset Card
 ## Dataset Summary
 
 The COLE benchmark is a suit of multiple French NLP tasks for evaluating language models. It includes test sets, and some validation, and training sets for tasks such as sentiment analysis, question answering, NLI, and more.
