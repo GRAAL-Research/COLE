@@ -43,11 +43,14 @@ TASK_METRICS = {
 CANDIDATE_PREFIXES = ["", "results.", "metrics.", "eval.", "evaluation.", "scores."]
 SEPARATORS = ["/", ".", "_", "-"]
 
+
 def norm(s):
     return str(s).lower().replace(" ", "_")
 
+
 def canon(s: str) -> str:
     return re.sub(r"[^a-z0-9]", "", str(s).lower())
+
 
 def flatten_dict(d, parent_key=""):
     items = {}
@@ -58,6 +61,7 @@ def flatten_dict(d, parent_key=""):
         else:
             items[new_key] = v
     return items
+
 
 def find_value(summary, task, metric):
     """Recherche la valeur d’un metric pour une tâche donnée."""
@@ -81,6 +85,7 @@ def find_value(summary, task, metric):
             return v
     return None
 
+
 def extract_tasks(summary):
     out = {}
     for task, metrics in TASK_METRICS.items():
@@ -99,12 +104,14 @@ def extract_tasks(summary):
             out[task] = task_block
     return out
 
+
 def best_model_url(model_name):
     if not model_name:
         return None
     if re.match(r"^[\w-]+/[\w.-]+$", model_name):
         return f"https://huggingface.co/{model_name}"
     return None
+
 
 def run_to_record(run, override_name=None, override_url=None):
     cfg = run.config or {}
@@ -130,7 +137,11 @@ def run_to_record(run, override_name=None, override_url=None):
             lc = norm(col)
             for task in TASK_METRICS:
                 for sep in SEPARATORS:
-                    if lc.startswith(task + sep) or lc.endswith(sep + task) or (sep + task + sep) in lc:
+                    if (
+                        lc.startswith(task + sep)
+                        or lc.endswith(sep + task)
+                        or (sep + task + sep) in lc
+                    ):
                         merged[col] = hist[col].dropna().iloc[-1]
                         break
         if merged:
@@ -138,11 +149,13 @@ def run_to_record(run, override_name=None, override_url=None):
     tasks_list = [{t: tasks[t]} for t in sorted(tasks.keys())]
     return {"model_name": name, "model_url": url, "tasks": tasks_list}
 
+
 def primary_metric_value(task_block):
     if not task_block:
         return None
     keys = list(task_block.keys())
     return task_block[keys[0]]
+
 
 def merge_by_model(records):
     grouped = defaultdict(list)
@@ -168,6 +181,7 @@ def merge_by_model(records):
         merged.append(combined)
     return merged
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--tag", default=None)
@@ -188,7 +202,9 @@ def main():
 
     records = []
     for r in runs:
-        rec = run_to_record(r, override_name=args.model_name, override_url=args.model_url)
+        rec = run_to_record(
+            r, override_name=args.model_name, override_url=args.model_url
+        )
         if rec["tasks"]:
             records.append(rec)
 
@@ -200,6 +216,7 @@ def main():
         json.dump(records, f, ensure_ascii=False, indent=2)
 
     print(f"✅ Wrote {len(records)} records to {args.out}")
+
 
 if __name__ == "__main__":
     main()

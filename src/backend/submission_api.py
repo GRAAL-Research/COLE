@@ -118,12 +118,19 @@ async def submit(
 @lru_cache(maxsize=1)
 def get_leaderboard_entries() -> List[Dict[str, Any]]:
     """Returns all entries currently in the leaderboard.
-       Supporte aussi les fichiers JSON qui contiennent une LISTE d'entrées
-       et normalise les métriques 'plates' en groupes imbriqués pour le front.
+    Supporte aussi les fichiers JSON qui contiennent une LISTE d'entrées
+    et normalise les métriques 'plates' en groupes imbriqués pour le front.
     """
 
     allowed_metrics = {
-        "acc", "accuracy", "f1", "exact_match", "fquad", "pearson", "pearsonr", "spearman"
+        "acc",
+        "accuracy",
+        "f1",
+        "exact_match",
+        "fquad",
+        "pearson",
+        "pearsonr",
+        "spearman",
     }
 
     def _wrap_flat_metrics(task_payload: Dict[str, Any]) -> Dict[str, Any]:
@@ -186,7 +193,9 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
 
                 return {
                     "submission_id": entry.get("submission_id") or str(uuid.uuid4()),
-                    "display_name": entry.get("display_name") or entry.get("model_name") or "Unnamed Model",
+                    "display_name": entry.get("display_name")
+                    or entry.get("model_name")
+                    or "Unnamed Model",
                     "email": entry.get("email", "N/A"),
                     "results": results,
                 }
@@ -207,6 +216,8 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
             continue
 
     return entries
+
+
 @app.get("/leaderboard")
 async def leaderboard() -> List[Dict[str, Any]]:
 
