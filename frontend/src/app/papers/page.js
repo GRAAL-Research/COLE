@@ -20,7 +20,7 @@ export default function PapersPage() {
 
       <iframe
         onLoad={() => setLoaded(true)}
-        src="/cole.pdf"
+        src="cole.pdf"
         title="Document COLE"
         width="100%"
         height="100%"
