@@ -27,8 +27,6 @@ class ModelAttributes:
 
 
 class ModelNameProcessor:
-    """Handles model name normalization and attribute assignment."""
-
     def __init__(self):
         self.gamma_models = {
             "gpt-5",
@@ -145,12 +143,12 @@ class ModelNameProcessor:
     def format_for_latex(self, name: str) -> str:
         attributes = self.get_model_attributes(name)
         normalized = self.normalize_base_name(name)
-        formatted = r"\texttt{" + normalized + "}"
+        formatted = r"\\texttt{" + normalized + "}"
         symbols = []
         if attributes.gamma_models:
-            symbols.append(r"$\Gamma$")
+            symbols.append(r"$\\Gamma$")
         if attributes.upsilon_models:
-            symbols.append(r"$\Upsilon$")
+            symbols.append(r"$\\Upsilon$")
         if symbols:
             formatted += " (" + "".join(symbols) + ")"
         return formatted
@@ -162,7 +160,6 @@ class ModelNameProcessor:
 
 
 def _scale_if_fraction(x: float) -> float:
-    """Met à l'échelle x en % si c'est probablement une fraction."""
     if x is None:
         return x
     try:
@@ -209,7 +206,6 @@ def main():
                             for metric_name, value in metrics.items():
                                 if isinstance(value, (float, int)):
                                     key = f"{task_name} ({metric_name})"
-                                    # Les autres métriques sont attendues en %
                                     results_by_model[model_display_name][key] = (
                                         float(value) * 100.0
                                     )
@@ -248,25 +244,25 @@ def main():
     df.to_csv(FULL_TABLE_CSV, index=False)
     df.to_latex(FULL_TABLE_LATEX, index=False, float_format="%.2f", escape=False)
 
-    df_2 = df[["model_name", "Composite Score"]].sort_values(
-        "Composite Score", ascending=False
-    )[:48]
-    df_2["model_name_2"] = pd.concat(
-        [
-            df[["model_name", "Composite Score"]].sort_values(
-                "Composite Score", ascending=False
-            )[48:]["model_name"],
-            pd.Series([""]),
-        ]
-    ).values
-    df_2["Composite Score_2"] = pd.concat(
-        [
-            df[["model_name", "Composite Score"]].sort_values(
-                "Composite Score", ascending=False
-            )[48:]["Composite Score"],
-            pd.Series([""]),
-        ]
-    ).values
+    df_sorted = (
+        df[["model_name", "Composite Score"]]
+        .sort_values("Composite Score", ascending=False)
+        .reset_index(drop=True)
+    )
+    top_n = 48
+    left = df_sorted.iloc[:top_n].reset_index(drop=True)
+    right = df_sorted.iloc[top_n : top_n * 2].reset_index(drop=True)
+    right = right.reindex(range(len(left)))
+    right["model_name"] = right["model_name"].fillna("")
+
+    df_2 = pd.DataFrame(
+        {
+            "model_name": left["model_name"],
+            "Composite Score": left["Composite Score"],
+            "model_name_2": right["model_name"],
+            "Composite Score_2": right["Composite Score"],
+        }
+    )
 
     df_2.to_latex(
         FULL_TABLE_LATEX_short, index=False, float_format="%.2f", escape=False
