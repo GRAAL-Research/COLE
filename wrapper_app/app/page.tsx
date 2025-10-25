@@ -7,7 +7,7 @@ export default function Home() {
             height: '100vh',
         }}>
             <iframe
-                src="https://davebulaval-colebenchmark.hf.space"
+                src="https://davebulaval-cole.hf.space"
                 frameBorder="0"
                 width="100%"
                 height="100%"
