@@ -1,23 +1,27 @@
 {
-  "name": "cole",
-  "version": "1.0.0",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "name": "cole_nlu_benchmark",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev --turbopack",
+    "build": "docker build -t Dockerfile",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GRAAL-Research/COLE.git"
+  "dependencies": {
+    "lucide-react": "^0.523.0",
+    "next": "15.3.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^13.0.0",
+    "i18next": "^23.0.0",
+    "i18next-browser-languagedetector": "^7.0.1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/GRAAL-Research/COLE/issues"
-  },
-  "homepage": "https://github.com/GRAAL-Research/COLE#readme",
-  "description": ""
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.3",
+    "tailwindcss": "^4"
+  }
 }
