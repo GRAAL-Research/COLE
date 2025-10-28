@@ -168,6 +168,8 @@ private_llm = {
     ],
     "cohere": [
         "command-a-03-2025",
+        "c4ai-aya-expanse-8b",
+        "c4ai-aya-expanse-32b"
         "command-r7b-12-2024",
         "command-a-reasoning-08-2025",
         "command-r-08-2024",
