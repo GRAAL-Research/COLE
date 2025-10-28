@@ -95,7 +95,10 @@ def private_language_model_factory(model_name):
             )
         elif model_name in private_llm["cohere"]:
             extra_params = {}
-            use_function_calling = True
+            if "c4ai-aya" in model_name:
+                use_function_calling = False
+            else:
+                use_function_calling = True
             model = CohereWrapper(
                 model_name=model_name,
                 api_key=api_key,
