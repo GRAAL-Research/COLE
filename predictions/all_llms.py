@@ -64,7 +64,6 @@ llms = {
         "mistralai/Mixtral-8x7B-v0.1",
     ],
     "cohere": [
-        "CohereForAI/aya-expanse-8b",
         "CohereForAI/aya-23-8b",
     ],
     "ibm": [

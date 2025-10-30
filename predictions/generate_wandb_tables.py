@@ -245,7 +245,9 @@ def main():
 
     df.to_csv(FULL_TABLE_CSV, index=False)
     df = df.fillna(0.00)
-    df.drop("Composite Score", axis=1).to_latex(FULL_TABLE_LATEX, index=False, float_format="%.2f", escape=False)
+    df.drop("Composite Score", axis=1).to_latex(
+        FULL_TABLE_LATEX, index=False, float_format="%.2f", escape=False
+    )
 
     df_sorted = (
         df[["model_name", "Composite Score"]]
@@ -254,7 +256,7 @@ def main():
     )
     top_n = int(len(df_sorted) / 2)
     left = df_sorted.iloc[:top_n].reset_index(drop=True)
-    right = df_sorted.iloc[top_n : ].reset_index(drop=True)
+    right = df_sorted.iloc[top_n:].reset_index(drop=True)
     right = right.reindex(range(len(left)))
     right["model_name"] = right["model_name"].fillna("")
 
