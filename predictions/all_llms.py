@@ -193,12 +193,15 @@ if __name__ == "__main__":
 
     import pandas
 
+    print(len(llms["all"]) + len(small_llm["all"]) + len(small_llm_2["all"]))
+
     print(
         len(llms["all"])
         + len(small_llm["all"])
         + len(small_llm_2["all"])
         + len(private_llm["all"])
     )
+
     print(
         Counter(
             llms["all"] + small_llm["all"] + small_llm_2["all"] + private_llm["all"]
