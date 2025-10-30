@@ -40,6 +40,8 @@ def hugging_face_language_model_tokenizer_factory(
         )
         if "chocolatine" in model_name.lower():
             extra_args = {"padding_side": "left"}
+        elif "eurollm" in model_name.lower():
+            model.gradient_checkpointing_enable()
         else:
             extra_args = {}
         tokenizer = AutoTokenizer.from_pretrained(
