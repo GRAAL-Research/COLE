@@ -134,8 +134,10 @@ class ModelNameProcessor:
         n = re.sub(r"(?i)^pixtral(?=-|$)", "Pixtral", n)
         n = re.sub(r"(?i)^qwq(?=-|$)", "QwQ", n)
         n = re.sub(r"(?i)^meta-llama(?=-|$)", "Meta-Llama", n)
+        n = re.sub(r"(?i)^command(?=-|$)", "Command", n)
+        n = re.sub(r"(?i)^c4ai-aya-expanse(?=-|$)", "C4ai-Aya-expanse", n)
         n = re.sub(r"(?i)^s1\.1(?=-|$)", "S1.1", n)
-        n = re.sub(r"(\d+\.\d+)", r"$\1$", n)
+        n = re.sub(r"(\d+\.\d+\.?\d?)", r"$\1$", n)
         for pattern, replacement in self.size_patterns.items():
             n = re.sub(pattern, replacement, n)
         return n
@@ -143,12 +145,12 @@ class ModelNameProcessor:
     def format_for_latex(self, name: str) -> str:
         attributes = self.get_model_attributes(name)
         normalized = self.normalize_base_name(name)
-        formatted = r"\\texttt{" + normalized + "}"
+        formatted = r"\texttt{" + normalized + "}"
         symbols = []
         if attributes.gamma_models:
-            symbols.append(r"$\\Gamma$")
+            symbols.append(r"$\Gamma$")
         if attributes.upsilon_models:
-            symbols.append(r"$\\Upsilon$")
+            symbols.append(r"$\Upsilon$")
         if symbols:
             formatted += " (" + "".join(symbols) + ")"
         return formatted
@@ -242,6 +244,8 @@ def main():
     df = df[ordered_cols]
 
     df.to_csv(FULL_TABLE_CSV, index=False)
+    df = df.drop("Composite Score", axis=1)
+    df = df.fillna(0.00)
     df.to_latex(FULL_TABLE_LATEX, index=False, float_format="%.2f", escape=False)
 
     df_sorted = (

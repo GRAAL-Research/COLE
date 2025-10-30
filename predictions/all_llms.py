@@ -72,6 +72,12 @@ llms = {
         "ibm-granite/granite-3.3-8b-instruct",
     ],
     "Apertus": ["swiss-ai/Apertus-8B-2509", "swiss-ai/Apertus-8B-Instruct-2509"],
+    "eurollm": [
+        "utter-project/EuroLLM-1.7B",
+        "utter-project/EuroLLM-1.7B-Instruct",
+        "utter-project/EuroLLM-9B",
+        "utter-project/EuroLLM-9B-Instruct",
+    ],
     "all": [],
 }
 for key in llms.keys():
