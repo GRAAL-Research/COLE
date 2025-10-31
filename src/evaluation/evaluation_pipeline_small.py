@@ -12,7 +12,7 @@ from src import WANDB_PROJECT
 from src.evaluation.llm_evaluator import ModelEvaluator
 from src.evaluation.llm_factory import model_factory
 from src.task.task_factory import tasks_factory
-from src.task.task_names import Tasks
+from src.task.task_names import COLETasks, BorealTasks
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -57,9 +57,25 @@ parser.add_argument(
     default=None,
 )
 
+parser.add_argument(
+    "--tasks_group",
+    "-pn",
+    help="The task group to test",
+    type=str,
+    default=None,
+    choices=["all", "cole", "boreal"],
+)
+
 args = parser.parse_args()
 
-tasks_names = list(Tasks)
+if args.tasks_group == "all":
+    tasks_names = list(COLETasks) + list(BorealTasks)
+elif args.tasks_group == "cole":
+    tasks_names = list(COLETasks)
+elif args.tasks_group == "boreal":
+    tasks_names = list(BorealTasks)
+else:
+    raise ValueError("Invalid value for tasks_group")
 
 tasks = tasks_factory(tasks_names)
 

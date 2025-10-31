@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Tasks(str, Enum):
+class COLETasks(str, Enum):
     ALLOCINE = "allocine"
     DACCORD = "daccord"
     FQUAD = "fquad"
@@ -25,5 +25,8 @@ class Tasks(str, Enum):
     WINO_X_MT = "wino_x_mt"
     XNLI = "xnli"
     WSD = "wsd"
+
+
+class BorealTasks(str, Enum):
     TIMELINE = "timeline"
     LQLE = "lqle"
