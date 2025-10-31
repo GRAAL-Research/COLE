@@ -48,6 +48,7 @@ class ModelNameProcessor:
             "llama-3.2",
             "meta-llama-3.1",
             "gemma-2",
+            "grok-4",
         }
         self.upsilon_models = {
             "chocolatine",
@@ -135,6 +136,7 @@ class ModelNameProcessor:
         n = re.sub(r"(?i)^qwq(?=-|$)", "QwQ", n)
         n = re.sub(r"(?i)^meta-llama(?=-|$)", "Meta-Llama", n)
         n = re.sub(r"(?i)^command(?=-|$)", "Command", n)
+        n = re.sub(r"(?i)^glm(?=-|$)", "GLM", n)
         n = re.sub(r"(?i)^c4ai-aya-expanse(?=-|$)", "C4ai-Aya-expanse", n)
         n = re.sub(r"(?i)^s1\.1(?=-|$)", "S1.1", n)
         n = re.sub(r"(\d+\.\d+\.?\d?)", r"$\1$", n)

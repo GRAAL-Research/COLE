@@ -15,7 +15,7 @@ def hugging_face_language_model_tokenizer_factory(
         "chocolatine" in model_name.lower()
         or "lucie" in model_name.lower()
         or "mixtral" in model_name.lower()
-        or "eurollm-9b" in model_name.lower()
+        or "eurollm" in model_name.lower()
     ):
 
         compute_dtype = getattr(torch, "bfloat16")
