@@ -597,7 +597,7 @@ datasets = {
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
             .add_premise(
-                "On te donne le titre d'une œuvre de littérature québécoise. "
+                "On te donne le titre d'une oeuvre de littérature québécoise. "
                 "Ton rôle est de donner UNIQUEMENT le nom de l'auteur ou de l'autrice québécois(e) qui l'a écrit."
             )
             .add_data(f"Titre : {line.get('work_title', '').strip()}")
