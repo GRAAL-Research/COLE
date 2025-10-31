@@ -1,14 +1,11 @@
-import enum
 import logging
 from typing import Dict, List, Union
 
 from src.task.task import Task, TaskType
-from src.task.task_names import BorealTasks, COLETasks
-
-Tasks = enum.Enum("Tasks", list(COLETasks) + list(BorealTasks))
+from src.task.task_names import Tasks
 
 
-def tasks_factory(task_names: Union[Dict, List]) -> List[Task]:
+def tasks_factory(task_names: Union[Dict, List[Tasks]]) -> List[Task]:
     """
     Factory method to create a list of Task objects from a dictionary of task names and their predictions.
     """

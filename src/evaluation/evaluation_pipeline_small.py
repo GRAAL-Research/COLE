@@ -59,7 +59,6 @@ parser.add_argument(
 
 parser.add_argument(
     "--tasks_group",
-    "-pn",
     help="The task group to test",
     type=str,
     default=None,
