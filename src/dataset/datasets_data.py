@@ -593,7 +593,7 @@ datasets = {
         line_to_truth_fn=lambda line: str(line["answer"]),
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
-            .add_premise("Deux événements sont donnés. Lequel est survenu en premier ?")
+            .add_premise("Deux événements historiques sont donnés. Lequel est survenu en premier ?")
             .add_data(f"Événement 1 : {line['event_1']} (date: {line['date_1']})")
             .add_data(f"Événement 2 : {line['event_2']} (date: {line['date_2']})")
             .add_end(
