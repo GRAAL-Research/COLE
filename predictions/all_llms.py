@@ -170,7 +170,7 @@ private_llm = {
         "c4ai-aya-expanse-8b",
         "c4ai-aya-expanse-32b",
         "command-r7b-12-2024",
-        "command-a-reasoning-08-2025",  # todo
+        # "command-a-reasoning-08-2025",  # todo
         "command-r-08-2024",
         "command-r-plus-08-2024",
     ],

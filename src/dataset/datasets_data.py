@@ -1,11 +1,11 @@
 from src.dataset.dataset import Dataset
 from src.dataset.prompt_builder import PromptBuilder
 from src.task import COLE_REPOSITORY_NAME
-from src.task.task_names import Tasks
+from src.task.task_names import COLETasks, BorealTasks
 
 datasets = {
-    Tasks.ALLOCINE.value: Dataset(
-        name=Tasks.ALLOCINE.value,
+    COLETasks.ALLOCINE.value: Dataset(
+        name=COLETasks.ALLOCINE.value,
         description="Binary classification on sentiment analysis"
         " of movie reviews, with reviews being either positive (1) or negative (0).",
         possible_ground_truths=["0", "1"],
@@ -23,8 +23,8 @@ datasets = {
         .build(),
         line_to_data_fn=lambda line: line["review"],
     ),
-    Tasks.QFRCOLA.value: Dataset(
-        name=Tasks.QFRCOLA.value,
+    COLETasks.QFRCOLA.value: Dataset(
+        name=COLETasks.QFRCOLA.value,
         description="Binary grammatical judgement : "
         "Predicts whether a sentence is grammatically correct (1) or not. (0).",
         possible_ground_truths=["0", "1"],
@@ -41,8 +41,8 @@ datasets = {
         .build(),
         line_to_data_fn=lambda line: line["sentence"],
     ),
-    Tasks.QFRBLIMP.value: Dataset(
-        name=Tasks.QFRBLIMP.value,
+    COLETasks.QFRBLIMP.value: Dataset(
+        name=COLETasks.QFRBLIMP.value,
         description="Choice task between two sentences : Choose the one which is grammatically correct.",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
@@ -63,8 +63,8 @@ datasets = {
         ),
         line_to_data_fn=lambda line: {line["sentence_a"], line["sentence_b"]},
     ),
-    Tasks.GQNLI.value: Dataset(
-        name=Tasks.GQNLI.value,
+    COLETasks.GQNLI.value: Dataset(
+        name=COLETasks.GQNLI.value,
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
@@ -91,8 +91,8 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
-    Tasks.SICKFR.value: Dataset(
-        name=Tasks.SICKFR.value,
+    COLETasks.SICKFR.value: Dataset(
+        name=COLETasks.SICKFR.value,
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
@@ -114,8 +114,8 @@ datasets = {
             "sentence_B": line["sentence_B"],
         },
     ),
-    Tasks.STS22.value: Dataset(
-        name=Tasks.STS22.value,
+    COLETasks.STS22.value: Dataset(
+        name=COLETasks.STS22.value,
         description="Semantic textual similarity task : "
         "Predict how similar two sentences are to each other (1 to 4).",
         possible_ground_truths=["1", "2", "3", "4"],
@@ -136,8 +136,8 @@ datasets = {
             "sentence2": line["sentence2"],
         },
     ),
-    Tasks.PAWS_X.value: Dataset(
-        name=Tasks.PAWS_X.value,
+    COLETasks.PAWS_X.value: Dataset(
+        name=COLETasks.PAWS_X.value,
         description="Binary classification task : "
         "Predict if two sentences have the same meaning (1) or not (0).",
         possible_ground_truths=["0", "1"],
@@ -160,8 +160,8 @@ datasets = {
             "sentence2": line["sentence2"],
         },
     ),
-    Tasks.PIAF.value: Dataset(
-        name=Tasks.PIAF.value,
+    COLETasks.PIAF.value: Dataset(
+        name=COLETasks.PIAF.value,
         description="Extractive question answering task : Extract a question's answer from a given context.",
         possible_ground_truths=[],
         hugging_face_repo=COLE_REPOSITORY_NAME,
@@ -184,8 +184,8 @@ datasets = {
             "question": line["question"],
         },
     ),
-    Tasks.FQUAD.value: Dataset(
-        name=Tasks.FQUAD.value,
+    COLETasks.FQUAD.value: Dataset(
+        name=COLETasks.FQUAD.value,
         description="Extractive question answering task : Extract a question's answer from a given context.",
         possible_ground_truths=[],
         hugging_face_repo=COLE_REPOSITORY_NAME,
@@ -208,8 +208,8 @@ datasets = {
             "question": line["question"],
         },
     ),
-    Tasks.XNLI.value: Dataset(
-        name=Tasks.XNLI.value,
+    COLETasks.XNLI.value: Dataset(
+        name=COLETasks.XNLI.value,
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
@@ -235,8 +235,8 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
-    Tasks.QFRCORE.value: Dataset(
-        name=Tasks.QFRCORE.value,
+    COLETasks.QFRCORE.value: Dataset(
+        name=COLETasks.QFRCORE.value,
         description="Definition matching task : "
         "Match the Quebec expression with its definition from a list.",
         possible_ground_truths=[str(i) for i in range(10)],
@@ -265,8 +265,8 @@ datasets = {
             "choices": line["choices"],
         },
     ),
-    Tasks.QFRCORT.value: Dataset(
-        name=Tasks.QFRCORT.value,
+    COLETasks.QFRCORT.value: Dataset(
+        name=COLETasks.QFRCORT.value,
         description="Definition matching task : "
         "Match the Quebec term with its definition from a list.",
         possible_ground_truths=[str(i) for i in range(10)],
@@ -294,8 +294,8 @@ datasets = {
             "choices": line["choices"],
         },
     ),
-    Tasks.DACCORD.value: Dataset(
-        name=Tasks.DACCORD.value,
+    COLETasks.DACCORD.value: Dataset(
+        name=COLETasks.DACCORD.value,
         description="Paraphrase detection task :"
         "Predict whether the two sentences are compatible (0) "
         "or contradict each other (1).",
@@ -320,8 +320,8 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
-    Tasks.FRENCH_BOOLQ.value: Dataset(
-        name=Tasks.FRENCH_BOOLQ.value,
+    COLETasks.FRENCH_BOOLQ.value: Dataset(
+        name=COLETasks.FRENCH_BOOLQ.value,
         description="Binary question answering task : "
         "Answer whether the context allows answering 'yes' to the question (1)"
         "or, if the context only allows answering 'no' "
@@ -346,8 +346,8 @@ datasets = {
             "passage": line["passage"],
         },
     ),
-    Tasks.MNLI_NINEELEVEN_FR_MT.value: Dataset(
-        name=Tasks.MNLI_NINEELEVEN_FR_MT.value,
+    COLETasks.MNLI_NINEELEVEN_FR_MT.value: Dataset(
+        name=COLETasks.MNLI_NINEELEVEN_FR_MT.value,
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
@@ -374,8 +374,8 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
-    Tasks.RTE3_FRENCH.value: Dataset(
-        name=Tasks.RTE3_FRENCH.value,
+    COLETasks.RTE3_FRENCH.value: Dataset(
+        name=COLETasks.RTE3_FRENCH.value,
         description="Natural language inference task : "
         "predict the relation between two sentences (entailment, neutral, contradiction)",
         possible_ground_truths=["0", "1", "2"],
@@ -402,8 +402,8 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
-    Tasks.WINO_X_LM.value: Dataset(
-        name=Tasks.WINO_X_LM.value,
+    COLETasks.WINO_X_LM.value: Dataset(
+        name=COLETasks.WINO_X_LM.value,
         description=(
             "Pronoun resolution task : predict the correct referent (1 or 2) "
             "of a pronoun in a sentence by choosing between two candidates."
@@ -431,7 +431,7 @@ datasets = {
             "referent2": line["option2_fr"],
         },
     ),
-    Tasks.WINO_X_MT.value: Dataset(
+    COLETasks.WINO_X_MT.value: Dataset(
         name="wino_x_mt",
         description=(
             "Pronoun resolution based on translations: choose between two French translations of an English "
@@ -462,8 +462,8 @@ datasets = {
             "pronoun2": line["pronoun2"],
         },
     ),
-    Tasks.MULTIBLIMP.value: Dataset(
-        name=Tasks.MULTIBLIMP.value,
+    COLETasks.MULTIBLIMP.value: Dataset(
+        name=COLETasks.MULTIBLIMP.value,
         description="Choice task between two sentences : Choose the one which is grammatically correct.",
         possible_ground_truths=["0", "1"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
@@ -484,8 +484,8 @@ datasets = {
         ),
         line_to_data_fn=lambda line: {line["sentence_a"], line["sentence_b"]},
     ),
-    Tasks.FRACAS.value: Dataset(
-        name=Tasks.FRACAS.value,
+    COLETasks.FRACAS.value: Dataset(
+        name=COLETasks.FRACAS.value,
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
@@ -512,8 +512,8 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
-    Tasks.MMS.value: Dataset(
-        name=Tasks.MMS.value,
+    COLETasks.MMS.value: Dataset(
+        name=COLETasks.MMS.value,
         description="A sentiment analysis task for classifying text as positive (2), negative (0), or neutral (1).",
         possible_ground_truths=["0", "1", "2"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
@@ -535,8 +535,8 @@ datasets = {
             "text": line["text"],
         },
     ),
-    Tasks.WSD.value: Dataset(
-        name=Tasks.WSD.value,
+    COLETasks.WSD.value: Dataset(
+        name=COLETasks.WSD.value,
         description="Extractive word sense disambiguation : Extract an ambiguous word in a sentence.",
         possible_ground_truths=[],
         hugging_face_repo=COLE_REPOSITORY_NAME,
@@ -557,8 +557,8 @@ datasets = {
             "pos_tag_labels": line["pos_tag_labels"],
         },
     ),
-    Tasks.LINGNLI.value: Dataset(
-        name=Tasks.LINGNLI.value,
+    COLETasks.LINGNLI.value: Dataset(
+        name=COLETasks.LINGNLI.value,
         description="Natural language inference task : "
         "predict the relation between two sentences (implication, neutral, contradiction).",
         possible_ground_truths=["0", "1", "2"],
@@ -585,8 +585,8 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
-    Tasks.TIMELINE.value: Dataset(
-        name=Tasks.TIMELINE.value,
+    BorealTasks.TIMELINE.value: Dataset(
+        name=BorealTasks.TIMELINE.value,
         description="Binary temporal ordering task: predict which of two events happened first.",
         possible_ground_truths=["1", "2"],
         hugging_face_repo=COLE_REPOSITORY_NAME,
@@ -611,8 +611,8 @@ datasets = {
             "date_2": line["date_2"],
         },
     ),
-    Tasks.LQLE.value: Dataset(
-        name=Tasks.LQLE.value,
+    BorealTasks.LQLE.value: Dataset(
+        name=BorealTasks.LQLE.value,
         description=(
             "Author name prediction for Quebec literature works: "
             "given the title of a literary work, predict the Quebecois author name."
