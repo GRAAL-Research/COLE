@@ -136,7 +136,6 @@ private_llm = {
         "qwen/qwen-max",
         "qwen/qwen3-235b-a22b-thinking-2507",
         "qwen/qwen3-235b-a22b",
-        "z-ai/glm-4.6",
         "z-ai/glm-4.5",
         "google/gemini-2.5-pro",
         "google/gemini-2.5-flash",
