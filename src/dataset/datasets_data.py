@@ -585,6 +585,32 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
+    Tasks.TIMELINE.value: Dataset(
+        name=Tasks.TIMELINE.value,
+        description="Binary temporal ordering task: predict which of two events happened first.",
+        possible_ground_truths=["1", "2"],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["answer"]),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise(
+                "Deux événements historiques sont donnés. Lequel est survenu en premier ?"
+            )
+            .add_data(f"Événement 1 : {line['event_1']} (date: {line['date_1']})")
+            .add_data(f"Événement 2 : {line['event_2']} (date: {line['date_2']})")
+            .add_end(
+                "Réponds uniquement par 1 si l'événement 1 est venu avant l'événement 2, "
+                "ou 2 si l'événement 2 est venu avant l'événement 1. La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "event_1": line["event_1"],
+            "date_1": line["date_1"],
+            "event_2": line["event_2"],
+            "date_2": line["date_2"],
+        },
+    ),
     Tasks.LQLE.value: Dataset(
         name=Tasks.LQLE.value,
         description=(
