@@ -1,0 +1,69 @@
+model_name	source	size
+\texttt{Apertus-8B-it-2509}	\citet{swissai2025apertus}	8B
+\texttt{Apertus-8B-2509}	\citet{swissai2025apertus}	8B
+\texttt{Aya-23-8b}	\citet{aryabumi2024aya}	8B
+\texttt{Chocolatine-14b-it} ($\Upsilon$)	\citet{chocolatine}	14B
+\texttt{Chocolatine-2-14b-it} ($\Upsilon$)	\citet{chocolatinev2}	14.8B
+\texttt{CroissantLLM-Base} ($\Upsilon$)	\citet{faysse2024croissantllm}	1.3B
+\texttt{DeepSeek-R1-distill-Llama-8b} ($\Gamma$)	\citet{deepseekai2025deepseekr1incentivizingreasoningcapability}	8.03B
+\texttt{DeepSeek-R1-distill-Qwen-14b} ($\Gamma$)	\citet{deepseekai2025deepseekr1incentivizingreasoningcapability}	14.8B
+\texttt{DeepSeek-R1-distill-Qwen-32b} ($\Gamma$)	\citet{deepseekai2025deepseekr1incentivizingreasoningcapability}	32.8B
+\texttt{DeepSeek-R1-distill-Qwen-7b} ($\Gamma$)	\citet{deepseekai2025deepseekr1incentivizingreasoningcapability}	7.62B
+\texttt{DeepSeek-R1-distill-Qwen3-8b} ($\Gamma$)	\citet{deepseekai2025deepseekr1incentivizingreasoningcapability}	5.27B
+\texttt{Deepthink-reasoning-14b} ($\Gamma$)	\citet{deepthink2}	14.8B
+\texttt{Deepthink-reasoning-7b} ($\Gamma$)	\citet{deepthink1}	7.62B
+\texttt{French-Alpaca-Llama3-8b-it} ($\Upsilon$,   $\Gamma$)  	\citet{alpaca}	8.03B
+\texttt{Gemma-2-27b-it} ($\Gamma$)	\citet{mesnard2024gemma}	27.2B
+\texttt{Gemma-2-27b} ($\Gamma$)	\citet{mesnard2024gemma}	27.2B
+\texttt{Gemma-2-2b-it} ($\Gamma$)	\citet{mesnard2024gemma}	27.2B
+\texttt{Gemma-2-2b} ($\Gamma$)	\citet{mesnard2024gemma}	2.6B
+\texttt{Gemma-2-9b-it} ($\Gamma$)	\citet{mesnard2024gemma}	9B
+\texttt{Gemma-2-9b} ($\Gamma$)	\citet{mesnard2024gemma}	9.2B
+\texttt{GPT-oss-20b} ($\Gamma$)	\citet{gptoss}	21.5B
+\texttt{Granite$3.2$-8B}	\citet{granite2024granite}	8.17B
+\texttt{Granite$3.3$-8B-base}	\citet{granite2024granite}	8.17B
+\texttt{Granite$3.3$-8B-it}	\citet{granite2024granite}	8.17B
+\texttt{Llama-$3.2$-1b-it} ($\Gamma$)	\citet{grattafiori2024llama}	1.2B
+\texttt{Llama-$3.2$-1b} ($\Gamma$)	\citet{grattafiori2024llama}	1.2B
+\texttt{Llama-$3.2$-3b-it} ($\Gamma$)	\citet{grattafiori2024llama}	3.21B
+\texttt{Llama-$3.2$-3b} ($\Gamma$)	\citet{grattafiori2024llama}	3.21B
+\texttt{Lucie-7b-it-human-data} ($\Upsilon$)	\citet{openllm2025lucie}	6.71B
+\texttt{Lucie-7b-it} ($\Upsilon$)	\citet{openllm2025lucie}	6.71B
+\texttt{Lucie-7b} ($\Upsilon$)	\citet{openllm2025lucie}	6.71B
+\texttt{Meta-Llama-$3.1$-8b-it} ($\Gamma$)	\citet{grattafiori2024llama}	8B
+\texttt{Meta-Llama-$3.1$-8b} ($\Gamma$)	\citet{grattafiori2024llama}	8B
+\texttt{Mixtral-8x7b-it}	\citet{rastogi2025magistral}	46.7B
+\texttt{Mixtral-8x7b}	\citet{rastogi2025magistral}	46.7B
+\texttt{OLMo-2-32B-it}	\citet{olmo20242olmo2furious}	32.2B
+\texttt{OLMo-2-32B}	\citet{olmo20242olmo2furious}	32.2B
+\texttt{OLMo-2-13B-it}	\citet{olmo20242olmo2furious}	13.7B
+\texttt{OLMo-2-13B}	\citet{olmo20242olmo2furious}	13.7B
+\texttt{OLMo-2-7B-it}	\citet{olmo20242olmo2furious}	7.3B
+\texttt{OLMo-2-7B}	\citet{olmo20242olmo2furious}	7.3B
+\texttt{OLMo-2-1B-it}	\citet{olmo20242olmo2furious}	1.48B
+\texttt{OLMo-2-1B}	\citet{olmo20242olmo2furious}	1.48B
+\texttt{Phi-$3.5$-mini-it}	\citet{abdin2024phi3technicalreporthighly}	3.8B
+\texttt{Phi-4}	\citet{abdin2024phi}	14.7B
+\texttt{QwQ-32b} ($\Gamma$)	\citet{qwq32b}	32.8B
+\texttt{Qwen$2.5$-$0.5$b-it} ($\Gamma$)	\citet{hui2024qwen2}	494M
+\texttt{Qwen$2.5$-$0.5$b}	\citet{hui2024qwen2}	494M
+\texttt{Qwen$2.5$-$1.5$b-it}	\citet{hui2024qwen2}	1.5B
+\texttt{Qwen$2.5$-$1.5$b}	\citet{hui2024qwen2}	1.5B
+\texttt{Qwen$2.5$-14b-it}	\citet{hui2024qwen2}	14.7B
+\texttt{Qwen$2.5$-14b}	\citet{hui2024qwen2}	14.7B
+\texttt{Qwen$2.5$-32b-it}	\citet{hui2024qwen2}	32.8B
+\texttt{Qwen$2.5$-32b}	\citet{hui2024qwen2}	32.8B
+\texttt{Qwen$2.5$-3b-it}	\citet{hui2024qwen2}	3B
+\texttt{Qwen$2.5$-3b}	\citet{hui2024qwen2}	3B
+\texttt{Qwen$2.5$-7b-it}	\citet{hui2024qwen2}	7.6B
+\texttt{Qwen$2.5$-7b}	\citet{hui2024qwen2}	7.6B
+\texttt{Qwen3-14b-base}	\citet{qwen3technicalreport}	14.8B
+\texttt{Qwen3-14b}	\citet{qwen3technicalreport}	8.76B
+\texttt{Reka-flash-3} ($\Gamma$)	\citet{reka}	20.9B
+\texttt{S1.1-32b} ($\Gamma$)	\citet{s11}	32.8B
+\texttt{SmolLM2-$1.7$b-it}	\citet{allal2025smollm2smolgoesbig}	1.7B
+\texttt{SmolLM2-$1.7$b}	\citet{allal2025smollm2smolgoesbig}	1.7B
+\texttt{SmolLM2-135m-it}	\citet{allal2025smollm2smolgoesbig}	134.5M
+\texttt{SmolLM2-135m}	\citet{allal2025smollm2smolgoesbig}	134.5M
+\texttt{SmolLM2-360m-it}	\citet{allal2025smollm2smolgoesbig}	361.8M
+\texttt{SmolLM2-360m}	\citet{allal2025smollm2smolgoesbig}	361.8M

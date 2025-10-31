@@ -14,6 +14,8 @@ PROJECT_PATH = f"doctorate/{WANDB_PROJECT}"
 MODELS_SIZE_PATH = "models_size.json"
 FULL_TABLE_CSV = os.path.join("results", "full_results_table.csv")
 FULL_TABLE_LATEX = os.path.join("results", "full_results_table.tex")
+FULL_TABLE_CSV_short = os.path.join("results", "full_results_table_short.csv")
+FULL_TABLE_LATEX_short = os.path.join("results", "full_results_table_short.tex")
 
 
 @dataclass
@@ -25,8 +27,6 @@ class ModelAttributes:
 
 
 class ModelNameProcessor:
-    """Handles model name normalization and attribute assignment."""
-
     def __init__(self):
         self.gamma_models = {
             "gpt-5",
@@ -48,6 +48,7 @@ class ModelNameProcessor:
             "llama-3.2",
             "meta-llama-3.1",
             "gemma-2",
+            "grok-4",
         }
         self.upsilon_models = {
             "chocolatine",
@@ -134,8 +135,11 @@ class ModelNameProcessor:
         n = re.sub(r"(?i)^pixtral(?=-|$)", "Pixtral", n)
         n = re.sub(r"(?i)^qwq(?=-|$)", "QwQ", n)
         n = re.sub(r"(?i)^meta-llama(?=-|$)", "Meta-Llama", n)
+        n = re.sub(r"(?i)^command(?=-|$)", "Command", n)
+        n = re.sub(r"(?i)^glm(?=-|$)", "GLM", n)
+        n = re.sub(r"(?i)^c4ai-aya-expanse(?=-|$)", "C4ai-Aya-expanse", n)
         n = re.sub(r"(?i)^s1\.1(?=-|$)", "S1.1", n)
-        n = re.sub(r"(\d+\.\d+)", r"$\1$", n)
+        n = re.sub(r"(\d+\.\d+\.?\d?)", r"$\1$", n)
         for pattern, replacement in self.size_patterns.items():
             n = re.sub(pattern, replacement, n)
         return n
@@ -160,7 +164,6 @@ class ModelNameProcessor:
 
 
 def _scale_if_fraction(x: float) -> float:
-    """Met à l'échelle x en % si c'est probablement une fraction."""
     if x is None:
         return x
     try:
@@ -207,7 +210,6 @@ def main():
                             for metric_name, value in metrics.items():
                                 if isinstance(value, (float, int)):
                                     key = f"{task_name} ({metric_name})"
-                                    # Les autres métriques sont attendues en %
                                     results_by_model[model_display_name][key] = (
                                         float(value) * 100.0
                                     )
@@ -244,7 +246,34 @@ def main():
     df = df[ordered_cols]
 
     df.to_csv(FULL_TABLE_CSV, index=False)
-    df.to_latex(FULL_TABLE_LATEX, index=False, float_format="%.2f", escape=False)
+    df = df.fillna(0.00)
+    df.drop("Composite Score", axis=1).to_latex(
+        FULL_TABLE_LATEX, index=False, float_format="%.2f", escape=False
+    )
+
+    df_sorted = (
+        df[["model_name", "Composite Score"]]
+        .sort_values("Composite Score", ascending=False)
+        .reset_index(drop=True)
+    )
+    top_n = int(len(df_sorted) / 2)
+    left = df_sorted.iloc[:top_n].reset_index(drop=True)
+    right = df_sorted.iloc[top_n:].reset_index(drop=True)
+    right = right.reindex(range(len(left)))
+    right["model_name"] = right["model_name"].fillna("")
+
+    df_2 = pd.DataFrame(
+        {
+            "model_name": left["model_name"],
+            "Composite Score": left["Composite Score"],
+            "model_name_2": right["model_name"],
+            "Composite Score_2": right["Composite Score"],
+        }
+    )
+
+    df_2.to_latex(
+        FULL_TABLE_LATEX_short, index=False, float_format="%.2f", escape=False
+    )
 
 
 if __name__ == "__main__":

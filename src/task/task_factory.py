@@ -213,6 +213,14 @@ def tasks_factory(task_names: Union[Dict, List[str], List[Tasks]]) -> List[Task]
                         task_type=TaskType.INFERENCE,
                     )
                 )
+            case Tasks.LQLE:
+                tasks.append(
+                    Task(
+                        task_name=task.value,
+                        metric="em",
+                        task_type=TaskType.GENERATIVE,
+                    )
+                )
             case _:
                 error = f"Unknown task {task.value}."
                 logging.error(error)

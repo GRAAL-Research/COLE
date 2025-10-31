@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime
 from functools import lru_cache
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Union
 
 import huggingface_hub
 from fastapi import FastAPI, UploadFile, Form, File
@@ -117,7 +117,42 @@ async def submit(
 
 @lru_cache(maxsize=1)
 def get_leaderboard_entries() -> List[Dict[str, Any]]:
-    """Returns all entries currently in the leaderboard."""
+    """Returns all entries currently in the leaderboard.
+    Supporte aussi les fichiers JSON qui contiennent une LISTE d'entrées
+    et normalise les métriques 'plates' en groupes imbriqués pour le front.
+    """
+
+    def _wrap_flat_metrics(task_payload: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Si task_payload est 'plat' (ex: {"accuracy": 94.2}),
+        on le transforme en {"<group>": {...}} pour que le front puisse l'agréger.
+        Règles de nommage du groupe :
+          - présence de exact_match/f1 -> "fquad"
+          - sinon présence de acc/accuracy -> "accuracy"
+          - sinon présence de pearson/pearsonr/spearman -> "correlation"
+          - sinon -> "metrics"
+        Les valeurs >1 sont laissées telles quelles (le front normalise déjà % -> [0,1]).
+        """
+        if not isinstance(task_payload, dict):
+            return task_payload
+
+        # si c'est déjà "imbriqué" (une valeur est un dict), on ne touche pas
+        if any(isinstance(v, dict) for v in task_payload.values()):
+            return task_payload
+
+        keys = set(k.lower() for k in task_payload.keys())
+        if {"exact_match", "f1"} & keys:
+            group = "fquad"
+        elif {"accuracy", "acc"} & keys:
+            group = "accuracy"
+        elif {"pearson", "pearsonr", "spearman"} & keys:
+            group = "correlation"
+        else:
+            group = "metrics"
+
+        # Rien de spécial pour les warnings ici : le front les considère optionnels
+        # et s'attend à "<group>_warning" dans l'objet interne si on veut en fournir.
+        return {group: task_payload}
 
     entries: List[Dict[str, Any]] = []
 
@@ -126,31 +161,48 @@ def get_leaderboard_entries() -> List[Dict[str, Any]]:
             with open(filepath, encoding="utf-8") as f:
                 data = json.load(f)
 
-            if "model_name" not in data or "tasks" not in data:
-                continue
+            # Fonction interne qui traite UNE entrée (dict) au bon format minimal
+            def process_entry(entry: Dict[str, Any]) -> Union[Dict[str, Any], None]:
+                if not isinstance(entry, dict):
+                    return None
+                if "model_name" not in entry or "tasks" not in entry:
+                    return None
 
-            results = {}
-            for task_obj in data["tasks"]:
-                for task_name, values in task_obj.items():
-                    results[task_name] = values
+                # Re-construire "results" comme le front s'y attend
+                results = {}
+                for task_obj in entry.get("tasks", []):
+                    if not isinstance(task_obj, dict) or len(task_obj) != 1:
+                        continue
+                    task_name, payload = list(task_obj.items())[0]
+                    normalized = _wrap_flat_metrics(payload)
+                    results[task_name] = normalized
 
-            if not results:
-                continue
+                if not results:
+                    return None
 
-            entry = {
-                "submission_id": data.get("submission_id") or str(uuid.uuid4()),
-                "display_name": data.get("display_name")
-                or data.get("model_name")
-                or "Unnamed Model",
-                "email": data.get("email", "N/A"),
-                "results": results,
-            }
+                return {
+                    "submission_id": entry.get("submission_id") or str(uuid.uuid4()),
+                    "display_name": entry.get("display_name")
+                    or entry.get("model_name")
+                    or "Unnamed Model",
+                    "email": entry.get("email", "N/A"),
+                    "results": results,
+                }
 
-            entries.append(entry)
+            # Le fichier peut contenir UNE entrée (dict) ou PLUSIEURS (list)
+            if isinstance(data, list):
+                for item in data:
+                    processed = process_entry(item)
+                    if processed:
+                        entries.append(processed)
+            else:
+                processed = process_entry(data)
+                if processed:
+                    entries.append(processed)
 
         except Exception as e:
-            error_message = f"Error processing file {filepath}: {e}"
-            logging.error(error_message)
+            logging_message = f"Error processing file '{filepath}': {e}"
+            logging.error(logging_message)
             continue
 
     return entries

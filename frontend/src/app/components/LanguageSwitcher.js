@@ -11,12 +11,10 @@ export function LanguageSwitcher() {
 
     return (
         <div className="flex space-x-2">
-            <button onClick={() => changeLanguage('en')} className="px-2 py-1 rounded-lg border"
-                    className="px-3 py-1.5 rounded-lg border bg-blue-600 text-white hover:bg-blue-700 transition">
+            <button onClick={() => changeLanguage('en')} className="px-2 py-1 rounded-lg border">
                 EN
             </button>
-            <button onClick={() => changeLanguage('fr')} className="px-2 py-1 rounded-lg border"
-                    className="px-3 py-1.5 rounded-lg border bg-blue-600 text-white hover:bg-blue-700 transition">
+            <button onClick={() => changeLanguage('fr')} className="px-2 py-1 rounded-lg border">
                 FR
             </button>
         </div>

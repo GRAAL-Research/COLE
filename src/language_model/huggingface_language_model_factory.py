@@ -15,6 +15,7 @@ def hugging_face_language_model_tokenizer_factory(
         "chocolatine" in model_name.lower()
         or "lucie" in model_name.lower()
         or "mixtral" in model_name.lower()
+        or "eurollm" in model_name.lower()
     ):
 
         compute_dtype = getattr(torch, "bfloat16")
@@ -41,6 +42,10 @@ def hugging_face_language_model_tokenizer_factory(
             extra_args = {"padding_side": "left"}
         else:
             extra_args = {}
+
+        if "eurollm" in model_name.lower():
+            model.gradient_checkpointing_enable()
+
         tokenizer = AutoTokenizer.from_pretrained(
             model_name, token=huggingface_token, **extra_args
         )

@@ -64,7 +64,6 @@ llms = {
         "mistralai/Mixtral-8x7B-v0.1",
     ],
     "cohere": [
-        "CohereForAI/aya-expanse-8b",
         "CohereForAI/aya-23-8b",
     ],
     "ibm": [
@@ -135,14 +134,23 @@ private_llm = {
     "openrouter": [
         "gpt-oss-120b",
         "qwen/qwen-max",
+        "qwen/qwen3-235b-a22b-thinking-2507",
+        "qwen/qwen3-235b-a22b",
+        "z-ai/glm-4.6",
+        "z-ai/glm-4.5",
         "google/gemini-2.5-pro",
         "google/gemini-2.5-flash",
     ],
     "anthropic": [
         "claude-opus-4-20250514",
         "claude-sonnet-4-20250514",
+        "claude-sonnet-4-5-20250929",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-1-20250805",
     ],
     "xai": [
+        "grok-4-fast-non-reasoning",
+        "grok-4-fast-reasoning",
         "grok-4-0709",
         "grok-3-latest",
         "grok-3-fast-latest",
@@ -157,6 +165,15 @@ private_llm = {
         "pixtral-large-latest",
         "mistral-large-latest",
     ],
+    "cohere": [
+        "command-a-03-2025",
+        "c4ai-aya-expanse-8b",
+        "c4ai-aya-expanse-32b",
+        "command-r7b-12-2024",
+        "command-a-reasoning-08-2025",  # todo
+        "command-r-08-2024",
+        "command-r-plus-08-2024",
+    ],
     "all": [],
 }
 
@@ -169,12 +186,15 @@ if __name__ == "__main__":
 
     import pandas
 
+    print(len(llms["all"]) + len(small_llm["all"]) + len(small_llm_2["all"]))
+
     print(
         len(llms["all"])
         + len(small_llm["all"])
         + len(small_llm_2["all"])
         + len(private_llm["all"])
     )
+
     print(
         Counter(
             llms["all"] + small_llm["all"] + small_llm_2["all"] + private_llm["all"]

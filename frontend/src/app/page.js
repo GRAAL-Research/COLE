@@ -44,7 +44,7 @@ export default function Home() {
           </a>
           &nbsp;to build a benchmark capable of evaluating models in the French language on multiple topics of language understanding. See&nbsp;
           <Link
-            href="/404"
+            href="https://arxiv.org/abs/2510.05046"
             className="text-blue-600 underline hover:text-blue-800"
           >
             our paper

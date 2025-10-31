@@ -26,3 +26,4 @@ class Tasks(str, Enum):
     XNLI = "xnli"
     WSD = "wsd"
     TIMELINE = "timeline"
+    LQLE = "lqle"

@@ -593,7 +593,9 @@ datasets = {
         line_to_truth_fn=lambda line: str(line["answer"]),
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
-            .add_premise("Deux événements historiques sont donnés. Lequel est survenu en premier ?")
+            .add_premise(
+                "Deux événements historiques sont donnés. Lequel est survenu en premier ?"
+            )
             .add_data(f"Événement 1 : {line['event_1']} (date: {line['date_1']})")
             .add_data(f"Événement 2 : {line['event_2']} (date: {line['date_2']})")
             .add_end(
@@ -607,6 +609,32 @@ datasets = {
             "date_1": line["date_1"],
             "event_2": line["event_2"],
             "date_2": line["date_2"],
+        },
+    ),
+    Tasks.LQLE.value: Dataset(
+        name=Tasks.LQLE.value,
+        description=(
+            "Author name prediction for Quebec literature works: "
+            "given the title of a literary work, predict the Quebecois author name."
+        ),
+        possible_ground_truths=[],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["author"],
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise(
+                "On te donne le titre d'une oeuvre de littérature québécoise. "
+                "Ton rôle est de donner UNIQUEMENT le nom de l'auteur ou de l'autrice québécois(e) qui l'a écrit."
+            )
+            .add_data(f"Titre : {line.get('work_title', '').strip()}")
+            .add_end(
+                "Réponds uniquement par le nom complet de l'auteur ou de l'autrice, sans commentaire ni guillemets. "
+                "La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "work_title": line["work_title"],
         },
     ),
 }
