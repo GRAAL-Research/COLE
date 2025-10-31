@@ -40,10 +40,12 @@ def private_language_model_factory(model_name):
         api_key = get_api_key(model_name)
 
         if model_name in private_llm["openai"]:
-            if "o1" in model_name and not "o1-mini" in model_name:
+            if "o1" in model_name and not "o1-mini" in model_name or "o3" in model_name:
                 extra_params = {
                     "reasoning_effort": "low"
                 }  # Otherwise take too many tokens and stop the process.
+                if "o3" in model_name:
+                    extra_params.update({"max_completion_tokens": 4096})
 
             else:
                 extra_params = {}
