@@ -2,20 +2,38 @@ import os
 import re
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Dict, List
 
 import pandas as pd
 import wandb
 
-from predictions.all_llms import llms, small_llm, small_llm_2, private_llm
-from src import WANDB_PROJECT
+from src import (
+    WANDB_PROJECTS,
+    NA_VALUE,
+    COLE_TASKS,
+    NEW_TASKS,
+    TARGET_TASKS,
+)
 
-PROJECT_PATH = f"doctorate/{WANDB_PROJECT}"
-MODELS_SIZE_PATH = "models_size.json"
+# Fichiers de sortie
 FULL_TABLE_CSV = os.path.join("results", "full_results_table.csv")
 FULL_TABLE_LATEX = os.path.join("results", "full_results_table.tex")
-FULL_TABLE_CSV_short = os.path.join("results", "full_results_table_short.csv")
-FULL_TABLE_LATEX_short = os.path.join("results", "full_results_table_short.tex")
+
+COLE_TABLE_CSV = os.path.join("results", "cole_results_table.csv")
+COLE_TABLE_LATEX = os.path.join("results", "cole_results_table.tex")
+
+NEW_TABLE_CSV = os.path.join("results", "new_results_table.csv")
+NEW_TABLE_LATEX = os.path.join("results", "new_results_table.tex")
+
+
+def _build_project_path(p: str) -> str:
+    """Normalise le nom de projet W&B pour inclure l'entité si nécessaire."""
+    if "/" in p:
+        return p
+    return f"doctorate/{p}"
+
+
+PROJECT_PATHS: List[str] = [_build_project_path(p) for p in WANDB_PROJECTS]
 
 
 @dataclass
@@ -27,13 +45,14 @@ class ModelAttributes:
 
 
 class ModelNameProcessor:
-    def __init__(self):
+    """Utilitaire pour normaliser et formatter les noms de modèles (latex-friendly)."""
+
+    def __init__(self) -> None:
         self.gamma_models = {
             "gpt-5",
             "o1",
             "o3",
             "o4",
-            "gpt-oss",
             "claude-opus",
             "claude-sonnet",
             "gemini-2.5-pro",
@@ -63,43 +82,37 @@ class ModelNameProcessor:
 
     def get_model_family(self, name: str) -> str:
         name_lower = name.lower()
-        if "gpt" in name_lower:
-            return "gpt"
-        if "claude" in name_lower:
-            return "claude"
-        if "gemini" in name_lower:
-            return "gemini"
-        if "phi" in name_lower:
-            return "phi"
-        if "deepseek" in name_lower:
-            return "deepseek"
-        if "qwen" in name_lower:
-            return "qwen"
-        if "llama" in name_lower:
-            return "llama"
-        if "mistral" in name_lower:
-            return "mistral"
-        if "gemma" in name_lower:
-            return "gemma"
-        if "granite" in name_lower:
-            return "granite"
-        if "aya" in name_lower:
-            return "aya"
-        if "grok" in name_lower:
-            return "grok"
-        if "croissant" in name_lower:
-            return "Croissant"
+        for family in [
+            "gpt",
+            "claude",
+            "gemini",
+            "phi",
+            "deepseek",
+            "qwen",
+            "llama",
+            "mistral",
+            "gemma",
+            "granite",
+            "aya",
+            "grok",
+            "croissant",
+        ]:
+            if family in name_lower:
+                return family
         if name_lower.startswith(("o1", "o3", "o4")):
-            return name_lower.split("-")[0] if "-" in name_lower else name_lower[:2]
+            return name_lower.split("-")[0]
         return "unknown"
 
     def get_model_attributes(self, name: str) -> ModelAttributes:
         name_lower = name.lower()
         gamma_models = any(p in name_lower for p in self.gamma_models)
         upsilon_models = any(p in name_lower for p in self.upsilon_models)
+
+        # cas particulier
         if "french-alpaca" in name_lower:
             upsilon_models = True
             gamma_models = True
+
         family = self.get_model_family(name)
         return ModelAttributes(
             upsilon_models=upsilon_models,
@@ -108,50 +121,24 @@ class ModelNameProcessor:
         )
 
     def normalize_base_name(self, name: str) -> str:
-        n = name
-        n = n.replace("-unsloth-bnb-4bit", "").replace("-bnb-4bit", "")
-        n = re.sub(r"(?i)-instruct\b", "-it", n)
-        n = re.sub(r"(?i)^gpt(?=-|$)", "GPT", n)
-        n = re.sub(r"(?i)^gemma(?=-|$)", "Gemma", n)
-        n = re.sub(r"(?i)^gemini(?=-|$)", "Gemini", n)
-        n = re.sub(r"(?i)^aya(?=-|$)", "Aya", n)
-        n = re.sub(r"(?i)^granite(?=-|$)", "Granite", n)
-        n = re.sub(r"(?i)^phi(?=-|$)", "Phi", n)
-        n = re.sub(r"(?i)^reka-flash(?=-|$)", "Reka-flash", n)
-        n = re.sub(r"(?i)^deepseek(?=-|$)", "DeepSeek", n)
-        n = re.sub(r"(?i)^qwen(?=-|$)", "Qwen", n)
-        n = re.sub(r"(?i)^llama(?=-|$)", "Llama", n)
-        n = re.sub(r"(?i)^mistral(?=-|$)", "Mistral", n)
-        n = re.sub(r"(?i)^claude(?=-|$)", "Claude", n)
-        n = re.sub(r"(?i)^grok(?=-|$)", "Grok", n)
-        n = re.sub(r"(?i)^olmo(?=-|$)", "OLMo", n)
-        n = re.sub(r"(?i)^smollm(?=-|$)", "SmolLM", n)
-        n = re.sub(r"(?i)^chocolatine(?=-|$)", "Chocolatine", n)
-        n = re.sub(r"(?i)^french-alpaca(?=-|$)", "French-Alpaca", n)
-        n = re.sub(r"(?i)^lucie(?=-|$)", "Lucie", n)
-        n = re.sub(r"(?i)^deepthink(?=-|$)", "Deepthink", n)
-        n = re.sub(r"(?i)^ministral(?=-|$)", "Ministral", n)
-        n = re.sub(r"(?i)^mixtral(?=-|$)", "Mixtral", n)
-        n = re.sub(r"(?i)^pixtral(?=-|$)", "Pixtral", n)
-        n = re.sub(r"(?i)^qwq(?=-|$)", "QwQ", n)
-        n = re.sub(r"(?i)^meta-llama(?=-|$)", "Meta-Llama", n)
-        n = re.sub(r"(?i)^command(?=-|$)", "Command", n)
-        n = re.sub(r"(?i)^glm(?=-|$)", "GLM", n)
-        n = re.sub(r"(?i)^c4ai-aya-expanse(?=-|$)", "C4ai-Aya-expanse", n)
-        n = re.sub(r"(?i)^s1\.1(?=-|$)", "S1.1", n)
-        n = re.sub(r"(\d+\.\d+\.?\d?)", r"$\1$", n)
+        """Nettoie et normalise le nom brut du modèle (sans LaTeX)."""
+        n = re.sub(r"(?i)-instruct\b", "-it", name)
+        n = re.sub(r"(?i)-unsloth-bnb-4bit|-bnb-4bit", "", n)
+        # Capitalise le préfixe alphabétique (simple mais suffisant ici)
+        n = re.sub(r"(?i)^([a-zA-Z]+)", lambda m: m.group(1).capitalize(), n)
+        # Formatage des tailles (M/B)
         for pattern, replacement in self.size_patterns.items():
             n = re.sub(pattern, replacement, n)
         return n
 
     def format_for_latex(self, name: str) -> str:
-        attributes = self.get_model_attributes(name)
-        normalized = self.normalize_base_name(name)
-        formatted = r"\texttt{" + normalized + "}"
+        """Retourne un nom formaté pour LaTeX, avec tags Γ / Υ si besoin."""
+        attrs = self.get_model_attributes(name)
+        formatted = r"\texttt{" + self.normalize_base_name(name) + "}"
         symbols = []
-        if attributes.gamma_models:
+        if attrs.gamma_models:
             symbols.append(r"$\Gamma$")
-        if attributes.upsilon_models:
+        if attrs.upsilon_models:
             symbols.append(r"$\Upsilon$")
         if symbols:
             formatted += " (" + "".join(symbols) + ")"
@@ -163,116 +150,133 @@ class ModelNameProcessor:
         )
 
 
-def _scale_if_fraction(x: float) -> float:
-    if x is None:
-        return x
+def _scale_if_fraction(x: float):
+    """Si x est dans [0,1], on le traite comme un ratio et on le met en pourcentage."""
     try:
-        if 0.0 <= float(x) <= 1.001:
-            return float(x) * 100.0
-        return float(x)
+        v = float(x)
+        return v * 100.0 if 0.0 <= v <= 1.001 else v
     except Exception:
         return x
 
 
-def main():
+def _task_in_target_list(task_name: str, targets: List[str]) -> bool:
+    """Vérifie si une tâche (éventuellement avec chemin) est dans TARGET_TASKS."""
+    if not targets:
+        return True
+    base = task_name.split("/")[-1]
+    return base in targets
+
+
+def _task_from_column(col: str) -> Optional[str]:
+    """Récupère le nom de tâche à partir d'un nom de colonne."""
+    if col in ("model_name", "Composite Score"):
+        return None
+    if " (" in col:
+        return col.split(" (")[0]
+    if col.endswith(" exact_match") or col.endswith(" f1"):
+        return col.rsplit(" ", 1)[0]
+    return col
+
+
+def main() -> None:
     os.makedirs("results", exist_ok=True)
     api = wandb.Api()
-    runs = api.runs(PROJECT_PATH)
-
     processor = ModelNameProcessor()
-    results_by_model = defaultdict(dict)
-    all_columns = []
-    all_model_names = []
 
-    for run in runs:
-        if run.state != "finished":
-            continue
-        summary = run.summary._json_dict
-        config = run.config
-        full_model_name = config.get("model_name", "unknown_model")
-        all_model_names.append(full_model_name)
-        model_display_name = full_model_name.split("/")[-1]
+    results_by_model: Dict[str, Dict[str, float]] = defaultdict(dict)
 
-        if "tasks" in summary and isinstance(summary["tasks"], list):
-            for task_dict in summary["tasks"]:
+    for project_path in PROJECT_PATHS:
+        runs = api.runs(project_path)
+        for run in runs:
+            if run.state != "finished":
+                continue
+
+            summary = run.summary._json_dict
+            config = run.config
+            model_name = config.get("model_name", "unknown_model").split("/")[-1]
+
+            tasks = summary.get("tasks")
+            if not isinstance(tasks, list):
+                continue
+
+            for task_dict in tasks:
                 for task_name, task_content in task_dict.items():
+                    if not _task_in_target_list(task_name, TARGET_TASKS):
+                        continue
+
                     for metrics in task_content.values():
+                        if not isinstance(metrics, dict):
+                            continue
+
                         if "exact_match" in metrics and "f1" in metrics:
                             em = _scale_if_fraction(metrics["exact_match"])
                             f1 = _scale_if_fraction(metrics["f1"])
                             key_em = f"{task_name} exact_match"
                             key_f1 = f"{task_name} f1"
-                            results_by_model[model_display_name][key_em] = em
-                            results_by_model[model_display_name][key_f1] = f1
-                            if key_em not in all_columns:
-                                all_columns.extend([key_em, key_f1])
+                            results_by_model[model_name][key_em] = em
+                            results_by_model[model_name][key_f1] = f1
                         else:
-                            for metric_name, value in metrics.items():
-                                if isinstance(value, (float, int)):
-                                    key = f"{task_name} ({metric_name})"
-                                    results_by_model[model_display_name][key] = (
-                                        float(value) * 100.0
+                            for m_name, val in metrics.items():
+                                if isinstance(val, (float, int)):
+                                    key = f"{task_name} ({m_name})"
+                                    results_by_model[model_name][key] = (
+                                        _scale_if_fraction(val)
                                     )
-                                    if key not in all_columns:
-                                        all_columns.append(key)
 
-    print(
-        set(
-            llms["all"] + small_llm["all"] + small_llm_2["all"] + private_llm["all"]
-        ).difference(set(all_model_names))
-    )
-    df = pd.DataFrame.from_dict(results_by_model, orient="index", columns=all_columns)
+    df = pd.DataFrame.from_dict(results_by_model, orient="index")
     df["Composite Score"] = df.mean(axis=1)
-    df.index.name = "model_name"
     df.reset_index(inplace=True)
+    df.rename(columns={"index": "model_name"}, inplace=True)
+
     df["model_name"] = df["model_name"].apply(
         lambda x: processor.process_model_name(x, for_latex=True)
     )
-    df = df.sort_values("model_name").reset_index(drop=True)
 
-    def sort_key(col: str):
-        if col == "model_name":
-            return ("", -1, "")
-        task = col.split(" (")[0].split(" ")[0]
-        if col.endswith(" exact_match"):
-            kind = 0
-        elif col.endswith(" f1"):
-            kind = 1
-        else:
-            kind = 2
-        return (task, kind, col)
-
-    ordered_cols = sorted([c for c in df.columns], key=sort_key)
+    cols = df.columns.tolist()
+    ordered_cols: List[str] = []
+    if "model_name" in cols:
+        ordered_cols.append("model_name")
+    if "Composite Score" in cols:
+        ordered_cols.append("Composite Score")
+    ordered_cols += [c for c in cols if c not in ("model_name", "Composite Score")]
     df = df[ordered_cols]
 
+    df = df.fillna(NA_VALUE)
+
     df.to_csv(FULL_TABLE_CSV, index=False)
-    df = df.fillna(0.00)
     df.drop("Composite Score", axis=1).to_latex(
-        FULL_TABLE_LATEX, index=False, float_format="%.2f", escape=False
+        FULL_TABLE_LATEX,
+        index=False,
+        float_format="%.2f",
+        escape=False,
     )
 
-    df_sorted = (
-        df[["model_name", "Composite Score"]]
-        .sort_values("Composite Score", ascending=False)
-        .reset_index(drop=True)
-    )
-    top_n = int(len(df_sorted) / 2)
-    left = df_sorted.iloc[:top_n].reset_index(drop=True)
-    right = df_sorted.iloc[top_n:].reset_index(drop=True)
-    right = right.reindex(range(len(left)))
-    right["model_name"] = right["model_name"].fillna("")
-
-    df_2 = pd.DataFrame(
-        {
-            "model_name": left["model_name"],
-            "Composite Score": left["Composite Score"],
-            "model_name_2": right["model_name"],
-            "Composite Score_2": right["Composite Score"],
-        }
+    cole_cols = [
+        c
+        for c in df.columns
+        if _task_from_column(c) in COLE_TASKS or c in ("model_name", "Composite Score")
+    ]
+    df_cole = df[cole_cols]
+    df_cole.to_csv(COLE_TABLE_CSV, index=False)
+    df_cole.drop("Composite Score", axis=1).to_latex(
+        COLE_TABLE_LATEX,
+        index=False,
+        float_format="%.2f",
+        escape=False,
     )
 
-    df_2.to_latex(
-        FULL_TABLE_LATEX_short, index=False, float_format="%.2f", escape=False
+    new_cols = [
+        c
+        for c in df.columns
+        if _task_from_column(c) in NEW_TASKS or c in ("model_name", "Composite Score")
+    ]
+    df_new = df[new_cols]
+    df_new.to_csv(NEW_TABLE_CSV, index=False)
+    df_new.drop("Composite Score", axis=1).to_latex(
+        NEW_TABLE_LATEX,
+        index=False,
+        float_format="%.2f",
+        escape=False,
     )
 
 
