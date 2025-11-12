@@ -16,11 +16,19 @@ class RemoteLLMModel(LanguageModel):
     """
 
     def generate(self, rows: LazyRow) -> Union[str, List[str]]:
-        generate = self.model.predict(rows["text"])
+        try:
+            generate = self.model.predict(rows["text"])
+        except:
+            generate = "NA"
+            print("Generated a NA when model inference.")
         return generate
 
     def infer(self, rows: LazyRow) -> Union[str, List[str]]:
-        infer = self.model.predict(rows["text"])
+        try:
+            infer = self.model.predict(rows["text"])
+        except:
+            infer = "NA"
+            print("Generated a NA when model inference.")
         return infer
 
     def __init__(
