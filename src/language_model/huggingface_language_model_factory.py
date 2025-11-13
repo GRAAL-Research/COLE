@@ -36,7 +36,7 @@ def hugging_face_language_model_tokenizer_factory(
             load_in_8bit=False,  # Since we use 4bits
             trust_remote_code=True,
             attn_implementation=attn_implementation,
-            torch_dtype=torch.float16,
+            dtype=torch.float16,
         )
         if "chocolatine" in model_name.lower():
             extra_args = {"padding_side": "left"}
