@@ -262,6 +262,13 @@ def main():
     right = right.reindex(range(len(left)))
     right["model_name"] = right["model_name"].fillna("")
 
+    right["model_name"] = right["model_name"].str.replace(
+        "RandomBaselineModel", r"\textbf{RandomBaselineModel}"
+    )
+    right[right["model_name"] == r"\texttt{\textbf{RandomBaselineModel}}"][
+        "Composite Score"
+    ].values
+
     df_2 = pd.DataFrame(
         {
             "model_name": left["model_name"],
