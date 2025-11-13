@@ -33,7 +33,6 @@ llms = {
         "unsloth/Qwen3-14B-unsloth-bnb-4bit",
         "unsloth/DeepSeek-R1-0528-Qwen3-8B-unsloth-bnb-4bit",
         "unsloth/Qwen3-14B-Base-unsloth-bnb-4bit",
-        "unsloth/gpt-oss-20b-unsloth-bnb-4bit",
     ],
     "jpacifico": [
         "jpacifico/Chocolatine-14B-Instruct-DPO-v1.3",
@@ -133,6 +132,7 @@ private_llm = {
     # We use Gemini in open router to be not rate limited
     "openrouter": [
         "gpt-oss-120b",
+        "openai/gpt-oss-20b",
         "qwen/qwen-max",
         "qwen/qwen3-235b-a22b-thinking-2507",
         "qwen/qwen3-235b-a22b",
