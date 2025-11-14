@@ -225,7 +225,7 @@ def tasks_factory(task_names: Union[Dict, List[Tasks]]) -> List[Task]:
                 tasks.append(
                     Task(
                         task_name=task.value,
-                        metric="accuracy",
+                        metric="em",
                         task_type=TaskType.GENERATIVE,
                     )
                 )
@@ -233,7 +233,7 @@ def tasks_factory(task_names: Union[Dict, List[Tasks]]) -> List[Task]:
                 tasks.append(
                     Task(
                         task_name=task.value,
-                        metric="accuracy",
+                        metric="em",
                         task_type=TaskType.GENERATIVE,
                     )
                 )

@@ -10,14 +10,14 @@ class TaskQccyTest(TaskTest):
     def test_given_a_prediction_smaller_than_corpus_when_compute_then_return_expected_result_and_warning(
         self,
     ):
-        a_predictions = [1861,1879,1000, 1000, 1000]
+        a_predictions = ['1861','1879','1000', '1000', '1000']
         task = Task(
             task_name="qccy",
-            metric="accuracy",
+            metric="em",
             task_type=TaskType.INFERENCE,
         )
 
-        expected_results = {"accuracy": 0.4}
+        expected_results = {"exact_match": 0.4}
         expected_warning = (
             f"Your prediction size is of '{len(a_predictions)}', while the ground truths size is "
             f"of '{self.dataset_size}'. We computed the metric over the first {len(a_predictions)}"
@@ -33,14 +33,14 @@ class TaskQccyTest(TaskTest):
     def test_given_a_prediction_when_compute_then_return_expected_result_no_warnings(
         self,
     ):
-        a_predictions = [0] * self.dataset_size
+        a_predictions = ['nan'] * self.dataset_size
         task = Task(
             task_name="qccy",
-            metric="accuracy",
+            metric="em",
             task_type=TaskType.INFERENCE,
         )
 
-        expected_results = {"accuracy": 0.0}
+        expected_results = {"exact_match": 0.0}
         expected_warning = None
 
         actual_result, actual_warning = task.compute(predictions=a_predictions)
@@ -53,7 +53,7 @@ class TaskQccyTest(TaskTest):
         a_predictions = [1] * (self.dataset_size + 1)
         task = Task(
             task_name="qccy",
-            metric="accuracy",
+            metric="em",
             task_type=TaskType.INFERENCE,
         )
 

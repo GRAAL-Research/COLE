@@ -673,13 +673,13 @@ datasets = {
     ),
     BorealTasks.QCCP.value: Dataset(
         name=BorealTasks.QCCP.value,
-        description="Québec cities – predict the population of the city.",
+        description="Québec cities – predict the population of the city (estimations de population, année 2024)",
         possible_ground_truths=[],
         hugging_face_repo=COLE_REPOSITORY_NAME,
         line_to_truth_fn=lambda line: line["population"],
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
-            .add_premise("Quelle est la population de cette ville du Québec ?")
+            .add_premise("Quelle est la population de cette ville du Québec en 2024 ?")
             .add_data(f"Ville : {line['city']}")
             .add_end("Réponds uniquement par le nombre d'habitants. La réponse est :")
             .build()
