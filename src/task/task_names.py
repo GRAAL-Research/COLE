@@ -30,6 +30,8 @@ class COLETasks(str, Enum):
 class BorealTasks(str, Enum):
     TIMELINE = "timeline"
     LQLE = "lqle"
+    PIQAFR= "piqafr"
+    PIQAQFR= "piqaqfr"
 
 
 class Tasks(str, Enum):
@@ -58,3 +60,5 @@ class Tasks(str, Enum):
     WSD = "wsd"
     TIMELINE = "timeline"
     LQLE = "lqle"
+    PIQAFR= "piqafr"
+    PIQAQFR= "piqaqfr"
