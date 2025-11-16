@@ -25,6 +25,7 @@ class COLETasks(str, Enum):
     WINO_X_MT = "wino_x_mt"
     XNLI = "xnli"
     WSD = "wsd"
+    QQnA = "qqna"
 
 
 class BorealTasks(str, Enum):
@@ -58,3 +59,4 @@ class Tasks(str, Enum):
     WSD = "wsd"
     TIMELINE = "timeline"
     LQLE = "lqle"
+    QQnA = "qqna"

@@ -8,7 +8,7 @@ from src.metrics.metrics_wrapper import (
     AccuracyWrapper,
     Metric,
     F1Score,
-    ExactMatch,
+    ExactMatch, Bleu,
 )
 
 
@@ -18,12 +18,15 @@ def metric_factory(metric_name: str) -> Metric:
     We support the "acc" (Accuracy) and "pearsonr" (Pearson correlation) metrics.
     """
     match metric_name:
+
         case "accuracy":
             return AccuracyWrapper()
         case "pearson":
             return PearsonCorrelation()
         case "f1":
             return F1Score()
+        case "bleu":
+            return Bleu()
         case "fquad":
             return FQuAD()
         case "em":

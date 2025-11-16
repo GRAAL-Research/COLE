@@ -585,6 +585,23 @@ datasets = {
             "hypothesis": line["hypothesis"],
         },
     ),
+    COLETasks.QQnA.value: Dataset(
+        name=COLETasks.QQnA.value,
+        description="QQnA is a question answering dataset in the quebecois french language,"
+        " it consists of questions on Quebec's culture and history.",
+        possible_ground_truths=[],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["answer"],
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise("Réponds brièvement à cette question :")
+        .add_data(line["question"])
+        .build(),
+        line_to_data_fn=lambda line: {
+            "question" : line["question"],
+            "answer" : line["answer"],
+            "source" : line["source"],
+        },
+    ),
     BorealTasks.TIMELINE.value: Dataset(
         name=BorealTasks.TIMELINE.value,
         description="Binary temporal ordering task: predict which of two events happened first.",

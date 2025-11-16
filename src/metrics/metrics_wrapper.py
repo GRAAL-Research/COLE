@@ -48,7 +48,6 @@ class F1Score(Metric):
             predictions=clean_predictions, references=references
         )
 
-
 class ExactMatch(Metric):
     def compute(self, predictions: List, references: List, **kwargs) -> Dict:
         score = [
@@ -57,6 +56,12 @@ class ExactMatch(Metric):
         ]
         return {"exact_match": sum(score) / len(score)}
 
+class Bleu(Metric):
+    def __init__(self):
+        self._metric = load("bleu")
+    def compute(self, predictions: List, references: List, **kwargs) -> Dict:
+        result = self._metric.compute(predictions=predictions, references=references)
+        return {"bleu" : result["bleu"]}
 
 def apply_int_casting(predictions_to_clean: List) -> List:
     na_value = 0

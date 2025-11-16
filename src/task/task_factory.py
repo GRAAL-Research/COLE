@@ -221,6 +221,14 @@ def tasks_factory(task_names: Union[Dict, List[Tasks]]) -> List[Task]:
                         task_type=TaskType.GENERATIVE,
                     )
                 )
+            case Tasks.QQnA:
+                tasks.append(
+                    Task(
+                        task_name=task.value,
+                        metric="bleu",
+                        task_type=TaskType.GENERATIVE,
+                    )
+                )
             case _:
                 error = f"Unknown task {task.value}."
                 logging.error(error)
