@@ -18,6 +18,7 @@ class COLETasks(str, Enum):
     QFRCOLA = "qfrcola"
     QFRCORE = "qfrcore"
     QFRCORT = "qfrcort"
+
     RTE3_FRENCH = "rte3-french"
     SICKFR = "sickfr"
     STS22 = "sts22"
@@ -30,6 +31,9 @@ class COLETasks(str, Enum):
 class BorealTasks(str, Enum):
     TIMELINE = "timeline"
     LQLE = "lqle"
+    QCCP = "qccp"
+    QCCY = "qccy"
+    QCCR = "qccr"
     PIQAFR= "piqafr"
     PIQAQFR= "piqaqfr"
 
@@ -51,6 +55,9 @@ class Tasks(str, Enum):
     QFRCOLA = "qfrcola"
     QFRCORE = "qfrcore"
     QFRCORT = "qfrcort"
+    QCCP = "qccp"
+    QCCY = "qccy"
+    QCCR = "qccr"
     RTE3_FRENCH = "rte3-french"
     SICKFR = "sickfr"
     STS22 = "sts22"

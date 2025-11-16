@@ -695,8 +695,58 @@ datasets = {
             "solution1": line["solution1"],
         },
     ),
+    BorealTasks.QCCR.value: Dataset(
+        name=BorealTasks.QCCR.value,
+        description="Québec cities – predict the administrative region of a given city.",
+        possible_ground_truths=[],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["region"],
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise("À quelle région administrative appartient cette ville du Québec ?")
+            .add_data(f"Ville : {line['city']}")
+            .add_end("Réponds uniquement par le nom exact de la région. La réponse est :")
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "city": line["city"],
+        },
+    ),
+    BorealTasks.QCCY.value: Dataset(
+        name=BorealTasks.QCCY.value,
+        description="Québec cities – predict the year the city was founded.",
+        possible_ground_truths=[],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["founded_year"],
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise("En quelle année cette ville du Québec a-t-elle été fondée ?")
+            .add_data(f"Ville : {line['city']}")
+            .add_end("Réponds uniquement par l'année (4 chiffres). La réponse est :")
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "city": line["city"],
+        },
+    ),
+    BorealTasks.QCCP.value: Dataset(
+        name=BorealTasks.QCCP.value,
+        description="Québec cities – predict the population of the city (estimations de population, année 2024)",
+        possible_ground_truths=[],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: line["population"],
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise("Quelle est la population de cette ville du Québec en 2024 ?")
+            .add_data(f"Ville : {line['city']}")
+            .add_end("Réponds uniquement par le nombre d'habitants. La réponse est :")
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "city": line["city"],
+        },
+    ),
 }
-
 
 
 def preload_all_datasets():
