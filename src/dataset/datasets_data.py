@@ -637,6 +637,64 @@ datasets = {
             "work_title": line["work_title"],
         },
     ),
+    BorealTasks.PIQAQFR.value: Dataset(
+        name=BorealTasks.PIQAQFR.value,
+        description=(
+            "Physical commonsense multiple-choice task (Global PIQA) in Quebec French: "
+            "given a short situation and two possible solutions, choose the physically plausible one."
+        ),
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["label"]),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise(
+                "Lis la situation suivante et choisis l'action qui a le plus de sens sur le plan physique."
+            )
+            .add_data(f"Problème : {line['prompt']}")
+            .add_data(f"Option 0 : {line['solution0']}")
+            .add_data(f"Option 1 : {line['solution1']}")
+            .add_end(
+                "Réponds uniquement par 0 si l'option 0 est la meilleure, "
+                "ou par 1 si l'option 1 est la meilleure. La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "prompt": line["prompt"],
+            "solution0": line["solution0"],
+            "solution1": line["solution1"],
+        },
+    ),
+    BorealTasks.PIQAFR.value: Dataset(
+        name=BorealTasks.PIQAFR.value,
+        description=(
+            "Physical commonsense multiple-choice task (Global PIQA) in standard French: "
+            "given a short situation and two possible solutions, choose the physically plausible one."
+        ),
+        possible_ground_truths=["0", "1"],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["label"]),
+        line_to_prompt_fn=lambda line: (
+            PromptBuilder()
+            .add_premise(
+                "Lis la situation suivante et choisis l'action qui a le plus de sens sur le plan physique."
+            )
+            .add_data(f"Problème : {line['prompt']}")
+            .add_data(f"Option 0 : {line['solution0']}")
+            .add_data(f"Option 1 : {line['solution1']}")
+            .add_end(
+                "Réponds uniquement par 0 si l'option 0 est la meilleure, "
+                "ou par 1 si l'option 1 est la meilleure. La réponse est :"
+            )
+            .build()
+        ),
+        line_to_data_fn=lambda line: {
+            "prompt": line["prompt"],
+            "solution0": line["solution0"],
+            "solution1": line["solution1"],
+        },
+    ),
     BorealTasks.QCCR.value: Dataset(
         name=BorealTasks.QCCR.value,
         description="Québec cities – predict the administrative region of a given city.",
