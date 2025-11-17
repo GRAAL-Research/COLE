@@ -34,8 +34,8 @@ class BorealTasks(str, Enum):
     QCCP = "qccp"
     QCCY = "qccy"
     QCCR = "qccr"
-    PIQAFR= "piqafr"
-    PIQAQFR= "piqaqfr"
+    PIQAFR = "piqafr"
+    PIQAQFR = "piqaqfr"
 
 
 class Tasks(str, Enum):
@@ -67,5 +67,5 @@ class Tasks(str, Enum):
     WSD = "wsd"
     TIMELINE = "timeline"
     LQLE = "lqle"
-    PIQAFR= "piqafr"
-    PIQAQFR= "piqaqfr"
+    PIQAFR = "piqafr"
+    PIQAQFR = "piqaqfr"

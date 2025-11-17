@@ -10,7 +10,7 @@ class TaskQccyTest(TaskTest):
     def test_given_a_prediction_smaller_than_corpus_when_compute_then_return_expected_result_and_warning(
         self,
     ):
-        a_predictions = ['1861','1879','1000', '1000', '1000']
+        a_predictions = ["1861", "1879", "1000", "1000", "1000"]
         task = Task(
             task_name="qccy",
             metric="em",
@@ -33,7 +33,7 @@ class TaskQccyTest(TaskTest):
     def test_given_a_prediction_when_compute_then_return_expected_result_no_warnings(
         self,
     ):
-        a_predictions = ['nan'] * self.dataset_size
+        a_predictions = ["nan"] * self.dataset_size
         task = Task(
             task_name="qccy",
             metric="em",

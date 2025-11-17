@@ -703,9 +703,13 @@ datasets = {
         line_to_truth_fn=lambda line: line["region"],
         line_to_prompt_fn=lambda line: (
             PromptBuilder()
-            .add_premise("À quelle région administrative appartient cette ville du Québec ?")
+            .add_premise(
+                "À quelle région administrative appartient cette ville du Québec ?"
+            )
             .add_data(f"Ville : {line['city']}")
-            .add_end("Réponds uniquement par le nom exact de la région. La réponse est :")
+            .add_end(
+                "Réponds uniquement par le nom exact de la région. La réponse est :"
+            )
             .build()
         ),
         line_to_data_fn=lambda line: {
