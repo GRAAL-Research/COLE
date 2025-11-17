@@ -70,7 +70,6 @@ llms = {
         "ibm-granite/granite-3.3-8b-instruct",
     ],
     "Apertus": ["swiss-ai/Apertus-8B-2509", "swiss-ai/Apertus-8B-Instruct-2509"],
-    "moonai": ["unsloth/Kimi-K2-Thinking-BF16", "unsloth/Kimi-K2-Instruct-BF16"],
     "all": [],
 }
 for key in llms.keys():
@@ -141,6 +140,8 @@ private_llm = {
         "z-ai/glm-4.5",
         "google/gemini-2.5-pro",
         "google/gemini-2.5-flash",
+        "moonshotai/kimi-k2-thinking",
+        "moonshotai/kimi-k2-0905",
     ],
     "anthropic": [
         "claude-opus-4-20250514",
