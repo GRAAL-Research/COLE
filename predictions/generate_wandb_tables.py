@@ -8,9 +8,10 @@ import pandas as pd
 import wandb
 
 from predictions.all_llms import llms, small_llm, small_llm_2, private_llm
-from src import WANDB_PROJECT
 
-PROJECT_PATH = f"doctorate/{WANDB_PROJECT}"
+from src import cole as project
+
+PROJECT_PATH = f"doctorate/{project}"
 MODELS_SIZE_PATH = "models_size.json"
 FULL_TABLE_CSV = os.path.join("results", "full_results_table.csv")
 FULL_TABLE_LATEX = os.path.join("results", "full_results_table.tex")

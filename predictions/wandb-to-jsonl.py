@@ -6,10 +6,10 @@ from collections import defaultdict
 from collections.abc import Mapping
 
 import wandb
-from src import WANDB_PROJECT
+from src import cole as project
 
 # === Config par défaut ===
-PROJECT_PATH = f"doctorate/{WANDB_PROJECT}"
+PROJECT_PATH = f"doctorate/{project}"
 DEFAULT_OUT = "results/leaderboard.json"
 
 

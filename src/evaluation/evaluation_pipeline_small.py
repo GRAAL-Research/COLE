@@ -8,7 +8,6 @@ import wandb
 from tqdm import tqdm
 
 from predictions.all_llms import small_llm
-from src import WANDB_PROJECT
 from src.evaluation.llm_evaluator import ModelEvaluator
 from src.evaluation.llm_factory import model_factory
 from src.task.task_factory import tasks_factory
@@ -69,10 +68,13 @@ args = parser.parse_args()
 
 if args.tasks_group == "all":
     tasks_names = list(COLETasks) + list(BorealTasks)
+    from src import complete as project
 elif args.tasks_group == "cole":
     tasks_names = list(COLETasks)
+    from src import cole as project
 elif args.tasks_group == "boreal":
     tasks_names = list(BorealTasks)
+    from src import boreal as project
 else:
     raise ValueError("Invalid value for tasks_group")
 
@@ -106,7 +108,7 @@ for model_name in tqdm(
 
         exp_name = f"{model_name}"
         wandb.init(
-            project=WANDB_PROJECT,
+            project=project,
             entity="doctorate",
             config={"model_name": model_name, "tasks": "; ".join(tasks_names)},
             name=exp_name,

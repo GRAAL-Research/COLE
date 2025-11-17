@@ -1,3 +1,5 @@
 REPO_ID = "COLE-Graal/COLEGraal"
-WANDB_PROJECT = "COLE-final-boreal"
+cole = "COLE-final"
+boreal = "COLE-final-boreal"
+complete = "COLE-finale-complete"
 NA_VALUE = -1
