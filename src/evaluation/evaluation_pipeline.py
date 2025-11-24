@@ -62,7 +62,7 @@ parser.add_argument(
     help="The task group to test",
     type=str,
     default=None,
-    choices=["all", "cole", "boreal"],
+    choices=["all", "cole", "boreal", "comparison"],
 )
 
 args = parser.parse_args()
@@ -76,6 +76,9 @@ elif args.tasks_group == "cole":
 elif args.tasks_group == "boreal":
     tasks_names = list(BorealTasks)
     from src import boreal as project
+elif args.tasks_group == "comparison":
+    tasks_names = ["frcoe"]
+    from src import comparison as project
 else:
     raise ValueError("Invalid value for tasks_group")
 

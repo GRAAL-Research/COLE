@@ -108,6 +108,14 @@ def tasks_factory(task_names: Union[Dict, List[Tasks]]) -> List[Task]:
                         task_type=TaskType.INFERENCE,
                     )
                 )
+            case Tasks.FRCOE:
+                tasks.append(
+                    Task(
+                        task_name=task.value,
+                        metric="accuracy",
+                        task_type=TaskType.INFERENCE,
+                    )
+                )
             case Tasks.QFRCORT:
                 tasks.append(
                     Task(

@@ -18,6 +18,7 @@ class COLETasks(str, Enum):
     QFRCOLA = "qfrcola"
     QFRCORE = "qfrcore"
     QFRCORT = "qfrcort"
+    FRCOE = "frcoe"
 
     RTE3_FRENCH = "rte3-french"
     SICKFR = "sickfr"
@@ -55,6 +56,7 @@ class Tasks(str, Enum):
     QFRCOLA = "qfrcola"
     QFRCORE = "qfrcore"
     QFRCORT = "qfrcort"
+    FRCOE = "frcoe"
     QCCP = "qccp"
     QCCY = "qccy"
     QCCR = "qccr"

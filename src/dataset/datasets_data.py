@@ -294,6 +294,36 @@ datasets = {
             "choices": line["choices"],
         },
     ),
+    COLETasks.FRCOE.value: Dataset(
+        name=COLETasks.FRCOE.value,
+        description="Definition matching task : "
+        "Match the French expression with its definition from a list.",
+        possible_ground_truths=[str(i) for i in range(10)],
+        hugging_face_repo=COLE_REPOSITORY_NAME,
+        line_to_truth_fn=lambda line: str(line["correct_index"]),
+        line_to_prompt_fn=lambda line: PromptBuilder()
+        .add_premise(
+            f"Que veut dire cette expression française « {line['expression']} » ?"
+        )
+        .add_data(
+            "\n".join(
+                f"{idx} - {definition}"
+                for idx, definition in enumerate(line["choices"])
+            )
+        )
+        .add_end(
+            (
+                "Réponds uniquement par l'index, débutant à zéro,  "
+                "de la bonne définition parmi la liste ci-dessus. Par exemple, si la "
+                "troisième phrase correspond à l'expression, la réponse sera 2. La réponse est :"
+            )
+        )
+        .build(),
+        line_to_data_fn=lambda line: {
+            "expression": line["expression"],
+            "choices": line["choices"],
+        },
+    ),
     COLETasks.DACCORD.value: Dataset(
         name=COLETasks.DACCORD.value,
         description="Paraphrase detection task :"
