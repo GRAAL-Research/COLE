@@ -100,7 +100,7 @@ class HFLLMModel(LanguageModel):
             remove_columns="text",
         )
 
-        return process_dataset["prediction"]
+        return list(process_dataset["prediction"])
 
     def generate(self, rows: LazyRow) -> Dict:
         """

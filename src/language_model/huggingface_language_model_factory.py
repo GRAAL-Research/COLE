@@ -16,6 +16,8 @@ def hugging_face_language_model_tokenizer_factory(
         or "lucie" in model_name.lower()
         or "mixtral" in model_name.lower()
         or "eurollm" in model_name.lower()
+        or "ibm-granite" in model_name.lower()
+        or "swiss-ai" in model_name.lower()
     ):
 
         compute_dtype = getattr(torch, "bfloat16")
