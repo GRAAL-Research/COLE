@@ -121,6 +121,7 @@ class ModelNameProcessor:
         n = re.sub(r"(?i)^reka-flash(?=-|$)", "Reka-flash", n)
         n = re.sub(r"(?i)^deepseek(?=-|$)", "DeepSeek", n)
         n = re.sub(r"(?i)^qwen(?=-|$)", "Qwen", n)
+        n = re.sub(r"(?i)^qwen3", "Qwen$3$", n)
         n = re.sub(r"(?i)^llama(?=-|$)", "Llama", n)
         n = re.sub(r"(?i)^mistral(?=-|$)", "Mistral", n)
         n = re.sub(r"(?i)^claude(?=-|$)", "Claude", n)
@@ -133,12 +134,14 @@ class ModelNameProcessor:
         n = re.sub(r"(?i)^deepthink(?=-|$)", "Deepthink", n)
         n = re.sub(r"(?i)^ministral(?=-|$)", "Ministral", n)
         n = re.sub(r"(?i)^mixtral(?=-|$)", "Mixtral", n)
+        n = re.sub(r"(?i)^kimi(?=-|$)", "Kimi", n)
         n = re.sub(r"(?i)^pixtral(?=-|$)", "Pixtral", n)
         n = re.sub(r"(?i)^qwq(?=-|$)", "QwQ", n)
         n = re.sub(r"(?i)^meta-llama(?=-|$)", "Meta-Llama", n)
         n = re.sub(r"(?i)^command(?=-|$)", "Command", n)
         n = re.sub(r"(?i)^glm(?=-|$)", "GLM", n)
         n = re.sub(r"(?i)^c4ai-aya-expanse(?=-|$)", "C4ai-Aya-expanse", n)
+        n = re.sub(r"(?i)^c4ai-", "", n)
         n = re.sub(r"(?i)^s1\.1(?=-|$)", "S1.1", n)
         n = re.sub(r"(\d+\.\d+\.?\d?)", r"$\1$", n)
         for pattern, replacement in self.size_patterns.items():
@@ -246,6 +249,7 @@ def main():
     ordered_cols = sorted([c for c in df.columns], key=sort_key)
     df = df[ordered_cols]
 
+    df.drop_duplicates(subset="model_name", keep="first", inplace=True)
     df.to_csv(FULL_TABLE_CSV, index=False)
     df = df.fillna(0.00)
     df.drop("Composite Score", axis=1).to_latex(
