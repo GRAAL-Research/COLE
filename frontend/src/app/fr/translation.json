@@ -116,7 +116,8 @@
   "leaderboard_modelHeader": "Nom du modèle",
   "leaderboard_overallHeader": "Global",
   "leaderboard_avgScoreLabel": "(score moyen)",
-  "leaderboard_notSpecified": "NS",
+  "leaderboard_notSpecified": "N/A",
+  "leaderboard_notSpecifiedTooltip": "Ce modèle n'a pas été évalué sur cette tâche",
   "leaderboard_modalTitle": "Résultats pour {{name}}",
   "leaderboard_closeButton": "Fermer",
   "nav_home": "COLE",
@@ -127,7 +128,20 @@
   "nav_tasks": "Nos tâches",
   "nav_results": "Résultats",
   "nav_leaderboard": "Classement COLE",
-  "nav_datasets": "Nos  données"
+  "nav_datasets": "Nos données",
+  "papers_title": "Nos articles",
+  "papers_arxiv_label": "COLE: a Comprehensive Benchmark for French Language Understanding Evaluation",
+  "papers_arxiv_authors": "David Beauchemin, Yan Tremblay, Mohamed Amine Youssef, Richard Khoury (arXiv:2510.05046, ICLR 2025 Workshop)",
+  "leaderboard_errorMessage": "Impossible de charger les données du classement. Veuillez réessayer plus tard.",
+  "benchmarks_category_sentiment": "Analyse de sentiments",
+  "benchmarks_category_nli": "Inférence en langage naturel",
+  "benchmarks_category_qa": "Réponse aux questions",
+  "benchmarks_category_paraphrase": "Détection de paraphrases",
+  "benchmarks_category_grammar": "Jugement grammatical",
+  "benchmarks_category_similarity": "Similarité sémantique",
+  "benchmarks_category_wsd": "Désambiguïsation lexicale",
+  "benchmarks_category_quebec": "Français québécois",
+  "benchmarks_category_coreference": "Coréférence / Résolution de pronoms"
 }
 
 

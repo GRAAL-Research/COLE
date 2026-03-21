@@ -20,6 +20,8 @@ const allowedMetrics = [
   'exact_match',
 ];
 
+const PAGE_SIZE = 25;
+
 export default function LeaderboardPage() {
   const { t } = useTranslation();
   const { id: _ } = useParams(); // unused here
@@ -28,6 +30,8 @@ export default function LeaderboardPage() {
   const [sortCol, setSortCol] = useState('overall');
   const [sortOrder, setSortOrder] = useState('desc');
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const [error, setError] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const headerLabels = {
     model: t('leaderboard_modelHeader'),
@@ -55,7 +59,7 @@ export default function LeaderboardPage() {
         });
         setBenchmarks(Array.from(allBench));
       })
-      .catch((err) => console.error('Failed to load leaderboard:', err));
+      .catch(() => setError(true));
   }, []);
 
   const getCellValue = (entry, col) => {
@@ -103,6 +107,12 @@ export default function LeaderboardPage() {
     return sortOrder === 'asc' ? na - nb : nb - na;
   });
 
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const paginatedEntries = sorted.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+
   const handleSort = (col) => {
     if (sortCol === col) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -110,6 +120,7 @@ export default function LeaderboardPage() {
       setSortCol(col);
       setSortOrder('desc');
     }
+    setCurrentPage(1);
   };
 
   const renderHeader = (col) => {
@@ -166,6 +177,19 @@ export default function LeaderboardPage() {
     );
   };
 
+  if (error) {
+    return (
+      <div className="space-y-8">
+        <h3 className="text-2xl font-semibold text-gray-900 mb-4 border-l-4 border-blue-600 pl-4">
+          {t('leaderboard_title')}
+        </h3>
+        <div className="text-center py-12">
+          <p className="text-red-600 text-lg">{t('leaderboard_errorMessage')}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
         <h3 className="text-2xl font-semibold text-gray-900 mb-4 border-l-4 border-blue-600 pl-4">
@@ -185,7 +209,7 @@ export default function LeaderboardPage() {
             </tr>
           </thead>
           <tbody>
-            {sorted.map((entry) => (
+            {paginatedEntries.map((entry) => (
               <tr
                 key={entry.submission_id}
                 className="bg-white hover:bg-gray-50 cursor-pointer"
@@ -205,9 +229,10 @@ export default function LeaderboardPage() {
                     <td
                       key={b}
                       className="border border-gray-200 px-2 py-1 text-center text-gray-800"
+                      title={val == null ? t('leaderboard_notSpecifiedTooltip') : undefined}
                     >
                       {val == null
-                        ? t('leaderboard_notSpecified')
+                        ? <span className="text-gray-400 italic">{t('leaderboard_notSpecified')}</span>
                         : (val * 100).toFixed(1) + '%'}
                     </td>
                   );
@@ -217,6 +242,28 @@ export default function LeaderboardPage() {
           </tbody>
         </table>
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 py-4">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 rounded bg-blue-600 text-white disabled:opacity-40 hover:bg-blue-700 transition"
+          >
+            &laquo;
+          </button>
+          <span className="text-gray-700 text-sm">
+            {currentPage} / {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 rounded bg-blue-600 text-white disabled:opacity-40 hover:bg-blue-700 transition"
+          >
+            &raquo;
+          </button>
+        </div>
+      )}
 
       {selectedEntry && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

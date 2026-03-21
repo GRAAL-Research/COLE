@@ -4,6 +4,7 @@ import '../../i18n';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { BACKEND_ADDRESS } from '@/app/resources/ResourcesPaths';
 
 export default function ResultsPage() {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ export default function ResultsPage() {
     metricKey.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
   useEffect(() => {
-    fetch(`http://localhost:8000/results/${submissionId}.json`)
+    fetch(`${BACKEND_ADDRESS}/results/${submissionId}.json`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
