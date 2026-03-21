@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 from tabulate import tabulate
 
-
 RESULTS_DIRECTORY = "../results"
 
 

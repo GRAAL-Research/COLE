@@ -30,7 +30,6 @@ from src.task.task_factory import (
     tasks_factory,
 )
 
-
 BASE_DIR = Path(__file__).resolve().parents[2]
 SRC_DIR = BASE_DIR / "src"
 sys.path.insert(0, str(SRC_DIR))
