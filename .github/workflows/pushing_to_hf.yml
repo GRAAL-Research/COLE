@@ -16,15 +16,13 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-      - name: Setup Git LFS for HF and push
+      - name: Push to HF Space with LFS migration
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git config user.email "ci@colebenchmark.org"
           git config user.name "COLE CI"
           git lfs install
-          git lfs track "*.pdf" "*.bin" "*.h5" "*.pt" "*.safetensors" "*.onnx" "*.parquet" "*.pkl"
-          git lfs track "package-lock.json"
-          git add .gitattributes
-          git diff --cached --quiet .gitattributes || git commit -m "configure git lfs for HF spaces"
+          # Migrate any large files in history to LFS
+          git lfs migrate import --include="*.jsonl,*.pdf,*.json" --everything --yes
           git push --force https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$HF_SPACE_NAME ${{ github.ref_name }}:main
