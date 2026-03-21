@@ -30,6 +30,6 @@ jobs:
           pip install -Ur tests/tests_requirements.txt
       - name: Test with pytest
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN_GRAALUL }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           pytest
