@@ -123,7 +123,7 @@ export default function LeaderboardPage() {
             {baseLabel}
             {arrow}
           </div>
-          <div className="text-xs text-gray-600 text-center">
+          <div className="text-xs text-blue-100 text-center">
             {t('leaderboard_avgScoreLabel')}
           </div>
         </div>
@@ -177,7 +177,7 @@ export default function LeaderboardPage() {
               {['model', 'overall', ...benchmarks].map((b) => (
                 <th
                   key={b}
-                  className="border border-gray-300 px-2 py-1 bg-blue-100 text-left text-sm font-semibold text-blue-700"
+                  className="border border-gray-300 px-2 py-1 bg-blue-600 text-left text-sm font-semibold text-white"
                 >
                   {renderHeader(b)}
                 </th>
@@ -204,7 +204,7 @@ export default function LeaderboardPage() {
                   return (
                     <td
                       key={b}
-                      className="border border-gray-200 px-2 py-1 text-center text-purple-700"
+                      className="border border-gray-200 px-2 py-1 text-center text-gray-800"
                     >
                       {val == null
                         ? t('leaderboard_notSpecified')

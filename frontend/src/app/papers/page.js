@@ -16,6 +16,19 @@ export default function PapersPage() {
       <h2 className="text-3xl font-bold text-center text-blue-700 border-b pb-4 mb-10">
         Our papers
       </h2>
+      <div className="mb-6 space-y-2">
+        <p className="text-gray-700">
+          <a
+            href="https://arxiv.org/abs/2510.05046"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline hover:text-blue-800 font-medium"
+          >
+            COLE: a Comprehensive Benchmark for French Language Understanding Evaluation
+          </a>
+          {' '}— David Beauchemin, Yan Tremblay, Mohamed Amine Youssef, Richard Khoury (arXiv:2510.05046, ICLR 2025 Workshop)
+        </p>
+      </div>
     </div>
 
       <iframe
