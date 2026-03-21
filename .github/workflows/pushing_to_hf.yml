@@ -20,11 +20,11 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          git config user.email "ci@colebenchmark.org"
+          git config user.name "COLE CI"
           git lfs install
-          # Track files that HF might consider large
           git lfs track "*.pdf" "*.bin" "*.h5" "*.pt" "*.safetensors" "*.onnx" "*.parquet" "*.pkl"
           git lfs track "package-lock.json"
-          # Commit .gitattributes if changed
           git add .gitattributes
           git diff --cached --quiet .gitattributes || git commit -m "configure git lfs for HF spaces"
           git push --force https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$HF_SPACE_NAME ${{ github.ref_name }}:main
