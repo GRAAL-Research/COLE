@@ -73,16 +73,32 @@
   "guide_section1_para2": "To test a model, you also need to fetch the data in the same way. Once done, your model should infer predictions for each line in the test split. Our repository includes benchmark evaluation scripts for each dataset. You only need to plug in your model's inference method using the HuggingFace Model interface. Our inference scripts are available on our <0>GitHub Repository</0>.",
   "guide_section1_para3": "If you prefer to run inference separately, please ensure that the predictions are formatted correctly before submitting them for evaluation (see our \"Formatting the Dataset\" section).",
   "guide_section2_title": "Formatting the Dataset",
-  "guide_section2_para1": "Before submitting your results, make sure your output is properly formatted so that our systems can process it. The expected format is a nested JSON dictionary as follows:",
+  "guide_section2_para1": "Before submitting your results, make sure your output is properly formatted so that our systems can process it. The expected format is a nested JSON dictionary as shown below. Once formatted, compress your JSON file into a ZIP archive (.zip) and upload it via the submission form.",
    "faq_title": "Frequently Asked Questions",
    "faqs": [
     {
       "question": "How can I evaluate my model?",
-      "answer": "You can upload your model outputs in JSON format on the website. The system will automatically evaluate them, and you can view the results in the evaluation interface."
+      "answer": "Format your model predictions as a JSON file following the format described in the Guide, compress it into a ZIP archive, and upload it via the submission form on the website. The system will automatically evaluate your predictions against the hidden test labels and display the results."
     },
     {
       "question": "Is COLE multilingual?",
       "answer": "No, COLE is available only in French. The benchmark is specifically designed to evaluate NLU models in the French language."
+    },
+    {
+      "question": "What format should my predictions be in?",
+      "answer": "Your predictions should be a JSON file containing your model name, model URL, and a list of tasks with predictions arrays. Each task prediction array must match the order and size of the corresponding test split. See the Guide page for the exact format. The JSON file must then be compressed into a ZIP archive before submission."
+    },
+    {
+      "question": "Where can I find the test data?",
+      "answer": "The test data (without labels) is available on our HuggingFace repository at huggingface.co/datasets/graalul/COLE-public. You can load any task using the datasets library: load_dataset('graalul/COLE-public', 'task_name')."
+    },
+    {
+      "question": "Why are the test labels hidden?",
+      "answer": "To ensure fair evaluation and prevent overfitting on test data, we do not release test labels. Models are evaluated server-side against the hidden ground truth when you submit your predictions."
+    },
+    {
+      "question": "Can I evaluate on only a subset of tasks?",
+      "answer": "Yes, you can submit predictions for any subset of the 23 tasks. The leaderboard will show your scores on the tasks you submitted and N/A for the rest."
     }
   ],
   "contact_title": "Contact us",

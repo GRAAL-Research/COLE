@@ -1,69 +1,54 @@
-# Build frontend
-FROM node:18 as frontend-build
+# Stage 1: Build frontend
+FROM node:18-slim AS frontend-build
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
-RUN npm install
+RUN npm ci
 COPY frontend/ ./
 RUN npm run build
 
-# Build backend
-FROM python:3.12-slim as backend
+# Stage 2: Final image with backend + built frontend
+FROM python:3.12-slim
+
 WORKDIR /app
 
-# Install dependencies including nginx
-RUN apt-get update && apt-get install -y nginx \
+# Install system dependencies (nginx, curl, Node.js runtime for Next.js)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nginx \
+    curl \
+    netcat-openbsd \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Python dependencies
 COPY src/docker_requirements.txt /app/src/
-RUN pip install --upgrade pip wheel
-RUN pip install --cache-dir=~/.cache/pip --prefer-binary pyarrow pandas numpy scipy fsspec aiohttp tqdm --progress-bar off -v
-RUN pip install --cache-dir=~/.cache/pip -r /app/src/docker_requirements.txt -v --prefer-binary && rm -rf ~/.cache/pip
+RUN pip install --no-cache-dir --upgrade pip wheel \
+    && pip install --no-cache-dir --prefer-binary pyarrow pandas numpy scipy fsspec aiohttp tqdm \
+    && pip install --no-cache-dir --prefer-binary -r /app/src/docker_requirements.txt
+
+# Copy backend source
 COPY src/ /app/src/
 
-# Copy Nginx config (adjust path if needed)
-COPY nginx.conf /etc/nginx/nginx.conf
-
+# Copy built frontend from stage 1
 COPY --from=frontend-build /app/frontend /app/frontend
 
-# Create non-root user
-RUN useradd -m -u 1000 user
+# Copy config files
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-# Create and configure cache directory
-RUN mkdir -p /app/.cache && \
-    chown -R user:user /app
+# Create non-root user and set permissions
+RUN useradd -m -u 1000 user \
+    && mkdir -p /app/.cache /var/lib/nginx /var/log/nginx /app/logs /run \
+    && touch /run/nginx.pid \
+    && chown -R user:user /app /var/lib/nginx /var/log/nginx /run
 
-# Environment variables
 ENV HF_HOME=/app/.cache \
     HF_DATASETS_CACHE=/app/.cache \
     INTERNAL_API_PORT=7861 \
     PORT=7860
 
-WORKDIR /app
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-RUN chown -R user:user /var/lib/nginx
-
-RUN apt-get update && apt-get install -y nginx \
-    && groupadd -r nginx && useradd -r -g nginx nginx
-
-#Give user nginx write permissions
-RUN mkdir -p /var/lib/nginx && chown -R user:user /var/lib/nginx
-RUN mkdir -p /var/log/nginx && chown -R user:user /var/log/nginx
-RUN mkdir -p /app/logs && chown -R user:user /app/logs
-RUN mkdir -p /run && touch /run/nginx.pid && chown -R user:user /run
-
-RUN apt-get update && apt-get install -y \
-    curl \
-    netcat-openbsd \
-    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
-
-
-# Note: HF_TOKEN should be provided at runtime, not build time
 USER user
 EXPOSE 7860
 
-# Start both servers with wait-for
 CMD ["sh", "/start.sh"]

@@ -73,16 +73,32 @@
   "guide_section1_para2": "Pour tester un modèle, vous devez également récupérer les données de la même façon. Une fois fait, votre modèle doit inférer les prédictions pour chaque ligne de la partition de test. Notre dépôt inclut des scripts d’évaluation pour chaque dataset. Il vous suffit de connecter la méthode d’inférence de votre modèle via l’interface HuggingFace. Nos scripts d’inférence sont disponibles sur notre <0>dépôt GitHub</0>.",
   "guide_section1_para3": "Si vous préférez lancer l’inférence séparément, assurez-vous que les prédictions sont correctement formatées avant de les soumettre pour évaluation (voir notre section « Formatting the Dataset »).",
   "guide_section2_title": "Formatage du jeu de données",
-  "guide_section2_para1": "Avant de soumettre vos résultats, assurez-vous que votre sortie est correctement formatée afin que nos systèmes puissent la traiter. Le format attendu est un dictionnaire JSON imbriqué comme suit :",
+  "guide_section2_para1": "Avant de soumettre vos résultats, assurez-vous que votre sortie est correctement formatée afin que nos systèmes puissent la traiter. Le format attendu est un dictionnaire JSON imbriqué comme ci-dessous. Une fois formaté, compressez votre fichier JSON dans une archive ZIP (.zip) et soumettez-le via le formulaire de soumission.",
   "faq_title": "Foire aux questions",
   "faqs": [
     {
       "question": "Comment évaluer mon modèle ?",
-      "answer": "Vous pouvez téléverser les sorties de votre modèle au format JSON sur le site. Le système les évaluera automatiquement, et vous pourrez consulter les résultats dans l’interface d’évaluation."
+      "answer": "Formatez les prédictions de votre modèle dans un fichier JSON selon le format décrit dans le Guide, compressez-le dans une archive ZIP, et soumettez-le via le formulaire sur le site. Le système évaluera automatiquement vos prédictions par rapport aux labels de test cachés et affichera les résultats."
     },
     {
       "question": "COLE est-il multilingue ?",
-      "answer": "Non, COLE est disponible uniquement en français. Le benchmark est spécifiquement conçu pour évaluer les modèles en compréhension de la langue française. ( NLU )"
+      "answer": "Non, COLE est disponible uniquement en français. Le benchmark est spécifiquement conçu pour évaluer les modèles en compréhension de la langue française (NLU)."
+    },
+    {
+      "question": "Quel format doivent avoir mes prédictions ?",
+      "answer": "Vos prédictions doivent être un fichier JSON contenant le nom du modèle, l’URL du modèle, et une liste de tâches avec des tableaux de prédictions. Chaque tableau de prédictions doit correspondre à l’ordre et à la taille du split de test correspondant. Consultez la page Guide pour le format exact. Le fichier JSON doit ensuite être compressé en archive ZIP avant la soumission."
+    },
+    {
+      "question": "Où puis-je trouver les données de test ?",
+      "answer": "Les données de test (sans labels) sont disponibles sur notre dépôt HuggingFace : huggingface.co/datasets/graalul/COLE-public. Vous pouvez charger n’importe quelle tâche avec la bibliothèque datasets : load_dataset(‘graalul/COLE-public’, ‘nom_tache’)."
+    },
+    {
+      "question": "Pourquoi les labels de test sont-ils cachés ?",
+      "answer": "Pour garantir une évaluation équitable et empêcher le sur-apprentissage sur les données de test, nous ne publions pas les labels de test. Les modèles sont évalués côté serveur par rapport à la vérité terrain cachée lors de la soumission de vos prédictions."
+    },
+    {
+      "question": "Puis-je évaluer sur un sous-ensemble de tâches ?",
+      "answer": "Oui, vous pouvez soumettre des prédictions pour n’importe quel sous-ensemble des 23 tâches. Le classement affichera vos scores sur les tâches soumises et N/A pour les autres."
     }
   ],
   "contact_title": "Nous contacter",

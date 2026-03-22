@@ -1,13 +1,13 @@
 name: Linting
 
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
   linting:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ "3.10", "3.11", "3.12" ]
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
       - uses: actions/checkout@v4
@@ -15,6 +15,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          cache-dependency-path: |
+            styling_requirements.txt
+            src/requirements.txt
+            tests/tests_requirements.txt
       - name: Install dependencies
         run: |
           pip install -Ur styling_requirements.txt
