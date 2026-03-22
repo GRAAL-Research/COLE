@@ -218,7 +218,7 @@ export default function LeaderboardPage() {
                 <td className="border border-gray-300 px-2 py-1 font-medium text-blue-600">
                   {entry.display_name}
                 </td>
-                <td className="border border-gray-300 px-2 py-1 text-center">
+                <td className="border border-gray-300 px-2 py-1 text-center text-black font-bold">
                   {entry.averageScore == null
                     ? t('leaderboard_notSpecified')
                     : (entry.averageScore * 100).toFixed(1) + '%'}

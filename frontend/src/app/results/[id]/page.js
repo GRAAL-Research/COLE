@@ -53,7 +53,7 @@ export default function ResultsPage() {
 
   if (!data) {
     return (
-      <main className="max-w-3xl mx-auto px-6 py-6 text-center">
+      <main className="max-w-5xl mx-auto px-6 py-6 text-center">
         <p className="text-gray-600">{t('results_loading')}</p>
       </main>
     );
@@ -63,7 +63,7 @@ export default function ResultsPage() {
   const displayName = data.display_name || data.config_general?.display_name;
 
   return (
-    <main className="max-w-3xl mx-auto px-6 py-6">
+    <main className="max-w-5xl mx-auto px-6 py-6">
       <h2 className="text-2xl font-bold text-center mb-4">
         {t('results_page_title', { displayName })}
       </h2>

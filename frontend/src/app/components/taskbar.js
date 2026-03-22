@@ -16,7 +16,7 @@ export default function Taskbar() {
       : 'text-gray-700 hover:text-blue-500';
 
   return (
-    <nav className="w-full py-4 bg-none flex justify-between items-center mx-auto max-w-5xl">
+    <nav className="w-full py-4 bg-none flex justify-between items-center mx-auto max-w-7xl">
       <div className="flex items-center">
         <Link href="/">
           <span className="text-xl font-bold text-blue-600">{t('nav_home')}</span>
@@ -43,11 +43,11 @@ export default function Taskbar() {
         >
           {t('nav_submit')}
         </Link>
-        <Link href="/benchmarks" className={linkStyle('/benchmarks')}>
-          {t('nav_tasks')}
-        </Link>
         <Link href="/results" className={linkStyle('/results')}>
           {t('nav_results')}
+        </Link>
+        <Link href="/benchmarks" className={linkStyle('/benchmarks')}>
+          {t('nav_tasks')}
         </Link>
         <Link href="/leaderboard" className={linkStyle('/leaderboard')}>
           {t('nav_leaderboard')}

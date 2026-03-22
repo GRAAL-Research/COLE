@@ -90,7 +90,7 @@
     },
     {
       "question": "Where can I find the test data?",
-      "answer": "The test data (without labels) is available on our HuggingFace repository at huggingface.co/datasets/graalul/COLE-public. You can load any task using the datasets library: load_dataset('graalul/COLE-public', 'task_name')."
+      "answer": "The test data (without labels) is available on our HuggingFace repository at <code>graalul/COLE-public</code>. You can load any task using the datasets library: <code>load_dataset('graalul/COLE-public', 'task_name')</code>."
     },
     {
       "question": "Why are the test labels hidden?",

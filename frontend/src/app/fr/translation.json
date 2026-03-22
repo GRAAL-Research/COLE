@@ -90,7 +90,7 @@
     },
     {
       "question": "Où puis-je trouver les données de test ?",
-      "answer": "Les données de test (sans labels) sont disponibles sur notre dépôt HuggingFace : huggingface.co/datasets/graalul/COLE-public. Vous pouvez charger n’importe quelle tâche avec la bibliothèque datasets : load_dataset(‘graalul/COLE-public’, ‘nom_tache’)."
+      "answer": "Les données de test (sans labels) sont disponibles sur notre dépôt HuggingFace : <code>graalul/COLE-public</code>. Vous pouvez charger n’importe quelle tâche avec la bibliothèque datasets : <code>load_dataset(‘graalul/COLE-public’, ‘nom_tache’)</code>."
     },
     {
       "question": "Pourquoi les labels de test sont-ils cachés ?",

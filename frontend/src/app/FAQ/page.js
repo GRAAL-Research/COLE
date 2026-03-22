@@ -14,7 +14,7 @@ export default function FAQ() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-3">
+    <div className="max-w-5xl mx-auto px-6 py-3">
       <h2 className="text-3xl font-bold text-center text-blue-700 border-b pb-4 mb-10">
         {t('faq_title')}
       </h2>
@@ -35,7 +35,7 @@ export default function FAQ() {
               </span>
             </button>
             {openIndex === i && (
-              <p className="mt-4 text-gray-600 text-sm">{faq.answer}</p>
+              <p className="mt-4 text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: faq.answer }} />
             )}
           </div>
         ))}

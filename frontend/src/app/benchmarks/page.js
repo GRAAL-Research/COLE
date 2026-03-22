@@ -80,7 +80,7 @@ export default function Benchmarks() {
 
   return (
     <div suppressHydrationWarning>
-      <div className="max-w-3xl mx-auto px-2 py-3">
+      <div className="max-w-5xl mx-auto px-2 py-3">
         <p className="text-1.5xl text-left text-gray-800">
           {t('benchmarksIntro')}
         </p>

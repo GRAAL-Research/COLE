@@ -15,7 +15,7 @@ export default function PapersPage() {
           <div className="animate-spin h-12 w-12 border-4 border-blue-600 border-t-transparent rounded-full" />
         </div>
       )}
-      <div className="max-w-3xl mx-auto px-6 py-3">
+      <div className="max-w-5xl mx-auto px-6 py-3">
         <h2 className="text-3xl font-bold text-center text-blue-700 border-b pb-4 mb-6">
           {t('papers_title')}
         </h2>
