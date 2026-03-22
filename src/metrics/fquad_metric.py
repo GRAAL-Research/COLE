@@ -62,6 +62,8 @@ def compute_score(predictions: List, references: List) -> Dict:
         )
         f1 += metric_max_over_ground_truths(f1_score, prediction, ground_truths)
 
+    if total == 0:
+        return {"exact_match": 0.0, "f1": 0.0}
     exact_match = 100.0 * exact_match / total
     f1 = 100.0 * f1 / total
 

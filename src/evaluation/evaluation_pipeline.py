@@ -118,7 +118,9 @@ for model_name in tqdm(
             entity="doctorate",
             config={
                 "model_name": model_name,
-                "tasks": "; ".join(tasks_names),
+                "tasks": "; ".join(
+                    t.value if hasattr(t, "value") else str(t) for t in tasks_names
+                ),
                 "batch_size": args.batch_size,
             },
             name=exp_name,
@@ -139,6 +141,8 @@ for model_name in tqdm(
         logging.error(error_message)
         wandb.finish(exit_code=1)
         continue
+    else:
+        wandb.finish(exit_code=0)
     finally:
         # Memory cleaning
         if "model" in locals():
@@ -147,7 +151,6 @@ for model_name in tqdm(
             del evaluator
         gc.collect()
         torch.cuda.empty_cache()
-        wandb.finish(exit_code=0)
 
 time_end = datetime.now()
 info_message = f"End time: {time_end}"

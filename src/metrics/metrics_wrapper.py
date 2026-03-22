@@ -55,7 +55,7 @@ class ExactMatch(Metric):
             reference.strip() == prediction.strip()
             for reference, prediction in zip(references, predictions)
         ]
-        return {"exact_match": sum(score) / len(score)}
+        return {"exact_match": sum(score) / len(score) if score else 0.0}
 
 
 def apply_int_casting(predictions_to_clean: List) -> List:
@@ -70,9 +70,9 @@ def apply_int_casting(predictions_to_clean: List) -> List:
         elif isinstance(prediction, float):
             predictions_to_clean[idx] = int(prediction)
         elif isinstance(prediction, str):
-            if prediction.strip().isdigit():
-                predictions_to_clean[idx] = int(prediction)
-            else:
+            try:
+                predictions_to_clean[idx] = int(prediction.strip())
+            except ValueError:
                 na_value += 1
                 predictions_to_clean[idx] = NA_VALUE
         elif prediction is None:

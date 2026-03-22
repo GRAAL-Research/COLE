@@ -26,6 +26,7 @@ class Dataset:
         line_to_data_fn: Callable,
     ):
         self._dataset = None
+        self._ground_truths_cache = None
         self.name = name
         self.description = description
         self.hugging_face_repo = hugging_face_repo
@@ -47,8 +48,12 @@ class Dataset:
 
     @property
     def ground_truths(self) -> Union[List[str], List[int], List[float]]:
-        """The dataset's ground truths as a list"""
-        return [self.line_to_truth_fn(line) for line in self.dataset]
+        """The dataset's ground truths as a list (cached after first computation)"""
+        if self._ground_truths_cache is None:
+            self._ground_truths_cache = [
+                self.line_to_truth_fn(line) for line in self.dataset
+            ]
+        return self._ground_truths_cache
 
     @property
     def prompts(self) -> List[str]:
@@ -79,7 +84,7 @@ class Dataset:
         return "\n".join(lines)
 
     def __len__(self):
-        return len(self.ground_truths)
+        return len(self.dataset)
 
     def __getitem__(self, index: Union[int, slice]):
         if isinstance(index, slice):

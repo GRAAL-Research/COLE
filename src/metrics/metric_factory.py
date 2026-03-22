@@ -31,4 +31,4 @@ def metric_factory(metric_name: str) -> Metric:
         case _:
             error = f"Unknown metric {metric_name}."
             logging.error(error)
-            raise HTTPException(200, error)
+            raise HTTPException(400, error)
