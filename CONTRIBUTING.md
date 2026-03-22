@@ -2,18 +2,21 @@
 
 Thank you for your interest in contributing to the COLE benchmark!
 
-## Local Development Setup
+For detailed architecture documentation (backend, frontend, evaluation pipeline, CI/CD), see [docs/architecture.md](docs/architecture.md).
+
+## Quick Start
 
 ### Prerequisites
 
-- Python 3.10+
-- Node.js 18+
-- A HuggingFace account with access to the `graalul/COLE` dataset
+- Python 3.12+
+- Node.js 20+
+- A HuggingFace token with access to `graalul/COLE`
 
 ### Backend
 
 ```bash
 pip install -r src/requirements.txt
+export HF_TOKEN=your_token
 uvicorn src.backend.submission_api:app --host 0.0.0.0 --port 8000
 ```
 
@@ -25,9 +28,7 @@ npm install
 npm run dev
 ```
 
-The frontend runs on port 3000 by default and proxies API calls to the backend on port 8000.
-
-### Running with Docker
+### Docker
 
 ```bash
 docker build -t cole .
@@ -36,8 +37,8 @@ docker run -p 7860:7860 -e HF_TOKEN=your_token cole
 
 ## Submitting Model Results
 
-1. Run inference on the COLE test splits (available via `graalul/COLE-public` on HuggingFace)
-2. Format predictions as a JSON file:
+1. Load test data from `graalul/COLE-public` on HuggingFace
+2. Format predictions as JSON:
 
 ```json
 {
@@ -50,39 +51,17 @@ docker run -p 7860:7860 -e HF_TOKEN=your_token cole
 }
 ```
 
-3. Compress the JSON file into a ZIP archive
-4. Submit via the website at [colebenchmark.org](https://colebenchmark.org/)
+3. Compress into a ZIP archive (max 50MB)
+4. Submit at [colebenchmark.org](https://colebenchmark.org/)
 
 ## Code Quality
 
-We use the following tools (install via `pip install -r styling_requirements.txt`):
-
-- **Black** for formatting: `black --check .`
-- **PyLint** for linting: `pylint src/ tests/`
-
-## Running Tests
-
 ```bash
-pip install -r tests/tests_requirements.txt
-export HF_TOKEN=your_token  # Required for private dataset access
-pytest
-```
-
-## Project Structure
-
-```
-COLE/
-├── frontend/          # Next.js frontend (leaderboard, submission UI)
-├── src/
-│   ├── backend/       # FastAPI backend (submission API, evaluation)
-│   ├── dataset/       # Dataset loading and configuration
-│   ├── task/          # Task definitions and metrics
-│   └── language_model/ # Model wrappers for inference
-├── tests/             # Test suite
-├── predictions/       # Prediction processing scripts
-├── Dockerfile         # Production container
-├── nginx.conf         # Reverse proxy config
-└── start.sh           # Container startup script
+pip install -r styling_requirements.txt
+black --check .          # Formatting
+pylint src/ tests/       # Linting
+cd frontend && npm run lint  # Frontend lint
+pytest                   # Tests (requires HF_TOKEN)
 ```
 
 ## Questions?
