@@ -1,5 +1,5 @@
 # Stage 1: Build frontend
-FROM node:18-slim AS frontend-build
+FROM node:20-slim AS frontend-build
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm ci
@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
     curl \
     netcat-openbsd \
-    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
 
