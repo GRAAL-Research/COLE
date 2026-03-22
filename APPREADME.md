@@ -1,1 +1,0 @@
-We use a wrapper app to integrate the HF space into a Vercel build.

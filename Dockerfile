@@ -51,4 +51,7 @@ ENV HF_HOME=/app/.cache \
 USER user
 EXPOSE 7860
 
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+  CMD curl -f http://localhost:7860/ || exit 1
+
 CMD ["sh", "/start.sh"]

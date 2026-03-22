@@ -177,6 +177,26 @@ export default function LeaderboardPage() {
     );
   };
 
+  const isLoading = entries.length === 0 && !error;
+
+  if (isLoading) {
+    return (
+      <div className="space-y-8">
+        <h3 className="text-2xl font-semibold text-gray-900 mb-4 border-l-4 border-blue-600 pl-4">
+          {t('leaderboard_title')}
+        </h3>
+        <div className="overflow-auto">
+          <div className="animate-pulse space-y-3">
+            <div className="h-10 bg-blue-100 rounded w-full" />
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="h-8 bg-gray-100 rounded w-full" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (error) {
     return (
       <div className="space-y-8">

@@ -11,11 +11,17 @@ from pathlib import Path
 from typing import Dict, List, Any, Union
 
 import huggingface_hub
-from fastapi import FastAPI, UploadFile, Form, File
+from fastapi import FastAPI, UploadFile, Form, File, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 from starlette.middleware.cors import CORSMiddleware
+from starlette.requests import Request
+
+MAX_ZIP_SIZE_MB = 50
 
 from src.backend.evaluation import compute_tasks_ratings
 from src.backend.submit_tools import unzip_predictions_from_zip
@@ -54,7 +60,16 @@ async def lifespan(application: FastAPI = None):  # pylint: disable=unused-argum
     yield
 
 
+limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(lifespan=lifespan)
+app.state.limiter = limiter
+app.add_exception_handler(
+    RateLimitExceeded,
+    lambda req, exc: JSONResponse(
+        status_code=429,
+        content={"detail": "Too many submissions. Please try again later."},
+    ),
+)
 app.mount("/results", StaticFiles(directory=str(RESULTS_DIR)), name="results")
 front_end_info_message = f"The Front-end directory is: {FRONTEND_DIR}"
 logging.info(front_end_info_message)
@@ -69,12 +84,15 @@ app.add_middleware(
 
 
 @app.post("/submit")
+@limiter.limit("5/minute")
 async def submit(
+    request: Request,
     email: str = Form(...),
     predictions_zip: UploadFile = File(...),
     display_name: str = Form(...),
 ):
     """Route for making submissions with user generated results.
+    :param request : The incoming request (used for rate limiting)
     :param email : The email of the user's submission
     :param predictions_zip : The zip file of the user's predictions'
     :param display_name : The display name associated with the user's submission'
@@ -83,6 +101,10 @@ async def submit(
     info_message = f"Submission from {email!r} as {display_name!r}."
     logging.info(info_message)
     zip_bytes = await predictions_zip.read()
+    if len(zip_bytes) > MAX_ZIP_SIZE_MB * 1024 * 1024:
+        raise HTTPException(
+            status_code=413, detail=f"ZIP file exceeds {MAX_ZIP_SIZE_MB}MB limit."
+        )
     submission_json = unzip_predictions_from_zip(zip_bytes)
 
     validate_submission_template(submission_json)

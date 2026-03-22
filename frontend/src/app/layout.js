@@ -16,8 +16,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "COLE NLU",
-  description: "COLE : An NLU benchmark",
+  title: "COLE - Comprehensive Benchmark for French Language Understanding",
+  description: "COLE is a benchmark of 23 tasks for evaluating French Natural Language Understanding (NLU) in large language models.",
+  openGraph: {
+    title: "COLE - French NLU Benchmark",
+    description: "Evaluate LLMs on 23 French NLU tasks: sentiment analysis, NLI, QA, and more.",
+    url: "https://colebenchmark.org",
+    siteName: "COLE Benchmark",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "COLE - French NLU Benchmark",
+    description: "Evaluate LLMs on 23 French NLU tasks: sentiment analysis, NLI, QA, and more.",
+  },
 };
 
 export default function RootLayout({ children }) {

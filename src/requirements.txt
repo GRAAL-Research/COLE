@@ -14,6 +14,7 @@ scikit-learn
 # Web backend (si tu utilises FastAPI/Flask, sinon à ignorer)
 fastapi
 uvicorn
+slowapi
 # Optional: pretty printing, progress bars, etc.
 tqdm
 aenum

@@ -11,7 +11,6 @@ until curl -s http://localhost:8000/ > /dev/null; do
 done
 
 echo '✅ Backend ready'
-ls
 # Start Next.js
 echo '🚀 Starting frontend'
 cd frontend
