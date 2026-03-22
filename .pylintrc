@@ -95,7 +95,7 @@ disable=raw-checker-failed,
         too-many-arguments,
         broad-exception-caught,
         import-error,
-        no-name-in-module,
+        no-name-in-module,  # disabled: false positive on mistralai.Mistral import
         bare-except,
         eval-used,
         too-many-branches,

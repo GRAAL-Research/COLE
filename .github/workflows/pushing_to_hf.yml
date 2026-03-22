@@ -23,10 +23,13 @@ jobs:
           git config user.name "COLE CI"
           git lfs install
           # Create a fresh orphan branch with LFS configured for large files
+          # Orphan approach avoids LFS issues with large .jsonl files in git history
           git checkout --orphan hf-deploy
           # Setup LFS tracking for large files before adding
           git lfs track "*.jsonl"
           git lfs track "*.pdf"
+          # Exclude files not needed for the HF Space deployment
+          rm -rf .github/ tests/ predictions/ .pylintrc CONTRIBUTING.md .env.example
           git add -A
           git commit -m "deploy to HF Space"
           git push --force https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$HF_SPACE_NAME hf-deploy:main

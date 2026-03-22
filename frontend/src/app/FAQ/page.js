@@ -35,7 +35,15 @@ export default function FAQ() {
               </span>
             </button>
             {openIndex === i && (
-              <p className="mt-4 text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: faq.answer }} />
+              <p className="mt-4 text-gray-600 text-sm">
+                {faq.answer.split(/(<code>.*?<\/code>)/g).map((part, j) =>
+                  part.startsWith('<code>') ? (
+                    <code key={j}>{part.replace(/<\/?code>/g, '')}</code>
+                  ) : (
+                    part
+                  )
+                )}
+              </p>
             )}
           </div>
         ))}
