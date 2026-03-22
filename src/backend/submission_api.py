@@ -85,7 +85,7 @@ app.add_middleware(
 @app.post("/submit")
 @limiter.limit("5/minute")
 async def submit(
-    request: Request,
+    request: Request,  # pylint: disable=unused-argument  # required by slowapi limiter
     email: str = Form(...),
     predictions_zip: UploadFile = File(...),
     display_name: str = Form(...),
