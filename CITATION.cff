@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+title: "COLE: a Comprehensive Benchmark for French Language Understanding Evaluation"
+message: "If you use COLE in your research, please cite our paper."
+type: software
+authors:
+  - given-names: David
+    family-names: Beauchemin
+    affiliation: Université Laval
+  - given-names: Yan
+    family-names: Tremblay
+    affiliation: Université Laval
+  - given-names: Mohamed Amine
+    family-names: Youssef
+    affiliation: Université Laval
+  - given-names: Richard
+    family-names: Khoury
+    affiliation: Université Laval
+repository-code: "https://github.com/GRAAL-Research/COLE"
+url: "https://colebenchmark.org"
+license: MIT
+version: 1.0.0
+date-released: "2025-10-07"
+preferred-citation:
+  type: article
+  title: "COLE: a Comprehensive Benchmark for French Language Understanding Evaluation"
+  authors:
+    - given-names: David
+      family-names: Beauchemin
+    - given-names: Yan
+      family-names: Tremblay
+    - given-names: Mohamed Amine
+      family-names: Youssef
+    - given-names: Richard
+      family-names: Khoury
+  year: 2025
+  url: "https://arxiv.org/abs/2510.05046"
+  identifiers:
+    - type: other
+      value: "arXiv:2510.05046"
+      description: arXiv preprint
