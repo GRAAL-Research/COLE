@@ -21,8 +21,6 @@ from slowapi.errors import RateLimitExceeded
 from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 
-MAX_ZIP_SIZE_MB = 50
-
 from src.backend.evaluation import compute_tasks_ratings
 from src.backend.submit_tools import unzip_predictions_from_zip
 from src.dataset.datasets_data import preload_all_datasets
@@ -35,6 +33,8 @@ from src.task.task import Task
 from src.task.task_factory import (
     tasks_factory,
 )
+
+MAX_ZIP_SIZE_MB = 50
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 SRC_DIR = BASE_DIR / "src"
