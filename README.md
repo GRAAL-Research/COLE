@@ -7,20 +7,20 @@ sdk: docker
 app_port: 7860
 ---
 
-# COLE: Comprehensive Benchmark for French Language Understanding Evaluation
+# COLE: Comprehensive Benchmark for Quebec French Language Understanding Evaluation
 
 [![Website](https://img.shields.io/badge/Website-colebenchmark.org-blue)](https://colebenchmark.org/)
 [![Paper](https://img.shields.io/badge/Paper-arXiv%3A2510.05046-b31b1b)](https://arxiv.org/abs/2510.05046)
 [![Dataset](https://img.shields.io/badge/Dataset-HuggingFace-ffd21e)](https://huggingface.co/datasets/graalul/COLE-public)
 
-**COLE** is a comprehensive benchmark for evaluating French Natural Language Understanding (NLU). It includes 23 diverse tasks covering sentiment analysis, paraphrase detection, natural language inference, question answering, grammatical judgment, word sense disambiguation, and more — with a particular focus on linguistic phenomena relevant to the French language.
+**COLE** is a comprehensive benchmark for evaluating Quebec French Natural Language Understanding (NLU). It includes 23 diverse tasks covering sentiment analysis, paraphrase detection, natural language inference, question answering, grammatical judgment, word sense disambiguation, and more — with a particular focus on linguistic phenomena relevant to the French language.
 
-We benchmark 94 large language models (LLMs), providing an extensive analysis of the current state of French NLU. Our results highlight a significant performance gap between closed- and open-weight models and identify key challenging frontiers such as zero-shot extractive question answering, fine-grained word sense disambiguation, and understanding of regional language variations.
+We benchmark 94 large language models (LLMs), providing an extensive analysis of the current state of Quebec French NLU. Our results highlight a significant performance gap between closed- and open-weight models and identify key challenging frontiers such as zero-shot extractive question answering, fine-grained word sense disambiguation, and understanding of regional language variations.
 
 ## Links
 
 - **Leaderboard**: [colebenchmark.org](https://colebenchmark.org/)
-- **Paper**: [COLE: a Comprehensive Benchmark for French Language Understanding Evaluation (arXiv:2510.05046)](https://arxiv.org/abs/2510.05046)
+- **Paper**: [COLE: a Comprehensive Benchmark for Quebec French Language Understanding Evaluation (arXiv:2510.05046)](https://arxiv.org/abs/2510.05046)
 - **Dataset**: [HuggingFace — graalul/COLE-public](https://huggingface.co/datasets/graalul/COLE-public)
 
 ## Tasks
@@ -96,7 +96,7 @@ If you use COLE in your research, please cite our paper:
 
 ```bibtex
 @article{beauchemin2025cole,
-  title={COLE: a Comprehensive Benchmark for French Language Understanding Evaluation},
+  title={COLE: a Comprehensive Benchmark for Quebec French Language Understanding Evaluation},
   author={Beauchemin, David and Tremblay, Yan and Youssef, Mohamed Amine and Khoury, Richard},
   journal={arXiv preprint arXiv:2510.05046},
   year={2025},
