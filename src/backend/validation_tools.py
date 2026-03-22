@@ -3,18 +3,9 @@ from typing import Dict, List
 
 from fastapi import HTTPException
 
-tasks_name = [
-    "allocine",
-    "fquad",
-    "gqnli",
-    "paws_x",
-    "piaf",
-    "qfrblimp",
-    "qfrcola",
-    "sickfr",
-    "sts22",
-    "xnli",
-]
+from src.task.task_names import Tasks
+
+tasks_name = [task.value for task in Tasks]
 
 
 def validate_submission_template(dictionary: Dict) -> None:
@@ -23,15 +14,15 @@ def validate_submission_template(dictionary: Dict) -> None:
     if dictionary.get("model_name", None) is None:
         error = "The submission is missing a model name."
         logging.error(error)
-        raise HTTPException(200, error)
+        raise HTTPException(400, error)
     if dictionary.get("model_url", None) is None:
         error = "The submission is missing a model URL."
         logging.error(error)
-        raise HTTPException(200, error)
+        raise HTTPException(400, error)
     if dictionary.get("tasks", None) is None:
         error = "The submission is missing a tasks keyword."
         logging.error(error)
-        raise HTTPException(200, error)
+        raise HTTPException(400, error)
 
     tasks = dictionary.get("tasks")
     if not isinstance(tasks, List):
@@ -41,7 +32,7 @@ def validate_submission_template(dictionary: Dict) -> None:
             "a template."
         )
         logging.error(error)
-        raise HTTPException(200, error)
+        raise HTTPException(400, error)
 
     for task in tasks:
         if len(task.keys()) > 1:
@@ -50,7 +41,7 @@ def validate_submission_template(dictionary: Dict) -> None:
                 "the task name and the value is a list."
             )
             logging.error(error)
-            raise HTTPException(200, error)
+            raise HTTPException(400, error)
 
 
 def validate_submission_tasks_name(dictionary: Dict) -> None:
@@ -62,7 +53,7 @@ def validate_submission_tasks_name(dictionary: Dict) -> None:
         if key not in tasks_name:
             error = f"Unknown key '{key}' in the submission JSON. The expected tasks are: {tasks_name}."
             logging.error(error)
-            raise HTTPException(200, error)
+            raise HTTPException(400, error)
 
 
 def validate_submission_json(dictionary: Dict) -> None:
@@ -78,16 +69,16 @@ def validate_submission_json(dictionary: Dict) -> None:
                     "for each task."
                 )
                 logging.error(error)
-                raise HTTPException(200, error)
+                raise HTTPException(400, error)
             for key, value in payload.items():
                 if key not in ["predictions", "prediction"]:
                     error = f"The task '{task_name}' payload does not have the expected key: 'predictions'."
                     logging.error(error)
-                    raise HTTPException(200, error)
+                    raise HTTPException(400, error)
                 if not isinstance(value, list):
                     error = (
                         f"The task '{task_name}' predictions payload is not in a list format. "
                         r"The expected format is: '{'prediction': [<predictions>]}'"
                     )
                     logging.error(error)
-                    raise HTTPException(200, error)
+                    raise HTTPException(400, error)

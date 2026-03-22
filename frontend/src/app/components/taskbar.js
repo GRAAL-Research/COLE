@@ -45,7 +45,7 @@ export default function Taskbar() {
       <Link href="/leaderboard" className={linkStyle('/leaderboard')} onClick={() => setMenuOpen(false)}>
         {t('nav_leaderboard')}
       </Link>
-      <Link href="https://huggingface.co/datasets/graalul/COLE-public" className={linkStyle('/hf')} onClick={() => setMenuOpen(false)}>
+      <Link href="https://huggingface.co/datasets/graalul/COLE-public" target="_blank" rel="noopener noreferrer" className={linkStyle('/hf')} onClick={() => setMenuOpen(false)}>
         {t('nav_datasets')}
       </Link>
     </>

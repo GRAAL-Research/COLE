@@ -8,6 +8,7 @@ from fastapi.testclient import TestClient
 from src.backend import submission_api
 from src.backend.submission_api import (
     app,
+    get_leaderboard_entries,
 )
 
 client = TestClient(app)
@@ -103,6 +104,7 @@ def test_submit_wrong_file_name_predictions_dict():
 
 def test_leaderboard_empty(monkeypatch, tmp_path):
     monkeypatch.setattr(submission_api, "RESULTS_DIR", tmp_path)
+    get_leaderboard_entries.cache_clear()
 
     response = client.get("/leaderboard")
     assert response.status_code == 200
@@ -111,6 +113,7 @@ def test_leaderboard_empty(monkeypatch, tmp_path):
 
 def test_leaderboard_with_entries(monkeypatch, tmp_path):
     monkeypatch.setattr(submission_api, "RESULTS_DIR", tmp_path)
+    get_leaderboard_entries.cache_clear()
 
     sample1 = {
         "display_name": "User1",
@@ -177,3 +180,7 @@ def test_leaderboard_with_entries(monkeypatch, tmp_path):
 
     response = client.get("/leaderboard")
     assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 2
+    display_names = {e["display_name"] for e in data}
+    assert display_names == {"User1", "User2"}

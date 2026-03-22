@@ -130,21 +130,21 @@ class ValidateSubmissionFormat(ValidateTest):
         self.assertRaises(
             HTTPException,
             validate_submission_template,
-            **{"dictionary": self.a_missing_model_url_submission_json}
+            **{"dictionary": self.a_missing_task_submission_json}
         )
 
     def test_given_a_missing_task_content_raise_error(self):
         self.assertRaises(
             HTTPException,
             validate_submission_template,
-            **{"dictionary": self.a_missing_model_url_submission_json}
+            **{"dictionary": self.a_missing_task_content_submission_content}
         )
 
     def test_given_a_two_task_content_raise_error(self):
         self.assertRaises(
             HTTPException,
             validate_submission_template,
-            **{"dictionary": self.a_missing_model_url_submission_json}
+            **{"dictionary": self.a_two_task_dict_in_list}
         )
 
 

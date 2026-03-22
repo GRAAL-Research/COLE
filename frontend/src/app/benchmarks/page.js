@@ -79,7 +79,7 @@ export default function Benchmarks() {
   const { t } = useTranslation();
 
   return (
-    <div suppressHydrationWarning>
+    <div>
       <div className="max-w-5xl mx-auto px-2 py-3">
         <p className="text-1.5xl text-left text-gray-800">
           {t('benchmarksIntro')}

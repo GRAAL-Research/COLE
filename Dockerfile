@@ -44,9 +44,7 @@ RUN useradd -m -u 1000 user \
     && chown -R user:user /app /var/lib/nginx /var/log/nginx /run
 
 ENV HF_HOME=/app/.cache \
-    HF_DATASETS_CACHE=/app/.cache \
-    INTERNAL_API_PORT=7861 \
-    PORT=7860
+    HF_DATASETS_CACHE=/app/.cache
 
 USER user
 EXPOSE 7860

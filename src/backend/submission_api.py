@@ -76,7 +76,6 @@ logging.info(front_end_info_message)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
@@ -98,6 +97,12 @@ async def submit(
     :param display_name : The display name associated with the user's submission'
     """
     logging.info("Starting submission")
+    if len(display_name) > 200:
+        raise HTTPException(
+            status_code=400, detail="Display name must be under 200 characters."
+        )
+    if len(email) > 320 or "@" not in email:
+        raise HTTPException(status_code=400, detail="Invalid email address.")
     info_message = f"Submission from {email!r} as {display_name!r}."
     logging.info(info_message)
     zip_bytes = await predictions_zip.read()

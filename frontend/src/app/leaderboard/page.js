@@ -6,7 +6,6 @@ import {
   computeAverageScore,
 } from "./util";
 import { useTranslation } from "react-i18next";
-import { useParams } from "next/navigation";
 import { BACKEND_ADDRESS } from "@/app/resources/ResourcesPaths";
 
 const allowedMetrics = [
@@ -24,13 +23,13 @@ const PAGE_SIZE = 25;
 
 export default function LeaderboardPage() {
   const { t } = useTranslation();
-  const { id: _ } = useParams(); // unused here
   const [entries, setEntries] = useState([]);
   const [benchmarks, setBenchmarks] = useState([]);
   const [sortCol, setSortCol] = useState('overall');
   const [sortOrder, setSortOrder] = useState('desc');
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
   const headerLabels = {
@@ -59,7 +58,8 @@ export default function LeaderboardPage() {
         });
         setBenchmarks(Array.from(allBench));
       })
-      .catch(() => setError(true));
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   const getCellValue = (entry, col) => {
@@ -177,9 +177,7 @@ export default function LeaderboardPage() {
     );
   };
 
-  const isLoading = entries.length === 0 && !error;
-
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="space-y-8">
         <h3 className="text-2xl font-semibold text-gray-900 mb-4 border-l-4 border-blue-600 pl-4">
@@ -286,7 +284,14 @@ export default function LeaderboardPage() {
       )}
 
       {selectedEntry && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+          onClick={(e) => { if (e.target === e.currentTarget) setSelectedEntry(null); }}
+          onKeyDown={(e) => { if (e.key === 'Escape') setSelectedEntry(null); }}
+          role="dialog"
+          aria-modal="true"
+          tabIndex={-1}
+        >
           <div className="bg-white p-6 rounded-2xl shadow-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
             <h3 className="text-xl font-semibold text-gray-800 mb-4">
               {t('leaderboard_modalTitle', {
