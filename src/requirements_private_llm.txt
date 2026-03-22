@@ -16,7 +16,7 @@ tqdm
 aenum
 wandb
 # Pour compatibilité ancienne
-protobuf<=3.20.3
+protobuf<=7.34.1
 openai
 anthropic
 mistralai
