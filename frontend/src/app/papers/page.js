@@ -36,7 +36,7 @@ export default function PapersPage() {
 
       <iframe
         onLoad={() => setLoaded(true)}
-        src="cole.pdf"
+        src="https://arxiv.org/pdf/2510.05046"
         title="Document COLE"
         width="100%"
         height="100%"
