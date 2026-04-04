@@ -74,10 +74,15 @@ app.mount("/results", StaticFiles(directory=str(RESULTS_DIR)), name="results")
 front_end_info_message = f"The Front-end directory is: {FRONTEND_DIR}"
 logging.info(front_end_info_message)
 
+ALLOWED_ORIGINS = os.environ.get(
+    "CORS_ORIGINS",
+    "https://davebulaval-cole.hf.space,http://localhost:3000,http://localhost:8001",
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
