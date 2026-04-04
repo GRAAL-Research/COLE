@@ -11,4 +11,3 @@ def pytest_collection_modifyitems(_config, items):
         )
         for item in items:
             item.add_marker(skip_marker)
-
