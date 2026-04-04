@@ -57,11 +57,13 @@ docker run -p 7860:7860 -e HF_TOKEN=your_token cole
 ## Code Quality
 
 ```bash
-pip install -r styling_requirements.txt
-black --check .          # Formatting
-pylint src/ tests/       # Linting
-cd frontend && npm run lint  # Frontend lint
-pytest                   # Tests (requires HF_TOKEN)
+make all                 # Run all checks (format, lint, test, build)
+
+# Or individually:
+make format              # Check formatting (black)
+make lint                # Linting (pylint + eslint)
+make test                # Tests (requires HF_TOKEN for full suite)
+make build               # Build frontend
 ```
 
 ## Questions?

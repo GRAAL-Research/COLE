@@ -2,17 +2,21 @@ import os
 
 import pytest
 
-# Modules whose tests require HF dataset access
+# Test modules that require HF dataset access (via Task.compute or preload_all_datasets)
 _HF_MODULES = {
     "tests.backend.test_submission_api",
+    "tests.backend.test_evaluation",
     "tests.tasks.evaluation",
+    "tests.llm_evaluation",
 }
 
 
 def _needs_hf(item):
     """Return True if the test item belongs to a module that requires HF_TOKEN."""
     module = item.module.__name__
-    return any(module.startswith(prefix) for prefix in _HF_MODULES)
+    return any(
+        module == prefix or module.startswith(prefix + ".") for prefix in _HF_MODULES
+    )
 
 
 def pytest_collection_modifyitems(config, items):  # pylint: disable=unused-argument

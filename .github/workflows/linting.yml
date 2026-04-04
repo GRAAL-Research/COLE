@@ -17,12 +17,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
           cache-dependency-path: |
-            styling_requirements.txt
             src/requirements.txt
             tests/tests_requirements.txt
       - name: Install dependencies
         run: |
-          pip install -Ur styling_requirements.txt
+          pip install pylint
           pip install -Ur src/requirements.txt
           pip install -Ur tests/tests_requirements.txt
       - name: PyLint
