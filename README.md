@@ -12,6 +12,7 @@ app_port: 7860
 [![Website](https://img.shields.io/badge/Website-colebenchmark.org-blue)](https://colebenchmark.org/)
 [![Paper](https://img.shields.io/badge/Paper-arXiv%3A2510.05046-b31b1b)](https://arxiv.org/abs/2510.05046)
 [![Dataset](https://img.shields.io/badge/Dataset-HuggingFace-ffd21e)](https://huggingface.co/datasets/graalul/COLE-public)
+[![Coverage](https://raw.githubusercontent.com/GRAAL-Research/COLE/badges/coverage-badge.svg)](https://github.com/GRAAL-Research/COLE/actions)
 
 **COLE** is a comprehensive benchmark for evaluating Quebec French Natural Language Understanding (NLU). It includes 23 diverse tasks covering sentiment analysis, paraphrase detection, natural language inference, question answering, grammatical judgment, word sense disambiguation, and more — with a particular focus on linguistic phenomena relevant to the French language.
 

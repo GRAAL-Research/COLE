@@ -6,6 +6,7 @@ requires-python = ">=3.10"
 
 [tool.black]
 line-length = 88
+target-version = ["py312"]
 
 [tool.pylint.master]
 extension-pkg-whitelist = "pydantic"
@@ -64,5 +65,5 @@ omit = [
 ]
 
 [tool.coverage.report]
-fail_under = 50
+fail_under = 70
 show_missing = true

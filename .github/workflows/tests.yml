@@ -33,4 +33,26 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          pytest
+          pytest --cov=src --cov-report=term-missing --cov-report=xml
+      - name: Generate coverage badge
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          pip install genbadge[coverage]
+          genbadge coverage -i coverage.xml -o coverage-badge.svg
+      - name: Upload coverage badge
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge
+          path: coverage-badge.svg
+      - name: Deploy badge to badges branch
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          git config user.email "ci@colebenchmark.org"
+          git config user.name "COLE CI"
+          git fetch origin badges:badges 2>/dev/null || git checkout --orphan badges
+          git checkout badges || git checkout --orphan badges
+          cp $GITHUB_WORKSPACE/coverage-badge.svg .
+          git add coverage-badge.svg
+          git diff --cached --quiet || git commit -m "update coverage badge"
+          git push origin badges
