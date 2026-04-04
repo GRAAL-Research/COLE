@@ -3,7 +3,7 @@ import os
 import pytest
 
 
-def pytest_collection_modifyitems(_config, items):
+def pytest_collection_modifyitems(config, items):  # pylint: disable=unused-argument
     """Skip all tests when HF_TOKEN is not available (e.g. Dependabot PRs)."""
     if not os.environ.get("HF_TOKEN"):
         skip_marker = pytest.mark.skip(
