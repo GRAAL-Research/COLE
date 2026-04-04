@@ -1,0 +1,68 @@
+[project]
+name = "cole"
+version = "0.1.0"
+description = "COLE — Quebec French NLU Benchmark"
+requires-python = ">=3.10"
+
+[tool.black]
+line-length = 88
+
+[tool.pylint.master]
+extension-pkg-whitelist = "pydantic"
+fail-under = 10.0
+jobs = 1
+py-version = "3.12"
+
+[tool.pylint."messages control"]
+disable = [
+    "raw-checker-failed",
+    "bad-inline-option",
+    "locally-disabled",
+    "file-ignored",
+    "suppressed-message",
+    "useless-suppression",
+    "deprecated-pragma",
+    "use-symbolic-message-instead",
+    "missing-docstring",
+    "invalid-name",
+    "too-few-public-methods",
+    "attribute-defined-outside-init",
+    "too-many-instance-attributes",
+    "cyclic-import",
+    "duplicate-code",
+    "no-member",
+    "too-many-positional-arguments",
+    "too-many-locals",
+    "too-many-arguments",
+    "broad-exception-caught",
+    "import-error",
+    "no-name-in-module",
+    "bare-except",
+    "eval-used",
+    "too-many-branches",
+    "too-many-boolean-expressions",
+    "too-many-statements",
+    "fixme",
+]
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.variables]
+ignored-argument-names = "_.*|^ignored_|^unused_"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=src --cov-report=term-missing"
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "src/evaluation/*",
+    "src/language_model/*",
+    "src/predictions/*",
+]
+
+[tool.coverage.report]
+fail_under = 50
+show_missing = true

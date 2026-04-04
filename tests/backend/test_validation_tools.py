@@ -116,35 +116,35 @@ class ValidateSubmissionFormat(ValidateTest):
         self.assertRaises(
             HTTPException,
             validate_submission_template,
-            **{"dictionary": self.a_missing_model_name_submission_json}
+            **{"dictionary": self.a_missing_model_name_submission_json},
         )
 
     def test_given_a_missing_model_url_raise_error(self):
         self.assertRaises(
             HTTPException,
             validate_submission_template,
-            **{"dictionary": self.a_missing_model_url_submission_json}
+            **{"dictionary": self.a_missing_model_url_submission_json},
         )
 
     def test_given_a_missing_task_raise_error(self):
         self.assertRaises(
             HTTPException,
             validate_submission_template,
-            **{"dictionary": self.a_missing_task_submission_json}
+            **{"dictionary": self.a_missing_task_submission_json},
         )
 
     def test_given_a_missing_task_content_raise_error(self):
         self.assertRaises(
             HTTPException,
             validate_submission_template,
-            **{"dictionary": self.a_missing_task_content_submission_content}
+            **{"dictionary": self.a_missing_task_content_submission_content},
         )
 
     def test_given_a_two_task_content_raise_error(self):
         self.assertRaises(
             HTTPException,
             validate_submission_template,
-            **{"dictionary": self.a_two_task_dict_in_list}
+            **{"dictionary": self.a_two_task_dict_in_list},
         )
 
 
@@ -161,7 +161,7 @@ class ValidateSubmissionTasksNameJSONTest(ValidateTest):
         self.assertRaises(
             HTTPException,
             validate_submission_tasks_name,
-            **{"dictionary": self.a_wrong_task_name}
+            **{"dictionary": self.a_wrong_task_name},
         )
 
 
@@ -179,17 +179,17 @@ class ValidateSubmissionJSONTest(ValidateTest):
         self.assertRaises(
             HTTPException,
             validate_submission_json,
-            **{"dictionary": self.unaccepted_task_dict_not_dict}
+            **{"dictionary": self.unaccepted_task_dict_not_dict},
         )
 
         self.assertRaises(
             HTTPException,
             validate_submission_json,
-            **{"dictionary": self.unaccepted_task_dict_no_prediction}
+            **{"dictionary": self.unaccepted_task_dict_no_prediction},
         )
 
         self.assertRaises(
             HTTPException,
             validate_submission_json,
-            **{"dictionary": self.unaccepted_task_dict_prediction_not_list}
+            **{"dictionary": self.unaccepted_task_dict_prediction_not_list},
         )
