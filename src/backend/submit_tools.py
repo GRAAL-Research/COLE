@@ -11,7 +11,14 @@ def unzip_predictions_from_zip(zip_bytes: bytes) -> dict:
     """
     Reads predictions.json directly from the ZIP in memory.
     """
-    with zipfile.ZipFile(io.BytesIO(zip_bytes)) as z:
+    try:
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_bytes))
+    except zipfile.BadZipFile as exc:
+        raise HTTPException(
+            400, "The uploaded file is not a valid ZIP archive."
+        ) from exc
+
+    with zip_file as z:
         if "predictions.json" not in z.namelist():
             error_message = (
                 "The uploaded ZIP file does not contains a predictions.json file."
@@ -24,4 +31,7 @@ def unzip_predictions_from_zip(zip_bytes: bytes) -> dict:
                 f"Decompressed predictions.json exceeds {MAX_DECOMPRESSED_SIZE_MB}MB limit.",
             )
         with z.open("predictions.json") as f:
-            return json.load(f)
+            try:
+                return json.load(f)
+            except json.JSONDecodeError as exc:
+                raise HTTPException(400, "predictions.json is not valid JSON.") from exc

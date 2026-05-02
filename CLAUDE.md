@@ -1,7 +1,7 @@
 # COLE — Quebec French NLU Benchmark
 
 ## Project overview
-COLE is a multidisciplinary Quebec French Natural Language Understanding benchmark with 30 tasks.
+COLE is a multidisciplinary Quebec French Natural Language Understanding benchmark with 23 tasks.
 - **Backend**: FastAPI (port 8000) — submission API, HuggingFace dataset evaluation
 - **Frontend**: Next.js 16 (port 8001) — leaderboard, submission form, bilingual (EN/FR)
 - **Deployment**: Docker container on HuggingFace Spaces (nginx on port 7860 proxies both)

@@ -35,7 +35,7 @@ def validate_submission_template(dictionary: Dict) -> None:
         raise HTTPException(400, error)
 
     for task in tasks:
-        if len(task.keys()) > 1:
+        if not isinstance(task, dict) or len(task.keys()) != 1:
             error = (
                 "Each task must be a dictionary of one element where the key is "
                 "the task name and the value is a list."
@@ -68,6 +68,12 @@ def validate_submission_json(dictionary: Dict) -> None:
                     "The tasks payload must be a dictionary in the format '{'prediction': [<predictions>]}' "
                     "for each task."
                 )
+                logging.error(error)
+                raise HTTPException(400, error)
+            if not ({"predictions", "prediction"} & payload.keys()):
+                # Empty payload (`{}`) used to slip through and crash compute_tasks_ratings
+                # with a KeyError -> HTTP 500. Reject it explicitly here.
+                error = f"The task '{task_name}' payload does not have the expected key: 'predictions'."
                 logging.error(error)
                 raise HTTPException(400, error)
             for key, value in payload.items():

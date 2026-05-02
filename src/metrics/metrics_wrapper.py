@@ -51,36 +51,44 @@ class F1Score(Metric):
 
 class ExactMatch(Metric):
     def compute(self, predictions: List, references: List, **kwargs) -> Dict:
+        # Coerce to string and treat None/missing as empty so a malformed prediction
+        # counts as a miss instead of crashing the whole computation.
         score = [
-            reference.strip() == prediction.strip()
+            (str(reference) if reference is not None else "").strip()
+            == (str(prediction) if prediction is not None else "").strip()
             for reference, prediction in zip(references, predictions)
         ]
         return {"exact_match": sum(score) / len(score) if score else 0.0}
 
 
 def apply_int_casting(predictions_to_clean: List) -> List:
+    # Operate on a copy to avoid mutating the caller's list (e.g. the submission payload).
+    cleaned = list(predictions_to_clean)
     na_value = 0
     none_value = 0
     undetected_value = 0
-    for idx, prediction in enumerate(predictions_to_clean):
-        if isinstance(prediction, int):
+    for idx, prediction in enumerate(cleaned):
+        if isinstance(prediction, bool):
+            # bool is a subclass of int; cast to int explicitly to avoid True/False leaking through.
+            cleaned[idx] = int(prediction)
+        elif isinstance(prediction, int):
             # Case where the prediction is already an int.
             # We use this branch since we want an else statement to capture undetected type.
             pass
         elif isinstance(prediction, float):
-            predictions_to_clean[idx] = int(prediction)
+            cleaned[idx] = int(prediction)
         elif isinstance(prediction, str):
             try:
-                predictions_to_clean[idx] = int(prediction.strip())
+                cleaned[idx] = int(prediction.strip())
             except ValueError:
                 na_value += 1
-                predictions_to_clean[idx] = NA_VALUE
+                cleaned[idx] = NA_VALUE
         elif prediction is None:
             none_value += 1
-            predictions_to_clean[idx] = NA_VALUE
+            cleaned[idx] = NA_VALUE
         else:
             undetected_value += 1
-            predictions_to_clean[idx] = NA_VALUE
+            cleaned[idx] = NA_VALUE
     if na_value > 0:
         warning_message = f"Number of na_value during int casting: {na_value}"
         logging.warning(warning_message)
@@ -92,4 +100,4 @@ def apply_int_casting(predictions_to_clean: List) -> List:
             f"Number of undetected_value during int casting: {undetected_value}"
         )
         logging.warning(warning_message)
-    return predictions_to_clean
+    return cleaned

@@ -21,7 +21,12 @@ def compute_tasks_ratings(tasks: List[Task], submission: Dict) -> Dict:
         task_name = task.task_name
 
         # We remove the prediction since we do not keep it in the response.
-        predictions = submission_response.get(task_name).pop("predictions")
+        # Validation allows both "predictions" and "prediction"; pop whichever is present.
+        task_payload = submission_response.get(task_name)
+        if "predictions" in task_payload:
+            predictions = task_payload.pop("predictions")
+        else:
+            predictions = task_payload.pop("prediction")
 
         ratings, warning = task.compute(predictions=predictions)
         ratings.update({f"{task.metric_name}_warning": warning})

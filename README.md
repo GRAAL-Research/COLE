@@ -37,6 +37,7 @@ COLE consists of 23 tasks grouped by NLU capability:
 ### Natural Language Inference (NLI)
 | Task | Description | Test size |
 |------|-------------|-----------|
+| **DACCORD** | Semantic plausibility / contradiction detection of French sentences (binary) | 1,034 |
 | **FraCaS** | NLI involving quantifiers, plurality, anaphora, and ellipsis | 346 |
 | **GQNLI-fr** | NLI with quantifier logic (e.g., most, at least, more than half) | 30 |
 | **LingNLI** | NLI corpus constructed with a linguist in the loop | 4,893 |
@@ -61,7 +62,6 @@ COLE consists of 23 tasks grouped by NLU capability:
 ### Grammatical Judgment
 | Task | Description | Test size |
 |------|-------------|-----------|
-| **DACCORD** | Semantic plausibility of French sentences (binary) | 1,034 |
 | **MultiBLiMP-Fr** | Grammatical correctness from minimal pairs | 77 |
 | **QFrCoLA** | Sentence acceptability in French (grammar, syntax) | 7,546 |
 
