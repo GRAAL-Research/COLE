@@ -32,7 +32,7 @@ class ModelEvaluator:
         Compute metrics over the last tested model's predictions,
         must have called one the evaluate functions before or loaded predictions with load_predictions_from_file.
         """
-        metrics = []
+        task_metrics: List[Dict] = []
 
         for task_dict in tqdm(
             self.last_predictions["tasks"], desc="Computing metrics: "
@@ -56,14 +56,17 @@ class ModelEvaluator:
                     metric_name: {**metric_score, f"{metric_name}_warning": warning}
                 }
             }
-            metrics.append(task_entry)
+            task_metrics.append(task_entry)
             wandb.log({f"{task_name}.{metric_name}": {**metric_score}})
 
-        self.last_metrics = metrics
-        metrics = self.last_predictions
-        metrics["tasks"] = self.last_metrics
-        self.last_metrics = metrics
-        return metrics
+        # Build the response from a fresh dict so `last_metrics` does NOT alias
+        # `last_predictions`. The previous implementation stored the same dict
+        # reference in both, so mutating one would silently mutate the other.
+        self.last_metrics = {
+            **{k: v for k, v in self.last_predictions.items() if k != "tasks"},
+            "tasks": task_metrics,
+        }
+        return self.last_metrics
 
     def load_predictions_from_file(self, file_path: str) -> None:
         """
@@ -87,7 +90,9 @@ class ModelEvaluator:
         Saves computed metrics to a json file.
         :param save_path : the path to which the json file will be saved.
         """
-        if self.last_metrics is None:
+        # `last_metrics` is initialized to {} (not None), so the previous
+        # `is None` check never fired. Treat both empty/missing the same way.
+        if not self.last_metrics or self.last_model_name is None:
             logging.info("No metrics saved")
             return None
         return self.save_object(
@@ -119,6 +124,11 @@ class ModelEvaluator:
                 f"-----Doing task '{task.task_name}' with model '{model.name}-----'."
             )
             logging.info(info_log)
+            # Initialize before try so the finally block can drop them without
+            # relying on `locals()` introspection (which is brittle and was
+            # papering over the case where the try block raised before assignment).
+            prompts = None
+            evaluate_dataset = None
             try:
                 if subset_size is None:
                     prompts = task.dataset.prompts[:]
@@ -141,10 +151,8 @@ class ModelEvaluator:
                 continue
             finally:
                 # Memory cleaning
-                if "evaluate_dataset" in locals():
-                    del evaluate_dataset
-                if "prompts" in locals():
-                    del prompts
+                del evaluate_dataset
+                del prompts
                 torch.cuda.empty_cache()
                 gc.collect()
             wandb.log({task.task_name: "Success"})
@@ -184,7 +192,12 @@ class ModelEvaluator:
             try:
                 with open(full_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                data.get("tasks").extend(saved_object.get("tasks"))
+                # `data.get("tasks")` could be None on a malformed/legacy file,
+                # in which case `.extend(...)` would raise AttributeError.
+                # Likewise the new payload may have no "tasks" key.
+                existing_tasks = data.get("tasks") or []
+                new_tasks = saved_object.get("tasks") or []
+                data["tasks"] = existing_tasks + new_tasks
                 with open(full_path, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=2)
                 info_message = f"Results saved to {save_dir_path}"
