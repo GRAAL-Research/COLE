@@ -25,3 +25,8 @@ updates:
     open-pull-requests-limit: 5
     labels:
       - "npm dependencies"
+    ignore:
+      # eslint 10 needs eslint-plugin-react 8+, which eslint-config-next does
+      # not yet pull in. Re-enable once the next ecosystem catches up.
+      - dependency-name: "eslint"
+        versions: [">=10"]
