@@ -24,6 +24,9 @@ COLE_nlu_benchmark_site/.yarn/*
 
 # testing
 /coverage
+.coverage
+coverage.xml
+htmlcov/
 
 # next.js
 COLE_nlu_benchmark_site/.next/
