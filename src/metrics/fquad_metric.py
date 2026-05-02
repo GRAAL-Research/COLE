@@ -13,6 +13,9 @@ def normalize_answer(answer: str) -> str:
     """
 
     def remove_articles(text):
+        # Articles must be removed BEFORE punctuation, because the elided form
+        # "l'" carries its apostrophe; once `remove_punc` strips it, "l'eau" becomes
+        # "leau" and can no longer be matched. Order matters in French.
         return re.sub(r"\b(le|la|l'|du|des|aux|un|une)\b", " ", text)
 
     def white_space_fix(text):
@@ -23,7 +26,7 @@ def normalize_answer(answer: str) -> str:
         return "".join(ch for ch in text if ch not in exclude)
 
     answer = str(answer)
-    return white_space_fix(remove_articles(remove_punc(answer.lower())))
+    return white_space_fix(remove_punc(remove_articles(answer.lower())))
 
 
 def f1_score(prediction: str, ground_truth: str) -> float:
@@ -44,6 +47,9 @@ def exact_match_score(prediction: str, ground_truth: str) -> float:
 
 
 def metric_max_over_ground_truths(metric_fn, prediction, ground_truths):
+    if not ground_truths:
+        # No reference answer available — neither exact match nor F1 can be positive.
+        return 0.0
     scores_for_ground_truths = []
     for ground_truth in ground_truths:
         score = metric_fn(prediction, ground_truth)

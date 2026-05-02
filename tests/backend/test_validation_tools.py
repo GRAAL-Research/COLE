@@ -193,3 +193,51 @@ class ValidateSubmissionJSONTest(ValidateTest):
             validate_submission_json,
             **{"dictionary": self.unaccepted_task_dict_prediction_not_list},
         )
+
+
+class ValidateSubmissionTemplateEdgeCasesTest(TestCase):
+    """Edge cases that previously crashed downstream validators with IndexError/AttributeError."""
+
+    def _wrap(self, tasks):
+        return {
+            "model_name": "a_model_name",
+            "model_url": "a_model_url",
+            "tasks": tasks,
+        }
+
+    def test_empty_task_dict_is_rejected(self):
+        # `{}` would slip through the previous `len(task.keys()) > 1` check and
+        # crash `validate_submission_tasks_name` with IndexError on `list(task.keys())[0]`.
+        with pytest.raises(HTTPException) as exc_info:
+            validate_submission_template(self._wrap([{}]))
+        assert exc_info.value.status_code == 400
+
+    def test_non_dict_task_entry_is_rejected(self):
+        # A bare string in the tasks list used to crash with AttributeError on `.keys()`.
+        with pytest.raises(HTTPException) as exc_info:
+            validate_submission_template(self._wrap(["not a dict"]))
+        assert exc_info.value.status_code == 400
+
+    def test_two_keys_in_one_task_dict_is_rejected(self):
+        with pytest.raises(HTTPException) as exc_info:
+            validate_submission_template(
+                self._wrap(
+                    [{"qfrcola": {"predictions": []}, "allocine": {"predictions": []}}]
+                )
+            )
+        assert exc_info.value.status_code == 400
+
+    def test_singular_prediction_key_is_accepted(self):
+        # `validate_submission_json` accepts both "prediction" and "predictions";
+        # this guards against a regression that would only accept the plural form.
+        payload = self._wrap([{"qfrcola": {"prediction": [1, 0, 1]}}])
+        validate_submission_template(payload)
+        validate_submission_json(payload)
+
+    def test_empty_payload_dict_is_rejected(self):
+        # `{"qfrcola": {}}` previously slipped through validate_submission_json
+        # (the inner for-loop saw an empty dict and did nothing) and crashed
+        # downstream in compute_tasks_ratings with a KeyError -> HTTP 500.
+        with pytest.raises(HTTPException) as exc_info:
+            validate_submission_json(self._wrap([{"qfrcola": {}}]))
+        assert exc_info.value.status_code == 400

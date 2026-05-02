@@ -115,14 +115,14 @@ graph TD
     Score --> Save[Save results JSON]
 ```
 
-### Tasks (30 total)
+### Tasks (23 total)
 
 Grouped by capability:
 
 | Category | Tasks |
 |----------|-------|
 | Sentiment | allocine, mms |
-| NLI | fracas, gqnli, lingnli, mnli-nineeleven-fr-mt, rte3-french, sickfr, xnli, daccord |
+| NLI | daccord, fracas, gqnli, lingnli, mnli-nineeleven-fr-mt, rte3-french, sickfr, xnli |
 | QA | fquad, french_boolq, piaf |
 | Paraphrase | paws_x, qfrblimp |
 | Grammar | multiblimp, qfrcola |
@@ -130,7 +130,6 @@ Grouped by capability:
 | WSD | wsd |
 | Quebec French | qfrcore, qfrcort |
 | Coreference | wino_x_lm, wino_x_mt |
-| Other | frcoe, timeline, lqle, qccp, qccy, qccr, piqafr, piqaqfr |
 
 ### Metrics
 
@@ -150,12 +149,14 @@ graph TD
     Push --> L[Linting\npylint src/ tests/]
     Push --> T[Tests\npytest]
     Push --> FB[Frontend Build\nnpm ci + lint + build]
+    Push --> DB[Docker Build]
     Push --> HF[HF Sync\nDeploy to Space]
 
     F -->|Python 3.12| Pass
     L -->|Python 3.10-3.12| Pass
     T -->|Python 3.12\nHF_TOKEN required| Pass
     FB -->|Node 20| Pass
+    DB -->|cole image| Pass
     HF -->|Orphan branch\nLFS for .jsonl/.pdf| Space[davebulaval/cole]
 ```
 
