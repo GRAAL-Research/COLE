@@ -1,3 +1,4 @@
+import argparse
 from typing import List, Union
 
 
@@ -13,3 +14,20 @@ def split_llm_list(models: List, llm_split: Union[None, int]) -> List:
     elif llm_split == 3:
         models = models[2 * len(models) // 3 :]
     return models
+
+
+def str2bool(value: Union[bool, str]) -> bool:
+    """argparse-friendly bool parser.
+
+    `argparse(type=bool)` is a footgun: `bool("False")` is True, so any
+    non-empty string flips the flag to True. This converter rejects garbage
+    explicitly and accepts the obvious truthy/falsy spellings.
+    """
+    if isinstance(value, bool):
+        return value
+    normalized = str(value).strip().lower()
+    if normalized in ("true", "1", "yes", "y", "t"):
+        return True
+    if normalized in ("false", "0", "no", "n", "f"):
+        return False
+    raise argparse.ArgumentTypeError(f"Boolean value expected, got: {value!r}")

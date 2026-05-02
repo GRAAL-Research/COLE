@@ -9,6 +9,7 @@ from tqdm import tqdm
 
 from predictions.all_llms import private_llm
 from src.evaluation.llm_evaluator import ModelEvaluator
+from src.evaluation.tools import str2bool
 from src.language_model.private_lm import RemoteLLMModel
 from src.task.task_factory import tasks_factory
 from src.task.task_names import COLETasks, BorealTasks
@@ -20,7 +21,7 @@ parser.add_argument(
     "--test",
     help="If set to true, the system will default to testing only a small model with a few examples.",
     default=False,
-    type=bool,
+    type=str2bool,
 )
 parser.add_argument(
     "--max_examples",
@@ -89,7 +90,8 @@ time_start = datetime.now()
 for model_name in tqdm(
     models, total=len(models), desc="Processing LLM inference on tasks."
 ):
-
+    model = None
+    evaluator = None
     try:
         model = RemoteLLMModel(model_name=model_name)
         logging.info("Creating model")
@@ -122,10 +124,8 @@ for model_name in tqdm(
         continue
     finally:
         # Memory cleaning
-        if "model" in locals():
-            del model
-        if "evaluator" in locals():
-            del evaluator
+        del model
+        del evaluator
         gc.collect()
         wandb.finish(exit_code=0)
 

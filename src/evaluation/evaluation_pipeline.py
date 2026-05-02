@@ -10,7 +10,7 @@ from tqdm import tqdm
 from predictions.all_llms import llms
 from src.evaluation.llm_evaluator import ModelEvaluator
 from src.evaluation.llm_factory import model_factory
-from src.evaluation.tools import split_llm_list
+from src.evaluation.tools import split_llm_list, str2bool
 from src.task.task_factory import tasks_factory
 from src.task.task_names import COLETasks, BorealTasks
 
@@ -19,7 +19,7 @@ parser.add_argument(
     "--test",
     help="If set to true, the system will default to testing only a small model with a few examples.",
     default=False,
-    type=bool,
+    type=str2bool,
 )
 parser.add_argument(
     "--max_examples",
@@ -105,7 +105,8 @@ time_start = datetime.now()
 for model_name in tqdm(
     models, total=len(models), desc="Processing LLM inference on tasks."
 ):
-
+    model = None
+    evaluator = None
     try:
         model = model_factory(model_name, batch_size=args.batch_size)
         logging.info("Creating model")
@@ -145,10 +146,8 @@ for model_name in tqdm(
         wandb.finish(exit_code=0)
     finally:
         # Memory cleaning
-        if "model" in locals():
-            del model
-        if "evaluator" in locals():
-            del evaluator
+        del model
+        del evaluator
         gc.collect()
         torch.cuda.empty_cache()
 
