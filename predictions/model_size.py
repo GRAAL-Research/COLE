@@ -1,6 +1,6 @@
 from dotenv import dotenv_values
 
-from src.model.model_factory import model_tokenizer_factory
+from cole.model.model_factory import model_tokenizer_factory
 
 
 def model_size(model_name: str):

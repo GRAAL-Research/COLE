@@ -21,13 +21,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY src/docker_requirements.txt /app/src/
+COPY cole/docker_requirements.txt /app/cole/
 RUN pip install --no-cache-dir --upgrade pip wheel \
     && pip install --no-cache-dir --prefer-binary pyarrow pandas numpy scipy fsspec aiohttp tqdm \
-    && pip install --no-cache-dir --prefer-binary -r /app/src/docker_requirements.txt
+    && pip install --no-cache-dir --prefer-binary -r /app/cole/docker_requirements.txt
 
 # Copy backend source
-COPY src/ /app/src/
+COPY cole/ /app/cole/
 
 # Copy built frontend from stage 1
 COPY --from=frontend-build /app/frontend /app/frontend

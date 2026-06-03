@@ -1,5 +1,5 @@
-from src.task.task import TaskType
-from src.task.task_factory import Task
+from cole.task.task import TaskType
+from cole.task.task_factory import Task
 from tests.tasks.evaluation.task_test_case import TaskTest
 
 

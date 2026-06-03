@@ -3,9 +3,9 @@ from typing import Dict, List
 from unittest import TestCase
 from unittest.mock import ANY
 
-from src.backend.evaluation import compute_tasks_ratings
-from src.task.task import TaskType
-from src.task.task_factory import Task
+from cole.backend.evaluation import compute_tasks_ratings
+from cole.task.task import TaskType
+from cole.task.task_factory import Task
 
 
 class ComputeTasksRatingsTest(TestCase):

@@ -11,11 +11,11 @@ from tempfile import TemporaryDirectory
 from unittest import TestCase
 from unittest import mock
 
-from src.evaluation.llm_evaluator import ModelEvaluator
+from cole.evaluation.llm_evaluator import ModelEvaluator
 
 
 class ComputeMetricsAliasingTest(TestCase):
-    @mock.patch("src.evaluation.llm_evaluator.wandb")
+    @mock.patch("cole.evaluation.llm_evaluator.wandb")
     def test_does_not_alias_last_predictions(self, _wandb_mock):
         # Previously `compute_metrics` ended with
         #   self.last_metrics = self.last_predictions

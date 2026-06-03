@@ -1,7 +1,7 @@
 import unittest
 
 from predictions.all_llms import llms
-from src.evaluation.tools import split_llm_list
+from cole.evaluation.tools import split_llm_list
 
 
 class TestTools(unittest.TestCase):

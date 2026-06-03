@@ -1,7 +1,7 @@
 #!/bin/sh
 # Start FastAPI
 echo 'Starting backend...'
-uvicorn src.backend.submission_api:app \
+uvicorn cole.backend.submission_api:app \
   --host 0.0.0.0 --port 8000 --log-level debug \
   > /app/backend.log 2>&1 &
 

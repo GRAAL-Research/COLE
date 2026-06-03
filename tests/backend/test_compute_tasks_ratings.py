@@ -8,7 +8,7 @@ handling, deepcopy, response shape) using a stub task.
 from typing import Dict, List, Tuple
 from unittest import TestCase
 
-from src.backend.evaluation import compute_tasks_ratings
+from cole.backend.evaluation import compute_tasks_ratings
 
 
 class _StubTask:

@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.metrics.fquad_metric import (
+from cole.metrics.fquad_metric import (
     compute_score,
     exact_match_score,
     f1_score,

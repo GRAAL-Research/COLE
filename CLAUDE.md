@@ -10,8 +10,8 @@ COLE is a multidisciplinary Quebec French Natural Language Understanding benchma
 ```bash
 # Backend
 export HF_TOKEN=hf_...
-pip install -r src/requirements.txt
-uvicorn src.backend.submission_api:app --host 0.0.0.0 --port 8000
+pip install -r cole/requirements.txt
+uvicorn cole.backend.submission_api:app --host 0.0.0.0 --port 8000
 
 # Frontend
 cd frontend && npm ci && npm run dev
@@ -22,10 +22,10 @@ pytest
 ```
 
 ## Key directories
-- `src/backend/` — FastAPI app (`submission_api.py` is the entry point)
-- `src/dataset/` — HuggingFace dataset loading (repo: `graalul/COLE`)
-- `src/task/` — Task definitions and evaluation logic
-- `src/metrics/` — Metric wrappers (accuracy, F1, pearson, fquad)
+- `cole/backend/` — FastAPI app (`submission_api.py` is the entry point)
+- `cole/dataset/` — HuggingFace dataset loading (repo: `graalul/COLE`)
+- `cole/task/` — Task definitions and evaluation logic
+- `cole/metrics/` — Metric wrappers (accuracy, F1, pearson, fquad)
 - `frontend/src/app/` — Next.js App Router pages and components
 - `tests/` — pytest tests (skip automatically without HF_TOKEN)
 
@@ -41,7 +41,7 @@ make all         # lint + format + test + build
 
 ## CI/CD
 - **Formatting**: `black --check .` (Python 3.12)
-- **Linting**: `pylint src/ tests/` (Python 3.10, 3.11, 3.12)
+- **Linting**: `pylint cole/ tests/` (Python 3.10, 3.11, 3.12)
 - **Tests**: `pytest` (Python 3.12, requires HF_TOKEN secret)
 - **Frontend build**: `npm ci && npm run lint && npm run build`
 - **Docker build**: builds and validates the Docker image

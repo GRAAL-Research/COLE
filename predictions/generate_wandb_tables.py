@@ -9,7 +9,7 @@ import wandb
 
 from predictions.all_llms import llms, small_llm, small_llm_2, private_llm
 
-from src import cole as project
+from cole import cole as project
 
 PROJECT_PATH = f"doctorate/{project}"
 MODELS_SIZE_PATH = "models_size.json"

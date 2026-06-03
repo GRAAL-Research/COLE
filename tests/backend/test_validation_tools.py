@@ -4,7 +4,7 @@ from unittest import TestCase
 import pytest
 from fastapi import HTTPException
 
-from src.backend.validation_tools import (
+from cole.backend.validation_tools import (
     validate_submission_tasks_name,
     validate_submission_json,
     validate_submission_template,
