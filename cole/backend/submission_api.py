@@ -2,7 +2,6 @@ import glob
 import json
 import logging
 import os
-import sys
 import uuid
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -37,9 +36,6 @@ from cole.task.task_factory import (
 MAX_ZIP_SIZE_MB = 50
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-PACKAGE_DIR = BASE_DIR / "cole"
-sys.path.insert(0, str(PACKAGE_DIR))
-
 RESULTS_DIR = BASE_DIR / "cole" / "backend" / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 FRONTEND_DIR = BASE_DIR / "frontend"
