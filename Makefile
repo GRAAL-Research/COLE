@@ -1,7 +1,7 @@
 .PHONY: lint format test build docker all
 
 lint:
-	pylint src/ tests/
+	pylint cole/ tests/
 	cd frontend && npm run lint
 
 format:

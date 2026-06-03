@@ -5,7 +5,7 @@ from unittest import TestCase
 
 from fastapi import HTTPException
 
-from src.backend.submit_tools import (
+from cole.backend.submit_tools import (
     MAX_DECOMPRESSED_SIZE_MB,
     unzip_predictions_from_zip,
 )

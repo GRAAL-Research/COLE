@@ -1,8 +1,8 @@
 from typing import List
 from unittest import TestCase
 
-from src.task.task_factory import tasks_factory
-from src.backend.validation_tools import tasks_name
+from cole.task.task_factory import tasks_factory
+from cole.backend.validation_tools import tasks_name
 
 
 class TasksFactoryTest(TestCase):

@@ -146,7 +146,7 @@ Grouped by capability:
 ```mermaid
 graph TD
     Push[git push to main] --> F[Formatting\nblack --check]
-    Push --> L[Linting\npylint src/ tests/]
+    Push --> L[Linting\npylint cole/ tests/]
     Push --> T[Tests\npytest]
     Push --> FB[Frontend Build\nnpm ci + lint + build]
     Push --> DB[Docker Build]

@@ -5,8 +5,8 @@ import zipfile
 
 from fastapi.testclient import TestClient
 
-from src.backend import submission_api
-from src.backend.submission_api import (
+from cole.backend import submission_api
+from cole.backend.submission_api import (
     app,
     get_leaderboard_entries,
 )

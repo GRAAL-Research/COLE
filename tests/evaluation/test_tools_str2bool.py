@@ -8,7 +8,7 @@ pipelines that previously used `type=bool`.
 import argparse
 from unittest import TestCase
 
-from src.evaluation.tools import str2bool
+from cole.evaluation.tools import str2bool
 
 
 class Str2BoolTest(TestCase):

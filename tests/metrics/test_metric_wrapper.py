@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from src import NA_VALUE
-from src.metrics.metrics_wrapper import ExactMatch, apply_int_casting
+from cole import NA_VALUE
+from cole.metrics.metrics_wrapper import ExactMatch, apply_int_casting
 
 
 class ApplyIntCasting(TestCase):

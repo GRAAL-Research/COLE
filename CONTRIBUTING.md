@@ -15,9 +15,9 @@ For detailed architecture documentation (backend, frontend, evaluation pipeline,
 ### Backend
 
 ```bash
-pip install -r src/requirements.txt
+pip install -r cole/requirements.txt
 export HF_TOKEN=your_token
-uvicorn src.backend.submission_api:app --host 0.0.0.0 --port 8000
+uvicorn cole.backend.submission_api:app --host 0.0.0.0 --port 8000
 ```
 
 ### Frontend
