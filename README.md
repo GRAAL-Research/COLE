@@ -91,6 +91,26 @@ COLE consists of 23 tasks grouped by NLU capability:
 
 All data in COLE is in **French**.
 
+## Evaluating mixed-type question files
+
+Some corpora (e.g. the Netquiz/COLE corpus) store several question types in a single
+JSONL file, each row keeping its type in a `question_type` field. Since the right
+metric differs from one question to the next, `cole.metrics.mixed_questions` selects
+the metric per row and aggregates the results:
+
+```bash
+# Predictions embedded in each row's "prediction" field
+python -m cole.metrics.mixed_questions gold.jsonl
+
+# Predictions in a separate file aligned line by line, JSON report written out
+python -m cole.metrics.mixed_questions gold.jsonl --predictions preds.jsonl --output report.json
+```
+
+It reuses COLE's metric primitives and reports a per-type score plus two composite
+scores: an unweighted mean of the per-type scores (GLUE-style) and a mean weighted by
+the number of instances of each type. Supported types: `single_choice`, `true_false`,
+`multiple_choice`, `short_answer`, `association`, `categorization`, `ordering`.
+
 ## Citation
 
 If you use COLE in your research, please cite our paper:
