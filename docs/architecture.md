@@ -141,6 +141,27 @@ Grouped by capability:
 | ExactMatch | Custom string comparison | wsd |
 | F1 | HuggingFace `evaluate` | Classification variants |
 
+### Mixed-type question files
+
+`cole/metrics/mixed_questions.py` evaluates JSONL files that mix several question
+types in a single file (the Netquiz/COLE corpus), where the metric must be chosen
+per row from the `question_type` field. It reuses the `fquad_metric` primitives
+(`normalize_answer`, `f1_score`, `exact_match_score`, `metric_max_over_ground_truths`)
+and adds set-based and structured-question metrics:
+
+| `question_type` | Metric |
+|-----------------|--------|
+| `single_choice`, `true_false` | Accuracy |
+| `multiple_choice` | Set F1 (+ exact set match) |
+| `short_answer` | FQuAD-style mean(EM, F1) over accepted answers |
+| `association` | F1 over pairs (+ exact match) |
+| `categorization` | Fraction of correctly classified elements (+ exact match) |
+| `ordering` | Exact match (+ pairwise concordance) |
+
+It reports a per-type score and two composites: unweighted (mean of per-type
+scores, GLUE-style) and weighted by the number of instances of each type. Run it
+with `python -m cole.metrics.mixed_questions <gold.jsonl>`.
+
 ## CI/CD Pipeline
 
 ```mermaid
