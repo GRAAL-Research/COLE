@@ -25,7 +25,7 @@ unsloth
 unsloth-zoo
 wandb
 # Pour compatibilité ancienne
-protobuf<=7.34.1
+protobuf<=7.35.0
 openai
 anthropic
 mistralai
