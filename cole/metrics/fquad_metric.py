@@ -13,20 +13,19 @@ def normalize_answer(answer: str) -> str:
     """
 
     def remove_articles(text):
-        # Articles must be removed BEFORE punctuation, because the elided form
-        # "l'" carries its apostrophe; once `remove_punc` strips it, "l'eau" becomes
-        # "leau" and can no longer be matched. Order matters in French.
-        return re.sub(r"\b(le|la|l'|du|des|aux|un|une)\b", " ", text)
+        return re.sub(r"\b(le|la|les|l|un|une|des|du|de|d|au|aux)\b", " ", text)
 
     def white_space_fix(text):
         return " ".join(text.split())
 
     def remove_punc(text):
-        exclude = set(string.punctuation)
-        return "".join(ch for ch in text if ch not in exclude)
+        exclude = set(string.punctuation) | {"«", "»", "’", "“", "”"}
+        return "".join(ch if ch not in exclude else " " for ch in text)
 
-    answer = str(answer)
-    return white_space_fix(remove_punc(remove_articles(answer.lower())))
+    answer = str(answer).lower()
+    for apostrophe in ("’", "‘", "'"):
+        answer = answer.replace(apostrophe, " ")
+    return white_space_fix(remove_punc(remove_articles(answer)))
 
 
 def f1_score(prediction: str, ground_truth: str) -> float:
