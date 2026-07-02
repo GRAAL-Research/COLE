@@ -13,18 +13,28 @@ def normalize_answer(answer: str) -> str:
     """
 
     def remove_articles(text):
-        return re.sub(r"\b(le|la|les|l|un|une|des|du|de|d|au|aux)\b", " ", text)
+        # Articles must be removed BEFORE punctuation, because the elided form
+        # "l'" carries its apostrophe; once `remove_punc` strips it, "l'eau" becomes
+        # "leau" and can no longer be matched. Order matters in French.
+        return re.sub(r"\b(le|la|l'|du|des|aux|un|une)\b", " ", text)
 
     def white_space_fix(text):
         return " ".join(text.split())
 
     def remove_punc(text):
         exclude = set(string.punctuation) | {"«", "»", "’", "“", "”"}
-        return "".join(ch if ch not in exclude else " " for ch in text)
+        apostrophes = {"'", "’", "‘"}
+        # Delete apostrophes (as in the original SQuAD metric), but replace other
+        # punctuation with spaces to avoid gluing tokens together (e.g. in math expressions).
+        return "".join(
+            " " if ch in exclude and ch not in apostrophes
+            else ("" if ch in apostrophes else ch)
+            for ch in text
+        )
 
     answer = str(answer).lower()
-    for apostrophe in ("’", "‘", "'"):
-        answer = answer.replace(apostrophe, " ")
+    # Normalize spaces around apostrophes (e.g., "l' eau" or "l 'eau" -> "l'eau")
+    answer = re.sub(r"\s*['’‘]\s*", "'", answer)
     return white_space_fix(remove_punc(remove_articles(answer)))
 
 

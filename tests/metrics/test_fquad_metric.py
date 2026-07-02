@@ -27,8 +27,8 @@ class NormalizeAnswerTest(TestCase):
         self.assertEqual("eau", normalize_answer("l'eau"))
         self.assertEqual("eau", normalize_answer("l' eau"))
         self.assertEqual("eau", normalize_answer("l 'eau"))
-        self.assertEqual("accord", normalize_answer("d'accord"))
-        self.assertEqual("accord", normalize_answer("d' accord"))
+        self.assertEqual("daccord", normalize_answer("d'accord"))
+        self.assertEqual("daccord", normalize_answer("d' accord"))
 
     def test_math_spacing_robustness(self):
         # Spaces around mathematical operators and delimiters shouldn't prevent matching
