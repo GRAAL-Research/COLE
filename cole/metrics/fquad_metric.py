@@ -26,11 +26,14 @@ def normalize_answer(answer: str) -> str:
         apostrophes = {"'", "’", "‘"}
         # Delete apostrophes (as in the original SQuAD metric), but replace other
         # punctuation with spaces to avoid gluing tokens together (e.g. in math expressions).
-        return "".join(
-            " " if ch in exclude and ch not in apostrophes
-            else ("" if ch in apostrophes else ch)
-            for ch in text
-        )
+        parts = []
+        for ch in text:
+            if ch in exclude:
+                if ch not in apostrophes:
+                    parts.append(" ")
+            else:
+                parts.append(ch)
+        return "".join(parts)
 
     answer = str(answer).lower()
     # Normalize spaces around apostrophes (e.g., "l' eau" or "l 'eau" -> "l'eau")
