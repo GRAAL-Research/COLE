@@ -39,6 +39,7 @@ from cole.metrics.fquad_metric import (
     f1_score,
     metric_max_over_ground_truths,
 )
+from cole.metrics.math_metric import math_exact_match_score, math_f1_score
 
 logger = logging.getLogger(__name__)
 
@@ -190,10 +191,35 @@ def score_short_answer(example: Dict[str, Any], prediction: object) -> Dict[str,
         ground_truths, (str, bytes)
     ):
         ground_truths = [ground_truths] if ground_truths is not None else []
-    exact = float(
-        metric_max_over_ground_truths(exact_match_score, prediction, ground_truths)
+
+    # Detect if the question is mathematical
+    subjects = example.get("subjects", [])
+    if isinstance(subjects, str):
+        subjects = [subjects]
+    elif not isinstance(subjects, (list, tuple, set)):
+        subjects = []
+
+    is_math = any(
+        isinstance(s, str)
+        and s.lower() in ("mathematics", "mathématiques", "mathématique", "math")
+        for s in subjects
     )
-    f1 = metric_max_over_ground_truths(f1_score, prediction, ground_truths)
+
+    if is_math:
+        exact = float(
+            metric_max_over_ground_truths(
+                math_exact_match_score, str(prediction), ground_truths
+            )
+        )
+        f1 = metric_max_over_ground_truths(
+            math_f1_score, str(prediction), ground_truths
+        )
+    else:
+        exact = float(
+            metric_max_over_ground_truths(exact_match_score, prediction, ground_truths)
+        )
+        f1 = metric_max_over_ground_truths(f1_score, prediction, ground_truths)
+
     return {"exact_match": exact, "f1": f1, "score": (exact + f1) / 2}
 
 

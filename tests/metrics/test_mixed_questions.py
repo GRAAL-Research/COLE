@@ -91,6 +91,22 @@ class ShortAnswerTest(TestCase):
         self.assertAlmostEqual(0.5, result["f1"])
         self.assertAlmostEqual(0.25, result["score"])
 
+    def test_math_short_answer_routing(self):
+        example = {
+            "question_type": "short_answer",
+            "answers": ["2^5"],
+            "subjects": ["mathematics"],
+        }
+        # With math subject, 2^5 and 2 ^ 5 should match perfectly
+        result = score_short_answer(example, "2 ^ 5")
+        self.assertEqual(1.0, result["exact_match"])
+        self.assertEqual(1.0, result["f1"])
+        self.assertEqual(1.0, result["score"])
+
+        # 2^5 and 2-5 should NOT match
+        result_diff = score_short_answer(example, "2-5")
+        self.assertEqual(0.0, result_diff["exact_match"])
+
 
 class AssociationTest(TestCase):
     def test_exact_and_partial_pairs(self):
