@@ -76,8 +76,11 @@ def parse_math_expression(text: str) -> Any:
     - Fractions like 1/2 -> 0.5 (or sympy Rational)
     - Algebraic expressions like x + y -> Symbol('x') + Symbol('y')
     - Fallback text like 'Section A' -> 'section a'
+
+    Non-string inputs (e.g. a numeric ground truth stored as a JSON number) are
+    coerced to their string form before parsing.
     """
-    text = text.strip()
+    text = str(text).strip()
     if not text:
         return ""
 
@@ -125,17 +128,49 @@ def check_mathematical_equivalence(val1: Any, val2: Any) -> bool:
     return val1 == val2
 
 
+def _candidate_parses(text: str) -> List[Any]:
+    """All plausible parses of a raw answer.
+
+    Always includes the standard parse. For an undelimited ``X,Y`` with a single
+    comma and two integer parts, also includes the French decimal reading
+    (``3,14`` -> ``3.14``), so a French-style decimal still matches its ``3.14``
+    counterpart while genuine coordinates like ``(24, 14)`` keep their tuple
+    reading.
+    """
+    text = str(text).strip()
+    candidates: List[Any] = [parse_math_expression(text)]
+    if "(" not in text and "[" not in text and text.count(",") == 1:
+        left, right = (part.strip() for part in text.split(","))
+        if left.lstrip("-").isdigit() and right.isdigit():
+            try:
+                candidates.append(float(f"{left}.{right}"))
+            except ValueError:
+                pass
+    return candidates
+
+
 def math_exact_match_score(prediction: str, ground_truth: str) -> bool:
     """Returns True if prediction is mathematically equivalent to the ground truth."""
-    pred_parsed = parse_math_expression(prediction)
-    gt_parsed = parse_math_expression(ground_truth)
-    return check_mathematical_equivalence(pred_parsed, gt_parsed)
+    pred_str = str(prediction).strip()
+    gt_str = str(ground_truth).strip()
+    # Identical textual answers always match. This guarantees reflexivity even
+    # for tokens SymPy parses to a non-comparable value (e.g. "nan", which never
+    # equals itself as a float).
+    if pred_str.lower() == gt_str.lower():
+        return True
+    return any(
+        check_mathematical_equivalence(pred_parsed, gt_parsed)
+        for pred_parsed in _candidate_parses(pred_str)
+        for gt_parsed in _candidate_parses(gt_str)
+    )
 
 
 def math_f1_score(prediction: str, ground_truth: str) -> float:
     """Returns 1.0 if mathematically equivalent, otherwise computes token-level F1
     using basic math tokenization (preserving numbers and symbols).
     """
+    prediction = str(prediction)
+    ground_truth = str(ground_truth)
     if math_exact_match_score(prediction, ground_truth):
         return 1.0
 

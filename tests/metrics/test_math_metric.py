@@ -81,3 +81,35 @@ class MathMetricTest(TestCase):
         # Partial credit on long algebraic expression typos
         partial_score = math_f1_score("2*x**2 + 5*x - 4", "2*x**2 + 5*x - 3")
         self.assertAlmostEqual(22 / 24, partial_score)
+
+    def test_numeric_ground_truth_is_coerced(self):
+        # Ground truths stored as JSON numbers (common for math answers) must not
+        # crash the parser, which strips strings. Regression: raised AttributeError.
+        self.assertEqual(42.0, parse_math_expression(42))
+        self.assertTrue(math_exact_match_score("42", 42))
+        self.assertTrue(math_exact_match_score(3.14, "3.14"))
+        self.assertEqual(1.0, math_f1_score(42, "42"))
+
+    def test_identical_answers_are_reflexive(self):
+        # Exact-match must be reflexive even when SymPy parses a token to a value
+        # that never equals itself (e.g. float NaN).
+        self.assertTrue(math_exact_match_score("nan", "nan"))
+        self.assertEqual(1.0, math_f1_score("nan", "nan"))
+        self.assertTrue(math_exact_match_score("Section A", "section a"))
+
+    def test_french_decimal_comma_matches_dot(self):
+        # French decimal notation "3,14" must match "3.14" in a Quebec benchmark.
+        self.assertTrue(math_exact_match_score("3,14", "3.14"))
+        self.assertTrue(math_exact_match_score("3.14", "3,14"))
+        self.assertTrue(math_exact_match_score("-2,5", "-2.5"))
+        self.assertEqual(1.0, math_f1_score("3,14", "3.14"))
+
+    def test_coordinates_still_match_as_tuples(self):
+        # The decimal reading must not break genuine coordinate/list answers.
+        self.assertTrue(math_exact_match_score("(24, 14)", "24,14"))
+        self.assertTrue(math_exact_match_score("47, 53", "47,53"))
+
+    def test_distinct_decimals_do_not_match(self):
+        # Double interpretation must not create false positives.
+        self.assertFalse(math_exact_match_score("3,14", "3,15"))
+        self.assertFalse(math_exact_match_score("3,14", "3.15"))

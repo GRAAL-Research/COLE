@@ -110,6 +110,8 @@ It reuses COLE's metric primitives and reports a per-type score plus two composi
 scores: an unweighted mean of the per-type scores (GLUE-style) and a mean weighted by
 the number of instances of each type. Supported types: `single_choice`, `true_false`,
 `multiple_choice`, `short_answer`, `association`, `categorization`, `ordering`.
+Mathematical `short_answer` rows (flagged via their `subjects`) are scored with
+SymPy-based equivalence so answers like `2^5` and `32` or `1/2` and `0.5` match.
 
 ## Citation
 
