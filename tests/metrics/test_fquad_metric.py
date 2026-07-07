@@ -22,6 +22,21 @@ class NormalizeAnswerTest(TestCase):
     def test_coerces_non_string_input(self):
         self.assertEqual("42", normalize_answer(42))
 
+    def test_french_elision_spacing_robustness(self):
+        # Spacing around apostrophes shouldn't prevent proper elision matching
+        self.assertEqual("eau", normalize_answer("l'eau"))
+        self.assertEqual("eau", normalize_answer("l' eau"))
+        self.assertEqual("eau", normalize_answer("l 'eau"))
+        self.assertEqual("daccord", normalize_answer("d'accord"))
+        self.assertEqual("daccord", normalize_answer("d' accord"))
+
+    def test_math_spacing_robustness(self):
+        # Spaces around mathematical operators and delimiters shouldn't prevent matching
+        self.assertEqual(normalize_answer("2^5"), normalize_answer("2 ^ 5"))
+        self.assertEqual(normalize_answer("2/3"), normalize_answer("2 / 3"))
+        self.assertEqual(normalize_answer("(24,14)"), normalize_answer("(24, 14)"))
+        self.assertEqual(normalize_answer("[24, 14]"), normalize_answer("(24, 14)"))
+
 
 class F1ScoreTest(TestCase):
     def test_identical_answers_score_one(self):

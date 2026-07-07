@@ -22,11 +22,23 @@ def normalize_answer(answer: str) -> str:
         return " ".join(text.split())
 
     def remove_punc(text):
-        exclude = set(string.punctuation)
-        return "".join(ch for ch in text if ch not in exclude)
+        exclude = set(string.punctuation) | {"«", "»", "’", "“", "”"}
+        apostrophes = {"'", "’", "‘"}
+        # Delete apostrophes (as in the original SQuAD metric), but replace other
+        # punctuation with spaces to avoid gluing tokens together (e.g. in math expressions).
+        parts = []
+        for ch in text:
+            if ch in exclude:
+                if ch not in apostrophes:
+                    parts.append(" ")
+            else:
+                parts.append(ch)
+        return "".join(parts)
 
-    answer = str(answer)
-    return white_space_fix(remove_punc(remove_articles(answer.lower())))
+    answer = str(answer).lower()
+    # Normalize spaces around apostrophes (e.g., "l' eau" or "l 'eau" -> "l'eau")
+    answer = re.sub(r"\s*['’‘]\s*", "'", answer)
+    return white_space_fix(remove_punc(remove_articles(answer)))
 
 
 def f1_score(prediction: str, ground_truth: str) -> float:
