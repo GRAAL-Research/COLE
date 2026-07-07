@@ -153,7 +153,7 @@ and adds set-based and structured-question metrics:
 |-----------------|--------|
 | `single_choice`, `true_false` | Accuracy |
 | `multiple_choice` | Set F1 (+ exact set match) |
-| `short_answer` | FQuAD-style mean(EM, F1) over accepted answers |
+| `short_answer` | FQuAD-style mean(EM, F1), or math-aware equivalence when the row's subject is mathematical |
 | `association` | F1 over pairs (+ exact match) |
 | `categorization` | Fraction of correctly classified elements (+ exact match) |
 | `ordering` | Exact match (+ pairwise concordance) |
@@ -161,6 +161,26 @@ and adds set-based and structured-question metrics:
 It reports a per-type score and two composites: unweighted (mean of per-type
 scores, GLUE-style) and weighted by the number of instances of each type. Run it
 with `python -m cole.metrics.mixed_questions <gold.jsonl>`.
+
+#### Mathematical short answers
+
+`cole/metrics/math_metric.py` provides SymPy-based scoring for `short_answer`
+rows whose `subjects` field flags them as mathematical (`mathematics`,
+`mathématiques`, `mathématique`, or `math`). `score_short_answer` routes those
+rows to `math_exact_match_score` / `math_f1_score` instead of the plain FQuAD
+primitives, so mathematically equivalent answers match despite surface
+differences:
+
+- exponent and spacing normalization (`2^5` == `2 ^ 5` == `32`);
+- fractions and decimals (`1/2` == `0.5`);
+- French decimal notation (`3,14` == `3.14`), while genuine coordinates keep
+  their tuple reading (`(24, 14)` == `24,14`);
+- coordinate and list tuples (`(24, 14)` == `24,14`);
+- algebraic equivalence via `sympy.simplify` (`(x - 1)*(2*x + 3)` == `2*x**2 + x - 3`).
+
+Numeric ground truths stored as JSON numbers are coerced before parsing, and
+exact match is reflexive for any identical answer. Non-mathematical
+`short_answer` rows keep the original FQuAD behavior.
 
 ## CI/CD Pipeline
 

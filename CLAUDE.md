@@ -25,7 +25,7 @@ pytest
 - `cole/backend/` — FastAPI app (`submission_api.py` is the entry point)
 - `cole/dataset/` — HuggingFace dataset loading (repo: `graalul/COLE`)
 - `cole/task/` — Task definitions and evaluation logic
-- `cole/metrics/` — Metric wrappers (accuracy, F1, pearson, fquad); `mixed_questions.py` evaluates JSONL files mixing several question types (Netquiz/COLE corpus)
+- `cole/metrics/` — Metric wrappers (accuracy, F1, pearson, fquad); `math_metric.py` scores math answers by SymPy equivalence; `mixed_questions.py` evaluates JSONL files mixing several question types (Netquiz/COLE corpus)
 - `frontend/src/app/` — Next.js App Router pages and components
 - `tests/` — pytest tests (skip automatically without HF_TOKEN)
 
@@ -58,8 +58,10 @@ python -m cole.metrics.mixed_questions gold.jsonl
 python -m cole.metrics.mixed_questions gold.jsonl --predictions preds.jsonl --output report.json
 ```
 Supported types and their metric: `single_choice`/`true_false` (accuracy),
-`multiple_choice` (set F1), `short_answer` (FQuAD EM+F1), `association` (pair F1),
-`categorization` (per-element accuracy), `ordering` (exact match + pairwise concordance).
+`multiple_choice` (set F1), `short_answer` (FQuAD EM+F1, or SymPy-based math
+equivalence via `math_metric.py` when the row's `subjects` flag it as
+mathematical), `association` (pair F1), `categorization` (per-element accuracy),
+`ordering` (exact match + pairwise concordance).
 
 ## Conventions
 - Python: black formatting (line-length 88), pylint score must be 10.0
