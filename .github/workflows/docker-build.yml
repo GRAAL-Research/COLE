@@ -12,6 +12,6 @@ jobs:
           sudo rm -rf /opt/ghc
           sudo rm -rf "/usr/local/share/boost"
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Build Docker image
         run: docker build -t cole:test .
