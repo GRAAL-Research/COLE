@@ -9,6 +9,7 @@ scipy
 pandas
 requests
 evaluate
+sympy
 python-multipart
 scikit-learn
 # Web backend (si tu utilises FastAPI/Flask, sinon à ignorer)
