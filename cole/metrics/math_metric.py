@@ -1,6 +1,13 @@
 from collections import Counter
+import re
 from typing import Any, List
 import sympy as sp
+from sympy.parsing.sympy_parser import (
+    convert_xor,
+    implicit_multiplication_application,
+    parse_expr,
+    standard_transformations,
+)
 
 
 def clean_parentheses(text: str) -> str:
@@ -58,13 +65,23 @@ def parse_single_math_token(token: str) -> Any:
     try:
         # Standardize exponentiation syntax for SymPy
         cleaned = token.replace("^", "**")
-        
+
         # Check if the token contains any word of length >= 3 that is not a math function.
         # This prevents plain text (like "Section A") from being parsed as algebraic products (like s*e*c*t*i*o*n * a).
-        import re
         has_text_words = False
-        for word in re.findall(r'[a-zA-Z]+', cleaned):
-            if len(word) >= 3 and word not in {'sin', 'cos', 'tan', 'log', 'ln', 'exp', 'sqrt', 'abs', 'max', 'min'}:
+        for word in re.findall(r"[a-zA-Z]+", cleaned):
+            if len(word) >= 3 and word not in {
+                "sin",
+                "cos",
+                "tan",
+                "log",
+                "ln",
+                "exp",
+                "sqrt",
+                "abs",
+                "max",
+                "min",
+            }:
                 has_text_words = True
                 break
 
@@ -74,20 +91,18 @@ def parse_single_math_token(token: str) -> Any:
         else:
             # Use advanced SymPy parsing to support implicit multiplication (e.g. 2x -> 2*x, 3(a+b) -> 3*(a+b))
             # and prevent conflicts with reserved letter class/constant names (e.g., O, I, E)
-            from sympy.parsing.sympy_parser import (
-                parse_expr,
-                standard_transformations,
+            global_dict = dict(sp.__dict__)
+            for letter in ["O", "I", "E", "S", "N", "C", "Q"]:
+                global_dict[letter] = sp.Symbol(letter)
+
+            transform = standard_transformations + (
                 implicit_multiplication_application,
                 convert_xor,
             )
-            
-            global_dict = dict(sp.__dict__)
-            for letter in ['O', 'I', 'E', 'S', 'N', 'C', 'Q']:
-                global_dict[letter] = sp.Symbol(letter)
-                
-            transform = standard_transformations + (implicit_multiplication_application, convert_xor)
-            expr = parse_expr(cleaned, transformations=transform, global_dict=global_dict)
-            
+            expr = parse_expr(
+                cleaned, transformations=transform, global_dict=global_dict
+            )
+
         if expr is not None:
             return expr
     except Exception:
