@@ -113,3 +113,22 @@ class MathMetricTest(TestCase):
         # Double interpretation must not create false positives.
         self.assertFalse(math_exact_match_score("3,14", "3,15"))
         self.assertFalse(math_exact_match_score("3,14", "3.15"))
+
+    def test_implicit_multiplication(self):
+        # Implicit multiplication must be understood on both sides.
+        self.assertTrue(math_exact_match_score("2x", "2*x"))
+        self.assertTrue(math_exact_match_score("xy", "x*y"))
+        self.assertTrue(math_exact_match_score("3(a+b)", "3*a + 3*b"))
+        self.assertTrue(math_exact_match_score("2(x+1)", "2x+2"))
+        self.assertEqual(1.0, math_f1_score("2x", "2*x"))
+        # Different symbols or operators must still not match.
+        self.assertFalse(math_exact_match_score("2x", "2*y"))
+        self.assertFalse(math_exact_match_score("xy", "x + y"))
+
+    def test_reserved_sympy_letters_are_plain_symbols(self):
+        # Single letters SymPy reserves (I, O, E, ...) must behave as ordinary
+        # symbols, not as the imaginary unit / big-O / Euler's number.
+        self.assertTrue(math_exact_match_score("2I", "2*I"))
+        self.assertTrue(math_exact_match_score("a*I", "I*a"))
+        self.assertTrue(math_exact_match_score("O + O", "2*O"))
+        self.assertFalse(math_exact_match_score("2I", "2*O"))
