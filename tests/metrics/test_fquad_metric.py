@@ -37,6 +37,19 @@ class NormalizeAnswerTest(TestCase):
         self.assertEqual(normalize_answer("(24,14)"), normalize_answer("(24, 14)"))
         self.assertEqual(normalize_answer("[24, 14]"), normalize_answer("(24, 14)"))
 
+    def test_preserves_negative_sign(self):
+        # A leading minus before a digit is part of the number, not punctuation.
+        self.assertEqual("-16", normalize_answer("-16"))
+        # So "16" and "-16" must NOT normalize to the same value.
+        self.assertNotEqual(normalize_answer("16"), normalize_answer("-16"))
+
+    def test_preserves_decimal_point(self):
+        # A dot between two digits is a decimal point, kept as a single token.
+        self.assertEqual("2.13", normalize_answer("2.13"))
+        self.assertNotEqual(normalize_answer("2.13"), normalize_answer("21.3"))
+        # A dot that is not between digits stays sentence punctuation (removed).
+        self.assertEqual("fin", normalize_answer("fin."))
+
 
 class F1ScoreTest(TestCase):
     def test_identical_answers_score_one(self):
@@ -57,6 +70,15 @@ class ExactMatchScoreTest(TestCase):
 
     def test_mismatch(self):
         self.assertFalse(exact_match_score("oui", "non"))
+
+    def test_no_false_positive_on_sign_or_decimal(self):
+        # Regression: minus sign and decimal point used to be stripped, so
+        # "16" wrongly matched "-16" and "2.13" wrongly collided with "21.3".
+        self.assertFalse(exact_match_score("16", "-16"))
+        self.assertFalse(exact_match_score("2.13", "21.3"))
+        # A genuinely equal numeric answer still matches.
+        self.assertTrue(exact_match_score("-16", "-16"))
+        self.assertTrue(exact_match_score("2.13", "2.13"))
 
 
 class MetricMaxOverGroundTruthsTest(TestCase):
