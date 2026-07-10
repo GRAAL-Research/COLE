@@ -151,6 +151,9 @@ def check_mathematical_equivalence(val1: Any, val2: Any) -> bool:
             return False
 
     if type(val1) != type(val2):
+        # Numbers of different Python types are still equal by value (2 == 2.0).
+        if isinstance(val1, (float, int)) and isinstance(val2, (float, int)):
+            return val1 == val2
         # Allow comparing float with SymPy number
         if isinstance(val1, (float, int)) and isinstance(val2, sp.Basic):
             try:
