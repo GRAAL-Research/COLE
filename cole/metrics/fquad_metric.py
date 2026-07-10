@@ -32,10 +32,16 @@ def normalize_answer(answer: str) -> str:
                 if ch in apostrophes:
                     continue
                 # Keep minus sign if it's followed by a digit (negative number)
-                if ch == "-" and i + 1 < len(text) and text[i+1].isdigit():
+                if ch == "-" and i + 1 < len(text) and text[i + 1].isdigit():
                     parts.append(ch)
                 # Keep dot if it's between two digits (decimal point)
-                elif ch == "." and i > 0 and text[i-1].isdigit() and i + 1 < len(text) and text[i+1].isdigit():
+                elif (
+                    ch == "."
+                    and i > 0
+                    and text[i - 1].isdigit()
+                    and i + 1 < len(text)
+                    and text[i + 1].isdigit()
+                ):
                     parts.append(ch)
                 else:
                     parts.append(" ")
