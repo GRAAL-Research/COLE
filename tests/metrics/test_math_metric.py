@@ -2,6 +2,8 @@ from unittest import TestCase
 import sympy as sp
 
 from cole.metrics.math_metric import (
+    check_mathematical_equivalence,
+    clean_parentheses,
     parse_math_expression,
     math_exact_match_score,
     math_f1_score,
@@ -132,3 +134,36 @@ class MathMetricTest(TestCase):
         self.assertTrue(math_exact_match_score("a*I", "I*a"))
         self.assertTrue(math_exact_match_score("O + O", "2*O"))
         self.assertFalse(math_exact_match_score("2I", "2*O"))
+
+    def test_bracket_delimited_lists(self):
+        # Square brackets enclose a list just like parentheses.
+        self.assertEqual("1, 2", clean_parentheses("[1, 2]"))
+        self.assertEqual((1.0, 2.0), parse_math_expression("[1, 2]"))
+        self.assertTrue(math_exact_match_score("[1, 2]", "1,2"))
+        # A bracket that does not enclose the whole expression is left intact.
+        self.assertEqual("[1,2] + [3]", clean_parentheses("[1,2] + [3]"))
+
+    def test_float_and_sympy_number_match_both_orders(self):
+        # A plain float and a SymPy rational must compare equal regardless of side.
+        self.assertTrue(math_exact_match_score("0.5", "1/2"))
+        self.assertTrue(math_exact_match_score("1/2", "0.5"))
+
+    def test_tuples_of_different_length_do_not_match(self):
+        self.assertFalse(math_exact_match_score("1,2", "1,2,3"))
+        self.assertFalse(check_mathematical_equivalence((1.0, 2.0), (1.0, 2.0, 3.0)))
+
+    def test_int_and_float_are_equivalent_by_value(self):
+        # Regression: type()-based comparison used to reject 2 vs 2.0 as unequal.
+        self.assertTrue(check_mathematical_equivalence(2, 2.0))
+        self.assertFalse(check_mathematical_equivalence(2, 3.0))
+
+    def test_f1_zero_when_no_common_tokens_or_empty(self):
+        self.assertEqual(0.0, math_f1_score("1", "2"))
+        self.assertEqual(0.0, math_f1_score("", "x"))
+
+    def test_empty_inputs(self):
+        # Empty and empty-after-cleaning inputs must not crash.
+        self.assertEqual("", clean_parentheses(""))
+        self.assertEqual("", parse_math_expression(""))
+        self.assertIsNone(parse_math_expression("()"))
+        self.assertTrue(math_exact_match_score("", ""))
