@@ -10,6 +10,23 @@ from sympy.parsing.sympy_parser import (
 )
 
 
+def check_unsafe_powers(expr) -> bool:
+    """Returns True if the expression contains unsafe powers that could cause hangs."""
+    if expr.is_Atom:
+        return False
+    if expr.is_Pow:
+        base, exp = expr.args
+        if exp.free_symbols == set():
+            try:
+                val = abs(float(exp.evalf()))
+                if val > 1000:
+                    return True
+            except Exception:
+                return True
+        return check_unsafe_powers(base) or check_unsafe_powers(exp)
+    return any(check_unsafe_powers(arg) for arg in expr.args)
+
+
 def clean_parentheses(text: str) -> str:
     """Removes outer parentheses/brackets only if they enclose the entire expression."""
     text = text.strip()
@@ -63,8 +80,9 @@ def parse_single_math_token(token: str) -> Any:
 
     # Try parsing as SymPy expression (handles algebra like x+y, fractions like 1/2)
     try:
-        # Standardize exponentiation syntax for SymPy
+        # Standardize exponentiation and equality syntax for SymPy
         cleaned = token.replace("^", "**")
+        cleaned = re.sub(r"(?<![<!=>])=(?![=])", "==", cleaned)
 
         # Check if the token contains any word of length >= 3 that is not a math function.
         # This prevents plain text (like "Section A") from being parsed as algebraic products (like s*e*c*t*i*o*n * a).
@@ -87,7 +105,7 @@ def parse_single_math_token(token: str) -> Any:
 
         if has_text_words:
             # Fall back to standard sympify for expressions with text words
-            expr = sp.sympify(cleaned)
+            expr = sp.sympify(cleaned, evaluate=False)
         else:
             # Use advanced SymPy parsing to support implicit multiplication (e.g. 2x -> 2*x, 3(a+b) -> 3*(a+b))
             # and prevent conflicts with reserved letter class/constant names (e.g., O, I, E)
@@ -100,10 +118,15 @@ def parse_single_math_token(token: str) -> Any:
                 convert_xor,
             )
             expr = parse_expr(
-                cleaned, transformations=transform, global_dict=global_dict
+                cleaned,
+                transformations=transform,
+                global_dict=global_dict,
+                evaluate=False,
             )
 
         if expr is not None:
+            if check_unsafe_powers(expr):
+                raise ValueError("Unsafe power expression detected")
             return expr
     except Exception:
         pass
@@ -144,6 +167,12 @@ def parse_math_expression(text: str) -> Any:
 def check_mathematical_equivalence(val1: Any, val2: Any) -> bool:
     # pylint: disable=too-many-return-statements
     """Determines if two parsed math values are equivalent."""
+    if isinstance(val1, sp.Equality) and isinstance(val2, sp.Equality):
+        try:
+            return sp.simplify((val1.lhs - val1.rhs) - (val2.lhs - val2.rhs)) == 0
+        except Exception:
+            return False
+
     if isinstance(val1, sp.Basic) and isinstance(val2, sp.Basic):
         try:
             return sp.simplify(val1 - val2) == 0
