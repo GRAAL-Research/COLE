@@ -176,10 +176,16 @@ differences:
 - French decimal notation (`3,14` == `3.14`), while genuine coordinates keep
   their tuple reading (`(24, 14)` == `24,14`);
 - coordinate and list tuples (`(24, 14)` == `24,14`);
-- algebraic equivalence via `sympy.simplify` (`(x - 1)*(2*x + 3)` == `2*x**2 + x - 3`).
+- algebraic equivalence via `sympy.simplify` (`(x - 1)*(2*x + 3)` == `2*x**2 + x - 3`);
+- implicit multiplication (`2x` == `2*x`, `3(a+b)` == `3*a + 3*b`);
+- equations compared structurally by `lhs - rhs` (`y = x + 1` == `y - 1 = x`); this
+  matches rearrangements but not solution-equivalent forms scaled by a factor
+  (`2x = 4` does not match `x = 2`).
 
 Numeric ground truths stored as JSON numbers are coerced before parsing, and
-exact match is reflexive for any identical answer. Non-mathematical
+exact match is reflexive for any identical answer. To stay responsive, answers
+whose parse contains a power with an exponent above 1000 are rejected (they fall
+back to plain string comparison) instead of being expanded. Non-mathematical
 `short_answer` rows keep the original FQuAD behavior.
 
 ## CI/CD Pipeline
