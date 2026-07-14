@@ -3,6 +3,7 @@ import sympy as sp
 
 from cole.metrics.math_metric import (
     check_mathematical_equivalence,
+    check_unsafe_powers,
     clean_parentheses,
     parse_math_expression,
     math_exact_match_score,
@@ -167,3 +168,29 @@ class MathMetricTest(TestCase):
         self.assertEqual("", parse_math_expression(""))
         self.assertIsNone(parse_math_expression("()"))
         self.assertTrue(math_exact_match_score("", ""))
+
+
+class MathEquationAndSafetyTest(TestCase):
+    def test_equation_structural_equivalence(self):
+        # Equations written with "=" compare by (lhs - rhs); structurally equal
+        # rearrangements match.
+        self.assertTrue(math_exact_match_score("x+1=2", "x=1"))
+        self.assertTrue(math_exact_match_score("y=x+1", "y-1=x"))
+        self.assertFalse(math_exact_match_score("x+1=2", "x=3"))
+
+    def test_equation_equivalence_is_structural_not_by_solution(self):
+        # Documented limitation: "2x=4" and "x=2" share the same solution but
+        # their (lhs - rhs) differ by a scalar factor, so they are NOT matched.
+        self.assertFalse(math_exact_match_score("2x=4", "x=2"))
+
+    def test_unsafe_powers_do_not_hang(self):
+        # A huge exponent is rejected during parsing (falls back to string), so
+        # scoring returns quickly instead of expanding the number.
+        self.assertFalse(math_exact_match_score("2^99999", "5"))
+        self.assertFalse(math_exact_match_score("2**2**30", "5"))
+
+    def test_check_unsafe_powers_flags_large_exponents(self):
+        self.assertTrue(check_unsafe_powers(sp.sympify("2**5000", evaluate=False)))
+        self.assertFalse(check_unsafe_powers(sp.sympify("2**5", evaluate=False)))
+        # A symbolic exponent is not a numeric blow-up risk.
+        self.assertFalse(check_unsafe_powers(sp.sympify("2**x", evaluate=False)))
