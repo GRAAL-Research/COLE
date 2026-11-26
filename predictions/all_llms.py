@@ -70,6 +70,16 @@ llms = {
         "ibm-granite/granite-3.3-8b-instruct",
     ],
     "Apertus": ["swiss-ai/Apertus-8B-2509", "swiss-ai/Apertus-8B-Instruct-2509"],
+    "recent": [
+        "google/gemma-4-31B-it",
+        "google/gemma-4-26B-A4B-it",
+        "Qwen/Qwen3.6-27B",
+        "Qwen/Qwen3.6-35B-A3B",
+        "allenai/Olmo-3-7B-Instruct",
+        "allenai/Olmo-3.1-32B-Instruct",
+        "ibm-granite/granite-4.1-30b",
+        "ibm-granite/granite-4.1-8b",
+    ],
     "all": [],
 }
 for key in llms.keys():
