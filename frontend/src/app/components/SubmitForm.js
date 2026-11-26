@@ -10,6 +10,9 @@ import { Trans, useTranslation } from 'react-i18next';
 const INPUT_CLASS =
   "w-full rounded-md border border-gray-400 p-3 text-gray-900 aria-[invalid=true]:border-red-700";
 
+const FILE_INPUT_CLASS =
+  `${INPUT_CLASS} cursor-pointer p-2 text-sm text-gray-700 file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:text-sm file:font-medium file:text-blue-800 hover:file:bg-blue-100`;
+
 export default function SubmitForm({ onStateChange }) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -168,7 +171,7 @@ export default function SubmitForm({ onStateChange }) {
             accept=".zip"
             required
             onChange={(e) => { setFile(e.target.files[0] ?? null); clearFieldError('file'); }}
-            className={INPUT_CLASS}
+            className={FILE_INPUT_CLASS}
             {...aria('file', 'zipfile', 'zipfile-hint')}
           />,
           <p id="zipfile-hint" className="mb-2 text-sm text-gray-700">

@@ -101,7 +101,13 @@ export default function Modal({ title, children, onClose, size = "md", dismissib
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-4"
-      onMouseDown={(e) => { if (e.target === e.currentTarget && dismissible) onClose(); }}
+      onMouseDown={(e) => {
+        if (e.target !== e.currentTarget) return;
+        // Keep the default mousedown action (focus moves to <body>) from
+        // undoing the focus restore that runs when the modal unmounts.
+        e.preventDefault();
+        if (dismissible) onClose();
+      }}
     >
       <div
         ref={panelRef}

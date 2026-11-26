@@ -33,6 +33,13 @@ body {
   }
 }
 
+/* Placeholders: gray-600 (7.5:1 on white) instead of the default 50% mix. */
+input::placeholder,
+textarea::placeholder {
+  color: #4b5563;
+  opacity: 1;
+}
+
 code {
   background-color: #f3f4f6;
   padding: 0.15em 0.4em;
