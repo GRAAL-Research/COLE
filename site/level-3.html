@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Article | COLE" data-fr="Article | COLE">Article | COLE</title>
+<meta name="description" content="Évaluation de 96 modèles de langage sur 23 tests de compréhension du français, dont le français québécois.">
+<meta property="og:site_name" content="COLE">
+<meta property="og:locale" content="fr_CA">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://colebenchmark.org/level-3.html">
+<meta property="og:title" content="COLE : quelle IA comprend le français québécois ?">
+<meta property="og:description" content="COLE : 96 modèles de langage, 23 tests en français.">
+<meta property="og:image" content="https://colebenchmark.org/cards/card-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Carte de partage COLE : trois chiffres tirés des résultats.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="COLE : quelle IA comprend le français québécois ?">
+<meta name="twitter:description" content="COLE : 96 modèles de langage, 23 tests en français.">
+<meta name="twitter:image" content="https://colebenchmark.org/cards/card-fr.png">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="tokens.css">
+<link rel="preload" href="fonts/SchibstedGrotesk-800.ttf" as="font" type="font/ttf" crossorigin>
+
+</head>
+<body data-page="paper">
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="fr">Aller au contenu</span></a>
+<header class="site-header ">
+<div class="wrap bar">
+<a class="wordmark" href="index.html" aria-label="COLE, home" data-i18n-attrs="aria-label" data-en-aria-label="COLE, home" data-fr-aria-label="COLE, accueil">COLE</a>
+<button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links"><span lang="en">Menu</span><span lang="fr">Menu</span></button>
+<div id="nav-links" class="nav-links">
+<nav class="nav-main" aria-label="Main" data-i18n-attrs="aria-label" data-en-aria-label="Main" data-fr-aria-label="Principale"><ol class="nav-journey" aria-label="Journey, four steps" data-i18n-attrs="aria-label" data-en-aria-label="Journey, four steps" data-fr-aria-label="Parcours, quatre étapes"><li><a href="model.html" data-carry><span lang="en">Model sheet</span><span lang="fr">Fiche d’un modèle</span></a></li><li><a href="choose-a-model.html" data-carry><span lang="en">Compare models</span><span lang="fr">Comparer des modèles</span></a></li><li><a href="all-results.html" data-carry><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></li><li><a href="explore.html" data-carry><span lang="en">Explore</span><span lang="fr">Explorer</span></a></li></ol></nav>
+<div class="nav-right">
+<ul class="nav-secondary" aria-label="About the project" data-i18n-attrs="aria-label" data-en-aria-label="About the project" data-fr-aria-label="À propos du projet"><li><a href="level-3.html#article" aria-current="page"><span lang="en">Article</span><span lang="fr">Article</span></a></li><li><a href="level-3.html#protocol"><span lang="en">Methodology</span><span lang="fr">Méthodologie</span></a></li><li><a href="plain-language.html"><span lang="en">Poster</span><span lang="fr">Affiche</span></a></li></ul>
+<div class="lang" role="group" aria-label="Language" data-i18n-attrs="aria-label" data-en-aria-label="Language" data-fr-aria-label="Langue"><button type="button" data-lang="fr" lang="fr" aria-label="Français" aria-pressed="true">FR</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
+<button class="btn btn-sm" type="button" data-open-contact><span lang="en">Contact</span><span lang="fr">Contact</span></button>
+</div>
+</div>
+</div>
+</header>
+<nav class="crumbs wrap" aria-label="Breadcrumb" data-i18n-attrs="aria-label" data-en-aria-label="Breadcrumb" data-fr-aria-label="Fil d’Ariane"><ol><li><a href="index.html"><span lang="en">Home</span><span lang="fr">Accueil</span></a></li><li><span aria-current="page"><span lang="en">Article</span><span lang="fr">Article</span></span></li></ol></nav>
+<main id="main">
+<section class="section" style="padding-block:calc(var(--pad-section) * 0.5)" aria-labelledby="page-title">
+<div class="wrap stack-lg">
+<h1 id="page-title" class="display mask-block"><span class="mask-line"><span><span lang="en">Article</span><span lang="fr">Article</span></span></span></h1>
+<div class="axis" style="margin-top:1.5rem"><div class="zone-note"></div><div class="stack" data-stagger>
+<p class="lead col-text" data-reveal><span lang="en">For researchers. Scores here carry two decimals, as in the paper.</span><span lang="fr">Pour la recherche. Les scores ont ici deux décimales, comme dans l’article.</span></p>
+</div></div>
+</div>
+</section>
+
+<section id="article" class="section ground-deep" aria-labelledby="paper-title">
+<div class="wrap axis">
+<div class="zone-note" data-reveal><p class="stat"><b>ICLR 2026</b><span><span lang="en">workshop poster</span><span lang="fr">affiche d’atelier</span></span></p></div>
+<div class="axis-main stack-lg"><h2 id="paper-title" class="head" data-reveal><span lang="en">Article</span><span lang="fr">Article</span></h2>
+<div class="stack col-text" data-reveal>
+<p class="lead">Lost in Translation: Why SOTA LLMs Struggle with French NLU Frontiers</p>
+<p>David Beauchemin, Yan Tremblay, Mohamed Youssef, Richard Khoury (2026)</p>
+<p>ICLR 2026, Poster in Workshop: I Can&#x27;t Believe It&#x27;s Not Better: Where Large Language Models need to improve. <span lang="en">This is a workshop poster, not a main-conference paper.</span><span lang="fr">C’est une affiche d’atelier, pas un article de la conférence principale.</span></p>
+<p><a class="btn" href="https://iclr.cc/virtual/2026/10014620"><span lang="en">Read the accepted paper</span><span lang="fr">Lire l’article accepté</span></a></p>
+</div>
+<div class="stack col-text" data-reveal><p class="strong"><span lang="en">Abstract (English original)</span><span lang="fr">Résumé (original anglais)</span></p><p lang="en" style="display:block !important">Despite LLMs&#x27; dominance in English, their transferability to French NLU remains inconsistent. To characterize this limitation, we present COLE, a new benchmark comprising 23 diverse French tasks, and use it to reveal significant failure modes in state-of-the-art (SOTA) models. Our analysis reveals three critical negative results: 1) a persistent performance gap where top open-weight models lag behind closed models by over 20%, 2) the illusion of specialization, where surface-level fluency in tuned models masks deep reasoning deficits, and 3) catastrophic failure in zero-shot extractive QA and regional dialect understanding, where many models, including top-tier reasoning models, achieve 0% Exact Match or perform near random baselines. We analyze these unexpected failures to highlight specific frontiers (morphology, cultural nuance) where scaling laws currently fail to generalize.</p></div>
+<details class="how" data-reveal><summary>BibTeX</summary><pre class="bib"><code>@inproceedings{beauchemin2026lost,
+  title={Lost in Translation: Why {SOTA} {LLM}s Struggle with {F}rench {NLU} Frontiers},
+  author={Beauchemin, David and Tremblay, Yan and Youssef, Mohamed and Khoury, Richard},
+  booktitle={ICLR 2026 Workshop: I Can&#x27;t Believe It&#x27;s Not Better: Where Large Language Models need to improve},
+  year={2026},
+  url={https://iclr.cc/virtual/2026/10014620}
+}</code></pre></details>
+</div>
+</div>
+</section>
+
+<section id="protocol" class="section" aria-labelledby="protocol-title">
+<div class="wrap axis">
+<div class="zone-note stack-lg" data-reveal><div class="pic pic-wide"><img src="assets/printing-house-16c.jpg" alt="Engraving of a sixteenth-century printing house." data-i18n-attrs="alt" data-en-alt="Engraving of a sixteenth-century printing house." data-fr-alt="Gravure d’une imprimerie du XVIe siècle." loading="lazy" decoding="async" style="object-position:60% 50%"></div></div>
+<div class="axis-main stack-lg"><h2 id="protocol-title" class="head" data-reveal><span lang="en">Protocol note</span><span lang="fr">Note de protocole</span></h2>
+<div class="cols-2">
+<div data-reveal><p><span lang="en">A task score is the mean of its metrics among accuracy, f1, pearson, pearsonr, spearman, fquad and exact match. A value above 1 is divided by 100.</span><span lang="fr">Le score d’une tâche est la moyenne de ses métriques parmi accuracy, f1, pearson, pearsonr, spearman, fquad et exact match. Une valeur supérieure à 1 est divisée par 100.</span></p></div>
+<div data-reveal><p><span lang="en">A skill score is the mean of the tasks the model has. Missing tasks are never counted as zero. The overall score follows the live leaderboard.</span><span lang="fr">Le score d’une compétence est la moyenne des tâches du modèle. Une tâche manquante n’est jamais comptée comme zéro. Le score général suit le classement en ligne.</span></p></div>
+<div data-reveal><p><span lang="en">To check with the authors: the entry frblimp duplicates qfrblimp in all 96 results, so it is left out and counted once; in this snapshot the Quebec grammar test (qfrblimp) therefore cannot be told apart from the general one. The wsd metric also holds values below 1.</span><span lang="fr">À vérifier avec les auteurs : l’entrée frblimp duplique qfrblimp dans les 96 résultats ; elle est donc écartée et comptée une fois. Dans ce relevé, le test de grammaire québécoise (qfrblimp) ne se distingue donc pas de la version générale. La métrique wsd contient aussi des valeurs inférieures à 1.</span></p></div>
+</div></div>
+</div>
+</section>
+
+<section class="section ground-tint" aria-labelledby="tasks-title">
+<div class="wrap axis">
+<div class="zone-note" data-reveal><p class="lead"><span lang="en">The 23 tasks, grouped into seven skills.</span><span lang="fr">Les 23 tâches, regroupées en sept compétences.</span></p></div>
+<div class="axis-main"><h2 id="tasks-title" class="head" data-reveal><span lang="en">Task list</span><span lang="fr">Liste des tâches</span></h2></div>
+<div class="span-all tbl-wide" data-reveal><div class="table-scroll" tabindex="0" role="region" aria-label="Score per task, two decimals" data-i18n-attrs="aria-label" data-en-aria-label="Score per task, two decimals" data-fr-aria-label="Score par tâche, deux décimales"><table class="data"><caption><span lang="en">Score per task for the six default models, two decimals, in percent.</span><span lang="fr">Score par tâche pour les six modèles par défaut, deux décimales, en pourcentage.</span></caption><thead><tr><th scope="col" class="l sticky-1" style="min-width:12rem;position:sticky;left:0"><span lang="en">Task</span><span lang="fr">Tâche</span></th><th scope="col" class="l"><span lang="en">Skill</span><span lang="fr">Compétence</span></th><th scope="col" class="l"><span lang="en">Metric</span><span lang="fr">Métrique</span></th><th scope="col">Claude Opus 4<span class="unit">(%)</span></th><th scope="col">GPT-4o<span class="unit">(%)</span></th><th scope="col">Qwen3 14B<span class="unit">(%)</span></th><th scope="col">Meta Llama 3.1 8B Instruct<span class="unit">(%)</span></th><th scope="col">Llama 3.2 1B Instruct<span class="unit">(%)</span></th><th scope="col"><span lang="en">Random guessing</span><span lang="fr">Tirage au hasard</span><span class="unit">(%)</span></th></tr></thead><tbody><tr><th scope="row" class="l">AlloCiné</th><td class="l"><span lang="en">Feelings</span><span lang="fr">Sentiments</span></td><td class="l">Accuracy</td><td>96.92</td><td>94.44</td><td>86.94</td><td>82.30</td><td>58.78</td><td>50.44</td></tr><tr><th scope="row" class="l">MMS</th><td class="l"><span lang="en">Feelings</span><span lang="fr">Sentiments</span></td><td class="l">Accuracy</td><td>75.65</td><td>74.92</td><td>72.32</td><td>56.18</td><td>34.03</td><td>33.60</td></tr><tr><th scope="row" class="l">FraCaS</th><td class="l"><span lang="en">Reasoning</span><span lang="fr">Raisonnement</span></td><td class="l">Accuracy</td><td>61.79</td><td>58.21</td><td>55.82</td><td>40.90</td><td>54.93</td><td>30.15</td></tr><tr><th scope="row" class="l">GQNLI-Fr</th><td class="l"><span lang="en">Reasoning</span><span lang="fr">Raisonnement</span></td><td class="l">Accuracy</td><td>60.00</td><td>66.67</td><td>30.00</td><td>36.67</td><td>16.67</td><td>26.67</td></tr><tr><th scope="row" class="l">LingNLI</th><td class="l"><span lang="en">Reasoning</span><span lang="fr">Raisonnement</span></td><td class="l">Accuracy</td><td>69.55</td><td>70.75</td><td>54.20</td><td>38.22</td><td>33.17</td><td>33.52</td></tr><tr><th scope="row" class="l">MNLI nineeleven FR-MT</th><td class="l"><span lang="en">Reasoning</span><span lang="fr">Raisonnement</span></td><td class="l">Accuracy</td><td>70.30</td><td>72.40</td><td>60.80</td><td>39.95</td><td>33.15</td><td>34.20</td></tr><tr><th scope="row" class="l">RTE3-French</th><td class="l"><span lang="en">Reasoning</span><span lang="fr">Raisonnement</span></td><td class="l">Accuracy</td><td>82.88</td><td>79.00</td><td>56.62</td><td>41.75</td><td>47.25</td><td>34.12</td></tr><tr><th scope="row" class="l">SICK-FR</th><td class="l"><span lang="en">Reasoning</span><span lang="fr">Raisonnement</span></td><td class="l">Pearson</td><td>75.64</td><td>80.00</td><td>40.38</td><td>58.56</td><td>28.70</td><td>33.31</td></tr><tr><th scope="row" class="l">XNLI</th><td class="l"><span lang="en">Reasoning</span><span lang="fr">Raisonnement</span></td><td class="l">Accuracy</td><td>75.63</td><td>71.98</td><td>60.68</td><td>38.38</td><td>32.97</td><td>34.29</td></tr><tr><th scope="row" class="l">DACCORD</th><td class="l"><span lang="en">Reasoning</span><span lang="fr">Raisonnement</span></td><td class="l">Accuracy</td><td>95.07</td><td>96.62</td><td>61.80</td><td>74.37</td><td>49.90</td><td>50.00</td></tr><tr><th scope="row" class="l">FQuAD</th><td class="l"><span lang="en">Questions</span><span lang="fr">Questions</span></td><td class="l">F1, exact match</td><td>0.00</td><td>0.00</td><td>22.00</td><td>8.15</td><td>3.48</td><td>0.00</td></tr><tr><th scope="row" class="l">French BoolQ</th><td class="l"><span lang="en">Questions</span><span lang="fr">Questions</span></td><td class="l">Accuracy</td><td>94.94</td><td>94.38</td><td>56.74</td><td>55.62</td><td>47.75</td><td>55.62</td></tr><tr><th scope="row" class="l">PIAF</th><td class="l"><span lang="en">Questions</span><span lang="fr">Questions</span></td><td class="l">F1, exact match</td><td>27.57</td><td>0.00</td><td>22.00</td><td>7.47</td><td>1.49</td><td>3.26</td></tr><tr><th scope="row" class="l">MultiBLiMP-Fr</th><td class="l"><span lang="en">Grammar</span><span lang="fr">Grammaire</span></td><td class="l">Accuracy</td><td>98.70</td><td>98.70</td><td>48.05</td><td>62.34</td><td>44.16</td><td>51.95</td></tr><tr><th scope="row" class="l">QFrCoLA</th><td class="l"><span lang="en">Grammar</span><span lang="fr">Grammaire</span></td><td class="l">Accuracy</td><td>82.31</td><td>82.85</td><td>42.49</td><td>65.54</td><td>48.30</td><td>49.46</td></tr><tr><th scope="row" class="l">QFrBLiMP</th><td class="l"><span lang="en">Grammar</span><span lang="fr">Grammaire</span></td><td class="l">Accuracy</td><td>88.66</td><td>88.47</td><td>57.28</td><td>62.57</td><td>49.34</td><td>49.15</td></tr><tr><th scope="row" class="l">PAWS-X</th><td class="l"><span lang="en">Meaning</span><span lang="fr">Sens</span></td><td class="l">Accuracy</td><td>79.05</td><td>78.00</td><td>55.25</td><td>54.85</td><td>52.50</td><td>50.80</td></tr><tr><th scope="row" class="l">STS22</th><td class="l"><span lang="en">Meaning</span><span lang="fr">Sens</span></td><td class="l">Pearson</td><td>51.39</td><td>47.22</td><td>30.56</td><td>37.50</td><td>31.94</td><td>30.56</td></tr><tr><th scope="row" class="l">WSD-Fr</th><td class="l"><span lang="en">Meaning</span><span lang="fr">Sens</span></td><td class="l">Exact match</td><td>16.02</td><td>0.00</td><td>70.49</td><td>12.82</td><td>3.20</td><td>5.00</td></tr><tr><th scope="row" class="l">WiNo-X LM</th><td class="l"><span lang="en">Pronouns</span><span lang="fr">Pronoms</span></td><td class="l">Accuracy</td><td>91.34</td><td>83.03</td><td>57.79</td><td>50.91</td><td>51.63</td><td>49.98</td></tr><tr><th scope="row" class="l">WiNo-X MT</th><td class="l"><span lang="en">Pronouns</span><span lang="fr">Pronoms</span></td><td class="l">Accuracy</td><td>82.13</td><td>58.17</td><td>50.54</td><td>48.96</td><td>50.33</td><td>48.96</td></tr><tr><th scope="row" class="l">QFrCoRE</th><td class="l"><span lang="en">Quebec</span><span lang="fr">Québécois</span></td><td class="l">Accuracy</td><td>93.46</td><td>83.94</td><td>33.48</td><td>20.14</td><td>15.93</td><td>9.93</td></tr><tr><th scope="row" class="l">QFrCoRT</th><td class="l"><span lang="en">Quebec</span><span lang="fr">Québécois</span></td><td class="l">Accuracy</td><td>97.66</td><td>93.57</td><td>28.07</td><td>9.36</td><td>12.28</td><td>12.28</td></tr></tbody></table></div></div>
+</div>
+</section>
+</main>
+<footer class="site-footer ground-deep">
+<div class="wrap">
+<div class="footer-grid">
+<p class="lead zone-note" data-reveal><span lang="en">COLE is a GRAAL research project, Université Laval, Quebec.</span><span lang="fr">COLE est un projet de recherche du GRAAL, Université Laval, Québec.</span></p>
+<div class="stack">
+<ul class="footer-links" data-reveal>
+<li><a href="level-3.html"><span lang="en">Article</span><span lang="fr">Article</span></a></li>
+<li><a href="plain-language.html"><span lang="en">Poster</span><span lang="fr">Affiche</span></a></li>
+<li><a href="https://github.com/GRAAL-Research/COLE">GitHub</a></li>
+</ul>
+<details class="credits"><summary><span lang="en">Image credits</span><span lang="fr">Crédits des images</span></summary><p><span lang="en">Greyscale images from Wikimedia Commons. All in the public domain, except where noted.</span><span lang="fr">Images en niveaux de gris, Wikimedia Commons. Toutes du domaine public, sauf mention.</span></p><ul><li><a href="https://commons.wikimedia.org/wiki/File:Champlain_Market,_Quebec_(NBY_442137).jpg"><span lang="en">Champlain Market, Quebec</span><span lang="fr">Marché Champlain, Québec</span></a></li><li><a href="https://commons.wikimedia.org/wiki/File:Samuel_de_Champlain_Carte_geographique_de_la_Nouvelle_France.jpg"><span lang="en">Champlain’s map of New France</span><span lang="fr">Carte de la Nouvelle-France, Champlain</span></a></li><li><a href="https://commons.wikimedia.org/wiki/File:Casse_fran%C3%A7aise.jpg"><span lang="en">French type case</span><span lang="fr">Casse française</span></a></li><li><a href="https://commons.wikimedia.org/w/index.php?curid=133290410"><span lang="en">Inside a 16th-century print shop</span><span lang="fr">Vue intérieure d’une imprimerie au XVIe siècle</span></a> (CC0)</li><li><a href="https://commons.wikimedia.org/wiki/File:Qu%C3%A9bec_Sous-Le-Cap_165_(BAnQ_0003731687).jpg"><span lang="en">Québec, Sous-le-Cap</span><span lang="fr">Québec, Sous-le-Cap</span></a></li></ul></details>
+</div>
+</div>
+<div class="footer-name" aria-hidden="true"><span>COLE</span></div>
+</div>
+</footer>
+<dialog id="contact-dialog" aria-labelledby="contact-title">
+<div class="dlg">
+<h2 id="contact-title"><span lang="en">Contact</span><span lang="fr">Contact</span></h2>
+<p><span lang="en">To ask for an evaluation of your model, open an issue on the project’s GitHub page. We do not promise a delay, and each dated model version is evaluated once.</span><span lang="fr">Pour demander l’évaluation de votre modèle, ouvrez une demande sur la page GitHub du projet. Aucun délai n’est promis, et chaque version datée d’un modèle est évaluée une seule fois.</span></p>
+<p><a class="btn" href="https://github.com/GRAAL-Research/COLE/issues/new"><span lang="en">Open an issue</span><span lang="fr">Ouvrir une demande</span></a></p>
+<p><button class="link-btn" type="button" data-close><span lang="en">Close</span><span lang="fr">Fermer</span></button></p>
+</div>
+</dialog>
+<script src="app.js"></script>
+<script src="data.js"></script>
+
+</body>
+</html>

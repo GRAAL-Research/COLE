@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Model sheet | COLE" data-fr="Fiche d’un modèle | COLE">Fiche d’un modèle | COLE</title>
+<meta name="description" content="Évaluation de 96 modèles de langage sur 23 tests de compréhension du français, dont le français québécois.">
+<meta property="og:site_name" content="COLE">
+<meta property="og:locale" content="fr_CA">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://colebenchmark.org/model.html">
+<meta property="og:title" content="COLE : quelle IA comprend le français québécois ?">
+<meta property="og:description" content="COLE : 96 modèles de langage, 23 tests en français.">
+<meta property="og:image" content="https://colebenchmark.org/cards/card-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Carte de partage COLE : trois chiffres tirés des résultats.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="COLE : quelle IA comprend le français québécois ?">
+<meta name="twitter:description" content="COLE : 96 modèles de langage, 23 tests en français.">
+<meta name="twitter:image" content="https://colebenchmark.org/cards/card-fr.png">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="tokens.css">
+<link rel="preload" href="fonts/SchibstedGrotesk-800.ttf" as="font" type="font/ttf" crossorigin>
+
+</head>
+<body data-page="model">
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="fr">Aller au contenu</span></a>
+<header class="site-header ">
+<div class="wrap bar">
+<a class="wordmark" href="index.html" aria-label="COLE, home" data-i18n-attrs="aria-label" data-en-aria-label="COLE, home" data-fr-aria-label="COLE, accueil">COLE</a>
+<button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links"><span lang="en">Menu</span><span lang="fr">Menu</span></button>
+<div id="nav-links" class="nav-links">
+<nav class="nav-main" aria-label="Main" data-i18n-attrs="aria-label" data-en-aria-label="Main" data-fr-aria-label="Principale"><ol class="nav-journey" aria-label="Journey, four steps" data-i18n-attrs="aria-label" data-en-aria-label="Journey, four steps" data-fr-aria-label="Parcours, quatre étapes"><li><a href="model.html" data-carry aria-current="page"><span lang="en">Model sheet</span><span lang="fr">Fiche d’un modèle</span></a></li><li><a href="choose-a-model.html" data-carry><span lang="en">Compare models</span><span lang="fr">Comparer des modèles</span></a></li><li><a href="all-results.html" data-carry><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></li><li><a href="explore.html" data-carry><span lang="en">Explore</span><span lang="fr">Explorer</span></a></li></ol></nav>
+<div class="nav-right">
+<ul class="nav-secondary" aria-label="About the project" data-i18n-attrs="aria-label" data-en-aria-label="About the project" data-fr-aria-label="À propos du projet"><li><a href="level-3.html#article"><span lang="en">Article</span><span lang="fr">Article</span></a></li><li><a href="level-3.html#protocol"><span lang="en">Methodology</span><span lang="fr">Méthodologie</span></a></li><li><a href="plain-language.html"><span lang="en">Poster</span><span lang="fr">Affiche</span></a></li></ul>
+<div class="lang" role="group" aria-label="Language" data-i18n-attrs="aria-label" data-en-aria-label="Language" data-fr-aria-label="Langue"><button type="button" data-lang="fr" lang="fr" aria-label="Français" aria-pressed="true">FR</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
+<button class="btn btn-sm" type="button" data-open-contact><span lang="en">Contact</span><span lang="fr">Contact</span></button>
+</div>
+</div>
+</div>
+</header>
+<nav class="crumbs wrap" aria-label="Breadcrumb" data-i18n-attrs="aria-label" data-en-aria-label="Breadcrumb" data-fr-aria-label="Fil d’Ariane"><ol><li><a href="index.html"><span lang="en">Home</span><span lang="fr">Accueil</span></a></li><li><span aria-current="page"><span lang="en">Model sheet</span><span lang="fr">Fiche d’un modèle</span></span></li></ol></nav>
+<main id="main">
+<section class="section" style="padding-block:calc(var(--pad-section) * 0.5)" aria-labelledby="page-title">
+<div class="wrap stack-lg">
+<h1 id="page-title" class="display mask-block"><span class="mask-line"><span><span lang="en">Model sheet</span><span lang="fr">Fiche d’un modèle</span></span></span></h1>
+<div class="axis" style="margin-top:1.5rem"><div class="zone-note"></div><div class="stack" data-stagger>
+<p class="lead col-text" data-reveal><span lang="en">Start from one model. See where it is strong.</span><span lang="fr">Partez d’un modèle. Voyez où il est fort.</span></p>
+</div></div>
+</div>
+</section>
+
+<section class="section ground-deep sheet" aria-labelledby="sheet-title" style="padding-block:calc(var(--pad-section) * 0.6)">
+<div class="wrap stack-lg">
+<h2 id="sheet-title" class="vh"><span lang="en">The model</span><span lang="fr">Le modèle</span></h2>
+<div class="picker"><label class="strong" for="m-pick"><span lang="en">Model</span><span lang="fr">Modèle</span></label><select id="m-pick" class="select" data-needs-data disabled></select><p class="vh" id="m-live" role="status" aria-live="polite"></p></div>
+<div id="sheet-host" aria-live="polite" aria-busy="true"><div class="stack" id="sheet-static"><h2 class="head">Claude Opus 4</h2>
+<p class="lead"><span lang="en">Rank 3 of 96, overall score 73.1 %.</span><span lang="fr">Rang 3 sur 96, score général 73,1 %.</span></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Skills of the model" data-i18n-attrs="aria-label" data-en-aria-label="Skills of the model" data-fr-aria-label="Compétences du modèle"><table class="data"><caption><span lang="en">Score per skill, in percent.</span><span lang="fr">Score par compétence, en pourcentage.</span></caption><thead><tr><th scope="col" class="l"><span lang="en">Skill</span><span lang="fr">Compétence</span></th><th scope="col"><span lang="en">Score</span><span lang="fr">Score</span><span class="unit">(%)</span></th></tr></thead><tbody><tr><th scope="row" class="l"><span lang="en">Feelings in text</span><span lang="fr">Sentiments dans un texte</span></th><td><span lang="en">86.3</span><span lang="fr">86,3</span></td></tr><tr><th scope="row" class="l"><span lang="en">Reasoning</span><span lang="fr">Raisonnement</span></th><td><span lang="en">73.9</span><span lang="fr">73,9</span></td></tr><tr><th scope="row" class="l"><span lang="en">Answering questions</span><span lang="fr">Répondre aux questions</span></th><td><span lang="en">40.8</span><span lang="fr">40,8</span></td></tr><tr><th scope="row" class="l"><span lang="en">Grammar</span><span lang="fr">Grammaire</span></th><td><span lang="en">89.9</span><span lang="fr">89,9</span></td></tr><tr><th scope="row" class="l"><span lang="en">Meaning of words and sentences</span><span lang="fr">Sens des mots et des phrases</span></th><td><span lang="en">48.8</span><span lang="fr">48,8</span></td></tr><tr><th scope="row" class="l"><span lang="en">Who is "he" or "she"?</span><span lang="fr">Qui est « il » ou « elle » ?</span></th><td><span lang="en">86.7</span><span lang="fr">86,7</span></td></tr><tr><th scope="row" class="l"><span lang="en">Quebec French</span><span lang="fr">Français québécois</span></th><td><span lang="en">95.6</span><span lang="fr">95,6</span></td></tr></tbody></table></div></div></div>
+</div>
+</section>
+</main>
+<section class="suite ground-tint" aria-labelledby="suite-title"><div class="wrap"><h2 id="suite-title" class="vh"><span lang="en">Next step</span><span lang="fr">Étape suivante</span></h2><a class="suite-card" href="choose-a-model.html" data-carry><span class="small strong"><span lang="en">Next step</span><span lang="fr">Étape suivante</span></span><span class="suite-t"><span lang="en">Compare models</span><span lang="fr">Comparer des modèles</span></span><span><span lang="en">Put two to six models side by side, skill by skill.</span><span lang="fr">Placer de deux à six modèles côte à côte, compétence par compétence.</span></span><span class="btn suite-btn" aria-hidden="true"><span lang="en">Compare this model</span><span lang="fr">Comparer ce modèle</span> →</span></a></div></section>
+<footer class="site-footer ground-deep">
+<div class="wrap">
+<div class="footer-grid">
+<p class="lead zone-note" data-reveal><span lang="en">COLE is a GRAAL research project, Université Laval, Quebec.</span><span lang="fr">COLE est un projet de recherche du GRAAL, Université Laval, Québec.</span></p>
+<div class="stack">
+<ul class="footer-links" data-reveal>
+<li><a href="level-3.html"><span lang="en">Article</span><span lang="fr">Article</span></a></li>
+<li><a href="plain-language.html"><span lang="en">Poster</span><span lang="fr">Affiche</span></a></li>
+<li><a href="https://github.com/GRAAL-Research/COLE">GitHub</a></li>
+</ul>
+<details class="credits"><summary><span lang="en">Image credits</span><span lang="fr">Crédits des images</span></summary><p><span lang="en">Greyscale images from Wikimedia Commons. All in the public domain, except where noted.</span><span lang="fr">Images en niveaux de gris, Wikimedia Commons. Toutes du domaine public, sauf mention.</span></p><ul><li><a href="https://commons.wikimedia.org/wiki/File:Champlain_Market,_Quebec_(NBY_442137).jpg"><span lang="en">Champlain Market, Quebec</span><span lang="fr">Marché Champlain, Québec</span></a></li><li><a href="https://commons.wikimedia.org/wiki/File:Samuel_de_Champlain_Carte_geographique_de_la_Nouvelle_France.jpg"><span lang="en">Champlain’s map of New France</span><span lang="fr">Carte de la Nouvelle-France, Champlain</span></a></li><li><a href="https://commons.wikimedia.org/wiki/File:Casse_fran%C3%A7aise.jpg"><span lang="en">French type case</span><span lang="fr">Casse française</span></a></li><li><a href="https://commons.wikimedia.org/w/index.php?curid=133290410"><span lang="en">Inside a 16th-century print shop</span><span lang="fr">Vue intérieure d’une imprimerie au XVIe siècle</span></a> (CC0)</li><li><a href="https://commons.wikimedia.org/wiki/File:Qu%C3%A9bec_Sous-Le-Cap_165_(BAnQ_0003731687).jpg"><span lang="en">Québec, Sous-le-Cap</span><span lang="fr">Québec, Sous-le-Cap</span></a></li></ul></details>
+</div>
+</div>
+<div class="footer-name" aria-hidden="true"><span>COLE</span></div>
+</div>
+</footer>
+<dialog id="contact-dialog" aria-labelledby="contact-title">
+<div class="dlg">
+<h2 id="contact-title"><span lang="en">Contact</span><span lang="fr">Contact</span></h2>
+<p><span lang="en">To ask for an evaluation of your model, open an issue on the project’s GitHub page. We do not promise a delay, and each dated model version is evaluated once.</span><span lang="fr">Pour demander l’évaluation de votre modèle, ouvrez une demande sur la page GitHub du projet. Aucun délai n’est promis, et chaque version datée d’un modèle est évaluée une seule fois.</span></p>
+<p><a class="btn" href="https://github.com/GRAAL-Research/COLE/issues/new"><span lang="en">Open an issue</span><span lang="fr">Ouvrir une demande</span></a></p>
+<p><button class="link-btn" type="button" data-close><span lang="en">Close</span><span lang="fr">Fermer</span></button></p>
+</div>
+</dialog>
+<script src="app.js"></script>
+<script src="data.js"></script>
+<script src="model.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Choose a model | COLE" data-fr="Choisir un modèle | COLE">Choisir un modèle | COLE</title>
+<meta name="description" content="Évaluation de 96 modèles de langage sur 23 tests de compréhension du français, dont le français québécois.">
+<meta property="og:site_name" content="COLE">
+<meta property="og:locale" content="fr_CA">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://colebenchmark.org/choose-a-model.html">
+<meta property="og:title" content="COLE : quelle IA comprend le français québécois ?">
+<meta property="og:description" content="COLE : 96 modèles de langage, 23 tests en français.">
+<meta property="og:image" content="https://colebenchmark.org/cards/card-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Carte de partage COLE : trois chiffres tirés des résultats.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="COLE : quelle IA comprend le français québécois ?">
+<meta name="twitter:description" content="COLE : 96 modèles de langage, 23 tests en français.">
+<meta name="twitter:image" content="https://colebenchmark.org/cards/card-fr.png">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="tokens.css">
+<link rel="preload" href="fonts/SchibstedGrotesk-800.ttf" as="font" type="font/ttf" crossorigin>
+
+</head>
+<body data-page="compare">
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="fr">Aller au contenu</span></a>
+<header class="site-header ">
+<div class="wrap bar">
+<a class="wordmark" href="index.html" aria-label="COLE, home" data-i18n-attrs="aria-label" data-en-aria-label="COLE, home" data-fr-aria-label="COLE, accueil">COLE</a>
+<button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links"><span lang="en">Menu</span><span lang="fr">Menu</span></button>
+<div id="nav-links" class="nav-links">
+<nav class="nav-main" aria-label="Main" data-i18n-attrs="aria-label" data-en-aria-label="Main" data-fr-aria-label="Principale"><ol class="nav-journey" aria-label="Journey, four steps" data-i18n-attrs="aria-label" data-en-aria-label="Journey, four steps" data-fr-aria-label="Parcours, quatre étapes"><li><a href="model.html" data-carry><span lang="en">Model sheet</span><span lang="fr">Fiche d’un modèle</span></a></li><li><a href="choose-a-model.html" data-carry aria-current="page"><span lang="en">Compare models</span><span lang="fr">Comparer des modèles</span></a></li><li><a href="all-results.html" data-carry><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></li><li><a href="explore.html" data-carry><span lang="en">Explore</span><span lang="fr">Explorer</span></a></li></ol></nav>
+<div class="nav-right">
+<ul class="nav-secondary" aria-label="About the project" data-i18n-attrs="aria-label" data-en-aria-label="About the project" data-fr-aria-label="À propos du projet"><li><a href="level-3.html#article"><span lang="en">Article</span><span lang="fr">Article</span></a></li><li><a href="level-3.html#protocol"><span lang="en">Methodology</span><span lang="fr">Méthodologie</span></a></li><li><a href="plain-language.html"><span lang="en">Poster</span><span lang="fr">Affiche</span></a></li></ul>
+<div class="lang" role="group" aria-label="Language" data-i18n-attrs="aria-label" data-en-aria-label="Language" data-fr-aria-label="Langue"><button type="button" data-lang="fr" lang="fr" aria-label="Français" aria-pressed="true">FR</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
+<button class="btn btn-sm" type="button" data-open-contact><span lang="en">Contact</span><span lang="fr">Contact</span></button>
+</div>
+</div>
+</div>
+</header>
+<nav class="crumbs wrap" aria-label="Breadcrumb" data-i18n-attrs="aria-label" data-en-aria-label="Breadcrumb" data-fr-aria-label="Fil d’Ariane"><ol><li><a href="index.html"><span lang="en">Home</span><span lang="fr">Accueil</span></a></li><li><span aria-current="page"><span lang="en">Compare models</span><span lang="fr">Comparer des modèles</span></span></li></ol></nav>
+<main id="main">
+<section class="section" style="padding-block:calc(var(--pad-section) * 0.5)" aria-labelledby="page-title">
+<div class="wrap stack-lg">
+<h1 id="page-title" class="display mask-block"><span class="mask-line"><span><span lang="en">Choose a model</span><span lang="fr">Choisir un modèle</span></span></span></h1>
+<div class="axis" style="margin-top:1.5rem"><div class="zone-note"></div><div class="stack" data-stagger>
+<p class="lead col-text" data-reveal><span lang="en">Pick two models. See where each one is stronger.</span><span lang="fr">Choisissez deux modèles. Voyez où chacun est le plus fort.</span></p>
+</div></div>
+</div>
+</section>
+
+<section id="compare" class="section ground-deep" aria-labelledby="compare-title">
+<div class="wrap axis compare-grid">
+<div class="c-head"><h2 id="compare-title" class="head" data-reveal><span lang="en">Where each one is stronger</span><span lang="fr">Où chacun est le plus fort</span></h2></div>
+<div class="c-pick js-only" hidden data-busy-target aria-busy="true">
+<label for="s-add" id="add-label" class="strong"><span lang="en">Add a model</span><span lang="fr">Ajouter un modèle</span></label>
+<div class="add-row"><select id="s-add" class="select"></select><button id="btn-add" class="btn btn-ghost" type="button"><span lang="en">Add</span><span lang="fr">Ajouter</span></button></div>
+<p id="add-note" class="small" role="alert"></p><p id="live-note" class="vh" role="status" aria-live="polite"></p>
+<ul id="suggest" class="chips"></ul>
+<p><button id="btn-reset" class="link-btn" type="button"><span lang="en">Reset to the default pair</span><span lang="fr">Revenir à la paire par défaut</span></button></p>
+</div>
+<div class="c-plate plate js-only" hidden data-chart>
+<ul id="chips" class="chips" aria-live="off"></ul>
+<div class="seg-row"><div id="seg" class="seg" role="tablist"></div><span class="help" data-help><button type="button" class="help-btn" id="help-sum" aria-expanded="false" aria-controls="help-pop-1" aria-label="How to read this chart" data-i18n-attrs="aria-label" data-en-aria-label="How to read this chart" data-fr-aria-label="Comment lire ce graphique" title="How to read this chart" data-i18n-attrs="title" data-en-title="How to read this chart" data-fr-title="Comment lire ce graphique"><span aria-hidden="true">?</span></button><span id="help-pop-1" class="help-pop" role="note" hidden><span lang="en">Radar: the farther a point is from the centre, the higher the score. By skill: one row per skill, each model is a marker on a line. Table: the same numbers, strongest starred.</span><span lang="fr">Radar : plus un point est loin du centre, plus le score est élevé. Par compétence : une ligne par compétence, chaque modèle est un repère sur une ligne. Tableau : les mêmes chiffres, le plus fort marqué d’une étoile.</span></span></span></div>
+<p><button id="more-cats" class="btn btn-ghost" type="button" aria-expanded="false">Voir plus</button></p>
+<div id="radar-pick" hidden></div>
+<p id="plate-scale" class="small plate-scale"><span lang="en">Scores in %.</span><span lang="fr">Scores en %.</span></p>
+<div id="plate-state" hidden></div>
+<div id="plate-svg-host" class="plate-box" role="tabpanel"></div>
+<div id="compare-host" class="vh"></div>
+<p id="verdict" class="verdict" aria-live="polite" tabindex="-1"></p>
+</div>
+<div class="no-js-only c-plate"><p class="lead"><span lang="en">The comparison needs JavaScript. This table of six models works without it.</span><span lang="fr">La comparaison demande JavaScript. Ce tableau de six modèles fonctionne sans.</span></p><div class="tbl-wide"><div class="table-scroll" tabindex="0" role="region" aria-label="Six models, score by skill, in percent." data-i18n-attrs="aria-label" data-en-aria-label="Six models, score by skill, in percent." data-fr-aria-label="Six modèles, score par compétence, en pourcentage."><table class="data"><caption><span lang="en">Six models, score by skill, in percent.</span><span lang="fr">Six modèles, score par compétence, en pourcentage.</span></caption><thead><tr><th scope="col" class="sticky-1"><span lang="en">Rank</span><span lang="fr">Rang</span></th><th scope="col" class="l sticky-2"><span lang="en">Model</span><span lang="fr">Modèle</span></th><th scope="col"><span lang="en">Overall</span><span lang="fr">Général</span><span class="unit">(%)</span></th><th scope="col"><span lang="en">Feelings</span><span lang="fr">Sentiments</span><span class="unit">(%)</span></th><th scope="col"><span lang="en">Reasoning</span><span lang="fr">Raisonnement</span><span class="unit">(%)</span></th><th scope="col"><span lang="en">Questions</span><span lang="fr">Questions</span><span class="unit">(%)</span></th><th scope="col"><span lang="en">Grammar</span><span lang="fr">Grammaire</span><span class="unit">(%)</span></th><th scope="col"><span lang="en">Meaning</span><span lang="fr">Sens</span><span class="unit">(%)</span></th><th scope="col"><span lang="en">Pronouns</span><span lang="fr">Pronoms</span><span class="unit">(%)</span></th><th scope="col"><span lang="en">Quebec</span><span lang="fr">Québécois</span><span class="unit">(%)</span></th></tr></thead><tbody><tr><td class="sticky-1">3</td><th scope="row" class="l sticky-2">Claude Opus 4</th><td>73.1</td><td>86.3</td><td>73.9</td><td>40.8</td><td>89.9</td><td>48.8</td><td>86.7</td><td>95.6</td></tr><tr><td class="sticky-1">12</td><th scope="row" class="l sticky-2">GPT-4o</th><td>69.2</td><td>84.7</td><td>74.5</td><td>31.5</td><td>90.0</td><td>41.7</td><td>70.6</td><td>88.8</td></tr><tr><td class="sticky-1">27</td><th scope="row" class="l sticky-2">Qwen3 14B</th><td>50.5</td><td>79.6</td><td>52.5</td><td>33.6</td><td>49.3</td><td>52.1</td><td>54.2</td><td>30.8</td></tr><tr><td class="sticky-1">37</td><th scope="row" class="l sticky-2">Meta Llama 3.1 8B Instruct</th><td>44.4</td><td>69.2</td><td>46.1</td><td>23.7</td><td>63.5</td><td>35.1</td><td>49.9</td><td>14.7</td></tr><tr><td class="sticky-1">73</td><th scope="row" class="l sticky-2">Llama 3.2 1B Instruct</th><td>35.5</td><td>46.4</td><td>37.1</td><td>17.6</td><td>47.3</td><td>29.2</td><td>51.0</td><td>14.1</td></tr><tr><td class="sticky-1">80</td><th scope="row" class="l sticky-2"><span lang="en">Random guessing</span><span lang="fr">Tirage au hasard</span></th><td>34.4</td><td>42.0</td><td>34.5</td><td>19.6</td><td>50.2</td><td>28.8</td><td>49.5</td><td>11.1</td></tr></tbody></table></div></div></div>
+</div>
+</section>
+
+
+
+<section class="section" aria-labelledby="notes-title">
+<div class="wrap axis">
+<div class="zone-note" data-reveal><div class="pic pic-wide"><img src="assets/champlain-map-1612.jpg" alt="Detail of Champlain’s 1612 map of New France." data-i18n-attrs="alt" data-en-alt="Detail of Champlain’s 1612 map of New France." data-fr-alt="Détail de la carte de la Nouvelle-France de Champlain, 1612." loading="lazy" decoding="async" style="object-position:0% 50%"></div></div>
+<div class="axis-main stack-lg"><h2 id="notes-title" class="head" data-reveal><span lang="en">Worth knowing</span><span lang="fr">À savoir</span></h2>
+<details class="how"><summary><span lang="en">Read the notes</span><span lang="fr">Lire les notes</span></summary><div class="stack"><div data-reveal><h3 class="strong lead"><span lang="en">n/a is not zero.</span><span lang="fr">n.d. n’est pas zéro.</span></h3><p><span lang="en">It means the model has no result for that test.</span><span lang="fr">Cela signifie que le modèle n’a pas de résultat pour ce test.</span></p></div><div data-reveal><h3 class="strong lead"><span lang="en">API models and open models are not run the same way.</span><span lang="fr">Les modèles par API et les modèles ouverts ne sont pas exécutés de la même façon.</span></h3><p><span lang="en">Some open models were run in a lighter form, so a full run could score a little differently.</span><span lang="fr">Certains modèles ouverts ont été exécutés sous une forme allégée ; une exécution complète pourrait donner des scores un peu différents.</span></p></div></div></details></div>
+</div>
+</section>
+</main>
+<section class="suite ground-tint" aria-labelledby="suite-title"><div class="wrap"><h2 id="suite-title" class="vh"><span lang="en">Next step</span><span lang="fr">Étape suivante</span></h2><a class="suite-card" href="all-results.html" data-carry><span class="small strong"><span lang="en">Next step</span><span lang="fr">Étape suivante</span></span><span class="suite-t"><span lang="en">All results</span><span lang="fr">Tous les résultats</span></span><span><span lang="en">Sort and filter the full table of 96 models and 23 tests.</span><span lang="fr">Trier et filtrer le tableau complet des 96 modèles et des 23 tests.</span></span><span class="btn suite-btn" aria-hidden="true"><span lang="en">See all results</span><span lang="fr">Voir tous les résultats</span> →</span></a><p class="suite-prev"><a href="model.html" data-carry><span lang="en">Previous step: </span><span lang="fr">Étape précédente : </span><span lang="en">Model sheet</span><span lang="fr">Fiche d’un modèle</span></a></p></div></section>
+<footer class="site-footer ground-deep">
+<div class="wrap">
+<div class="footer-grid">
+<p class="lead zone-note" data-reveal><span lang="en">COLE is a GRAAL research project, Université Laval, Quebec.</span><span lang="fr">COLE est un projet de recherche du GRAAL, Université Laval, Québec.</span></p>
+<div class="stack">
+<ul class="footer-links" data-reveal>
+<li><a href="level-3.html"><span lang="en">Article</span><span lang="fr">Article</span></a></li>
+<li><a href="plain-language.html"><span lang="en">Poster</span><span lang="fr">Affiche</span></a></li>
+<li><a href="https://github.com/GRAAL-Research/COLE">GitHub</a></li>
+</ul>
+<details class="credits"><summary><span lang="en">Image credits</span><span lang="fr">Crédits des images</span></summary><p><span lang="en">Greyscale images from Wikimedia Commons. All in the public domain, except where noted.</span><span lang="fr">Images en niveaux de gris, Wikimedia Commons. Toutes du domaine public, sauf mention.</span></p><ul><li><a href="https://commons.wikimedia.org/wiki/File:Champlain_Market,_Quebec_(NBY_442137).jpg"><span lang="en">Champlain Market, Quebec</span><span lang="fr">Marché Champlain, Québec</span></a></li><li><a href="https://commons.wikimedia.org/wiki/File:Samuel_de_Champlain_Carte_geographique_de_la_Nouvelle_France.jpg"><span lang="en">Champlain’s map of New France</span><span lang="fr">Carte de la Nouvelle-France, Champlain</span></a></li><li><a href="https://commons.wikimedia.org/wiki/File:Casse_fran%C3%A7aise.jpg"><span lang="en">French type case</span><span lang="fr">Casse française</span></a></li><li><a href="https://commons.wikimedia.org/w/index.php?curid=133290410"><span lang="en">Inside a 16th-century print shop</span><span lang="fr">Vue intérieure d’une imprimerie au XVIe siècle</span></a> (CC0)</li><li><a href="https://commons.wikimedia.org/wiki/File:Qu%C3%A9bec_Sous-Le-Cap_165_(BAnQ_0003731687).jpg"><span lang="en">Québec, Sous-le-Cap</span><span lang="fr">Québec, Sous-le-Cap</span></a></li></ul></details>
+</div>
+</div>
+<div class="footer-name" aria-hidden="true"><span>COLE</span></div>
+</div>
+</footer>
+<dialog id="contact-dialog" aria-labelledby="contact-title">
+<div class="dlg">
+<h2 id="contact-title"><span lang="en">Contact</span><span lang="fr">Contact</span></h2>
+<p><span lang="en">To ask for an evaluation of your model, open an issue on the project’s GitHub page. We do not promise a delay, and each dated model version is evaluated once.</span><span lang="fr">Pour demander l’évaluation de votre modèle, ouvrez une demande sur la page GitHub du projet. Aucun délai n’est promis, et chaque version datée d’un modèle est évaluée une seule fois.</span></p>
+<p><a class="btn" href="https://github.com/GRAAL-Research/COLE/issues/new"><span lang="en">Open an issue</span><span lang="fr">Ouvrir une demande</span></a></p>
+<p><button class="link-btn" type="button" data-close><span lang="en">Close</span><span lang="fr">Fermer</span></button></p>
+</div>
+</dialog>
+<script src="app.js"></script>
+<script src="data.js"></script>
+<script src="choose.js"></script>
+</body>
+</html>
