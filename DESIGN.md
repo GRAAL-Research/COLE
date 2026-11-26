@@ -1,6 +1,6 @@
 # COLE: design contract
 
-Status: draft to validate. Date: 2026-11-26. Product framing: `PRODUCT.md` and
+Status: draft to validate (palette decided). Date: 2026-11-26. Product framing: `PRODUCT.md` and
 `docs/produit/cadrage-site-statique.md`. Direction sheet: `.taste-skill/direction.json`
 (seed 436372402, reprint with `node <skill>/scripts/draw.mjs --show`; the folder is git-ignored).
 
@@ -53,29 +53,49 @@ Schibsted Grotesk only, loaded with `font-display: swap`.
 - Number format: one decimal in tables, two decimals on level 3 (scientific) pages,
   matching the paper.
 
-## Colour (PROVISIONAL, see open point 1)
+## Colour
+
+Decision (owner, 2026-11-26): Quebec blue and white, with a single warm accent for
+the action. The dealt soot and lime palette is dropped. These hex values are our
+own choices (not an official flag or institutional specification); contrast ratios
+below were computed, not estimated.
 
 ```css
 :root {
-  --bg: #0f0f0f;          /* soot, opening and closing sections only */
-  --surface: #1a1a1a;
-  --ink: #ffffff;
-  --muted: #8f8f8f;
-  --accent: #dafa9c;      /* single action colour */
-  --accent-ink: #0f0f0f;
-  --field-1: #ffffff;  --field-1-ink: #0f0f0f;   /* middle sections */
-  --field-2: #dafa9c;  --field-2-ink: #0f0f0f;
+  --bg: #ffffff;            /* page ground */
+  --tint: #e8eef8;          /* quiet surface step, never a line */
+  --ink: #101a2b;           /* running text */
+  --muted: #4a5568;         /* secondary text */
+  --blue: #1d4a9a;          /* field colour and links */
+  --deep: #0b2a5c;          /* opening and closing fields */
+  --accent: #f2a900;        /* the single action colour */
+  --accent-ink: #101a2b;
+  --placeholder: #5a6475;
 }
 ```
 
-The soot ground opens and closes the page; middle sections are white or one flat
-field colour. The accent is on the primary action only (and at most one headline on
-the dark ground). Surfaces separate by a step in tone, never by a line or a shadow.
-This is a page composition, not a dark theme: there is still no dark mode toggle
-(non-objective of the framing).
+Roles and measured contrast (WCAG ratio):
 
-Contrast: every text/background pair is measured at 4.5:1 or more (3:1 for large
-text) before merge. Placeholders at 4.5:1 or more.
+| Pair | Ratio |
+|---|---|
+| `--ink` on `--bg` | 17.43 |
+| `--muted` on `--bg` | 7.53 |
+| `--muted` on `--tint` | 6.46 |
+| `--ink` on `--tint` | 14.96 |
+| white on `--blue` | 8.41 |
+| `--blue` on `--bg` (links) | 8.41 |
+| white on `--deep` | 14.00 |
+| `--accent` on `--deep` | 6.97 |
+| `--accent-ink` on `--accent` (buttons) | 8.68 |
+| `--placeholder` on `--bg` | 5.98 |
+
+Proportions: white ground with `--ink` text; the opening and closing sections are
+full-bleed `--deep`; middle "colour pages" are one flat `--blue` or `--tint` field;
+the accent appears on the primary action only (and at most one headline on a deep
+ground). Surfaces separate by a step in tone, never by a line or a shadow. Radar
+series use `--ink` and `--blue` on light fields, white and `--accent` on deep
+fields, at most two series per plate. This is a page composition, not a dark theme:
+there is still no dark mode toggle (non-objective of the framing).
 
 ## Data visualisation
 
@@ -128,14 +148,11 @@ ring on dark and accent grounds, ink ring on light). Colour is never the only si
 
 ## Declared exceptions (WARN kept with a reason)
 
-- The soot-black opening and closing sections: part of the dealt composition, not a
-  dark theme.
+- The deep-blue opening and closing sections: part of the dealt composition (the
+  printed annual's bracket pages), not a dark theme.
 - Tabular and chart borders: real tables and chart axes may use lines.
 
 ## Open points for the owner
 
-1. Palette: the dealt soot and lime reads "tech product". Options: keep it; or keep
-   the proportions and take colours from the subject (a Quebec blue with white for
-   the report fields, lime replaced by a single warm accent); or a Laval red and gold.
-2. Photography plan: who supplies or approves the found pictures, and the credit line.
-3. Wordmark: COLE set in the display face for now; a logo is out of scope.
+1. Photography plan: who supplies or approves the found pictures, and the credit line.
+2. Wordmark: COLE set in the display face for now; a logo is out of scope.
