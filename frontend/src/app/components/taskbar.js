@@ -10,7 +10,9 @@ import { useEffect, useRef, useState } from 'react';
 const DATASETS_URL = 'https://huggingface.co/datasets/graalul/COLE-public';
 const MENU_ID = 'primary-menu';
 
-export default function Taskbar() {
+// `trailing` sits in the top row after the menu button, so the mobile menu
+// panel below it spans the whole header width.
+export default function Taskbar({ trailing = null }) {
   const { t } = useTranslation();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -117,6 +119,7 @@ export default function Taskbar() {
           {links.map((link) => renderLink(link, 'desktop'))}
         </div>
 
+        <div className="flex items-center gap-4">
         {/* Mobile hamburger */}
         <button
           ref={toggleRef}
@@ -130,6 +133,8 @@ export default function Taskbar() {
         >
           {menuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
         </button>
+        {trailing}
+        </div>
       </div>
 
       {/* Mobile menu */}
