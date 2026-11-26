@@ -45,3 +45,55 @@ export const computeAverageScore = (entry) => {
   return perTaskAverages.reduce((a, b) => a + b, 0) / perTaskAverages.length;
 };
 
+
+const BRAND_NAMES = {
+  gpt: "GPT",
+  chatgpt: "ChatGPT",
+  claude: "Claude",
+  opus: "Opus",
+  sonnet: "Sonnet",
+  haiku: "Haiku",
+  fable: "Fable",
+  gemini: "Gemini",
+  gemma: "Gemma",
+  llama: "Llama",
+  mistral: "Mistral",
+  mixtral: "Mixtral",
+  qwen: "Qwen",
+  deepseek: "DeepSeek",
+  phi: "Phi",
+  camembert: "CamemBERT",
+  flaubert: "FlauBERT",
+  bert: "BERT",
+  roberta: "RoBERTa",
+  instruct: "Instruct",
+  chat: "Chat",
+};
+
+// Turn a raw submitted model name ("openai/gpt-4o", "claude-opus-4-5")
+// into its usual display name ("GPT-4o", "Claude Opus 4.5").
+export const prettifyModelName = (name) => {
+  if (!name || typeof name !== "string") return name;
+  const base = name.trim().split("/").pop();
+  const tokens = base.split(/[-_\s]+/).filter(Boolean);
+  const isClaude = tokens[0]?.toLowerCase() === "claude";
+
+  const mapped = tokens.map((tok) => BRAND_NAMES[tok.toLowerCase()] ?? tok);
+  if (!isClaude) return mapped.join(mapped[0] === "GPT" ? "-" : " ");
+
+  // Claude: "Claude 3 Opus", "Claude Opus 4.5" (consecutive digits -> "4.5").
+  const out = [];
+  mapped.forEach((tok) => {
+    const prev = out[out.length - 1];
+    if (/^\d{1,2}$/.test(tok) && /^\d+(\.\d+)?$/.test(prev ?? "")) {
+      out[out.length - 1] = `${prev}.${tok}`;
+    } else {
+      out.push(tok);
+    }
+  });
+  return out.join(" ");
+};
+
+// Short task name for column headers: "FQuAD - French Question ..." -> "FQuAD".
+export const shortTaskName = (title) =>
+  title.split(/\s+[-–]\s+|\s*:\s+/)[0].trim();

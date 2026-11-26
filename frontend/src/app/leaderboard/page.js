@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import {
   normalizeBenchmarkName,
   computeAverageScore,
+  prettifyModelName,
+  shortTaskName,
 } from "./util";
 import { useTranslation } from "react-i18next";
 import { BACKEND_ADDRESS } from "@/app/resources/ResourcesPaths";
@@ -31,8 +33,10 @@ export default function LeaderboardPage() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState('');
 
   const headerLabels = {
+    rank: t('leaderboard_rankHeader'),
     model: t('leaderboard_modelHeader'),
     overall: t('leaderboard_overallHeader'),
   };
@@ -46,6 +50,7 @@ export default function LeaderboardPage() {
       .then((data) => {
         const withOverall = data.map((e) => ({
           ...e,
+          display_name: prettifyModelName(e.display_name),
           averageScore: computeAverageScore(e),
         }));
         setEntries(withOverall);
@@ -92,9 +97,37 @@ export default function LeaderboardPage() {
     return avg;
   };
 
-  const sorted = [...entries].sort((a, b) => {
+  // Rank by overall score (1 = best); ties share a rank, independent of
+  // the current sort column or search filter.
+  const rankById = new Map();
+  const ranked = entries
+    .filter((e) => e.averageScore != null)
+    .sort((a, b) => b.averageScore - a.averageScore);
+  ranked.forEach((e, i) => {
+    const prev = ranked[i - 1];
+    const rank =
+      prev && prev.averageScore === e.averageScore
+        ? rankById.get(prev.submission_id)
+        : i + 1;
+    rankById.set(e.submission_id, rank);
+  });
+
+  const query = search.trim().toLowerCase();
+  const filtered = query
+    ? entries.filter((e) =>
+        (e.display_name || '').toLowerCase().includes(query)
+      )
+    : entries;
+
+  const sorted = [...filtered].sort((a, b) => {
     const va = getCellValue(a, sortCol);
     const vb = getCellValue(b, sortCol);
+    if (sortCol === 'rank') {
+      const ra = rankById.get(a.submission_id) ?? Infinity;
+      const rb = rankById.get(b.submission_id) ?? Infinity;
+      if (ra === rb) return 0;
+      return sortOrder === 'asc' ? ra - rb : rb - ra;
+    }
     if (sortCol === 'model') {
       if (va == null) return 1;
       if (vb == null) return -1;
@@ -123,8 +156,15 @@ export default function LeaderboardPage() {
     setCurrentPage(1);
   };
 
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(1);
+  };
+
   const renderHeader = (col) => {
-    const baseLabel = headerLabels[col] ?? col;
+    const baseLabel =
+      headerLabels[col] ??
+      shortTaskName(t(`benchmark_${col}_title`, { defaultValue: col }));
     const arrow = sortCol === col ? (sortOrder === 'asc' ? ' ▲' : ' ▼') : '';
 
     if (col === 'overall') {
@@ -141,7 +181,7 @@ export default function LeaderboardPage() {
       );
     }
 
-    if (col === 'model') {
+    if (col === 'model' || col === 'rank') {
       return (
         <div onClick={() => handleSort(col)} className="cursor-pointer">
           {baseLabel}
@@ -212,11 +252,19 @@ export default function LeaderboardPage() {
     <div className="space-y-8">
         <h3 className="text-2xl font-semibold text-gray-900 mb-4 border-l-4 border-blue-600 pl-4">
         {t('leaderboard_title')}</h3>
+      <input
+        type="search"
+        value={search}
+        onChange={handleSearch}
+        placeholder={t('leaderboard_searchPlaceholder')}
+        aria-label={t('leaderboard_searchPlaceholder')}
+        className="w-full max-w-sm border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+      />
       <div className="overflow-auto">
         <table className="min-w-full border-collapse">
           <thead>
             <tr>
-              {['model', 'overall', ...benchmarks].map((b) => (
+              {['rank', 'model', 'overall', ...benchmarks].map((b) => (
                 <th
                   key={b}
                   className="border border-gray-300 px-2 py-1 bg-blue-600 text-left text-sm font-semibold text-white"
@@ -233,6 +281,9 @@ export default function LeaderboardPage() {
                 className="bg-white hover:bg-gray-50 cursor-pointer"
                 onClick={() => setSelectedEntry(entry)}
               >
+                <td className="border border-gray-300 px-2 py-1 text-center font-bold text-gray-800">
+                  {rankById.get(entry.submission_id) ?? '—'}
+                </td>
                 <td className="border border-gray-300 px-2 py-1 font-medium text-blue-600">
                   {entry.display_name}
                 </td>
@@ -257,6 +308,16 @@ export default function LeaderboardPage() {
                 })}
               </tr>
             ))}
+            {paginatedEntries.length === 0 && (
+              <tr>
+                <td
+                  colSpan={benchmarks.length + 3}
+                  className="px-2 py-4 text-center text-gray-500"
+                >
+                  {t('leaderboard_noResults')}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
