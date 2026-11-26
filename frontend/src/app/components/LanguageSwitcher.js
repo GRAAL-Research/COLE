@@ -1,6 +1,7 @@
 'use client';
 
 import {useTranslation} from 'react-i18next';
+import {setLanguage} from '../i18n';
 
 const LANGUAGES = [
     {code: 'en', label: 'EN', name: 'English'},
@@ -27,7 +28,7 @@ export function LanguageSwitcher() {
                     lang={code}
                     aria-label={name}
                     aria-pressed={code === currentLang}
-                    onClick={() => i18n.changeLanguage(code)}
+                    onClick={() => setLanguage(code)}
                     className={btnStyle(code)}
                 >
                     {label}

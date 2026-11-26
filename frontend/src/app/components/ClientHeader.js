@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import i18n, { syncDocumentLanguage } from '../i18n';
+import i18n, { detectLanguage } from '../i18n';
 import { useTranslation } from 'react-i18next';
 import Taskbar from './taskbar';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -9,9 +9,11 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 export default function ClientHeader() {
   useTranslation();
 
-  // Hydration resets <html lang>; re-apply the detected language once mounted.
+  // The server and the first client render are English so hydration matches;
+  // apply the visitor's language once mounted (this also updates <html lang>).
   useEffect(() => {
-    syncDocumentLanguage(i18n.language);
+    const detected = detectLanguage();
+    if (detected !== i18n.language) i18n.changeLanguage(detected);
   }, []);
 
   return (
