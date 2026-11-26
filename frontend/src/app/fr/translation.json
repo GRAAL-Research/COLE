@@ -188,5 +188,13 @@
   "results_downloading": "Téléchargement…",
   "results_downloadError": "Le téléchargement a échoué. Réessayez.",
   "results_warning": "Avertissement\u00a0:",
-  "papers_timeout": "Le PDF met trop de temps à se charger. Ouvrez-le plutôt sur arXiv."
+  "papers_timeout": "Le PDF met trop de temps à se charger. Ouvrez-le plutôt sur arXiv.",
+  "page_title_home": "Banc d’essai de compréhension du français",
+  "page_title_guide": "Guide",
+  "page_title_faq": "FAQ",
+  "page_title_contact": "Contact",
+  "page_title_results": "Résultats",
+  "page_title_benchmarks": "Tâches",
+  "page_title_leaderboard": "Classement",
+  "page_title_papers": "Article"
 }

@@ -189,5 +189,13 @@
   "results_downloading": "Downloading…",
   "results_downloadError": "The download failed. Try again.",
   "results_warning": "Warning:",
-  "papers_timeout": "The PDF is taking too long to load. Open it on arXiv instead."
+  "papers_timeout": "The PDF is taking too long to load. Open it on arXiv instead.",
+  "page_title_home": "French NLU Benchmark",
+  "page_title_guide": "Guide",
+  "page_title_faq": "FAQ",
+  "page_title_contact": "Contact",
+  "page_title_results": "Results",
+  "page_title_benchmarks": "Tasks",
+  "page_title_leaderboard": "Leaderboard",
+  "page_title_papers": "Paper"
 }

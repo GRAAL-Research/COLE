@@ -17,12 +17,12 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: {
-    default: "COLE - Comprehensive Benchmark for French Language Understanding",
+    default: "French NLU Benchmark | COLE",
     template: "%s | COLE",
   },
   description: "COLE is a benchmark of 23 tasks for evaluating French Natural Language Understanding (NLU) in large language models.",
   openGraph: {
-    title: "COLE - French NLU Benchmark",
+    title: "French NLU Benchmark | COLE",
     description: "Evaluate LLMs on 23 French NLU tasks: sentiment analysis, NLI, QA, and more.",
     url: "https://colebenchmark.org",
     siteName: "COLE Benchmark",
@@ -30,7 +30,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary",
-    title: "COLE - French NLU Benchmark",
+    title: "French NLU Benchmark | COLE",
     description: "Evaluate LLMs on 23 French NLU tasks: sentiment analysis, NLI, QA, and more.",
   },
 };
