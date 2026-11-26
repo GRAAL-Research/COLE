@@ -87,8 +87,20 @@ class ExactMatchComputeTest(TestCase):
     def test_none_prediction_does_not_crash(self):
         # Previously raised AttributeError on `prediction.strip()` when the model
         # returned None for a row.
-        result = self.metric.compute(["valid", None], ["valid", "valid"])
-        self.assertEqual({"exact_match": 0.5}, result)
+        # Behaviour change: failed (None) predictions are now excluded from the denominator
+        # and reported in `na_count` instead of silently counting as misses.
+        result = self.metric.compute(
+            ["valid", None], ["valid", "valid"], max_na_fraction=0.5
+        )
+        self.assertEqual({"exact_match": 1.0, "na_count": 1}, result)
+
+    def test_na_heavy_predictions_raise(self):
+        with self.assertRaises(ValueError):
+            self.metric.compute(["NA", "NA", "NA", "a"], ["a"] * 4)
+
+    def test_few_na_excluded_and_reported(self):
+        result = self.metric.compute(["NA"] + ["a"] * 9, ["a"] * 10)
+        self.assertEqual({"exact_match": 1.0, "na_count": 1}, result)
 
     def test_non_string_prediction_is_coerced(self):
         result = self.metric.compute([42, "answer"], ["42", "answer"])

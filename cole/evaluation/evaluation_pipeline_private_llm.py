@@ -2,6 +2,7 @@ import argparse
 import gc
 import logging
 from datetime import datetime
+from enum import Enum
 
 import wandb
 from dotenv import load_dotenv
@@ -9,7 +10,7 @@ from tqdm import tqdm
 
 from predictions.all_llms import private_llm
 from cole.evaluation.llm_evaluator import ModelEvaluator
-from cole.evaluation.tools import str2bool
+from cole.evaluation.tools import select_tasks, str2bool
 from cole.language_model.private_lm import RemoteLLMModel
 from cole.task.task_factory import tasks_factory
 from cole.task.task_names import COLETasks, BorealTasks
@@ -53,6 +54,13 @@ parser.add_argument(
     choices=["all", "cole", "boreal", "comparison"],
 )
 
+parser.add_argument(
+    "--tasks",
+    help="Comma-separated task names to run (e.g. fquad,piaf,wsd); defaults to the whole group.",
+    type=str,
+    default=None,
+)
+
 args = parser.parse_args()
 
 if args.tasks_group == "all":
@@ -70,6 +78,10 @@ elif args.tasks_group == "comparison":
 else:
     raise ValueError("Invalid value for tasks_group")
 
+tasks_names = select_tasks(
+    [name.value if isinstance(name, Enum) else name for name in tasks_names],
+    args.tasks,
+)
 tasks = tasks_factory(tasks_names)
 
 models = []
