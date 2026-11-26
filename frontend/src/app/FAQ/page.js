@@ -2,7 +2,9 @@
 
 import '../i18n';
 import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import PageTitle from '../components/PageTitle';
 
 export default function FAQ() {
   const { t } = useTranslation();
@@ -14,28 +16,40 @@ export default function FAQ() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-3">
-      <h2 className="text-3xl font-bold text-center text-blue-700 border-b pb-4 mb-10">
-        {t('faq_title')}
-      </h2>
+    <div className="max-w-[72ch] py-3">
+      <PageTitle>{t('faq_title')}</PageTitle>
 
       <div className="space-y-4">
-        {faqs.map((faq, i) => (
-          <div
-            key={i}
-            className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm transition"
-          >
-            <button
-              className="w-full text-left text-xl font-semibold text-gray-800 flex justify-between items-center"
-              onClick={() => toggle(i)}
+        {faqs.map((faq, i) => {
+          const isOpen = openIndex === i;
+          return (
+            <div
+              key={i}
+              className="rounded-lg border border-gray-200 bg-white shadow-sm"
             >
-              <span>{`${i + 1}. ${faq.question}`}</span>
-              <span className="text-2xl text-gray-500">
-                {openIndex === i ? '▴' : '▾'}
-              </span>
-            </button>
-            {openIndex === i && (
-              <p className="mt-4 text-gray-600 text-sm">
+              <h2>
+                <button
+                  type="button"
+                  id={`faq-question-${i}`}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${i}`}
+                  className="flex min-h-11 w-full items-center justify-between gap-4 rounded-lg p-5 text-left text-lg font-semibold text-gray-900"
+                  onClick={() => toggle(i)}
+                >
+                  <span>{`${i + 1}. ${faq.question}`}</span>
+                  <ChevronDown
+                    aria-hidden="true"
+                    className={`h-5 w-5 shrink-0 text-gray-600 transition-transform motion-reduce:transition-none ${isOpen ? 'rotate-180' : ''}`}
+                  />
+                </button>
+              </h2>
+              <div
+                id={`faq-answer-${i}`}
+                role="region"
+                aria-labelledby={`faq-question-${i}`}
+                hidden={!isOpen}
+                className="px-5 pb-5 text-gray-700"
+              >
                 {faq.answer.split(/(<code>.*?<\/code>)/g).map((part, j) =>
                   part.startsWith('<code>') ? (
                     <code key={j}>{part.replace(/<\/?code>/g, '')}</code>
@@ -43,10 +57,10 @@ export default function FAQ() {
                     part
                   )
                 )}
-              </p>
-            )}
-          </div>
-        ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

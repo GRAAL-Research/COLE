@@ -2,8 +2,10 @@
 
 import '../i18n'
 import { useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import PageTitle from '../components/PageTitle';
 
 export default function ResultsDefaultPage() {
   const router = useRouter();
@@ -21,11 +23,15 @@ export default function ResultsDefaultPage() {
   }, [router]);
 
   return (
-    <main className="max-w-2xl mx-auto px-6 py-12 text-center">
-      <h1 className="text-3xl font-bold text-blue-700 mb-4">
-        {t('results_default_title')}
-      </h1>
-      <p className="text-gray-700">{t('results_default_message')}</p>
-    </main>
+    <div className="max-w-[72ch] py-3">
+      <PageTitle>{t('results_default_title')}</PageTitle>
+      <p className="mb-6 text-gray-700">{t('results_default_message')}</p>
+      <Link
+        href="/results?show=submit"
+        className="inline-flex min-h-11 items-center rounded-md bg-accent px-4 py-2 text-base font-medium text-white hover:bg-accent-strong"
+      >
+        {t('nav_submit')}
+      </Link>
+    </div>
   );
 }

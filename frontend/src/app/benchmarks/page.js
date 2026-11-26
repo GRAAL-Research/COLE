@@ -3,6 +3,7 @@
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
+import PageTitle, { SectionTitle } from '../components/PageTitle';
 
 const categories = [
   {
@@ -80,17 +81,14 @@ export default function Benchmarks() {
 
   return (
     <div>
-      <div className="max-w-5xl mx-auto px-2 py-3">
-        <p className="text-1.5xl text-left text-gray-800">
-          {t('benchmarksIntro')}
-        </p>
-      </div>
+      <PageTitle>{t('benchmarks_title')}</PageTitle>
+      <p className="mb-10 max-w-[72ch] text-lg text-gray-800">
+        {t('benchmarksIntro')}
+      </p>
       <div className="space-y-10">
         {categories.map((cat) => (
           <div key={cat.key}>
-            <h2 className="text-xl font-bold text-blue-700 mb-4 border-l-4 border-blue-600 pl-3">
-              {t(cat.key)}
-            </h2>
+            <SectionTitle>{t(cat.key)}</SectionTitle>
             <div className="space-y-4">
               {cat.benchmarks.map((b) => (
                 <Benchmark
@@ -114,7 +112,7 @@ function Benchmark({ title, description, metrics, link }) {
 
   return (
     <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-      <h3 className="text-xl font-semibold text-blue-700 mb-2 border-b-2 border-blue-500 inline-block">
+      <h3 className="text-lg font-semibold text-blue-700 mb-2 border-b-2 border-blue-500 inline-block">
         {link ? (
           <Link href={link} className="hover:underline">
             {title}
@@ -123,8 +121,8 @@ function Benchmark({ title, description, metrics, link }) {
           title
         )}
       </h3>
-      <p className="text-gray-700 mb-2">{description}</p>
-      <p className="text-sm text-gray-500">
+      <p className="text-gray-700 mb-2 max-w-[72ch]">{description}</p>
+      <p className="text-sm text-gray-700">
         <span className="font-medium">{t('metrics')}</span> {metrics}
       </p>
     </div>
