@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ExternalLink, FileText, Menu, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const DATASETS_URL = 'https://huggingface.co/datasets/graalul/COLE-public';
 const MENU_ID = 'primary-menu';
@@ -15,7 +15,30 @@ export default function Taskbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const navRef = useRef(null);
+  const toggleRef = useRef(null);
+
   const closeMenu = () => setMenuOpen(false);
+
+  // Close the mobile menu on Escape (returning focus to its button) and on
+  // any pointer press outside the navigation.
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key !== 'Escape') return;
+      setMenuOpen(false);
+      toggleRef.current?.focus();
+    };
+    const onPointerDown = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target)) setMenuOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('pointerdown', onPointerDown);
+    };
+  }, [menuOpen]);
   const isCurrent = (path) =>
     path === '/' ? pathname === '/' : pathname === path || pathname.startsWith(`${path}/`);
 
@@ -66,7 +89,7 @@ export default function Taskbar() {
   };
 
   return (
-    <nav aria-label={t('nav_main')} className="min-w-0 flex-1 py-2">
+    <nav ref={navRef} aria-label={t('nav_main')} className="min-w-0 flex-1 py-2">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center">
           <Link
@@ -80,6 +103,7 @@ export default function Taskbar() {
           <Link
             href="/papers"
             aria-label={t('nav_papers')}
+            title={t('nav_papers')}
             aria-current={isCurrent('/papers') ? 'page' : undefined}
             className="ml-1 inline-flex h-11 w-11 items-center justify-center rounded-md"
             onClick={closeMenu}
@@ -95,6 +119,8 @@ export default function Taskbar() {
 
         {/* Mobile hamburger */}
         <button
+          ref={toggleRef}
+          data-menu-toggle
           type="button"
           className="inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-700 xl:hidden"
           aria-label={menuOpen ? t('nav_menuClose') : t('nav_menuOpen')}
