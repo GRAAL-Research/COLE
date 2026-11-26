@@ -26,7 +26,9 @@ export default function SubmitForm({ onStateChange }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [submissionId, setSubmissionId] = useState(null);
 
-  const fieldRefs = { email: useRef(null), displayName: useRef(null), file: useRef(null) };
+  const emailRef = useRef(null);
+  const displayNameRef = useRef(null);
+  const fileRef = useRef(null);
   const feedbackRef = useRef(null);
 
   const isDirty = submitStatus !== 'success' && Boolean(email || displayName || file);
@@ -65,7 +67,8 @@ export default function SubmitForm({ onStateChange }) {
     setFieldErrors(errors);
     const firstInvalid = ['email', 'displayName', 'file'].find((k) => errors[k]);
     if (firstInvalid) {
-      fieldRefs[firstInvalid].current?.focus();
+      const refsByField = { email: emailRef, displayName: displayNameRef, file: fileRef };
+      refsByField[firstInvalid].current?.focus();
       return;
     }
 
@@ -139,7 +142,7 @@ export default function SubmitForm({ onStateChange }) {
         {field('email', 'email', t('submit_labelEmail'),
           <input
             id="email"
-            ref={fieldRefs.email}
+            ref={emailRef}
             type="email"
             autoComplete="email"
             required
@@ -153,7 +156,7 @@ export default function SubmitForm({ onStateChange }) {
         {field('displayName', 'displayname', t('submit_labelDisplayName'),
           <input
             id="displayname"
-            ref={fieldRefs.displayName}
+            ref={displayNameRef}
             type="text"
             required
             placeholder={t('submit_placeholderDisplayName')}
@@ -166,7 +169,7 @@ export default function SubmitForm({ onStateChange }) {
         {field('file', 'zipfile', t('submit_labelZip'),
           <input
             id="zipfile"
-            ref={fieldRefs.file}
+            ref={fileRef}
             type="file"
             accept=".zip"
             required
