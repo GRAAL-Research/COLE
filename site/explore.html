@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Explore the results | COLE" data-fr="Explorer les résultats | COLE">Explorer les résultats | COLE</title>
+<meta name="description" content="Évaluation de 96 modèles de langage sur 23 tests de compréhension du français, dont le français québécois.">
+<meta property="og:site_name" content="COLE">
+<meta property="og:locale" content="fr_CA">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://colebenchmark.org/explore.html">
+<meta property="og:title" content="COLE : quelle IA comprend le français québécois ?">
+<meta property="og:description" content="COLE : 96 modèles de langage, 23 tests en français.">
+<meta property="og:image" content="https://colebenchmark.org/cards/card-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Carte de partage COLE : trois chiffres tirés des résultats.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="COLE : quelle IA comprend le français québécois ?">
+<meta name="twitter:description" content="COLE : 96 modèles de langage, 23 tests en français.">
+<meta name="twitter:image" content="https://colebenchmark.org/cards/card-fr.png">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="tokens.css">
+<link rel="preload" href="fonts/SchibstedGrotesk-800.ttf" as="font" type="font/ttf" crossorigin>
+
+</head>
+<body data-page="explore">
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="fr">Aller au contenu</span></a>
+<header class="site-header ">
+<div class="wrap bar">
+<a class="wordmark" href="index.html" aria-label="COLE, home" data-i18n-attrs="aria-label" data-en-aria-label="COLE, home" data-fr-aria-label="COLE, accueil">COLE</a>
+<button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links"><span lang="en">Menu</span><span lang="fr">Menu</span></button>
+<div id="nav-links" class="nav-links">
+<nav class="nav-main" aria-label="Main" data-i18n-attrs="aria-label" data-en-aria-label="Main" data-fr-aria-label="Principale"><ol class="nav-journey" aria-label="Journey, four steps" data-i18n-attrs="aria-label" data-en-aria-label="Journey, four steps" data-fr-aria-label="Parcours, quatre étapes"><li><a href="model.html" data-carry><span lang="en">Model sheet</span><span lang="fr">Fiche d’un modèle</span></a></li><li><a href="choose-a-model.html" data-carry><span lang="en">Compare models</span><span lang="fr">Comparer des modèles</span></a></li><li><a href="all-results.html" data-carry><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></li><li><a href="explore.html" data-carry aria-current="page"><span lang="en">Explore</span><span lang="fr">Explorer</span></a></li></ol></nav>
+<div class="nav-right">
+<ul class="nav-secondary" aria-label="About the project" data-i18n-attrs="aria-label" data-en-aria-label="About the project" data-fr-aria-label="À propos du projet"><li><a href="level-3.html#article"><span lang="en">Article</span><span lang="fr">Article</span></a></li><li><a href="level-3.html#protocol"><span lang="en">Methodology</span><span lang="fr">Méthodologie</span></a></li><li><a href="plain-language.html"><span lang="en">Poster</span><span lang="fr">Affiche</span></a></li></ul>
+<div class="lang" role="group" aria-label="Language" data-i18n-attrs="aria-label" data-en-aria-label="Language" data-fr-aria-label="Langue"><button type="button" data-lang="fr" lang="fr" aria-label="Français" aria-pressed="true">FR</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
+<button class="btn btn-sm" type="button" data-open-contact><span lang="en">Contact</span><span lang="fr">Contact</span></button>
+</div>
+</div>
+</div>
+</header>
+<nav class="crumbs wrap" aria-label="Breadcrumb" data-i18n-attrs="aria-label" data-en-aria-label="Breadcrumb" data-fr-aria-label="Fil d’Ariane"><ol><li><a href="index.html"><span lang="en">Home</span><span lang="fr">Accueil</span></a></li><li><span aria-current="page"><span lang="en">Explore</span><span lang="fr">Explorer</span></span></li></ol></nav>
+<main id="main">
+<section class="section" style="padding-block:calc(var(--pad-section) * 0.5)" aria-labelledby="page-title">
+<div class="wrap stack-lg">
+<h1 id="page-title" class="display mask-block"><span class="mask-line"><span><span lang="en">Explore the results</span><span lang="fr">Explorer les résultats</span></span></span></h1>
+<div class="axis" style="margin-top:1.5rem"><div class="zone-note"></div><div class="stack" data-stagger>
+<p class="lead col-text" data-reveal><span lang="en">Eight ways to look at the same scores. All scores are percentages.</span><span lang="fr">Huit façons de regarder les mêmes scores. Tous les scores sont des pourcentages.</span></p>
+<ul class="explore-nav" data-reveal><li><a href="#quebec"><span lang="en">Quebec and France</span><span lang="fr">Québec et France</span></a></li><li><a href="#chance"><span lang="en">Above chance</span><span lang="fr">Au-dessus du hasard</span></a></li><li><a href="#hard"><span lang="en">Hardest tasks</span><span lang="fr">Épreuves difficiles</span></a></li><li><a href="#heatmap"><span lang="en">Heatmap</span><span lang="fr">Carte de chaleur</span></a></li><li><a href="#size"><span lang="en">Size and score</span><span lang="fr">Taille et score</span></a></li><li><a href="#access"><span lang="en">Open and API</span><span lang="fr">Ouverts et API</span></a></li><li><a href="#quiz"><span lang="en">Quiz</span><span lang="fr">Quiz</span></a></li><li><a href="#time"><span lang="en">Over time</span><span lang="fr">Dans le temps</span></a></li><li><a href="#card"><span lang="en">Share</span><span lang="fr">Partager</span></a></li></ul>
+</div></div>
+</div>
+</section>
+<section id="quebec" class="section ground-deep" data-chart aria-labelledby="quebec-title" style="padding-block:calc(var(--pad-section) * 0.6)">
+<div class="wrap stack-lg">
+<div class="head-row" data-reveal><h2 id="quebec-title" class="head"><span lang="en">Quebec tests against other French tests</span><span lang="fr">Tests québécois contre autres tests en français</span></h2><span class="help" data-help><button type="button" class="help-btn" aria-expanded="false" aria-controls="help-pop-3" aria-label="How to read this chart" data-i18n-attrs="aria-label" data-en-aria-label="How to read this chart" data-fr-aria-label="Comment lire ce graphique" title="How to read this chart" data-i18n-attrs="title" data-en-title="How to read this chart" data-fr-title="Comment lire ce graphique"><span aria-hidden="true">?</span></button><span id="help-pop-3" class="help-pop" role="note" hidden><span lang="en">One line per model. The first mark is its average on the two Quebec tests, the second its average on the other French tests. The farther apart the marks, the bigger the difference.</span><span lang="fr">Une ligne par modèle. Le premier repère est sa moyenne sur les deux tests québécois, le second sa moyenne sur les autres tests en français. Plus les repères sont éloignés, plus la différence est grande.</span></span></span></div>
+<p class="lead col-text" data-reveal><span lang="en">Does a model do as well on Quebec French as on French in general?</span><span lang="fr">Un modèle réussit-il aussi bien le français québécois que le français en général ?</span></p>
+<div id="x1" aria-busy="true"><noscript><p><span lang="en">This chart needs JavaScript. The same numbers are in the table of all results.</span><span lang="fr">Ce graphique demande JavaScript. Les mêmes chiffres sont dans le tableau de tous les résultats.</span> <a href="all-results.html"><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></p></noscript></div>
+</div>
+</section><section id="chance" class="section ground-deep" data-chart aria-labelledby="chance-title" style="padding-block:calc(var(--pad-section) * 0.6)">
+<div class="wrap stack-lg">
+<div class="head-row" data-reveal><h2 id="chance-title" class="head"><span lang="en">Above chance?</span><span lang="fr">Au-dessus du hasard ?</span></h2><span class="help" data-help><button type="button" class="help-btn" aria-expanded="false" aria-controls="help-pop-4" aria-label="How to read this chart" data-i18n-attrs="aria-label" data-en-aria-label="How to read this chart" data-fr-aria-label="Comment lire ce graphique" title="How to read this chart" data-i18n-attrs="title" data-en-title="How to read this chart" data-fr-title="Comment lire ce graphique"><span aria-hidden="true">?</span></button><span id="help-pop-4" class="help-pop" role="note" hidden><span lang="en">The bar is the model’s score. The gold tick is the score of the project’s random-guessing model on the same test. Two tests have no tick because their score is a correlation, not a share of right answers.</span><span lang="fr">La barre est le score du modèle. Le repère doré est le score du modèle de tirage au hasard du projet sur le même test. Deux tests n’ont pas de repère, car leur score est une corrélation et non une part de réponses justes.</span></span></span></div>
+<p class="lead col-text" data-reveal><span lang="en">A test with two answers is passed half the time by guessing. This shows how far a model is from guessing.</span><span lang="fr">Un test à deux réponses est réussi une fois sur deux au hasard. Voici la distance entre un modèle et le hasard.</span></p>
+<div id="x2" aria-busy="true"><noscript><p><span lang="en">This chart needs JavaScript. The same numbers are in the table of all results.</span><span lang="fr">Ce graphique demande JavaScript. Les mêmes chiffres sont dans le tableau de tous les résultats.</span> <a href="all-results.html"><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></p></noscript></div>
+</div>
+</section><section id="hard" class="section ground-deep" data-chart aria-labelledby="hard-title" style="padding-block:calc(var(--pad-section) * 0.6)">
+<div class="wrap stack-lg">
+<div class="head-row" data-reveal><h2 id="hard-title" class="head"><span lang="en">The hardest tasks</span><span lang="fr">Les épreuves les plus difficiles</span></h2><span class="help" data-help><button type="button" class="help-btn" aria-expanded="false" aria-controls="help-pop-5" aria-label="How to read this chart" data-i18n-attrs="aria-label" data-en-aria-label="How to read this chart" data-fr-aria-label="Comment lire ce graphique" title="How to read this chart" data-i18n-attrs="title" data-en-title="How to read this chart" data-fr-title="Comment lire ce graphique"><span aria-hidden="true">?</span></button><span id="help-pop-5" class="help-pop" role="note" hidden><span lang="en">One row per task, grouped by skill, the closest to guessing first. The gold tick is the score of random guessing, the circle the strongest model, the square the median model. A bold name means the median model is within 5 points of guessing. No tick for FQuAD, PIAF, SICK-FR, STS22, WSD-Fr: for these, guessing is not a meaningful reference (correlations and free-text answers); they come last.</span><span lang="fr">Une ligne par épreuve, regroupées par compétence, les plus proches du hasard d’abord. Le repère doré est le score du tirage au hasard, le rond le modèle le plus fort, le carré le modèle médian. Un nom en gras signale que le modèle médian est à moins de 5 points du hasard. Pas de repère pour FQuAD, PIAF, SICK-FR, STS22, WSD-Fr : le hasard n’y est pas une référence utile (corrélations et réponses libres) ; elles viennent en dernier.</span></span></span></div>
+<p class="lead col-text" data-reveal><span lang="en">Against guessing, where do the strongest and the typical model stand?</span><span lang="fr">Face au hasard, où se situent le modèle le plus fort et le modèle typique ?</span></p>
+<div id="x8" aria-busy="true"><noscript><p><span lang="en">This chart needs JavaScript. The same numbers are in the table of all results.</span><span lang="fr">Ce graphique demande JavaScript. Les mêmes chiffres sont dans le tableau de tous les résultats.</span> <a href="all-results.html"><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></p></noscript></div>
+</div>
+</section><section id="heatmap" class="section ground-tint" aria-labelledby="heatmap-title" style="padding-block:calc(var(--pad-section) * 0.6)">
+<div class="wrap stack-lg">
+<div class="head-row" data-reveal><h2 id="heatmap-title" class="head"><span lang="en">Heatmap</span><span lang="fr">Carte de chaleur</span></h2><span class="help" data-help><button type="button" class="help-btn" aria-expanded="false" aria-controls="help-pop-6" aria-label="How to read this chart" data-i18n-attrs="aria-label" data-en-aria-label="How to read this chart" data-fr-aria-label="Comment lire ce graphique" title="How to read this chart" data-i18n-attrs="title" data-en-title="How to read this chart" data-fr-title="Comment lire ce graphique"><span aria-hidden="true">?</span></button><span id="help-pop-6" class="help-pop" role="note" hidden><span lang="en">Darker means a higher score. The value is printed in each cell. Hatched cells have no result. Press a column title to sort.</span><span lang="fr">Plus c’est foncé, plus le score est élevé. La valeur est inscrite dans chaque case. Les cases hachurées n’ont pas de résultat. Appuyez sur un titre de colonne pour trier.</span></span></span></div>
+<p class="lead col-text" data-reveal><span lang="en">Every model, every skill, one tone per band of scores.</span><span lang="fr">Chaque modèle, chaque compétence, un ton par tranche de scores.</span></p>
+<div id="x3" aria-busy="true"><noscript><p><span lang="en">This chart needs JavaScript. The same numbers are in the table of all results.</span><span lang="fr">Ce graphique demande JavaScript. Les mêmes chiffres sont dans le tableau de tous les résultats.</span> <a href="all-results.html"><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></p></noscript></div>
+</div>
+</section><section id="size" class="section ground-deep" data-chart aria-labelledby="size-title" style="padding-block:calc(var(--pad-section) * 0.6)">
+<div class="wrap stack-lg">
+<div class="head-row" data-reveal><h2 id="size-title" class="head"><span lang="en">Size against score</span><span lang="fr">Taille contre score</span></h2><span class="help" data-help><button type="button" class="help-btn" aria-expanded="false" aria-controls="help-pop-7" aria-label="How to read this chart" data-i18n-attrs="aria-label" data-en-aria-label="How to read this chart" data-fr-aria-label="Comment lire ce graphique" title="How to read this chart" data-i18n-attrs="title" data-en-title="How to read this chart" data-fr-title="Comment lire ce graphique"><span aria-hidden="true">?</span></button><span id="help-pop-7" class="help-pop" role="note" hidden><span lang="en">Each mark is a model. Left to right is its size on a log scale, bottom to top its score. Models whose size is not published are in the strip on the right.</span><span lang="fr">Chaque repère est un modèle. De gauche à droite, sa taille sur une échelle logarithmique ; de bas en haut, son score. Les modèles dont la taille n’est pas publiée sont dans la bande de droite.</span></span></span></div>
+<p class="lead col-text" data-reveal><span lang="en">Does a bigger model score higher?</span><span lang="fr">Un modèle plus gros obtient-il un score plus fort ?</span></p>
+<div id="x4" aria-busy="true"><noscript><p><span lang="en">This chart needs JavaScript. The same numbers are in the table of all results.</span><span lang="fr">Ce graphique demande JavaScript. Les mêmes chiffres sont dans le tableau de tous les résultats.</span> <a href="all-results.html"><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></p></noscript></div>
+</div>
+</section><section id="access" class="section ground-deep" data-chart aria-labelledby="access-title" style="padding-block:calc(var(--pad-section) * 0.6)">
+<div class="wrap stack-lg">
+<div class="head-row" data-reveal><h2 id="access-title" class="head"><span lang="en">Open weights against API</span><span lang="fr">Poids ouverts contre API</span></h2><span class="help" data-help><button type="button" class="help-btn" aria-expanded="false" aria-controls="help-pop-8" aria-label="How to read this chart" data-i18n-attrs="aria-label" data-en-aria-label="How to read this chart" data-fr-aria-label="Comment lire ce graphique" title="How to read this chart" data-i18n-attrs="title" data-en-title="How to read this chart" data-fr-title="Comment lire ce graphique"><span aria-hidden="true">?</span></button><span id="help-pop-8" class="help-pop" role="note" hidden><span lang="en">One block per skill. Each mark is a model: circles are open-weight models, squares are models served through an API. The white bar is the median of each group. The random-guessing model is left out. Models with unknown access: 0, so none is left out of a group.</span><span lang="fr">Un bloc par compétence. Chaque repère est un modèle : les ronds sont les modèles à poids ouverts, les carrés ceux servis par API. La barre blanche est la médiane de chaque groupe. Le modèle de tirage au hasard est exclu. Modèles à accès inconnu : 0, donc aucun n’est laissé hors d’un groupe.</span></span></span></div>
+<p class="lead col-text" data-reveal><span lang="en">Do models with open weights trail the ones served through an API?</span><span lang="fr">Les modèles à poids ouverts sont-ils moins forts que ceux servis par API ?</span></p>
+<div id="x7" aria-busy="true"><noscript><p><span lang="en">This chart needs JavaScript. The same numbers are in the table of all results.</span><span lang="fr">Ce graphique demande JavaScript. Les mêmes chiffres sont dans le tableau de tous les résultats.</span> <a href="all-results.html"><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></p></noscript></div>
+</div>
+</section><section id="quiz" class="section ground-tint" aria-labelledby="quiz-title" style="padding-block:calc(var(--pad-section) * 0.6)">
+<div class="wrap stack-lg">
+<div class="head-row" data-reveal><h2 id="quiz-title" class="head"><span lang="en">Would you pass?</span><span lang="fr">Réussiriez-vous ?</span></h2><span class="help" data-help><button type="button" class="help-btn" aria-expanded="false" aria-controls="help-pop-9" aria-label="How to read this chart" data-i18n-attrs="aria-label" data-en-aria-label="How to read this chart" data-fr-aria-label="Comment lire ce graphique" title="How to read this chart" data-i18n-attrs="title" data-en-title="How to read this chart" data-fr-title="Comment lire ce graphique"><span aria-hidden="true">?</span></button><span id="help-pop-9" class="help-pop" role="note" hidden><span lang="en">The questions come from the public training and validation parts of the data, with the answer given by the dataset. Models are not tested on these four questions here: the scores shown at the end are for the whole test.</span><span lang="fr">Les questions viennent des parties publiques d’entraînement et de validation des données, avec la réponse du jeu de données. Les modèles ne sont pas testés ici sur ces quatre questions : les scores affichés à la fin portent sur le test entier.</span></span></span></div>
+<p class="lead col-text" data-reveal><span lang="en">Four real questions from the public data of the tests. Answer, then check.</span><span lang="fr">Quatre vraies questions tirées des données publiques des tests. Répondez, puis vérifiez.</span></p>
+<div id="x5" aria-busy="true"><noscript><p><span lang="en">This chart needs JavaScript. The same numbers are in the table of all results.</span><span lang="fr">Ce graphique demande JavaScript. Les mêmes chiffres sont dans le tableau de tous les résultats.</span> <a href="all-results.html"><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></p></noscript></div>
+</div>
+</section><section id="time" class="section ground-deep" data-chart aria-labelledby="time-title" style="padding-block:calc(var(--pad-section) * 0.6)">
+<div class="wrap stack-lg">
+<div class="head-row" data-reveal><h2 id="time-title" class="head"><span lang="en">Progress over time</span><span lang="fr">Progrès dans le temps</span></h2><span class="help" data-help><button type="button" class="help-btn" aria-expanded="false" aria-controls="help-pop-10" aria-label="How to read this chart" data-i18n-attrs="aria-label" data-en-aria-label="How to read this chart" data-fr-aria-label="Comment lire ce graphique" title="How to read this chart" data-i18n-attrs="title" data-en-title="How to read this chart" data-fr-title="Comment lire ce graphique"><span aria-hidden="true">?</span></button><span id="help-pop-10" class="help-pop" role="note" hidden><span lang="en">The step goes up each time a dated model beats every earlier one. The vertical axis starts at the lowest score shown, not at zero.</span><span lang="fr">L’escalier monte chaque fois qu’un modèle daté dépasse tous les précédents. L’axe vertical commence au plus bas score affiché, pas à zéro.</span></span></span></div>
+<p class="lead col-text" data-reveal><span lang="en">The highest score reached so far, by month, among models whose name carries a date.</span><span lang="fr">Le score le plus élevé atteint jusqu’ici, mois par mois, parmi les modèles dont le nom porte une date.</span></p>
+<div id="x6" aria-busy="true"><noscript><p><span lang="en">This chart needs JavaScript. The same numbers are in the table of all results.</span><span lang="fr">Ce graphique demande JavaScript. Les mêmes chiffres sont dans le tableau de tous les résultats.</span> <a href="all-results.html"><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></p></noscript></div>
+</div>
+</section>
+<section id="card" class="section" aria-labelledby="card-title" style="padding-block:calc(var(--pad-section) * 0.6)">
+<div class="wrap axis">
+<div class="zone-note"><picture><img class="card-prev" src="cards/card-en.svg" alt="Share card: the highest Quebec score, the strongest open model and the date of the data." data-i18n-attrs="alt" data-en-alt="Share card: the highest Quebec score, the strongest open model and the date of the data." data-fr-alt="Carte de partage : le score québécois le plus élevé, le modèle ouvert le plus fort et la date des données." width="1200" height="630" loading="lazy"></picture></div>
+<div class="axis-main stack">
+<h2 id="card-title" class="head" data-reveal><span lang="en">Share the headline</span><span lang="fr">Partager le constat</span></h2>
+<p class="lead col-text"><span lang="en">A picture of the main figures, sized for social networks.</span><span lang="fr">Une image des chiffres principaux, au format des réseaux sociaux.</span></p>
+<p><a class="btn" href="cards/card-en.png" download><span lang="en">Download the card (PNG, English)</span><span lang="fr">Télécharger la carte (PNG, anglais)</span></a> <a class="btn btn-ghost" href="cards/card-fr.png" download><span lang="en">Download the card (PNG, French)</span><span lang="fr">Télécharger la carte (PNG, français)</span></a></p>
+</div>
+</div>
+</section>
+</main>
+<section class="suite ground-tint" aria-labelledby="suite-title"><div class="wrap"><h2 id="suite-title" class="vh"><span lang="en">Next step</span><span lang="fr">Étape suivante</span></h2><a class="suite-card" href="model.html"><span class="small strong"><span lang="en">Back to the start</span><span lang="fr">Retour au début</span></span><span class="suite-t"><span lang="en">Pick another model</span><span lang="fr">Choisir un autre modèle</span></span><span><span lang="en">Look up one model: its rank and where it is strong.</span><span lang="fr">Consulter un modèle : son rang et ses points forts.</span></span><span class="btn suite-btn" aria-hidden="true"><span lang="en">Pick a model</span><span lang="fr">Choisir un modèle</span> →</span></a><p class="suite-prev"><a href="all-results.html" data-carry><span lang="en">Previous step: </span><span lang="fr">Étape précédente : </span><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></p></div></section>
+<footer class="site-footer ground-deep">
+<div class="wrap">
+<div class="footer-grid">
+<p class="lead zone-note" data-reveal><span lang="en">COLE is a GRAAL research project, Université Laval, Quebec.</span><span lang="fr">COLE est un projet de recherche du GRAAL, Université Laval, Québec.</span></p>
+<div class="stack">
+<ul class="footer-links" data-reveal>
+<li><a href="level-3.html"><span lang="en">Article</span><span lang="fr">Article</span></a></li>
+<li><a href="plain-language.html"><span lang="en">Poster</span><span lang="fr">Affiche</span></a></li>
+<li><a href="https://github.com/GRAAL-Research/COLE">GitHub</a></li>
+</ul>
+<details class="credits"><summary><span lang="en">Image credits</span><span lang="fr">Crédits des images</span></summary><p><span lang="en">Greyscale images from Wikimedia Commons. All in the public domain, except where noted.</span><span lang="fr">Images en niveaux de gris, Wikimedia Commons. Toutes du domaine public, sauf mention.</span></p><ul><li><a href="https://commons.wikimedia.org/wiki/File:Champlain_Market,_Quebec_(NBY_442137).jpg"><span lang="en">Champlain Market, Quebec</span><span lang="fr">Marché Champlain, Québec</span></a></li><li><a href="https://commons.wikimedia.org/wiki/File:Samuel_de_Champlain_Carte_geographique_de_la_Nouvelle_France.jpg"><span lang="en">Champlain’s map of New France</span><span lang="fr">Carte de la Nouvelle-France, Champlain</span></a></li><li><a href="https://commons.wikimedia.org/wiki/File:Casse_fran%C3%A7aise.jpg"><span lang="en">French type case</span><span lang="fr">Casse française</span></a></li><li><a href="https://commons.wikimedia.org/w/index.php?curid=133290410"><span lang="en">Inside a 16th-century print shop</span><span lang="fr">Vue intérieure d’une imprimerie au XVIe siècle</span></a> (CC0)</li><li><a href="https://commons.wikimedia.org/wiki/File:Qu%C3%A9bec_Sous-Le-Cap_165_(BAnQ_0003731687).jpg"><span lang="en">Québec, Sous-le-Cap</span><span lang="fr">Québec, Sous-le-Cap</span></a></li></ul></details>
+</div>
+</div>
+<div class="footer-name" aria-hidden="true"><span>COLE</span></div>
+</div>
+</footer>
+<dialog id="contact-dialog" aria-labelledby="contact-title">
+<div class="dlg">
+<h2 id="contact-title"><span lang="en">Contact</span><span lang="fr">Contact</span></h2>
+<p><span lang="en">To ask for an evaluation of your model, open an issue on the project’s GitHub page. We do not promise a delay, and each dated model version is evaluated once.</span><span lang="fr">Pour demander l’évaluation de votre modèle, ouvrez une demande sur la page GitHub du projet. Aucun délai n’est promis, et chaque version datée d’un modèle est évaluée une seule fois.</span></p>
+<p><a class="btn" href="https://github.com/GRAAL-Research/COLE/issues/new"><span lang="en">Open an issue</span><span lang="fr">Ouvrir une demande</span></a></p>
+<p><button class="link-btn" type="button" data-close><span lang="en">Close</span><span lang="fr">Fermer</span></button></p>
+</div>
+</dialog>
+<script src="app.js"></script>
+<script src="data.js"></script>
+<script src="explore.js"></script>
+</body>
+</html>

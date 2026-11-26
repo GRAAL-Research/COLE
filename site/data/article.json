@@ -1,0 +1,11 @@
+{
+ "title": "Lost in Translation: Why SOTA LLMs Struggle with French NLU Frontiers",
+ "authors": "David Beauchemin, Yan Tremblay, Mohamed Youssef, Richard Khoury",
+ "year": 2026,
+ "venue": "ICLR 2026, Poster in Workshop: I Can't Believe It's Not Better: Where Large Language Models need to improve",
+ "venue_kind": "workshop poster",
+ "primary_url": "https://iclr.cc/virtual/2026/10014620",
+ "abstract": "Despite LLMs' dominance in English, their transferability to French NLU remains inconsistent. To characterize this limitation, we present COLE, a new benchmark comprising 23 diverse French tasks, and use it to reveal significant failure modes in state-of-the-art (SOTA) models. Our analysis reveals three critical negative results: 1) a persistent performance gap where top open-weight models lag behind closed models by over 20%, 2) the illusion of specialization, where surface-level fluency in tuned models masks deep reasoning deficits, and 3) catastrophic failure in zero-shot extractive QA and regional dialect understanding, where many models, including top-tier reasoning models, achieve 0% Exact Match or perform near random baselines. We analyze these unexpected failures to highlight specific frontiers (morphology, cultural nuance) where scaling laws currently fail to generalize.",
+ "abstract_source": "https://iclr.cc/virtual/2026/10014620 (fetched 2026-11-26)",
+ "bibtex": "@inproceedings{beauchemin2026lost,\n  title={Lost in Translation: Why {SOTA} {LLM}s Struggle with {F}rench {NLU} Frontiers},\n  author={Beauchemin, David and Tremblay, Yan and Youssef, Mohamed and Khoury, Richard},\n  booktitle={ICLR 2026 Workshop: I Can't Believe It's Not Better: Where Large Language Models need to improve},\n  year={2026},\n  url={https://iclr.cc/virtual/2026/10014620}\n}"
+}
