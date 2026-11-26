@@ -12276,5 +12276,616 @@
         }
       }
     ]
+  },
+  {
+    "model_name": "CohereForAI/aya-expanse-32b",
+    "tasks": [
+      {
+        "allocine": {
+          "accuracy": 95.165
+        }
+      },
+      {
+        "daccord": {
+          "accuracy": 92.64990328820116
+        }
+      },
+      {
+        "fquad": {
+          "f1": 44.57162176953132,
+          "exact_match": 15.25
+        }
+      },
+      {
+        "fracas": {
+          "accuracy": 58.507462686567166
+        }
+      },
+      {
+        "french_boolq": {
+          "accuracy": 77.52808988764045
+        }
+      },
+      {
+        "gqnli": {
+          "accuracy": 66.66666666666666
+        }
+      },
+      {
+        "lingnli": {
+          "accuracy": 66.64622930717351
+        }
+      },
+      {
+        "mms": {
+          "accuracy": 74.2206045260326
+        }
+      },
+      {
+        "mnli-nineeleven-fr-mt": {
+          "accuracy": 67.45
+        }
+      },
+      {
+        "multiblimp": {
+          "accuracy": 93.5064935064935
+        }
+      },
+      {
+        "paws_x": {
+          "accuracy": 70.0
+        }
+      },
+      {
+        "piaf": {
+          "exact_match": 7.8125,
+          "f1": 32.5822028113786
+        }
+      },
+      {
+        "qfrblimp": {
+          "accuracy": 86.38941398865785
+        }
+      },
+      {
+        "qfrcola": {
+          "accuracy": 67.81076066790352
+        }
+      },
+      {
+        "qfrcore": {
+          "accuracy": 53.874379451759125
+        }
+      },
+      {
+        "qfrcort": {
+          "accuracy": 74.85380116959064
+        }
+      },
+      {
+        "rte3-french": {
+          "accuracy": 63.125
+        }
+      },
+      {
+        "sickfr": {
+          "accuracy": 43.11047696697921
+        }
+      },
+      {
+        "sts22": {
+          "accuracy": 40.27777777777778
+        }
+      },
+      {
+        "wino_x_lm": {
+          "accuracy": 73.1829573934837
+        }
+      },
+      {
+        "wino_x_mt": {
+          "accuracy": 45.38152610441767
+        }
+      },
+      {
+        "wsd": {
+          "exact_match": 26.882409484139696
+        }
+      },
+      {
+        "xnli": {
+          "accuracy": 70.75848303393214
+        }
+      }
+    ],
+    "model_url": "https://huggingface.co/CohereForAI/aya-expanse-32b"
+  },
+  {
+    "model_name": "command-a-03-2025",
+    "tasks": [
+      {
+        "allocine": {
+          "accuracy": 95.94500000000001
+        }
+      },
+      {
+        "daccord": {
+          "accuracy": 96.13152804642168
+        }
+      },
+      {
+        "fquad": {
+          "f1": 3.4140615853393586,
+          "exact_match": 1.75
+        }
+      },
+      {
+        "fracas": {
+          "accuracy": 60.0
+        }
+      },
+      {
+        "french_boolq": {
+          "accuracy": 97.19101123595506
+        }
+      },
+      {
+        "gqnli": {
+          "accuracy": 63.33333333333333
+        }
+      },
+      {
+        "lingnli": {
+          "accuracy": 67.0958512160229
+        }
+      },
+      {
+        "mms": {
+          "accuracy": 74.96755815793638
+        }
+      },
+      {
+        "mnli-nineeleven-fr-mt": {
+          "accuracy": 68.25
+        }
+      },
+      {
+        "multiblimp": {
+          "accuracy": 98.7012987012987
+        }
+      },
+      {
+        "paws_x": {
+          "accuracy": 80.0
+        }
+      },
+      {
+        "piaf": {
+          "exact_match": 1.8229166666666667,
+          "f1": 3.3765134343210974
+        }
+      },
+      {
+        "qfrblimp": {
+          "accuracy": 90.35916824196596
+        }
+      },
+      {
+        "qfrcola": {
+          "accuracy": 81.31460376358336
+        }
+      },
+      {
+        "qfrcore": {
+          "accuracy": 82.53831210878481
+        }
+      },
+      {
+        "qfrcort": {
+          "accuracy": 92.39766081871345
+        }
+      },
+      {
+        "rte3-french": {
+          "accuracy": 80.25
+        }
+      },
+      {
+        "sickfr": {
+          "accuracy": 83.0411740725642
+        }
+      },
+      {
+        "sts22": {
+          "accuracy": 50.0
+        }
+      },
+      {
+        "wino_x_lm": {
+          "accuracy": 79.484425349087
+        }
+      },
+      {
+        "wino_x_mt": {
+          "accuracy": 55.68942436412316
+        }
+      },
+      {
+        "wsd": {
+          "exact_match": 10.445370073694328
+        }
+      },
+      {
+        "xnli": {
+          "accuracy": 68.74251497005987
+        }
+      }
+    ]
+  },
+  {
+    "model_name": "command-r-08-2024",
+    "tasks": [
+      {
+        "allocine": {
+          "accuracy": 61.08
+        }
+      },
+      {
+        "daccord": {
+          "accuracy": 77.56286266924565
+        }
+      },
+      {
+        "fquad": {
+          "f1": 6.037220558275738,
+          "exact_match": 50.0
+        }
+      },
+      {
+        "fracas": {
+          "accuracy": 66.56716417910448
+        }
+      },
+      {
+        "french_boolq": {
+          "accuracy": 85.39325842696628
+        }
+      },
+      {
+        "gqnli": {
+          "accuracy": 36.666666666666664
+        }
+      },
+      {
+        "lingnli": {
+          "accuracy": 58.14428775802166
+        }
+      },
+      {
+        "mms": {
+          "accuracy": 43.31381547713246
+        }
+      },
+      {
+        "mnli-nineeleven-fr-mt": {
+          "accuracy": 59.8
+        }
+      },
+      {
+        "multiblimp": {
+          "accuracy": 55.84415584415584
+        }
+      },
+      {
+        "paws_x": {
+          "accuracy": 60.099999999999994
+        }
+      },
+      {
+        "piaf": {
+          "exact_match": 52.083333333333336,
+          "f1": 2.2185897002484904
+        }
+      },
+      {
+        "qfrblimp": {
+          "accuracy": 49.14933837429111
+        }
+      },
+      {
+        "qfrcola": {
+          "accuracy": 59.83302411873841
+        }
+      },
+      {
+        "qfrcore": {
+          "accuracy": 14.69889920138139
+        }
+      },
+      {
+        "qfrcort": {
+          "accuracy": 15.204678362573102
+        }
+      },
+      {
+        "rte3-french": {
+          "accuracy": 62.875
+        }
+      },
+      {
+        "sickfr": {
+          "accuracy": 59.31512433754587
+        }
+      },
+      {
+        "sts22": {
+          "accuracy": 43.05555555555556
+        }
+      },
+      {
+        "wino_x_lm": {
+          "accuracy": 60.544217687074834
+        }
+      },
+      {
+        "wino_x_mt": {
+          "accuracy": 50.568942436412314
+        }
+      },
+      {
+        "wsd": {
+          "exact_match": 10.573534123678307
+        }
+      },
+      {
+        "xnli": {
+          "accuracy": 53.55289421157685
+        }
+      }
+    ]
+  },
+  {
+    "model_name": "command-r-plus-08-2024",
+    "tasks": [
+      {
+        "allocine": {
+          "accuracy": 91.655
+        }
+      },
+      {
+        "daccord": {
+          "accuracy": 50.58027079303675
+        }
+      },
+      {
+        "fquad": {
+          "f1": 49.61193734617444,
+          "exact_match": 25.0
+        }
+      },
+      {
+        "fracas": {
+          "accuracy": 62.089552238805965
+        }
+      },
+      {
+        "french_boolq": {
+          "accuracy": 77.52808988764045
+        }
+      },
+      {
+        "gqnli": {
+          "accuracy": 40.0
+        }
+      },
+      {
+        "lingnli": {
+          "accuracy": 38.279174330676476
+        }
+      },
+      {
+        "mms": {
+          "accuracy": 40.32125336287387
+        }
+      },
+      {
+        "mnli-nineeleven-fr-mt": {
+          "accuracy": 40.45
+        }
+      },
+      {
+        "multiblimp": {
+          "accuracy": 57.14285714285714
+        }
+      },
+      {
+        "paws_x": {
+          "accuracy": 61.8
+        }
+      },
+      {
+        "piaf": {
+          "exact_match": 16.145833333333332,
+          "f1": 36.94024952970178
+        }
+      },
+      {
+        "qfrblimp": {
+          "accuracy": 63.32703213610586
+        }
+      },
+      {
+        "qfrcola": {
+          "accuracy": 72.36946726742644
+        }
+      },
+      {
+        "qfrcore": {
+          "accuracy": 44.571551910209365
+        }
+      },
+      {
+        "qfrcort": {
+          "accuracy": 67.83625730994152
+        }
+      },
+      {
+        "rte3-french": {
+          "accuracy": 54.50000000000001
+        }
+      },
+      {
+        "sickfr": {
+          "accuracy": 67.2849571952711
+        }
+      },
+      {
+        "sts22": {
+          "accuracy": 36.11111111111111
+        }
+      },
+      {
+        "wino_x_lm": {
+          "accuracy": 60.40100250626567
+        }
+      },
+      {
+        "wino_x_mt": {
+          "accuracy": 50.80321285140562
+        }
+      },
+      {
+        "wsd": {
+          "exact_match": 23.902595322012175
+        }
+      },
+      {
+        "xnli": {
+          "accuracy": 40.47904191616766
+        }
+      }
+    ]
+  },
+  {
+    "model_name": "command-r7b-12-2024",
+    "tasks": [
+      {
+        "allocine": {
+          "accuracy": 71.59
+        }
+      },
+      {
+        "daccord": {
+          "accuracy": 50.19342359767892
+        }
+      },
+      {
+        "fquad": {
+          "f1": 0.0,
+          "exact_match": 0.0
+        }
+      },
+      {
+        "fracas": {
+          "accuracy": 60.895522388059696
+        }
+      },
+      {
+        "french_boolq": {
+          "accuracy": 50.0
+        }
+      },
+      {
+        "gqnli": {
+          "accuracy": 40.0
+        }
+      },
+      {
+        "lingnli": {
+          "accuracy": 35.35663192315553
+        }
+      },
+      {
+        "mms": {
+          "accuracy": 63.74268080392467
+        }
+      },
+      {
+        "mnli-nineeleven-fr-mt": {
+          "accuracy": 35.25
+        }
+      },
+      {
+        "multiblimp": {
+          "accuracy": 48.05194805194805
+        }
+      },
+      {
+        "paws_x": {
+          "accuracy": 55.05
+        }
+      },
+      {
+        "piaf": {
+          "exact_match": 0.0,
+          "f1": 0.0
+        }
+      },
+      {
+        "qfrblimp": {
+          "accuracy": 48.01512287334593
+        }
+      },
+      {
+        "qfrcola": {
+          "accuracy": 30.50622846541214
+        }
+      },
+      {
+        "qfrcore": {
+          "accuracy": 41.2691560543924
+        }
+      },
+      {
+        "qfrcort": {
+          "accuracy": 40.35087719298245
+        }
+      },
+      {
+        "rte3-french": {
+          "accuracy": 51.125
+        }
+      },
+      {
+        "sickfr": {
+          "accuracy": 28.618018752547904
+        }
+      },
+      {
+        "sts22": {
+          "accuracy": 27.77777777777778
+        }
+      },
+      {
+        "wino_x_lm": {
+          "accuracy": 51.98711063372718
+        }
+      },
+      {
+        "wino_x_mt": {
+          "accuracy": 50.26773761713521
+        }
+      },
+      {
+        "wsd": {
+          "exact_match": 0.0
+        }
+      },
+      {
+        "xnli": {
+          "accuracy": 33.33333333333333
+        }
+      }
+    ]
   }
 ]

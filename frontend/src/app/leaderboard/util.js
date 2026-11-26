@@ -66,6 +66,10 @@ const BRAND_NAMES = {
   flaubert: "FlauBERT",
   bert: "BERT",
   roberta: "RoBERTa",
+  command: "Command",
+  aya: "Aya",
+  expanse: "Expanse",
+  plus: "Plus",
   instruct: "Instruct",
   chat: "Chat",
 };
@@ -78,7 +82,11 @@ export const prettifyModelName = (name) => {
   const tokens = base.split(/[-_\s]+/).filter(Boolean);
   const isClaude = tokens[0]?.toLowerCase() === "claude";
 
-  const mapped = tokens.map((tok) => BRAND_NAMES[tok.toLowerCase()] ?? tok);
+  const mapped = tokens.map(
+    (tok) =>
+      BRAND_NAMES[tok.toLowerCase()] ??
+      (/^[a-z]$/.test(tok) ? tok.toUpperCase() : tok)
+  );
   if (!isClaude) return mapped.join(mapped[0] === "GPT" ? "-" : " ");
 
   // Claude: "Claude 3 Opus", "Claude Opus 4.5" (consecutive digits -> "4.5").
