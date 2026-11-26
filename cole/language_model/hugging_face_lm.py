@@ -51,6 +51,19 @@ class HFLLMModel(LanguageModel):
             )
         self._batch_size = batch_size
 
+        if "ConditionalGeneration" in type(self.model).__name__:
+            # Multimodal checkpoints (Qwen3.6, ...) return the logits of the whole
+            # sequence, whose length differs from one batch to the next and breaks the
+            # zero-shot pipeline (it concatenates the logits of all batches). Keep only
+            # the last position, as the text-only models already do.
+            original_forward = self.model.forward
+
+            def forward_last_token(*args, **kwargs):
+                kwargs.setdefault("logits_to_keep", 1)
+                return original_forward(*args, **kwargs)
+
+            self.model.forward = forward_last_token
+
     def predict(self, evaluation_dataset: Dataset, task: Task) -> List:
         if task.task_name == "sts22" and "gpt-oss" in self._model_name:
             # For sts22, GPT-oss get OOM for batch size higher than 1.
