@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, ChevronsUpDown, TriangleAlert } from "lucide-react";
 import PageTitle from "@/app/components/PageTitle";
 import Modal from "@/app/components/Modal";
 import BigBlueButton, { buttonClass } from "@/app/components/BigBlueButton";
@@ -515,8 +515,9 @@ export default function LeaderboardPage() {
                       ))}
                   </ul>
                   {values[`${metricType}_warning`] && (
-                    <p className="mt-2 text-sm text-yellow-800">
-                      ⚠️ {values[`${metricType}_warning`]}
+                    <p className="mt-2 flex items-start gap-1.5 text-sm text-yellow-800">
+                      <TriangleAlert aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+                      <span>{values[`${metricType}_warning`]}</span>
                     </p>
                   )}
                 </div>
