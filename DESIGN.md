@@ -99,9 +99,12 @@ there is still no dark mode toggle (non-objective of the framing).
 
 ## Data visualisation
 
-- Charts live inside a root marked `data-chart`. Radar plates: two series at most per
-  plate (ink and accent on a field), direct labels on axes, no rainbow, no gradient,
-  no 3D, no invented numbers.
+- Charts live inside a root marked `data-chart`. Radar plates: three series at most per
+  plate, told apart by colour, stroke pattern and marker shape (never colour alone),
+  one legend per chart (the selected-model chips), value labels without the marker
+  symbol, no rainbow, no gradient, no 3D, no invented numbers. Above three models the
+  default view is the by-skill strip and a "check up to 3 models" picker chooses the
+  radar series. Selected values are shown once per screen.
 - Every chart has a keyboard-reachable table alternative with the same values
   (accessibility requirement of the framing).
 - The leaderboard keeps real table semantics (th scope, aria-sort, sticky rank and
