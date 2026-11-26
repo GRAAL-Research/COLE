@@ -1,6 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
+import PageTitle from "@/app/components/PageTitle";
+import Modal from "@/app/components/Modal";
 import {
   normalizeBenchmarkName,
   computeAverageScore,
@@ -34,6 +38,10 @@ export default function LeaderboardPage() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState('');
+  const [reloadKey, setReloadKey] = useState(0);
+  const [scrollState, setScrollState] = useState({ scrolled: false, atEnd: false });
+  const searchRef = useRef(null);
+  const scrollRef = useRef(null);
 
   const headerLabels = {
     rank: t('leaderboard_rankHeader'),
@@ -65,7 +73,28 @@ export default function LeaderboardPage() {
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, []);
+  }, [reloadKey]);
+
+  const retry = () => {
+    setError(false);
+    setLoading(true);
+    setReloadKey((k) => k + 1);
+  };
+
+  const updateScrollState = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setScrollState({
+      scrolled: el.scrollLeft > 0,
+      atEnd: el.scrollLeft + el.clientWidth >= el.scrollWidth - 1,
+    });
+  };
+
+  useEffect(() => {
+    updateScrollState();
+    window.addEventListener('resize', updateScrollState);
+    return () => window.removeEventListener('resize', updateScrollState);
+  }, [loading, benchmarks, currentPage, search]);
 
   const getCellValue = (entry, col) => {
     if (col === 'model') return entry.display_name;
@@ -161,75 +190,83 @@ export default function LeaderboardPage() {
     setCurrentPage(1);
   };
 
+
+  const stickyClass = (col, isHeader) => {
+    if (col !== 'rank' && col !== 'model') return '';
+    const position = col === 'rank' ? 'left-0 w-14 min-w-14' : 'left-14 min-w-40 sm:min-w-56';
+    const edge = col === 'model' && scrollState.scrolled
+      ? ' shadow-[4px_0_6px_-4px_rgba(0,0,0,0.35)]'
+      : '';
+    const background = isHeader ? '' : ' bg-white group-hover:bg-gray-50';
+    return `sticky z-10 ${position}${background}${edge}`;
+  };
+
   const renderHeader = (col) => {
     const baseLabel =
       headerLabels[col] ??
       shortTaskName(t(`benchmark_${col}_title`, { defaultValue: col }));
-    const arrow = sortCol === col ? (sortOrder === 'asc' ? ' ▲' : ' ▼') : '';
-
-    if (col === 'overall') {
-      return (
-        <div>
-          <div onClick={() => handleSort(col)} className="cursor-pointer">
-            {baseLabel}
-            {arrow}
-          </div>
-          <div className="text-xs text-blue-100 text-center">
-            {t('leaderboard_avgScoreLabel')}
-          </div>
-        </div>
-      );
-    }
-
-    if (col === 'model' || col === 'rank') {
-      return (
-        <div onClick={() => handleSort(col)} className="cursor-pointer">
-          {baseLabel}
-          {arrow}
-        </div>
-      );
-    }
+    const isSorted = sortCol === col;
+    const SortIcon = isSorted ? (sortOrder === 'asc' ? ArrowUp : ArrowDown) : ChevronsUpDown;
 
     let metricText = '';
-    const sample = entries[0];
-    if (sample && sample.results) {
-      const p = Object.entries(sample.results).find(
-        ([raw]) => normalizeBenchmarkName(raw) === col
-      );
-      if (p) {
-        const grp = Object.values(p[1])[0];
-        if (grp) {
-          const metrics = Object.keys(grp)
-            .filter((m) => allowedMetrics.includes(m.toLowerCase()));
-          if (metrics.length > 0) {
-            metricText = ` (${metrics.join(', ')})`;
-          }
-        }
+    if (col !== 'rank' && col !== 'model' && col !== 'overall') {
+      const sample = entries[0];
+      const p = sample?.results
+        ? Object.entries(sample.results).find(([raw]) => normalizeBenchmarkName(raw) === col)
+        : null;
+      const grp = p ? Object.values(p[1])[0] : null;
+      if (grp) {
+        const metrics = Object.keys(grp).filter((m) => allowedMetrics.includes(m.toLowerCase()));
+        if (metrics.length > 0) metricText = ` (${metrics.join(', ')})`;
       }
     }
 
     return (
-      <div onClick={() => handleSort(col)} className="cursor-pointer">
-        {baseLabel}
-        {arrow}
-        {metricText}
-      </div>
+      <>
+        <button
+          type="button"
+          onClick={() => handleSort(col)}
+          className="inline-flex min-h-11 items-center gap-1 rounded text-left font-semibold text-white focus-visible:outline-white"
+        >
+          <span>
+            {baseLabel}
+            {metricText}
+          </span>
+          <SortIcon
+            className={`h-4 w-4 shrink-0 ${isSorted ? '' : 'opacity-70'}`}
+            aria-hidden="true"
+          />
+        </button>
+        {col === 'overall' && (
+          <div className="text-xs font-normal text-white">{t('leaderboard_avgScoreLabel')}</div>
+        )}
+      </>
     );
   };
 
+  const columns = ['rank', 'model', 'overall', ...benchmarks];
+  const ariaSort = (col) =>
+    sortCol === col ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none';
+
+  const title = <PageTitle>{t('leaderboard_title')}</PageTitle>;
+
   if (loading) {
     return (
-      <div className="space-y-8">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-4 border-l-4 border-blue-600 pl-4">
-          {t('leaderboard_title')}
-        </h3>
-        <div className="overflow-auto">
-          <div className="animate-pulse space-y-3">
-            <div className="h-10 bg-blue-100 rounded w-full" />
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="h-8 bg-gray-100 rounded w-full" />
-            ))}
-          </div>
+      <div role="status" aria-busy="true">
+        {title}
+        <span className="sr-only">{t('leaderboard_loading')}</span>
+        <div aria-hidden="true" className="animate-pulse motion-reduce:animate-none">
+          <div className="mb-6 h-10 w-full max-w-sm rounded bg-gray-100" />
+          <div className="h-14 w-full rounded-t bg-blue-100" />
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="flex h-11 items-center gap-4 border-b border-gray-200 px-2">
+              <div className="h-4 w-8 rounded bg-gray-100" />
+              <div className="h-4 w-40 rounded bg-gray-100" />
+              <div className="h-4 w-16 rounded bg-gray-100" />
+              <div className="hidden h-4 w-16 rounded bg-gray-100 sm:block" />
+              <div className="hidden h-4 w-16 rounded bg-gray-100 sm:block" />
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -237,168 +274,223 @@ export default function LeaderboardPage() {
 
   if (error) {
     return (
-      <div className="space-y-8">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-4 border-l-4 border-blue-600 pl-4">
-          {t('leaderboard_title')}
-        </h3>
-        <div className="text-center py-12">
-          <p className="text-red-600 text-lg">{t('leaderboard_errorMessage')}</p>
+      <div>
+        {title}
+        <div role="alert" className="py-12 text-center">
+          <p className="mb-4 text-lg text-red-700">{t('leaderboard_errorMessage')}</p>
+          <button
+            type="button"
+            onClick={retry}
+            className="inline-flex min-h-11 items-center rounded-md bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
+          >
+            {t('leaderboard_retry')}
+          </button>
         </div>
       </div>
     );
   }
 
+  const clearSearch = () => {
+    setSearch('');
+    setCurrentPage(1);
+    searchRef.current?.focus();
+  };
+
+  const pagerButton =
+    'inline-flex min-h-11 min-w-11 items-center justify-center rounded bg-accent text-white hover:bg-accent-strong disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-600';
+
   return (
-    <div className="space-y-8">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-4 border-l-4 border-blue-600 pl-4">
-        {t('leaderboard_title')}</h3>
+    <div>
+      {title}
       <input
+        ref={searchRef}
         type="search"
         value={search}
         onChange={handleSearch}
         placeholder={t('leaderboard_searchPlaceholder')}
         aria-label={t('leaderboard_searchPlaceholder')}
-        className="w-full max-w-sm border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="mb-6 min-h-11 w-full max-w-sm rounded border border-gray-400 px-3 py-2 text-sm text-gray-900"
       />
-      <div className="overflow-auto">
-        <table className="min-w-full border-collapse">
-          <thead>
-            <tr>
-              {['rank', 'model', 'overall', ...benchmarks].map((b) => (
-                <th
-                  key={b}
-                  className="border border-gray-300 px-2 py-1 bg-blue-600 text-left text-sm font-semibold text-white"
-                >
-                  {renderHeader(b)}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedEntries.map((entry) => (
-              <tr
-                key={entry.submission_id}
-                className="bg-white hover:bg-gray-50 cursor-pointer"
-                onClick={() => setSelectedEntry(entry)}
-              >
-                <td className="border border-gray-300 px-2 py-1 text-center font-bold text-gray-800">
-                  {rankById.get(entry.submission_id) ?? '—'}
-                </td>
-                <td className="border border-gray-300 px-2 py-1 font-medium text-blue-600">
-                  {entry.display_name}
-                </td>
-                <td className="border border-gray-300 px-2 py-1 text-center text-black font-bold">
-                  {entry.averageScore == null
-                    ? t('leaderboard_notSpecified')
-                    : (entry.averageScore * 100).toFixed(1) + '%'}
-                </td>
-                {benchmarks.map((b) => {
-                  const val = getCellValue(entry, b);
-                  return (
-                    <td
-                      key={b}
-                      className="border border-gray-200 px-2 py-1 text-center text-gray-800"
-                      title={val == null ? t('leaderboard_notSpecifiedTooltip') : undefined}
-                    >
-                      {val == null
-                        ? <span className="text-gray-400 italic">{t('leaderboard_notSpecified')}</span>
-                        : (val * 100).toFixed(1) + '%'}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-            {paginatedEntries.length === 0 && (
-              <tr>
-                <td
-                  colSpan={benchmarks.length + 3}
-                  className="px-2 py-4 text-center text-gray-500"
-                >
-                  {t('leaderboard_noResults')}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
 
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-4 py-4">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1 rounded bg-blue-600 text-white disabled:opacity-40 hover:bg-blue-700 transition"
+      {sorted.length === 0 ? (
+        <div role="status" className="py-12 text-center">
+          {query ? (
+            <>
+              <p className="mb-4 text-gray-700">{t('leaderboard_noResults')}</p>
+              <button
+                type="button"
+                onClick={clearSearch}
+                className="inline-flex min-h-11 items-center rounded-md border border-gray-400 bg-white px-4 py-2 font-medium text-gray-800 hover:bg-gray-100"
+              >
+                {t('leaderboard_clearSearch')}
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="mb-4 text-gray-700">{t('leaderboard_empty')}</p>
+              <Link
+                href="/leaderboard?show=submit"
+                className="inline-flex min-h-11 items-center rounded-md bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
+              >
+                {t('nav_submit')}
+              </Link>
+            </>
+          )}
+        </div>
+      ) : (
+        <div className="relative">
+          <div
+            ref={scrollRef}
+            onScroll={updateScrollState}
+            role="region"
+            tabIndex={0}
+            aria-label={t('leaderboard_scrollRegion')}
+            className="overflow-x-auto"
           >
-            &laquo;
-          </button>
-          <span className="text-gray-700 text-sm">
-            {currentPage} / {totalPages}
-          </span>
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 rounded bg-blue-600 text-white disabled:opacity-40 hover:bg-blue-700 transition"
-          >
-            &raquo;
-          </button>
+            <table className="min-w-full border-separate border-spacing-0">
+              <thead>
+                <tr>
+                  {columns.map((b) => (
+                    <th
+                      key={b}
+                      scope="col"
+                      aria-sort={ariaSort(b)}
+                      className={`border-b border-r border-blue-500 bg-blue-600 px-2 py-1 text-left align-top text-sm text-white ${
+                        b === 'rank' || b === 'model' ? stickyClass(b, true) : 'min-w-28'
+                      }`}
+                    >
+                      {renderHeader(b)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedEntries.map((entry) => (
+                  <tr
+                    key={entry.submission_id}
+                    className="group cursor-pointer"
+                    onClick={(e) => {
+                      e.currentTarget.querySelector('button')?.focus();
+                      setSelectedEntry(entry);
+                    }}
+                  >
+                    <td className={`border-b border-r border-gray-200 px-2 py-1 text-center font-bold text-gray-800 ${stickyClass('rank')}`}>
+                      {rankById.get(entry.submission_id) ?? '-'}
+                    </td>
+                    <td className={`border-b border-r border-gray-200 px-1 py-0 font-medium ${stickyClass('model')}`}>
+                      <button
+                        type="button"
+                        aria-haspopup="dialog"
+                        aria-label={t('leaderboard_openDetails', { name: entry.display_name })}
+                        title={entry.display_name}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedEntry(entry);
+                        }}
+                        className="block min-h-11 w-full max-w-[12rem] truncate whitespace-nowrap rounded px-1 text-left text-blue-700 hover:underline sm:max-w-[20rem]"
+                      >
+                        {entry.display_name}
+                      </button>
+                    </td>
+                    <td className="border-b border-r border-gray-200 bg-white px-2 py-1 text-center font-bold text-gray-900 group-hover:bg-gray-50">
+                      {entry.averageScore == null
+                        ? t('leaderboard_notSpecified')
+                        : (entry.averageScore * 100).toFixed(1) + '%'}
+                    </td>
+                    {benchmarks.map((b) => {
+                      const val = getCellValue(entry, b);
+                      return (
+                        <td
+                          key={b}
+                          className="border-b border-r border-gray-200 bg-white px-2 py-1 text-center text-gray-800 group-hover:bg-gray-50"
+                          title={val == null ? t('leaderboard_notSpecifiedTooltip') : undefined}
+                        >
+                          {val == null
+                            ? <span className="italic text-gray-600">{t('leaderboard_notSpecified')}</span>
+                            : (val * 100).toFixed(1) + '%'}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {!scrollState.atEnd && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-black/15 to-transparent"
+            />
+          )}
         </div>
       )}
 
-      {selectedEntry && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-          onClick={(e) => { if (e.target === e.currentTarget) setSelectedEntry(null); }}
-          onKeyDown={(e) => { if (e.key === 'Escape') setSelectedEntry(null); }}
-          role="dialog"
-          aria-modal="true"
-          tabIndex={-1}
+      {totalPages > 1 && (
+        <nav
+          aria-label={t('leaderboard_pagination')}
+          className="flex items-center justify-center gap-4 py-4"
         >
-          <div className="bg-white p-6 rounded-2xl shadow-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">
-              {t('leaderboard_modalTitle', {
-                name: selectedEntry.display_name,
-              })}
-            </h3>
-            {Object.entries(selectedEntry.results || {}).map(
-              ([taskKey, metricsObj]) => {
-                const prettyName = taskKey.split('|')[1] || taskKey;
-                const [metricType, values] = Object.entries(metricsObj)[0];
-                return (
-                  <div key={taskKey} className="mb-4">
-                    <h4 className="font-medium text-blue-700">
-                      {prettyName}
-                    </h4>
-                    <ul className="list-disc list-inside text-gray-700">
-                      {Object.entries(values)
-                        .filter(([k]) => !k.endsWith('_warning'))
-                        .map(([metricKey, value]) => (
-                          <li key={metricKey}>
-                            <strong>{metricKey.replace(/_/g, ' ')}</strong>:{' '}
-                            {typeof value === 'number'
-                              ? (value > 1
-                                ? value.toFixed(1) + '%'
-                                : (value * 100).toFixed(1) + '%')
-                              : value}
-                          </li>
-                        ))}
-                    </ul>
-                    {values[`${metricType}_warning`] && (
-                      <p className="text-sm text-yellow-700 mt-2">
-                        ⚠️ {values[`${metricType}_warning`]}
-                      </p>
-                    )}
-                  </div>
-                );
-              }
-            )}
-            <button
-              className="mt-4 px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300"
-              onClick={() => setSelectedEntry(null)}
-            >
-              {t('leaderboard_closeButton')}
-            </button>
-          </div>
-        </div>
+          <button
+            type="button"
+            aria-label={t('leaderboard_prevPage')}
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className={pagerButton}
+          >
+            <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <span className="text-sm text-gray-800" aria-live="polite" aria-atomic="true">
+            {t('leaderboard_pageStatus', { current: currentPage, total: totalPages })}
+          </span>
+          <button
+            type="button"
+            aria-label={t('leaderboard_nextPage')}
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className={pagerButton}
+          >
+            <ChevronRight className="h-5 w-5" aria-hidden="true" />
+          </button>
+        </nav>
+      )}
+
+      {selectedEntry && (
+        <Modal
+          size="lg"
+          title={t('leaderboard_modalTitle', { name: selectedEntry.display_name })}
+          onClose={() => setSelectedEntry(null)}
+        >
+          {Object.entries(selectedEntry.results || {}).map(
+            ([taskKey, metricsObj]) => {
+              const prettyName = taskKey.split('|')[1] || taskKey;
+              const [metricType, values] = Object.entries(metricsObj)[0];
+              return (
+                <div key={taskKey} className="mb-4">
+                  <h3 className="font-medium text-blue-700">{prettyName}</h3>
+                  <ul className="list-inside list-disc text-gray-700">
+                    {Object.entries(values)
+                      .filter(([k]) => !k.endsWith('_warning'))
+                      .map(([metricKey, value]) => (
+                        <li key={metricKey}>
+                          <strong>{metricKey.replace(/_/g, ' ')}</strong>:{' '}
+                          {typeof value === 'number'
+                            ? (value > 1
+                              ? value.toFixed(1) + '%'
+                              : (value * 100).toFixed(1) + '%')
+                            : value}
+                        </li>
+                      ))}
+                  </ul>
+                  {values[`${metricType}_warning`] && (
+                    <p className="mt-2 text-sm text-yellow-800">
+                      ⚠️ {values[`${metricType}_warning`]}
+                    </p>
+                  )}
+                </div>
+              );
+            }
+          )}
+        </Modal>
       )}
     </div>
   );
