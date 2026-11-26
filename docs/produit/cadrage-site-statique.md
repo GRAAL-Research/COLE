@@ -10,18 +10,31 @@ refait et une page de vulgarisation à trois niveaux. »
 ## Problème
 
 Une personne qui veut savoir quel modèle de langage est fiable en français
-québécois ouvre colebenchmark.org et trouve un tableau de 96 lignes sur 26
-colonnes, lisible seulement par un spécialiste. Elle ne voit ni la date
-d'évaluation, ni le coût, ni la taille, ni ce que mesure chaque colonne. Les
-modèles récents manquent : aucun Claude 5, aucun Cohere de 2026, ni plusieurs
-modèles de la liste du dépôt (Claude Sonnet 4.5, GPT-5.1, Gemini 3 Pro).
-Les résultats vieillissent donc sans que personne ne le sache, et ceux qui ne
-sont pas spécialistes ne comprennent pas ce que COLE mesure.
+québécois ouvre colebenchmark.org et trouve un tableau de 96 entrées sur 27
+colonnes (nom, score composite et 25 colonnes de métrique : 23 tâches, dont
+fquad et piaf qui portent deux métriques chacune), lisible seulement par un
+spécialiste. La page ne montre ni la date d'évaluation, ni le coût, ni la
+taille (la taille existe dans `predictions/llm_details.csv` mais n'est pas
+affichée), ni ce que mesure chaque colonne.
+
+Les modèles récents manquent. Le classement en ligne (`leaderboard.json`, 96
+entrées) ne contient que 2 Claude (Opus 4 et Sonnet 4, mai 2025) et 2 Cohere
+(aya-expanse-8b, aya-23-8b). Dix-neuf modèles configurés dans
+`predictions/all_llms.py` en sont absents (dont Claude Sonnet 4.5, Haiku 4.5,
+Opus 4.1, GPT-5.1, Gemini 3 Pro, Command A). Les familles Claude 5 et Cohere
+2026 ne sont pas encore dans le dépôt : elles viennent du registre du projet
+Tribune (fleet_private.json, fleet_cohere.json). Deux sources divergent :
+`predictions/results/full_results_table.csv` (article) contient déjà
+Claude-sonnet-4-5 et GPT-5, que `leaderboard.json` n'a pas. La source de
+vérité retenue sera le registre de modèles décrit plus bas.
 
 Pourquoi ce n'est pas résolu : le site est né comme annexe d'un article, avec un
 backend FastAPI à entretenir sur HuggingFace, un protocole d'évaluation qui
-perd des appels en silence (relance qui devient NA, erreurs confondues, aucun
-suivi de coût) et aucun processus pour ajouter un modèle.
+fausse des résultats (dans `open_ai_api_lm_wrapper.py` : une relance réussie
+renvoie None donc NA, des `except` nus confondent refus, 429 et délai dépassé,
+un `eval()` est appliqué à la sortie du modèle, et les branches testées dans
+l'ordre « 0 » avant « 10 » et « 11 » rendent ces deux étiquettes
+inatteignables) et aucun processus pour ajouter un modèle.
 
 En quoi nous sommes une partie du problème : l'ajout d'un modèle dépend d'une
 personne et d'une soumission manuelle ; le public a été invité à déposer des
@@ -45,14 +58,24 @@ Les chercheurs en NLP restent servis par le niveau 3, mais ne priment pas.
 - Fournisseur : quand mon modèle sort, je veux savoir comment il se compare et
   comment le faire évaluer, afin de le situer sans fabriquer mes propres tests.
 
-## Résultat visé (métriques proposées, valeurs actuelles à mesurer)
+## Résultat visé
+
+Les valeurs « aujourd'hui » sont celles mesurées dans le dépôt le 2026-11-26.
+Il n'existe aucune mesure d'audience (décision : on n'en ajoute pas), donc
+aucune métrique d'usage chiffrée n'est possible ; l'usage se juge sur des
+preuves qualitatives (voir plus bas).
 
 | Métrique | Aujourd'hui | Cible | Échéance |
 |---|---|---|---|
-| Fraîcheur : modèles frontière sortis depuis moins de 90 jours et évalués | 0 des 4 Claude 5 ; Claude 4.x seulement | 100 % des modèles frontière listés au registre, délai de moins de 30 jours après la sortie | 3 mois après la mise en ligne |
-| Lisibilité : une personne non spécialiste répond correctement à « quel modèle est le meilleur en inférence ? » sans aide | non mesuré | 4 sur 5 en test avec 5 personnes | avant la mise en ligne |
-| Entretien : serveurs ou services à entretenir | 1 backend + 1 Space + 1 proxy | 0 (GitHub Pages seul) | à la bascule |
-| Reproductibilité : entrées avec date, modèle daté, empreinte des prompts, commit | 0 sur 96 | 100 % des nouvelles entrées | dès le jalon 1 |
+| Couverture du registre : modèles du registre (`models.yaml`) évalués en v2 | 0 sur 19 modèles de `all_llms.py` absents, plus la famille Claude 5 et les Cohere 2026 | 100 % des modèles du registre | 3 mois après la mise en ligne |
+| Fraîcheur : délai entre la sortie d'un modèle du registre et son entrée au classement | non suivi | moins de 30 jours (sans engagement envers un fournisseur) | régime permanent, relevé tous les trimestres |
+| Décision d'un praticien : sur 5 praticiens nommés, nombre qui choisissent un modèle plausible entre 2 candidats en moins de 3 minutes avec la page niveau 2 | non mesuré | 4 sur 5, avec les raisons notées (qualitatif, pas statistique) | avant la bascule du domaine |
+| Reproductibilité : entrées avec modèle daté, date, empreinte des prompts, commit, versions des jeux | 0 sur 96 | 100 % des nouvelles entrées v2, 96 anciennes marquées paper-v1 | dès le jalon 1 |
+| Entretien : services à maintenir | 1 backend + 1 Space + 1 proxy Vercel | 0 serveur (Pages seul) | à la bascule |
+
+Preuves d'usage acceptées faute de mesure : demandes d'évaluation reçues
+(bouton de contact, issues GitHub), citations du site, retours des praticiens
+interviewés.
 
 ## Décisions déjà prises avec l'équipe
 
@@ -64,6 +87,15 @@ Les chercheurs en NLP restent servis par le niveau 3, mais ne priment pas.
   d'issue GitHub.
 - Unité « % » dans l'en-tête des colonnes, nombres seuls dans les cellules.
 - Archiver l'état du dépôt (étiquette Git) avant de retirer la soumission.
+- Aucune mesure d'audience sur le site (vie privée maximale) ; risque assumé :
+  l'hypothèse « des praticiens viennent » ne se vérifie que par entrevues et
+  par les demandes reçues.
+- Réévaluation en v2 de tous les modèles d'API sans test préalable v1/v2 ;
+  risque assumé : le site et l'article peuvent diverger. Mitigation : note de
+  protocole publique, anciennes entrées gardées en archive, écart v1/v2 mesuré
+  après coup sur les modèles évalués dans les deux protocoles.
+- Fournisseurs : aucun délai garanti ; une seule évaluation par identifiant de
+  modèle daté (pas de réessai pour améliorer un score).
 
 ## Lean UX Canvas
 
@@ -104,7 +136,55 @@ Les chercheurs en NLP restent servis par le niveau 3, mais ne priment pas.
 - Pas de mode sombre dans la première version : décision de design à part, pour
   tenir le délai.
 - Pas de rang unique « meilleur modèle » sans contexte : le classement général
-  reste, mais la page praticien compare par catégorie.
+  reste comme vue de référence, mais la page praticien compare par catégorie.
+- Pas de nouveaux jeux de tâches dans ce chantier : les 23 tâches restent.
+- Pas d'évaluation à la demande avec délai garanti, ni payante, ni de
+  résultats privés avant publication (embargo) pour les fournisseurs.
+- Pas d'API publique des résultats au-delà du fichier JSON versionné.
+
+## Critères d'acceptation minimaux
+
+- Langues : EN et FR, parité des textes ; la page de vulgarisation existe dans
+  les deux.
+- Accessibilité : le radar a une alternative tableau lisible au clavier et par
+  lecteur d'écran ; contrastes AA mesurés ; focus visible.
+- Étiquettes privées : aucun fichier publié ne contient de résultat par exemple
+  ni d'étiquette ; une vérification automatique le contrôle avant chaque
+  publication. Les entrées de test publiques (`graalul/COLE-public`) doivent
+  avoir les mêmes empreintes que les entrées privées (à vérifier).
+- Cas limites : modèle sans coût public (champ nul affiché « n.d. »), modèle à
+  raisonnement (deux entrées liées), entrée paper-v1 (badge de protocole),
+  tâche non évaluée (NA expliqué, jamais un zéro).
+- Chiffres : une décimale dans le tableau du site ; l'article rapporte deux
+  décimales (règle de recherche) ; la page de niveau avancé donne deux
+  décimales.
+- Aucune adresse courriel affichée ; contact par bouton.
+
+## Économie et condition d'arrêt
+
+- Les clés sont celles de licences académiques sans plafond ; le suivi de coût
+  (jetons, coût estimé, latence) est tout de même journalisé par appel pour
+  chaque modèle (champ `billed: false` pour les licences académiques).
+- Condition d'arrêt de la réévaluation de masse : si l'écart v1/v2 mesuré sur
+  les premiers modèles dépasse 1 point en moyenne ou déplace des rangs du top
+  10, on s'arrête et on tranche (étape ajoutée même si le test préalable est
+  refusé).
+- Condition d'arrêt du projet : le test de niveau 2 échoue (moins de 3
+  praticiens sur 5) : on abandonne la page radar et on reprend l'alternative B
+  ou C ci-dessous.
+
+## Découpe : tranche 1 puis suite
+
+1. Tranche 1 (livrable seule, de bout en bout) : maquette statique « Choisir un
+   modèle » avec un radar par catégorie sur 6 modèles (données actuelles),
+   testée avec 5 praticiens nommés avant d'engager la migration Pages et les
+   trois niveaux. Les 5 praticiens sont à nommer par l'équipe (organisation,
+   rôle, décision de modèle récente) : point ouvert.
+2. Si le test réussit : registre de modèles et pipeline d'évaluation v2
+   (jalon 1 : un modèle sur 3 tâches), puis migration vers GitHub Pages avec
+   archivage (étiquette Git), puis niveaux 1 et 3, puis refonte visuelle
+   complète.
+3. Si le test échoue : retour au cadrage (alternatives B à D).
 
 ## Réévaluation de la solution ancrée
 
