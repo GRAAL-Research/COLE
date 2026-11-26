@@ -1,7 +1,10 @@
+import os
+from concurrent.futures import ThreadPoolExecutor
 from typing import Union, List
 
 from datasets import Dataset
 from datasets.formatting.formatting import LazyRow
+from tqdm import tqdm
 
 from cole.language_model.language_model_abstraction import LanguageModel
 from cole.language_model.private_language_model_factory import (
@@ -52,6 +55,10 @@ class RemoteLLMModel(LanguageModel):
         else:
             inference_fn = self.generate
 
+        workers = int(os.getenv("COLE_WORKERS", "1"))
+        if workers > 1:
+            return self._predict_parallel(evaluation_dataset, workers)
+
         process_dataset = evaluation_dataset.map(
             inference_fn,
             batched=False,
@@ -62,3 +69,24 @@ class RemoteLLMModel(LanguageModel):
         self.model.print_none()
 
         return list(process_dataset["prediction"])
+
+    def _predict_parallel(self, evaluation_dataset: Dataset, workers: int) -> List:
+        """Appelle l'API avec `workers` requêtes simultanées (les appels sont
+        limités par la latence réseau, pas par le CPU)."""
+
+        def call(text: str):
+            try:
+                return self.model.predict(text)["prediction"]
+            except Exception:  # pylint: disable=broad-exception-caught
+                return "NA"
+
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            predictions = list(
+                tqdm(
+                    pool.map(call, evaluation_dataset["text"]),
+                    total=len(evaluation_dataset),
+                    desc=f"Parallel inference ({workers} workers)",
+                )
+            )
+        self.model.print_none()
+        return predictions
