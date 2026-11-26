@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import {
   normalizeBenchmarkName,
   computeAverageScore,
+  prettifyModelName,
+  shortTaskName,
 } from "./util";
 import { useTranslation } from "react-i18next";
 import { BACKEND_ADDRESS } from "@/app/resources/ResourcesPaths";
@@ -48,6 +50,7 @@ export default function LeaderboardPage() {
       .then((data) => {
         const withOverall = data.map((e) => ({
           ...e,
+          display_name: prettifyModelName(e.display_name),
           averageScore: computeAverageScore(e),
         }));
         setEntries(withOverall);
@@ -159,7 +162,9 @@ export default function LeaderboardPage() {
   };
 
   const renderHeader = (col) => {
-    const baseLabel = headerLabels[col] ?? col;
+    const baseLabel =
+      headerLabels[col] ??
+      shortTaskName(t(`benchmark_${col}_title`, { defaultValue: col }));
     const arrow = sortCol === col ? (sortOrder === 'asc' ? ' ▲' : ' ▼') : '';
 
     if (col === 'overall') {
