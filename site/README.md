@@ -46,21 +46,22 @@ Pipeline, all from files of this repository:
 
 1. `cole/backend/results/leaderboard.json` is reshaped into `data/leaderboard-snapshot.json`
    (the live API format; emails are never copied). The published snapshot was taken from the
-   live API: for its 96 models the scores are identical to the repo file, so the published
-   `models.json` and `extra.json` are reproduced byte for byte with `--keep-snapshot-models`.
+   live API; for its first 96 models the scores are identical to the repo file. The site now
+   publishes every entry of the repo file (101 models, five Cohere entries included).
 2. `build_models.py` computes `data/models.json`: task scores, category means (mean of the
    tasks a model has, never zero-filled), overall score, rank, family, size.
 3. `build_extra.py` computes `data/extra.json`: chance references from the random baseline.
 
 The script stops with a clear message when an input file is missing.
 
-Without `--keep-snapshot-models`, the repo file holds more entries than the published
-snapshot (five Cohere models at the time of writing). Some page texts say "96", so check
-them before publishing a larger snapshot. `SNAPSHOT_DATE` in `build_models.py` is set by hand.
+`--keep-snapshot-models` restricts the run to the models already in the committed snapshot.
+Counts of models and tests shown on the pages (titles, descriptions, share cards, popovers)
+are computed from `data/models.json` and `data/categories.json` at build time, so they follow
+the data. `SNAPSHOT_DATE` in `build_models.py` is set by hand.
 
 What cannot be reproduced from the repository:
 
-- The original live-API snapshot itself (submission ids, the 96-entry selection): the repo
+- The original live-API snapshot itself (submission ids, the selection of entries): the repo
   file replaces it. Submission ids of new entries are synthetic (`repo:<model name>`).
 - Model sizes for seven models, matched by hand from `predictions/llm_details.csv`
   (`data/inputs/size_from_details.json`, provenance in `data/inputs/README.md`).

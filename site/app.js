@@ -42,8 +42,8 @@
   /* ---------- the chosen model follows the reader from step to step (?model=slug) ---------- */
   window.coleCarry = function (slug) {
     document.querySelectorAll("a[data-carry]").forEach(function (a) {
-      var u = a.getAttribute("href").split("?")[0].split("#")[0];
-      a.setAttribute("href", slug ? u + "?model=" + encodeURIComponent(slug) : u);
+      var h = a.getAttribute("href"), hash = h.indexOf("#") === -1 ? "" : h.slice(h.indexOf("#")), u = h.split("#")[0].split("?")[0];
+      a.setAttribute("href", (slug ? u + "?model=" + encodeURIComponent(slug) : u) + hash);
     });
   };
   var carried = new URLSearchParams(location.search).get("model");
@@ -105,8 +105,15 @@
   }
 
   /* ---------- entrances: once per part, staggered; masked headlines ---------- */
-  var io = null;
+  var io = null, SEL = "[data-reveal], .mask-block, .pic, .bars";
   function reveal(el) { el.classList.add("is-in"); }
+  var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (calm) { document.querySelectorAll(SEL).forEach(reveal); }
+  else {
+    /* what is already on screen at load is never hidden: mark it shown before the entrance class exists */
+    document.querySelectorAll(SEL).forEach(function (el) { var r = el.getBoundingClientRect(); if (r.top < window.innerHeight * 1.2) reveal(el); });
+    root.classList.add("motion");
+  }
   if ("IntersectionObserver" in window) {
     io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { if (en.isIntersecting) { reveal(en.target); io.unobserve(en.target); } });

@@ -107,12 +107,12 @@ a { color: var(--blue); text-underline-offset: 0.2em; text-decoration-thickness:
 /* masked headline: each line rises from behind its own baseline */
 .mask-line { display: block; padding-top: 0.14em; margin-top: -0.14em; padding-bottom: 0.22em; margin-bottom: -0.22em; overflow: hidden; }
 .mask-line > span { display: block; }
-.js .mask-line > span { transform: translateY(130%); }
-.js .is-in .mask-line > span, .js .mask-line.is-in > span { transform: none; transition: transform var(--t-mask) var(--ease-out); transition-delay: calc(var(--line, 0) * 110ms); }
+.motion .mask-line > span { transform: translateY(130%); }
+.motion .is-in .mask-line > span, .js .mask-line.is-in > span { transform: none; transition: transform var(--t-mask) var(--ease-out); transition-delay: calc(var(--line, 0) * 110ms); }
 
 /* entrances, once per section part */
-.js [data-reveal] { opacity: 0; transform: translateY(24px); }
-.js [data-reveal].is-in { opacity: 1; transform: none; transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out); transition-delay: calc(var(--i, 0) * 75ms); }
+.motion [data-reveal] { opacity: 0; transform: translateY(24px); }
+.motion [data-reveal].is-in { opacity: 1; transform: none; transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out); transition-delay: calc(var(--i, 0) * 75ms); }
 
 .btn-sm { min-height: 44px; padding: 0 1.25rem; }
 
@@ -154,8 +154,8 @@ a { color: var(--blue); text-underline-offset: 0.2em; text-decoration-thickness:
 .pic img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); }
 .pic-tall { aspect-ratio: 3 / 4; }
 .pic-wide { aspect-ratio: 4 / 3; }
-.js .pic img { transform: scale(1.06); }
-.js .pic.is-in img { transform: none; transition: transform 1400ms var(--ease-out); }
+.motion .pic img { transform: scale(1.06); }
+.motion .pic.is-in img { transform: none; transition: transform 1400ms var(--ease-out); }
 
 /* rows that read as three formats of one publication */
 .formats { display: grid; gap: 0.5rem; }
@@ -175,8 +175,8 @@ a { color: var(--blue); text-underline-offset: 0.2em; text-decoration-thickness:
 .bar-track { background: var(--deep); height: 2.25rem; position: relative; }
 .bar-fill { display: block; height: 100%; background: var(--bg); width: var(--w); transform-origin: left center; }
 .bar-val { font-weight: 800; letter-spacing: -0.03em; font-size: var(--step-lead); line-height: 1; }
-.js .bar-fill { transform: scaleX(0); }
-.js .is-in .bar-fill, .js .bar-fill.is-in { transform: none; transition: transform 900ms var(--ease-out); transition-delay: calc(var(--i, 0) * 80ms); }
+.motion .bar-fill { transform: scaleX(0); }
+.motion .is-in .bar-fill, .js .bar-fill.is-in { transform: none; transition: transform 900ms var(--ease-out); transition-delay: calc(var(--i, 0) * 80ms); }
 .bar-line { display: grid; grid-template-columns: minmax(0, 1fr) 6.5rem; align-items: center; gap: 1rem; }
 .bar-line .bar-val { text-align: right; }
 @media (min-width: 900px) {
@@ -301,11 +301,6 @@ dialog[open] { animation: dlg-in 260ms var(--ease-out); }
 /* reduced motion: keep content, drop the travel */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js .mask-line > span { transform: none; opacity: 0; }
-  .js .is-in .mask-line > span, .js .mask-line.is-in > span { opacity: 1; transition: opacity 300ms linear; }
-  .js [data-reveal] { transform: none; }
-  .js [data-reveal].is-in { transition: opacity 300ms linear; }
-  .js .bar-fill, .js .pic img { transform: none; }
   .btn:hover, .format-row:hover { transform: none; }
   .plate-box .series.enter, dialog[open] { animation: none; }
   .skel-ring, .skel-rows span { animation: none; }
@@ -673,3 +668,22 @@ a.badge.badge-link { display: inline-flex; align-items: center; min-height: 44px
 .ex-body[hidden] { display: none; }
 html .lang button[lang] { display: inline-block; } /* the language buttons carry lang for screen readers; keep both visible */
 table, .bar-val, .axis-num, .end-label, .figure-big, .g-val, .stat b { font-variant-numeric: tabular-nums; }
+[data-chart] .ring-label { paint-order: stroke; stroke: var(--deep); stroke-width: 3px; stroke-linejoin: round; }
+
+/* compact footer: no wordmark */
+.site-footer { padding-top: 2rem; padding-bottom: 1.5rem; }
+.footer-grid { padding-bottom: 0; gap: 0.5rem 2rem; }
+/* inline-flex trims the space between a label and what follows: give it an explicit gap */
+.btn, .suite-btn { gap: 0.5rem; }
+.suite-prev a { gap: 0.35em; }
+.hero { padding-top: clamp(2.5rem, 6vw, 5rem); }
+
+/* narrow screens: cue that the table scrolls sideways (edge fade and a line of text) */
+.scroll-hint { display: none; }
+@media (max-width: 899px) {
+  .scroll-hint { display: block; margin-top: 0.5rem; }
+  .scroll-wrap.has-more::after { width: 2.5rem; opacity: 1; background: linear-gradient(to right, transparent, var(--tint)); z-index: 5; }
+}
+
+/* entrances exist only once JS adds .motion (and never under reduced motion); print and bots see everything */
+@media print { [data-reveal], .mask-line > span, .bar-fill, .pic img { opacity: 1 !important; transform: none !important; } }

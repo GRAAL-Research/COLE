@@ -14,8 +14,7 @@ Pipeline:
 Pages are not rebuilt here: run python3 site/build_pages.py afterwards.
 
 --keep-snapshot-models keeps only the models already present in the committed snapshot, which
-reproduces the published 96-entry data set. Without it, every entry of leaderboard.json is used
-(the repository file holds more entries than the published snapshot).
+restricts the run to those models. Without it, every entry of leaderboard.json is used.
 """
 
 import argparse
@@ -32,6 +31,7 @@ REQUIRED_INPUTS = [
     LEADERBOARD,
     ROOT / "data/categories.json",
     REPO_ROOT / "predictions/models_size.json",
+    REPO_ROOT / "predictions/all_llms.py",
     ROOT / "data/inputs/size_from_details.json",
 ]
 # The live API names the metric group "fquad" for the free-text tasks and "accuracy" for all others.

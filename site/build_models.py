@@ -9,6 +9,7 @@ Submitter emails are never copied.
 Run from the repo root: python3 site/build_models.py (normally through site/refresh_data.py).
 """
 
+import ast
 import json
 import re
 import sys
@@ -32,6 +33,7 @@ ALLOWED = {
 }
 SNAPSHOT_DATE = "2026-11-26"
 SIZES_FILE = PRED / "models_size.json"
+ALL_LLMS_FILE = PRED / "all_llms.py"
 # Sizes read by hand from predictions/llm_details.csv (billions of parameters) for entries whose id is
 # not a key of models_size.json. See data/inputs/README.md for the provenance.
 SIZE_FROM_DETAILS_FILE = ROOT / "data/inputs/size_from_details.json"
@@ -39,6 +41,47 @@ SIZE_FROM_DETAILS_FILE = ROOT / "data/inputs/size_from_details.json"
 CLOSED = re.compile(
     r"^(gpt-(?!oss)|o1|o3|claude|grok|google/gemini|pixtral|mistral-large|deepseek-(chat|reasoner)|qwen/qwen-max)"
 )
+
+
+def api_model_names(source: str) -> set:
+    """Model names listed in the `private_llm` dict of predictions/all_llms.py (served through an API).
+
+    The file is parsed, never imported (it holds large lists and may carry side effects).
+    """
+    tree = ast.parse(source)
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(
+            isinstance(t, ast.Name) and t.id == "private_llm" for t in node.targets
+        ):
+            return {
+                item.value
+                for group in node.value.values
+                if isinstance(group, ast.List)
+                for item in group.elts
+                if isinstance(item, ast.Constant) and isinstance(item.value, str)
+            }
+    return set()
+
+
+# Open-weights models that predictions/all_llms.py lists under private_llm because the runs went through
+# a provider API; the site classifies by the weights, so they stay "open".
+OPEN_WEIGHTS_SERVED_BY_API = {"gpt-oss-120b"}
+
+
+def model_kind(name: str, api_names: set, sizes: dict) -> str:
+    """ "api" or "open". A model listed in private_llm is an API model, matched by name with the
+    "c4ai-" prefix read as "CohereForAI/", unless its weights were measured locally (models_size.json).
+    Everything else falls back to the name rule CLOSED."""
+    aliases = {name, name.split("/")[-1]}
+    if name.startswith("CohereForAI/"):
+        aliases.add("c4ai-" + name.split("/")[-1])
+    if (
+        aliases & api_names
+        and name not in sizes
+        and name not in OPEN_WEIGHTS_SERVED_BY_API
+    ):
+        return "api"
+    return "api" if CLOSED.match(name) else "open"
 
 
 def normalize(name: str) -> str:
@@ -165,7 +208,7 @@ FAMILIES = [
     (r"OLMo", "AI2"),
     (r"granite", "IBM"),
     (r"SmolLM", "Hugging Face"),
-    (r"aya", "Cohere"),
+    (r"aya|^command-", "Cohere"),
     (r"Lucie|Croissant", "OpenLLM-France"),
     (r"Apertus", "Swiss AI"),
     (r"reka", "Reka"),
@@ -211,11 +254,15 @@ def model_size(name: str, sizes: dict, size_from_details: dict):
 
 
 def build_model(
-    entry: dict, categories: list, sizes: dict, size_from_details: dict
+    entry: dict,
+    categories: list,
+    sizes: dict,
+    size_from_details: dict,
+    api_names: frozenset = frozenset(),
 ) -> dict:
     """One row of models.json from one leaderboard entry."""
     name = entry["display_name"]
-    kind = "api" if CLOSED.match(name) else "open"
+    kind = model_kind(name, api_names, sizes)
     na = unreliable_tasks(entry, kind)
     tasks = task_scores(entry, na)
     tasks.pop("frblimp", None)  # duplicate of qfrblimp, see categories.json
@@ -255,10 +302,15 @@ def rank_models(models: list) -> list:
 
 
 def build_all(
-    snapshot: list, categories: list, sizes: dict, size_from_details: dict
+    snapshot: list,
+    categories: list,
+    sizes: dict,
+    size_from_details: dict,
+    api_names: frozenset = frozenset(),
 ) -> list:
     models = [
-        build_model(entry, categories, sizes, size_from_details) for entry in snapshot
+        build_model(entry, categories, sizes, size_from_details, api_names)
+        for entry in snapshot
     ]
     assert len({m["label"] for m in models}) == len(models), "label collision"
     return rank_models(models)
@@ -279,7 +331,8 @@ def main() -> None:
     ]
     sizes = json.loads(require(SIZES_FILE).read_text())
     size_from_details = json.loads(require(SIZE_FROM_DETAILS_FILE).read_text())
-    models = build_all(snapshot, categories, sizes, size_from_details)
+    api_names = frozenset(api_model_names(require(ALL_LLMS_FILE).read_text()))
+    models = build_all(snapshot, categories, sizes, size_from_details, api_names)
     out = {"snapshot": SNAPSHOT_DATE, "protocol": "paper-v1", "models": models}
     (ROOT / "data/models.json").write_text(
         json.dumps(out, ensure_ascii=False, separators=(",", ":"))
