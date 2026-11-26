@@ -1,6 +1,9 @@
 from typing import Dict
 
-from mistralai import Mistral
+try:
+    from mistralai import Mistral
+except ImportError:  # mistralai >= 2.x
+    from mistralai.client import Mistral
 
 from cole.language_model.open_ai_api_lm_wrapper import OpenAIAPILMWrapper
 

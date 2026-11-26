@@ -25,6 +25,8 @@ def get_api_key(model_name: str) -> Union[str, None]:
         key_name = "open_route_api_key"
     elif model_name in private_llm["cohere"]:
         key_name = "cohere_api_key"
+    elif model_name in private_llm["ul"]:
+        key_name = "UL_GATEWAY_KEY"
     else:
         raise ValueError(f"Model name {model_name} not found.")
 
@@ -93,6 +95,18 @@ def private_language_model_factory(model_name):
                 extra_params=extra_params,
                 use_function_calling=use_function_calling,
                 base_url="https://openrouter.ai/api/v1",
+                timeout=480,
+            )
+        elif model_name in private_llm["ul"]:
+            gateway_url = os.getenv("UL_GATEWAY_URL")
+            if gateway_url is None:
+                raise ValueError("UL_GATEWAY_URL not found.")
+            model = OpenAIWrapper(
+                model_name=model_name,
+                api_key=api_key,
+                extra_params={},
+                use_function_calling=True,
+                base_url=gateway_url,
                 timeout=480,
             )
         elif model_name in private_llm["cohere"]:
