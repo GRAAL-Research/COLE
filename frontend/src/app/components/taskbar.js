@@ -89,14 +89,14 @@ export default function Taskbar() {
         </div>
 
         {/* Desktop nav */}
-        <div className="hidden items-center gap-x-3 lg:flex">
+        <div className="hidden items-center gap-x-3 xl:flex">
           {links.map((link) => renderLink(link, 'desktop'))}
         </div>
 
         {/* Mobile hamburger */}
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-700 lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-700 xl:hidden"
           aria-label={menuOpen ? t('nav_menuClose') : t('nav_menuOpen')}
           aria-expanded={menuOpen}
           aria-controls={MENU_ID}
@@ -110,7 +110,7 @@ export default function Taskbar() {
       <div
         id={MENU_ID}
         hidden={!menuOpen}
-        className="mt-2 flex flex-col items-start gap-1 border-t border-gray-200 pt-2 lg:hidden"
+        className="mt-2 flex flex-col items-start gap-1 border-t border-gray-200 pt-2 xl:hidden"
       >
         {links.map((link) => renderLink(link, 'mobile'))}
       </div>

@@ -5,11 +5,13 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import en from "./en/translation.json";
 import fr from './fr/translation.json';
 
-const syncDocumentLanguage = (lng) => {
+export const syncDocumentLanguage = (lng) => {
   if (typeof document !== 'undefined') {
     document.documentElement.lang = lng?.startsWith('fr') ? 'fr' : 'en';
   }
 };
+
+i18n.on('languageChanged', syncDocumentLanguage);
 
 i18n
   .use(LanguageDetector)
@@ -27,9 +29,7 @@ i18n
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
     },
-  });
-
-syncDocumentLanguage(i18n.language);
-i18n.on('languageChanged', syncDocumentLanguage);
+  })
+  .then(() => syncDocumentLanguage(i18n.language));
 
 export default i18n;

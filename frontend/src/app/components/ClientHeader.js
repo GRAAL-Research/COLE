@@ -1,12 +1,18 @@
 'use client';
 
-import '../i18n';
+import { useEffect } from 'react';
+import i18n, { syncDocumentLanguage } from '../i18n';
 import { useTranslation } from 'react-i18next';
 import Taskbar from './taskbar';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
 export default function ClientHeader() {
   useTranslation();
+
+  // Hydration resets <html lang>; re-apply the detected language once mounted.
+  useEffect(() => {
+    syncDocumentLanguage(i18n.language);
+  }, []);
 
   return (
     <header className="shadow">
