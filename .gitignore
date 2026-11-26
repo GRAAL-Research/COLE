@@ -67,3 +67,4 @@ next-env.d.ts
 /frontend/.next
 /src/backend/results
 /node_modules
+.taste-skill/
