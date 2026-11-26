@@ -10,7 +10,12 @@ class AnthropicWrapper(OpenAIAPILMWrapper):
         super().__init__(model_name=model_name, extra_params=extra_params)
         self.client = Anthropic(api_key=api_key)
 
-        self.tool_choices = {"type": "tool", "name": "classification"}
+        # Claude Opus/Sonnet 5.x reject a forced tool_choice ("tool" or "any");
+        # "auto" still calls the classification tool.
+        if any(tag in model_name for tag in ("claude-opus-5", "claude-sonnet-5")):
+            self.tool_choices = {"type": "auto"}
+        else:
+            self.tool_choices = {"type": "tool", "name": "classification"}
 
     def _inner_generate_fn(self, prompt: Dict):
         return self.client.messages.create(

@@ -70,6 +70,16 @@ llms = {
         "ibm-granite/granite-3.3-8b-instruct",
     ],
     "Apertus": ["swiss-ai/Apertus-8B-2509", "swiss-ai/Apertus-8B-Instruct-2509"],
+    "recent": [
+        "google/gemma-4-31B-it",
+        "google/gemma-4-26B-A4B-it",
+        "Qwen/Qwen3.6-27B",
+        "Qwen/Qwen3.6-35B-A3B",
+        "allenai/Olmo-3-7B-Instruct",
+        "allenai/Olmo-3.1-32B-Instruct",
+        "ibm-granite/granite-4.1-30b",
+        "ibm-granite/granite-4.1-8b",
+    ],
     "all": [],
 }
 for key in llms.keys():
@@ -150,6 +160,21 @@ private_llm = {
         "claude-sonnet-4-5-20250929",
         "claude-haiku-4-5-20251001",
         "claude-opus-4-1-20250805",
+        "claude-opus-5-5",
+        "claude-sonnet-5-5",
+        "claude-haiku-5-5",
+    ],
+    # Passerelle d'inférence LiteLLM de l'Université Laval (OpenAI-compatible,
+    # accessible depuis le réseau UL / VPN). URL et clé: UL_GATEWAY_URL, UL_GATEWAY_KEY.
+    "ul": [
+        "IAG-DeepSeek-V4.1-Flash",
+        "IAG-GLM-5.3-Flash",
+        "IAG-MiniMax-M3.1-Flash",
+        "IAG-North-Mini-Code",
+        "IAG-Ornith-1.5-122B",
+        "IAG-Qwen3-Coder-Next",
+        "IAG-Qwen3.8-27B",
+        "IAG-Qwen3.8-Flash-Next",
     ],
     "xai": [
         "grok-4-fast-non-reasoning",

@@ -35,7 +35,6 @@ def hugging_face_language_model_tokenizer_factory(
             model_name,
             token=huggingface_token,
             quantization_config=bnb_configs,
-            load_in_8bit=False,  # Since we use 4bits
             trust_remote_code=True,
             attn_implementation=attn_implementation,
             dtype=torch.float16,
@@ -63,6 +62,12 @@ def hugging_face_language_model_tokenizer_factory(
             load_in_4bit=True,
             token=huggingface_token,
         )
+
+    if hasattr(tokenizer, "tokenizer"):
+        # Multimodal checkpoints (Gemma 4, Qwen3.6, ...) come back with a processor;
+        # the text-generation pipeline needs the plain tokenizer, otherwise it reads
+        # the prompt as an image source.
+        tokenizer = tokenizer.tokenizer
 
     model.eval()
     return model, tokenizer

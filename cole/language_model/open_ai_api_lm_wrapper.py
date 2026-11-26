@@ -139,7 +139,19 @@ class OpenAIAPILMWrapper(ABC):
                 if getattr(block, "text", None)
             ]
             return "".join(text_blocks).strip() or None
-        tool_input = generated_completion.content[0].input
+        tool_blocks = [
+            block
+            for block in generated_completion.content
+            if getattr(block, "type", None) == "tool_use"
+        ]
+        if not tool_blocks:
+            # tool_choice "auto": the model may answer in plain text instead.
+            text = "".join(
+                getattr(block, "text", "") or ""
+                for block in generated_completion.content
+            ).strip()
+            return text or None
+        tool_input = tool_blocks[0].input
         if tool_input is None:
             return None
         try:
