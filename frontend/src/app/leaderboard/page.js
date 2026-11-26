@@ -211,7 +211,7 @@ export default function LeaderboardPage() {
     const position =
       col === 'rank'
         ? 'sm:sticky sm:left-0 sm:z-10 w-(--rank-w) min-w-(--rank-w) max-w-(--rank-w)'
-        : 'sticky z-10 left-0 sm:left-(--rank-w) min-w-36 sm:min-w-56';
+        : 'sticky z-10 left-0 sm:left-(--rank-w) min-w-40 sm:min-w-56';
     const edge = col === 'model' && scrollState.scrolled
       ? ' shadow-[4px_0_6px_-4px_rgba(0,0,0,0.35)]'
       : '';
@@ -291,17 +291,19 @@ export default function LeaderboardPage() {
         {title}
         {liveRegions}
         <div aria-hidden="true" className="animate-pulse motion-reduce:animate-none">
-          <div className="mb-6 h-10 w-full max-w-sm rounded bg-gray-100" />
-          <div className="h-14 w-full rounded-t bg-blue-100" />
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="flex h-11 items-center gap-4 border-b border-gray-200 px-2">
-              <div className="h-4 w-8 rounded bg-gray-100" />
-              <div className="h-4 w-40 rounded bg-gray-100" />
-              <div className="h-4 w-16 rounded bg-gray-100" />
-              <div className="hidden h-4 w-16 rounded bg-gray-100 sm:block" />
-              <div className="hidden h-4 w-16 rounded bg-gray-100 sm:block" />
-            </div>
-          ))}
+          <div className="mb-6 h-11 w-full max-w-sm rounded bg-gray-200" />
+          <div className="overflow-hidden">
+            <div className="h-14 w-max min-w-full rounded-t bg-blue-200" />
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="flex h-11 w-max min-w-full items-center gap-6 border-b border-gray-200 px-2">
+                <div className="hidden h-4 w-8 shrink-0 rounded bg-gray-200 sm:block" />
+                <div className="h-4 w-36 shrink-0 rounded bg-gray-200 sm:w-48" />
+                {[...Array(10)].map((__, j) => (
+                  <div key={j} className="h-4 w-16 shrink-0 rounded bg-gray-200" />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -420,7 +422,7 @@ export default function LeaderboardPage() {
                           e.currentTarget.focus();
                           setSelectedEntry(entry);
                         }}
-                        className="block min-h-11 w-full max-w-[8rem] truncate whitespace-nowrap rounded px-1 text-left text-blue-700 hover:underline sm:max-w-[20rem]"
+                        className="line-clamp-2 block min-h-11 w-full max-w-[9rem] rounded px-1 text-left leading-tight wrap-anywhere text-blue-700 hover:underline sm:max-w-[20rem]"
                       >
                         {entry.display_name}
                       </button>
