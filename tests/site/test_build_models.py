@@ -189,7 +189,10 @@ def test_committed_models_json_matches_committed_snapshot():
     ]
     sizes = json.loads(build_models.SIZES_FILE.read_text())
     details = json.loads(build_models.SIZE_FROM_DETAILS_FILE.read_text())
-    expected = build_models.build_all(snapshot, categories, sizes, details)
+    api_names = frozenset(
+        build_models.api_model_names(build_models.ALL_LLMS_FILE.read_text())
+    )
+    expected = build_models.build_all(snapshot, categories, sizes, details, api_names)
     committed = json.loads((SITE_DIR / "data/models.json").read_text())["models"]
     assert committed == expected
 
@@ -210,3 +213,42 @@ def test_published_pages_follow_the_data():
         assert "{N_" not in html and "{Q_" not in html
         if n != 96:
             assert "96 models" not in html and "96 modèles" not in html
+
+
+PRIVATE_SOURCE = """
+llms = {"all": ["CohereForAI/aya-23-8b"]}
+private_llm = {
+    "openai": ["o3-2025-04-16", "gpt-oss-120b"],
+    "cohere": [
+        "command-a-03-2025",
+        "command-r-08-2024",
+        "c4ai-aya-expanse-8b",
+        "c4ai-aya-expanse-32b",
+    ],
+    "all": [],
+}
+"""
+
+
+def test_api_model_names_reads_private_llm_only():
+    names = build_models.api_model_names(PRIVATE_SOURCE)
+    assert "command-a-03-2025" in names and "c4ai-aya-expanse-32b" in names
+    assert "CohereForAI/aya-23-8b" not in names
+
+
+@pytest.mark.parametrize(
+    "name,expected",
+    [
+        ("command-r-08-2024", "api"),
+        ("CohereForAI/aya-expanse-32b", "api"),  # c4ai- prefix tolerated
+        ("CohereForAI/aya-expanse-8b", "open"),  # weights measured locally
+        ("gpt-oss-120b", "open"),  # open weights served through an API
+        ("CohereForAI/aya-23-8b", "open"),
+        ("gpt-4o-2024-08-06", "api"),  # name rule fallback
+        ("Qwen/Qwen3-8B", "open"),
+    ],
+)
+def test_model_kind(name, expected):
+    names = build_models.api_model_names(PRIVATE_SOURCE)
+    sizes = {"CohereForAI/aya-expanse-8b": 8028033024}
+    assert build_models.model_kind(name, names, sizes) == expected

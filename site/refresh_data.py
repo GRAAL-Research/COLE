@@ -31,6 +31,7 @@ REQUIRED_INPUTS = [
     LEADERBOARD,
     ROOT / "data/categories.json",
     REPO_ROOT / "predictions/models_size.json",
+    REPO_ROOT / "predictions/all_llms.py",
     ROOT / "data/inputs/size_from_details.json",
 ]
 # The live API names the metric group "fquad" for the free-text tasks and "accuracy" for all others.
