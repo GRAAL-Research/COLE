@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Does AI get Québécois? | COLE" data-fr="L’IA parle québécois ? | COLE">L’IA parle québécois ? | COLE</title>
+<meta name="description" content="Évaluation de 96 modèles de langage sur 23 tests de compréhension du français, dont le français québécois.">
+<meta property="og:site_name" content="COLE">
+<meta property="og:locale" content="fr_CA">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://colebenchmark.org/plain-language.html">
+<meta property="og:title" content="COLE : quelle IA comprend le français québécois ?">
+<meta property="og:description" content="COLE : 96 modèles de langage, 23 tests en français.">
+<meta property="og:image" content="https://colebenchmark.org/cards/card-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Carte de partage COLE : trois chiffres tirés des résultats.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="COLE : quelle IA comprend le français québécois ?">
+<meta name="twitter:description" content="COLE : 96 modèles de langage, 23 tests en français.">
+<meta name="twitter:image" content="https://colebenchmark.org/cards/card-fr.png">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="tokens.css">
+<link rel="preload" href="fonts/SchibstedGrotesk-800.ttf" as="font" type="font/ttf" crossorigin>
+
+</head>
+<body data-page="plain">
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="fr">Aller au contenu</span></a>
+<header class="site-header ">
+<div class="wrap bar">
+<a class="wordmark" href="index.html" aria-label="COLE, home" data-i18n-attrs="aria-label" data-en-aria-label="COLE, home" data-fr-aria-label="COLE, accueil">COLE</a>
+<button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links"><span lang="en">Menu</span><span lang="fr">Menu</span></button>
+<div id="nav-links" class="nav-links">
+<nav class="nav-main" aria-label="Main" data-i18n-attrs="aria-label" data-en-aria-label="Main" data-fr-aria-label="Principale"><ol class="nav-journey" aria-label="Journey, four steps" data-i18n-attrs="aria-label" data-en-aria-label="Journey, four steps" data-fr-aria-label="Parcours, quatre étapes"><li><a href="model.html" data-carry><span lang="en">Model sheet</span><span lang="fr">Fiche d’un modèle</span></a></li><li><a href="choose-a-model.html" data-carry><span lang="en">Compare models</span><span lang="fr">Comparer des modèles</span></a></li><li><a href="all-results.html" data-carry><span lang="en">All results</span><span lang="fr">Tous les résultats</span></a></li><li><a href="explore.html" data-carry><span lang="en">Explore</span><span lang="fr">Explorer</span></a></li></ol></nav>
+<div class="nav-right">
+<ul class="nav-secondary" aria-label="About the project" data-i18n-attrs="aria-label" data-en-aria-label="About the project" data-fr-aria-label="À propos du projet"><li><a href="level-3.html#article"><span lang="en">Article</span><span lang="fr">Article</span></a></li><li><a href="level-3.html#protocol"><span lang="en">Methodology</span><span lang="fr">Méthodologie</span></a></li><li><a href="plain-language.html" aria-current="page"><span lang="en">Poster</span><span lang="fr">Affiche</span></a></li></ul>
+<div class="lang" role="group" aria-label="Language" data-i18n-attrs="aria-label" data-en-aria-label="Language" data-fr-aria-label="Langue"><button type="button" data-lang="fr" lang="fr" aria-label="Français" aria-pressed="true">FR</button><button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button></div>
+<button class="btn btn-sm" type="button" data-open-contact><span lang="en">Contact</span><span lang="fr">Contact</span></button>
+</div>
+</div>
+</div>
+</header>
+<main id="main">
+<section class="hero ground-deep" aria-labelledby="poster-title" style="padding-bottom:0">
+<nav class="crumbs wrap" aria-label="Breadcrumb" data-i18n-attrs="aria-label" data-en-aria-label="Breadcrumb" data-fr-aria-label="Fil d’Ariane"><ol><li><a href="index.html"><span lang="en">Home</span><span lang="fr">Accueil</span></a></li><li><span aria-current="page"><span lang="en">Poster</span><span lang="fr">Affiche</span></span></li></ol></nav>
+<div class="wrap poster-grid">
+<div class="poster-pic"><div class="pic" data-reveal><img src="assets/postcard-sous-le-cap.jpg" alt="Old postcard of a narrow street in Quebec City, Sous-le-Cap, with wooden balconies and clothes lines." data-i18n-attrs="alt" data-en-alt="Old postcard of a narrow street in Quebec City, Sous-le-Cap, with wooden balconies and clothes lines." data-fr-alt="Ancienne carte postale d’une ruelle de Québec, Sous-le-Cap, avec des balcons de bois et des cordes à linge."  decoding="async" style="object-position:50% 25%"></div></div>
+<div class="poster-main">
+<h1 id="poster-title" class="display hero-title mask-block"><span class="mask-line"><span><span lang="en">Does AI get</span><span lang="fr">L’IA parle</span></span></span><span class="mask-line"><span><span lang="en">Québécois?</span><span lang="fr">québécois&nbsp;?</span></span></span></h1>
+<p class="lead" data-reveal><span lang="en">Some do. The strongest model answered 96 out of 100 on Quebec expressions and words. The models you can run on your own computer, up to 33 billion parameters, scored no more than 54.</span><span lang="fr">Certaines, oui. Le modèle le plus fort a répondu juste à 96 questions sur 100 sur les expressions et les mots du Québec. Les modèles qu’on peut exécuter sur son propre ordinateur, jusqu’à 33 milliards de paramètres, ont obtenu 54 au maximum.</span></p>
+<p data-reveal><a class="btn" href="#bars"><span lang="en">See six models</span><span lang="fr">Voir six modèles</span></a></p>
+</div>
+</div>
+</section>
+
+<section class="section" aria-labelledby="words-title">
+<div class="wrap">
+<h2 id="words-title" class="head" style="margin-bottom:1.5rem" data-reveal><span lang="en">Three words</span><span lang="fr">Trois mots</span></h2>
+<dl class="def-list" data-stagger>
+<div class="def-row" data-reveal><dt>COLE</dt><dd><span lang="en">A set of 23 French tests built by researchers. Two of them are about Quebec expressions and words.</span><span lang="fr">Un ensemble de 23 tests en français créé par des chercheurs. Deux portent sur les expressions et les mots du Québec.</span></dd></div>
+<div class="def-row" data-reveal><dt><span lang="en">Benchmark</span><span lang="fr">Banc d’essai</span></dt><dd><span lang="en">A test that asks every model the same questions, so their scores can be compared.</span><span lang="fr">Un test qui pose les mêmes questions à chaque modèle, pour que leurs scores soient comparables.</span></dd></div>
+<div class="def-row" data-reveal><dt><span lang="en">Model</span><span lang="fr">Modèle</span></dt><dd><span lang="en">An AI program that reads and writes text, like the one behind a chatbot.</span><span lang="fr">Un programme d’IA qui lit et écrit du texte, comme celui derrière un robot conversationnel.</span></dd></div>
+</dl>
+</div>
+</section>
+
+<section id="bars" class="section ground-blue" aria-labelledby="bars-title">
+<div class="wrap axis">
+<div class="zone-note stack" data-reveal><p class="figure-big">96</p><p class="small"><span lang="en">out of 100: the highest score, Claude Opus 4.</span><span lang="fr">sur 100 : le score le plus élevé, Claude Opus 4.</span></p></div>
+<div class="axis-main stack-lg">
+<h2 id="bars-title" class="head" data-reveal><span lang="en">How well do they know Quebec words?</span><span lang="fr">Connaissent-ils les mots du Québec ?</span></h2>
+<p class="lead col-text" data-reveal><span lang="en">Each model got the same questions: match a Quebec expression or word with its meaning.</span><span lang="fr">Chaque modèle a reçu les mêmes questions : associer une expression ou un mot du Québec à son sens.</span></p>
+<ul class="bars" data-stagger><li class="bar-row" style="--i:0"><span class="bar-label">Claude Opus 4</span><div class="bar-line"><span class="bar-track"><span class="bar-fill" style="--w:95.6%"></span></span><span class="bar-val"><span lang="en">96</span><span lang="fr">96</span></span></div></li><li class="bar-row" style="--i:1"><span class="bar-label">GPT-4o</span><div class="bar-line"><span class="bar-track"><span class="bar-fill" style="--w:88.8%"></span></span><span class="bar-val"><span lang="en">89</span><span lang="fr">89</span></span></div></li><li class="bar-row" style="--i:2"><span class="bar-label">Qwen3 14B</span><div class="bar-line"><span class="bar-track"><span class="bar-fill" style="--w:30.8%"></span></span><span class="bar-val"><span lang="en">31</span><span lang="fr">31</span></span></div></li><li class="bar-row" style="--i:3"><span class="bar-label">Meta Llama 3.1 8B Instruct</span><div class="bar-line"><span class="bar-track"><span class="bar-fill" style="--w:14.7%"></span></span><span class="bar-val"><span lang="en">15</span><span lang="fr">15</span></span></div></li><li class="bar-row" style="--i:4"><span class="bar-label">Llama 3.2 1B Instruct</span><div class="bar-line"><span class="bar-track"><span class="bar-fill" style="--w:14.1%"></span></span><span class="bar-val"><span lang="en">14</span><span lang="fr">14</span></span></div></li><li class="bar-row" style="--i:5"><span class="bar-label"><span lang="en">Random guessing</span><span lang="fr">Tirage au hasard</span></span><div class="bar-line"><span class="bar-track"><span class="bar-fill" style="--w:11.1%"></span></span><span class="bar-val"><span lang="en">11</span><span lang="fr">11</span></span></div></li></ul>
+<p class="col-text" data-reveal><span lang="en">Guessing at random scores 11. The two smallest models score barely higher.</span><span lang="fr">Le hasard obtient 11. Les deux plus petits modèles obtiennent à peine plus.</span></p>
+</div>
+</div>
+</section>
+
+<section class="section" aria-labelledby="limits-title">
+<div class="wrap axis">
+<div class="zone-note stack" data-reveal><p class="stat"><b>2 <span lang="en">of</span><span lang="fr">sur</span> 23</b><span><span lang="en">tests are about Quebec French.</span><span lang="fr">tests portent sur le français québécois.</span></span></p></div>
+<div class="axis-main stack-lg"><h2 id="limits-title" class="head" data-reveal><span lang="en">What this does not tell you</span><span lang="fr">Ce que ce score ne dit pas</span></h2>
+<div class="cols-2"><div data-reveal><h3 class="strong lead"><span lang="en">It is not the whole of Quebec French.</span><span lang="fr">Ce n’est pas tout le français québécois.</span></h3><p><span lang="en">Two of the 23 tests are about Quebec. The other 21 test French in general.</span><span lang="fr">Deux des 23 tests portent sur le Québec. Les 21 autres testent le français en général.</span></p></div><div data-reveal><h3 class="strong lead"><span lang="en">It says nothing about cost or speed.</span><span lang="fr">Il ne dit rien du coût ni de la vitesse.</span></h3><p><span lang="en">A high score does not tell you the price, the delay or where your data goes.</span><span lang="fr">Un score élevé n’indique ni le prix, ni le délai, ni où vont vos données.</span></p></div><div data-reveal><h3 class="strong lead"><span lang="en">It is a snapshot.</span><span lang="fr">C’est un instantané.</span></h3><p><span lang="en">Results use one protocol, a single snapshot. Newer models are not in yet.</span><span lang="fr">Les résultats suivent un seul protocole et un seul instantané. Les modèles plus récents n’y sont pas encore.</span></p></div><div data-reveal><h3 class="strong lead"><span lang="en">It may not match your job.</span><span lang="fr">Il ne correspond pas forcément à votre tâche.</span></h3><p><span lang="en">The tests are short, scored questions, not conversations. A model can do well here and still write badly for you.</span><span lang="fr">Les tests sont de courtes questions notées, pas des conversations. Un modèle peut bien réussir ici et mal écrire pour vous.</span></p></div></div></div>
+</div>
+</section>
+
+<section class="section ground-deep" aria-labelledby="next-title" style="padding-bottom:0">
+<div class="wrap closing-grid">
+<div class="closing-talk" data-stagger>
+<h2 id="next-title" class="head" data-reveal><span lang="en">Want the details?</span><span lang="fr">Envie de détails ?</span></h2>
+<p class="lead" data-reveal><span lang="en">Compare two models side by side, or read how the scores are computed.</span><span lang="fr">Comparez deux modèles côte à côte, ou lisez comment les scores sont calculés.</span></p>
+<a class="btn" href="choose-a-model.html" data-reveal><span lang="en">Compare two models</span><span lang="fr">Comparer deux modèles</span></a>
+<a class="link-btn" href="level-3.html" data-reveal><span lang="en">Read the article page</span><span lang="fr">Lire la page de l’article</span></a>
+</div>
+<div class="pic" style="aspect-ratio:16/8"><img src="assets/printing-house-16c.jpg" alt="Engraving of a sixteenth-century printing house." data-i18n-attrs="alt" data-en-alt="Engraving of a sixteenth-century printing house." data-fr-alt="Gravure d’une imprimerie du XVIe siècle." loading="lazy" decoding="async" style="object-position:50% 30%"></div>
+</div>
+</section>
+<section class="section ground-tint" aria-labelledby="tease-title">
+<div class="wrap axis">
+<div class="zone-note" data-reveal><p class="small strong"><span lang="en">Two more ways to look</span><span lang="fr">Deux autres façons de regarder</span></p></div>
+<div class="axis-main stack-lg">
+<h2 id="tease-title" class="head" data-reveal><span lang="en">Quebec against the rest</span><span lang="fr">Le Québec contre le reste</span></h2>
+<p class="lead col-text" data-reveal><span lang="en">Claude Opus 4 averages 95.6 on the two Quebec tests and 70.3 on the other French tests. Two tests are few, so read the gap as a hint.</span><span lang="fr">Claude Opus 4 obtient en moyenne 95,6 sur les deux tests québécois et 70,3 sur les autres tests en français. Deux tests, c’est peu : lisez l’écart comme un indice.</span></p>
+<p class="col-text" data-reveal><span lang="en">On a yes-or-no test about Quebec sentences, guessing scores 49. Claude Opus 4 scores 82.</span><span lang="fr">Sur un test par oui ou non sur des phrases québécoises, le hasard obtient 49. Claude Opus 4 obtient 82.</span></p>
+<p data-reveal><a class="btn" href="explore.html#quebec"><span lang="en">Explore the charts</span><span lang="fr">Explorer les graphiques</span></a></p>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer ground-deep">
+<div class="wrap">
+<div class="footer-grid">
+<p class="lead zone-note" data-reveal><span lang="en">COLE is a GRAAL research project, Université Laval, Quebec.</span><span lang="fr">COLE est un projet de recherche du GRAAL, Université Laval, Québec.</span></p>
+<div class="stack">
+<ul class="footer-links" data-reveal>
+<li><a href="level-3.html"><span lang="en">Article</span><span lang="fr">Article</span></a></li>
+<li><a href="plain-language.html"><span lang="en">Poster</span><span lang="fr">Affiche</span></a></li>
+<li><a href="https://github.com/GRAAL-Research/COLE">GitHub</a></li>
+</ul>
+<details class="credits"><summary><span lang="en">Image credits</span><span lang="fr">Crédits des images</span></summary><p><span lang="en">Greyscale images from Wikimedia Commons. All in the public domain, except where noted.</span><span lang="fr">Images en niveaux de gris, Wikimedia Commons. Toutes du domaine public, sauf mention.</span></p><ul><li><a href="https://commons.wikimedia.org/wiki/File:Champlain_Market,_Quebec_(NBY_442137).jpg"><span lang="en">Champlain Market, Quebec</span><span lang="fr">Marché Champlain, Québec</span></a></li><li><a href="https://commons.wikimedia.org/wiki/File:Samuel_de_Champlain_Carte_geographique_de_la_Nouvelle_France.jpg"><span lang="en">Champlain’s map of New France</span><span lang="fr">Carte de la Nouvelle-France, Champlain</span></a></li><li><a href="https://commons.wikimedia.org/wiki/File:Casse_fran%C3%A7aise.jpg"><span lang="en">French type case</span><span lang="fr">Casse française</span></a></li><li><a href="https://commons.wikimedia.org/w/index.php?curid=133290410"><span lang="en">Inside a 16th-century print shop</span><span lang="fr">Vue intérieure d’une imprimerie au XVIe siècle</span></a> (CC0)</li><li><a href="https://commons.wikimedia.org/wiki/File:Qu%C3%A9bec_Sous-Le-Cap_165_(BAnQ_0003731687).jpg"><span lang="en">Québec, Sous-le-Cap</span><span lang="fr">Québec, Sous-le-Cap</span></a></li></ul></details>
+</div>
+</div>
+<div class="footer-name" aria-hidden="true"><span>COLE</span></div>
+</div>
+</footer>
+<dialog id="contact-dialog" aria-labelledby="contact-title">
+<div class="dlg">
+<h2 id="contact-title"><span lang="en">Contact</span><span lang="fr">Contact</span></h2>
+<p><span lang="en">To ask for an evaluation of your model, open an issue on the project’s GitHub page. We do not promise a delay, and each dated model version is evaluated once.</span><span lang="fr">Pour demander l’évaluation de votre modèle, ouvrez une demande sur la page GitHub du projet. Aucun délai n’est promis, et chaque version datée d’un modèle est évaluée une seule fois.</span></p>
+<p><a class="btn" href="https://github.com/GRAAL-Research/COLE/issues/new"><span lang="en">Open an issue</span><span lang="fr">Ouvrir une demande</span></a></p>
+<p><button class="link-btn" type="button" data-close><span lang="en">Close</span><span lang="fr">Fermer</span></button></p>
+</div>
+</dialog>
+<script src="app.js"></script>
+<script src="data.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+{
+ "note": "Plain-language grouping of the 23 COLE tasks for the mockups. The live site groups them in 9 groups; here they are merged into 7. Keys are the normalized task keys of the leaderboard (see normalizeBenchmarkName in COLE/frontend/src/app/leaderboard/util.js).",
+ "categories": [
+  {
+   "key": "sentiment",
+   "label": {
+    "en": "Feelings in text",
+    "fr": "Sentiments dans un texte"
+   },
+   "plain": {
+    "en": "Does the model tell a happy review from an angry one?",
+    "fr": "Le modèle distingue-t-il un avis content d'un avis fâché ?"
+   },
+   "tasks": [
+    "allocine",
+    "mms"
+   ],
+   "short": {
+    "en": "Feelings",
+    "fr": "Sentiments"
+   }
+  },
+  {
+   "key": "reasoning",
+   "label": {
+    "en": "Reasoning",
+    "fr": "Raisonnement"
+   },
+   "plain": {
+    "en": "Given one sentence, does another one follow, contradict it or say something unrelated?",
+    "fr": "Une phrase en entraîne-t-elle une autre, la contredit-elle ou n'a-t-elle aucun lien ?"
+   },
+   "tasks": [
+    "fracas",
+    "gqnli",
+    "lingnli",
+    "mnli-nineeleven-fr-mt",
+    "rte3-french",
+    "sickfr",
+    "xnli",
+    "daccord"
+   ],
+   "short": {
+    "en": "Reasoning",
+    "fr": "Raisonnement"
+   }
+  },
+  {
+   "key": "questions",
+   "label": {
+    "en": "Answering questions",
+    "fr": "Répondre aux questions"
+   },
+   "plain": {
+    "en": "Can it find the answer in a passage, or say yes or no to a question?",
+    "fr": "Trouve-t-il la réponse dans un texte, ou répond-il par oui ou non à une question ?"
+   },
+   "tasks": [
+    "fquad",
+    "french_boolq",
+    "piaf"
+   ],
+   "short": {
+    "en": "Questions",
+    "fr": "Questions"
+   }
+  },
+  {
+   "key": "grammar",
+   "label": {
+    "en": "Grammar",
+    "fr": "Grammaire"
+   },
+   "plain": {
+    "en": "Can it spot the sentence that is written correctly?",
+    "fr": "Repère-t-il la phrase bien écrite ?"
+   },
+   "tasks": [
+    "multiblimp",
+    "qfrcola",
+    "qfrblimp"
+   ],
+   "uncertain": [
+    "qfrblimp"
+   ],
+   "short": {
+    "en": "Grammar",
+    "fr": "Grammaire"
+   }
+  },
+  {
+   "key": "meaning",
+   "label": {
+    "en": "Meaning of words and sentences",
+    "fr": "Sens des mots et des phrases"
+   },
+   "plain": {
+    "en": "Does it see that two sentences say the same thing, and which sense of a word is meant?",
+    "fr": "Voit-il que deux phrases disent la même chose, et quel sens d'un mot est visé ?"
+   },
+   "tasks": [
+    "paws_x",
+    "sts22",
+    "wsd"
+   ],
+   "short": {
+    "en": "Meaning",
+    "fr": "Sens"
+   }
+  },
+  {
+   "key": "pronouns",
+   "label": {
+    "en": "Who is \"he\" or \"she\"?",
+    "fr": "Qui est « il » ou « elle » ?"
+   },
+   "plain": {
+    "en": "Can it work out which person or thing a pronoun points to?",
+    "fr": "Sait-il à quelle personne ou chose renvoie un pronom ?"
+   },
+   "tasks": [
+    "wino_x_lm",
+    "wino_x_mt"
+   ],
+   "short": {
+    "en": "Pronouns",
+    "fr": "Pronoms"
+   }
+  },
+  {
+   "key": "quebec",
+   "label": {
+    "en": "Quebec French",
+    "fr": "Français québécois"
+   },
+   "plain": {
+    "en": "Does it know Quebec expressions and words?",
+    "fr": "Connaît-il les expressions et les mots du Québec ?"
+   },
+   "tasks": [
+    "qfrcore",
+    "qfrcort"
+   ],
+   "short": {
+    "en": "Quebec",
+    "fr": "Québécois"
+   }
+  }
+ ],
+ "excluded_keys": {
+  "frblimp": "Present in all 96 snapshot entries but absent from the site's benchmark list, and its value equals qfrblimp in every entry (checked on the snapshot). Treated as a duplicate of qfrblimp and left out of the 23 tasks. The live site's overall score still counts it, so overall_site in models.json keeps the site formula."
+ },
+ "uncertain_tasks": [
+  {
+   "task": "qfrblimp",
+   "reason": "The live benchmarks page files it under 'Paraphrase detection', but its title (Quebec-French linguistic minimal pairs) and the sibling multiblimp say it is a grammar task; its English description on the site reads like a paraphrase task (copy of PAWS). Placed in grammar. To confirm with the authors."
+  },
+  {
+   "task": "sickfr",
+   "reason": "Relatedness and entailment on sentence pairs; the site files it under natural language inference. Kept in reasoning, though its Pearson metric is a similarity score."
+  },
+  {
+   "task": "paws_x",
+   "reason": "Paraphrase detection: kept with meaning (sts22, wsd) rather than reasoning."
+  },
+  {
+   "task": "wsd",
+   "reason": "Its exact_match values are below 1 in the data (for example 0.03), so the site rule 'values above 1 are divided by 100' leaves them as fractions; if they are really percentages the score is 100 times too high. Rule kept as the site applies it; to verify."
+  }
+ ],
+ "task_names": {
+  "allocine": {
+   "name": "AlloCiné",
+   "metric": "Accuracy"
+  },
+  "mms": {
+   "name": "MMS",
+   "metric": "Accuracy"
+  },
+  "fracas": {
+   "name": "FraCaS",
+   "metric": "Accuracy"
+  },
+  "gqnli": {
+   "name": "GQNLI-Fr",
+   "metric": "Accuracy"
+  },
+  "lingnli": {
+   "name": "LingNLI",
+   "metric": "Accuracy"
+  },
+  "mnli-nineeleven-fr-mt": {
+   "name": "MNLI nineeleven FR-MT",
+   "metric": "Accuracy"
+  },
+  "rte3-french": {
+   "name": "RTE3-French",
+   "metric": "Accuracy"
+  },
+  "sickfr": {
+   "name": "SICK-FR",
+   "metric": "Pearson"
+  },
+  "xnli": {
+   "name": "XNLI",
+   "metric": "Accuracy"
+  },
+  "daccord": {
+   "name": "DACCORD",
+   "metric": "Accuracy"
+  },
+  "fquad": {
+   "name": "FQuAD",
+   "metric": "F1, exact match"
+  },
+  "french_boolq": {
+   "name": "French BoolQ",
+   "metric": "Accuracy"
+  },
+  "piaf": {
+   "name": "PIAF",
+   "metric": "F1, exact match"
+  },
+  "multiblimp": {
+   "name": "MultiBLiMP-Fr",
+   "metric": "Accuracy"
+  },
+  "qfrcola": {
+   "name": "QFrCoLA",
+   "metric": "Accuracy"
+  },
+  "qfrblimp": {
+   "name": "QFrBLiMP",
+   "metric": "Accuracy"
+  },
+  "paws_x": {
+   "name": "PAWS-X",
+   "metric": "Accuracy"
+  },
+  "sts22": {
+   "name": "STS22",
+   "metric": "Pearson"
+  },
+  "wsd": {
+   "name": "WSD-Fr",
+   "metric": "Exact match"
+  },
+  "wino_x_lm": {
+   "name": "WiNo-X LM",
+   "metric": "Accuracy"
+  },
+  "wino_x_mt": {
+   "name": "WiNo-X MT",
+   "metric": "Accuracy"
+  },
+  "qfrcore": {
+   "name": "QFrCoRE",
+   "metric": "Accuracy"
+  },
+  "qfrcort": {
+   "name": "QFrCoRT",
+   "metric": "Accuracy"
+  }
+ }
+}

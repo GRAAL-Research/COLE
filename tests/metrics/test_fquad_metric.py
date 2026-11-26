@@ -110,3 +110,27 @@ class ComputeScoreTest(TestCase):
             {"exact_match": 0.0, "f1": 0.0},
             compute_score(predictions=[], references=[]),
         )
+
+
+class NaGuardTest(TestCase):
+    refs = [{"text": ["le roi Louis XIV"]}] * 10
+
+    def test_na_heavy_predictions_raise_instead_of_scoring_zero(self):
+        predictions = ["NA"] * 8 + ["le roi Louis XIV"] * 2
+        with self.assertRaises(ValueError):
+            compute_score(predictions=predictions, references=self.refs)
+
+    def test_few_na_are_excluded_from_denominator_and_reported(self):
+        predictions = ["NA", ""] + ["le roi Louis XIV"] * 8
+        result = compute_score(predictions=predictions, references=self.refs)
+        self.assertEqual(100.0, result["f1"])
+        self.assertEqual(100.0, result["exact_match"])
+        self.assertEqual(2, result["na_count"])
+
+    def test_threshold_is_configurable(self):
+        predictions = ["NA"] * 5 + ["le roi Louis XIV"] * 5
+        result = compute_score(
+            predictions=predictions, references=self.refs, max_na_fraction=0.5
+        )
+        self.assertEqual(5, result["na_count"])
+        self.assertEqual(100.0, result["f1"])

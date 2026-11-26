@@ -20,17 +20,17 @@ class RemoteLLMModel(LanguageModel):
 
     def generate(self, rows: LazyRow) -> Union[str, List[str]]:
         try:
-            generate = self.model.predict(rows["text"])
-        except:
-            generate = "NA"
+            generate = self.model.predict(rows["text"], extract_label=False)
+        except Exception:  # pylint: disable=broad-exception-caught
+            generate = {"prediction": "NA"}
             print("Generated a NA when model inference.")
         return generate
 
     def infer(self, rows: LazyRow) -> Union[str, List[str]]:
         try:
             infer = self.model.predict(rows["text"])
-        except:
-            infer = "NA"
+        except Exception:  # pylint: disable=broad-exception-caught
+            infer = {"prediction": "NA"}
             print("Generated a NA when model inference.")
         return infer
 
@@ -53,6 +53,8 @@ class RemoteLLMModel(LanguageModel):
             )
             inference_fn = self.infer
         else:
+            # Do not carry the tools/tool_choice of a previous classification task.
+            self.model.reset_function_calling()
             inference_fn = self.generate
 
         workers = int(os.getenv("COLE_WORKERS", "1"))

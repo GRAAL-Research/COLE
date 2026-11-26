@@ -17,7 +17,11 @@ class OpenAIAPILMWrapper(ABC):
         max_retries: int = 10,
     ):
         self.model_name = model_name
-        self._extra_params = extra_params
+        # Never mutate the caller's dict, and keep an untouched copy so that per-task
+        # parameters (tools, tool_choice) can be dropped between tasks.
+        self._base_extra_params: Dict = dict(extra_params)
+        self._extra_params: Dict = dict(extra_params)
+        self.retry_delay_seconds = 5.0
         self.max_retries = max_retries
         self.use_function_calling = use_function_calling
         self.tool_choices = "required"
@@ -34,19 +38,35 @@ class OpenAIAPILMWrapper(ABC):
             open_ai_api_call = (
                 "claude" not in self.model_name.lower()
             )  # False for Anthropic model, True for the rest
-            self._extra_params.update(
-                init_function_calling(
+            # Build a new dict instead of updating in place.
+            self._extra_params = {
+                **self._base_extra_params,
+                **init_function_calling(
                     labels=labels,
                     tool_choices=tool_choices,
                     open_ai_api_call=open_ai_api_call,
-                )
-            )
+                ),
+            }
 
-    def predict(self, text: str) -> Dict:
+    def reset_function_calling(self) -> None:
+        """Drop the label-constrained tools so a generative task is not forced into a label enum."""
+        self._extra_params = dict(self._base_extra_params)
+
+    def predict(self, text: str, extract_label: bool = True) -> Dict:
+        """
+        Predict for one text.
+
+        Args:
+            text: The prompt.
+            extract_label: True for classification tasks (label post-processing is applied),
+                False for generative/extractive tasks (the raw answer is kept as is).
+        """
         prompt = self.format_prompt(text)
         generated_completion = self.language_model_calling(prompt=prompt)
 
-        final_prediction = self.extract_final_prediction(generated_completion)
+        final_prediction = self.extract_final_prediction(
+            generated_completion, extract_label=extract_label
+        )
 
         return {"prediction": final_prediction}
 
@@ -64,103 +84,103 @@ class OpenAIAPILMWrapper(ABC):
     def language_model_calling(self, prompt: List):
         return self._try_again(prompt=prompt)
 
-    def _try_again(self, prompt: List, retries: int = 0):
-        generated_completion = None
-        if retries > self.max_retries:
-            logging_message = f"Max retries exceeded: {retries}."
-            logging.warning(logging_message)
-            self._max_retries_counter += 1
-            return generated_completion
-        try:
-            generated_completion = self._inner_generate_fn(prompt=prompt)
-            return generated_completion
-        except:
-            time.sleep(5)
-            self._try_again(prompt=prompt, retries=retries + 1)
-
-    def extract_final_prediction(self, generated_completion) -> str:
-        if "claude" in self.model_name.lower():
-            if generated_completion is None:
-                final_prediction = None
-            elif generated_completion.content is None:
-                final_prediction = None
-            elif generated_completion.content[0].input is None:
-                final_prediction = None
-            else:
-                try:
-                    final_prediction = generated_completion.content[0].input.get(
-                        "category"
-                    )
-                except:
-                    # Case where the prediction is not a proper dictionary.
-                    final_prediction = generated_completion.content[0].input
-        else:
-            # Something the completion is incomplete, thus we validate that components are there.
-            if generated_completion is None:
-                final_prediction = None
-            elif generated_completion.choices is None:
-                final_prediction = None
-            elif generated_completion.choices[0].message is None:
-                final_prediction = None
-            elif generated_completion.choices[0].message.tool_calls is None:
-                if generated_completion.choices[0].message.content is None:
-                    final_prediction = None
-                else:
-                    # No tools call, but potentially a response in the raw message content.
-                    final_prediction = (
-                        generated_completion.choices[0]
-                        .message.content.strip()
-                        .replace(")", "")
-                        .strip()
-                    )
-            else:
-                prediction = (
-                    generated_completion.choices[0]
-                    .message.tool_calls[0]
-                    .function.arguments
+    def _try_again(self, prompt: List):
+        """Call the API with a bounded number of retries. Return None when all attempts failed."""
+        last_error = None
+        for attempt in range(self.max_retries + 1):
+            try:
+                return self._inner_generate_fn(prompt=prompt)
+            except Exception as error:  # pylint: disable=broad-exception-caught
+                last_error = error
+                logging.warning(
+                    "API call failed (attempt %s/%s): %r",
+                    attempt + 1,
+                    self.max_retries + 1,
+                    error,
                 )
-                try:
-                    final_prediction = eval(prediction).get("category")
-                except:
-                    # Case where the prediction is not a proper dictionary.
-                    final_prediction = prediction
+                if attempt < self.max_retries:
+                    time.sleep(self.retry_delay_seconds)
+        logging.warning(
+            "Max retries exceeded: %s. Last error: %r", self.max_retries, last_error
+        )
+        self._max_retries_counter += 1
+        return None
+
+    def extract_final_prediction(
+        self, generated_completion, extract_label: bool = True
+    ) -> str:
+        if "claude" in self.model_name.lower():
+            final_prediction = self._extract_anthropic(
+                generated_completion, extract_label
+            )
+        else:
+            final_prediction = self._extract_openai(generated_completion, extract_label)
 
         if final_prediction is None:
-            # Case were final prediction is None, thus we return -1 to be able to be converted
-            # as int if necessary (infer-case) or left as string (generate-case).
-            # Thus, in both case, it will not yield better results.
+            # Case were final prediction is None. Labels must stay castable as int (-1);
+            # generative answers use an explicit "NA" marker that the generative metrics
+            # exclude and report. In both cases it can not yield better results.
             self._none_prediction_counter += 1
-            final_prediction = f"{NA_VALUE}"
-        elif "La réponse est" in final_prediction or ":" in final_prediction:
-            # To handle case where the LLM return the premise to the last query.
-            final_prediction = final_prediction.split(":")[-1].strip().replace(" ", "")
-        # Cases where the response is accompanied by other string elements, but it should be a single digit.
-        elif "0" in final_prediction:
-            final_prediction = "0"
-        elif "1" in final_prediction:
-            final_prediction = "1"
-        elif "2" in final_prediction:
-            final_prediction = "2"
-        elif "3" in final_prediction:
-            final_prediction = "3"
-        elif "4" in final_prediction:
-            final_prediction = "4"
-        elif "5" in final_prediction:
-            final_prediction = "5"
-        elif "6" in final_prediction:
-            final_prediction = "6"
-        elif "7" in final_prediction:
-            final_prediction = "7"
-        elif "8" in final_prediction:
-            final_prediction = "8"
-        elif "9" in final_prediction:
-            final_prediction = "9"
-        elif "10" in final_prediction:
-            final_prediction = "10"
-        elif "11" in final_prediction:
-            final_prediction = "11"
+            return f"{NA_VALUE}" if extract_label else "NA"
+        if not extract_label:
+            # Generative/extractive task: keep the answer untouched.
+            return final_prediction
+        return self._clean_label(final_prediction)
 
-        return final_prediction
+    @staticmethod
+    def _extract_anthropic(generated_completion, extract_label: bool):
+        if generated_completion is None or generated_completion.content is None:
+            return None
+        if not extract_label:
+            # Generative task: Anthropic answers with plain text blocks (no tool input).
+            text_blocks = [
+                block.text
+                for block in generated_completion.content
+                if getattr(block, "text", None)
+            ]
+            return "".join(text_blocks).strip() or None
+        tool_input = generated_completion.content[0].input
+        if tool_input is None:
+            return None
+        try:
+            return tool_input.get("category")
+        except:  # pylint: disable=bare-except
+            # Case where the prediction is not a proper dictionary.
+            return tool_input
+
+    @staticmethod
+    def _extract_openai(generated_completion, extract_label: bool):
+        # Sometimes the completion is incomplete, thus we validate that components are there.
+        if generated_completion is None or generated_completion.choices is None:
+            return None
+        message = generated_completion.choices[0].message
+        if message is None:
+            return None
+        if message.tool_calls is None:
+            if message.content is None:
+                return None
+            # No tools call, but potentially a response in the raw message content.
+            content = message.content.strip()
+            return content.replace(")", "").strip() if extract_label else content
+        prediction = message.tool_calls[0].function.arguments
+        try:
+            return eval(prediction).get("category")  # pylint: disable=eval-used
+        except:  # pylint: disable=bare-except
+            # Case where the prediction is not a proper dictionary.
+            return prediction
+
+    @staticmethod
+    def _clean_label(prediction: str) -> str:
+        """Post-process a classification answer so it becomes a bare label (single digit)."""
+        if "La réponse est" in prediction or ":" in prediction:
+            # To handle case where the LLM return the premise to the last query.
+            return prediction.split(":")[-1].strip().replace(" ", "")
+        # Cases where the response is accompanied by other string elements, but it should be a
+        # single digit. (Legacy order kept: "10" and "11" are caught by "1"/"0" first.)
+        for digit in "0123456789":
+            if digit in prediction:
+                return digit
+        return prediction
 
     def print_none(self) -> None:
         if self._none_prediction_counter > 0:

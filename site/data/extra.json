@@ -1,0 +1,227 @@
+{
+ "chance": {
+  "allocine": {
+   "value": 0.5044,
+   "basis": "random-baseline"
+  },
+  "daccord": {
+   "value": 0.5,
+   "basis": "random-baseline"
+  },
+  "fquad": {
+   "value": 0.0,
+   "basis": "random-generation"
+  },
+  "fracas": {
+   "value": 0.301493,
+   "basis": "random-baseline"
+  },
+  "french_boolq": {
+   "value": 0.55618,
+   "basis": "random-baseline"
+  },
+  "gqnli": {
+   "value": 0.266667,
+   "basis": "random-baseline"
+  },
+  "lingnli": {
+   "value": 0.335173,
+   "basis": "random-baseline"
+  },
+  "mms": {
+   "value": 0.336034,
+   "basis": "random-baseline"
+  },
+  "mnli-nineeleven-fr-mt": {
+   "value": 0.342,
+   "basis": "random-baseline"
+  },
+  "multiblimp": {
+   "value": 0.519481,
+   "basis": "random-baseline"
+  },
+  "paws_x": {
+   "value": 0.508,
+   "basis": "random-baseline"
+  },
+  "piaf": {
+   "value": 0.032552,
+   "basis": "random-generation"
+  },
+  "qfrblimp": {
+   "value": 0.491493,
+   "basis": "random-baseline"
+  },
+  "qfrcola": {
+   "value": 0.494567,
+   "basis": "random-baseline"
+  },
+  "qfrcore": {
+   "value": 0.099288,
+   "basis": "random-baseline"
+  },
+  "qfrcort": {
+   "value": 0.122807,
+   "basis": "random-baseline"
+  },
+  "rte3-french": {
+   "value": 0.34125,
+   "basis": "random-baseline"
+  },
+  "sickfr": {
+   "value": null,
+   "basis": "n/a",
+   "note": "Pearson correlation: chance is a correlation near 0, not comparable with the baseline's class score"
+  },
+  "sts22": {
+   "value": null,
+   "basis": "n/a",
+   "note": "Pearson correlation: chance is a correlation near 0, not comparable with the baseline's class score"
+  },
+  "wino_x_lm": {
+   "value": 0.499821,
+   "basis": "random-baseline"
+  },
+  "wino_x_mt": {
+   "value": 0.489625,
+   "basis": "random-baseline"
+  },
+  "wsd": {
+   "value": 0.049984,
+   "basis": "random-generation"
+  },
+  "xnli": {
+   "value": 0.342914,
+   "basis": "random-baseline"
+  }
+ },
+ "chance_note": "Chance reference = score of the project's own RandomBaselineModel on each task (one seeded run, from the snapshot). It matches 1/k for class tasks (about 50 for two classes, about 33 for three).",
+ "quebec_tasks": [
+  "qfrcore",
+  "qfrcort"
+ ],
+ "dataset": {
+  "repo": "graalul/COLE-public",
+  "splits_checked": "README.md configs of the dataset repository, 2026-11-26"
+ },
+ "quiz": [
+  {
+   "id": "multiblimp",
+   "task": "multiblimp",
+   "family": {
+    "en": "Grammar: which sentence is correct?",
+    "fr": "Grammaire : quelle phrase est correcte ?"
+   },
+   "split": "train",
+   "file": "multiblimp/multiblimp_train.jsonl",
+   "kind": "choice",
+   "labels": [
+    {
+     "en": "Sentence 0",
+     "fr": "Phrase 0"
+    },
+    {
+     "en": "Sentence 1",
+     "fr": "Phrase 1"
+    }
+   ],
+   "options": [
+    "Cette logique, poursuit-il, suis basée sur les résolutions que le Conseil de sécurité a adoptées depuis 2007 en vertu de lesquelles ce dernier a pris note de les deux propositions.",
+    "Cette logique, poursuit-il, est basée sur les résolutions que le Conseil de sécurité a adoptées depuis 2007 en vertu de lesquelles ce dernier a pris note de les deux propositions."
+   ],
+   "answer": 1,
+   "why": {
+    "en": "Sentence 0 uses « suis » where the subject « cette logique » needs « est ». The dataset label (1) marks sentence 1 as the grammatical one.",
+    "fr": "La phrase 0 emploie « suis » alors que le sujet « cette logique » demande « est ». L’étiquette du jeu de données (1) désigne la phrase 1 comme correcte."
+   }
+  },
+  {
+   "id": "qfrcola",
+   "task": "qfrcola",
+   "family": {
+    "en": "Quebec acceptability: is the sentence correct?",
+    "fr": "Acceptabilité québécoise : la phrase est-elle correcte ?"
+   },
+   "split": "train",
+   "file": "qfrcola/frcola_train.jsonl",
+   "kind": "choice",
+   "labels": [
+    {
+     "en": "Not correct",
+     "fr": "Incorrecte"
+    },
+    {
+     "en": "Correct",
+     "fr": "Correcte"
+    }
+   ],
+   "prompt": "La journée était calme : point de vent, poing de bruit, point de mouvement.",
+   "options": null,
+   "answer": 0,
+   "why": {
+    "en": "Label 0 (not correct): « poing » (fist) is the wrong homophone, it should be « point ». The source is a language-advice page of the Office québécois de la langue française.",
+    "fr": "Étiquette 0 (incorrecte) : « poing » est le mauvais homophone, il faut « point ». La source est une page de la Vitrine linguistique de l’Office québécois de la langue française."
+   }
+  },
+  {
+   "id": "paws_x",
+   "task": "paws_x",
+   "family": {
+    "en": "Meaning: same thing or not?",
+    "fr": "Sens : même chose ou non ?"
+   },
+   "split": "validation",
+   "file": "paws_x/paws_x_fr_validation.jsonl",
+   "kind": "choice",
+   "labels": [
+    {
+     "en": "Different meanings",
+     "fr": "Sens différents"
+    },
+    {
+     "en": "Same meaning",
+     "fr": "Même sens"
+    }
+   ],
+   "prompt": "1. Kathy et son mari Pete Beale (Peter Dean) sont financièrement stables.\n2. Kathy et son mari Peter Dean (Pete Beale) sont stables financièrement.",
+   "options": null,
+   "answer": 1,
+   "why": {
+    "en": "Label 1 (same meaning). The two sentences swap the two names between the brackets, which is a trap in this dataset, but the label says they mean the same.",
+    "fr": "Étiquette 1 (même sens). Les deux phrases échangent les noms entre parenthèses, ce qui est un piège dans ce jeu de données, mais l’étiquette dit qu’elles ont le même sens."
+   }
+  },
+  {
+   "id": "lingnli",
+   "task": "lingnli",
+   "family": {
+    "en": "Reasoning: what is the relation?",
+    "fr": "Raisonnement : quelle relation ?"
+   },
+   "split": "train",
+   "file": "lingnli/lingnli_train.jsonl",
+   "kind": "choice",
+   "labels": [
+    {
+     "en": "Implication",
+     "fr": "Implication"
+    },
+    {
+     "en": "Neutral",
+     "fr": "Neutre"
+    },
+    {
+     "en": "Contradiction",
+     "fr": "Contradiction"
+    }
+   ],
+   "prompt": "1. Une grande partie de l’argent donné par la Slate 60 sert à financer de nouveaux bâtiments dans des universités déjà riches.\n2. Les universités riches reçoivent un financement de Slate 60.",
+   "options": null,
+   "answer": 0,
+   "why": {
+    "en": "Label 0 in the COLE prompt: implication. Sentence 2 follows from sentence 1.",
+    "fr": "Étiquette 0 dans l’invite COLE : implication. La phrase 2 découle de la phrase 1."
+   }
+  }
+ ]
+}

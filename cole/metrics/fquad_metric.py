@@ -3,7 +3,12 @@ import string
 from collections import Counter
 from typing import Dict, List
 
-from cole.metrics.metrics_wrapper import Metric
+from cole.metrics.metrics_wrapper import (
+    DEFAULT_MAX_NA_FRACTION,
+    Metric,
+    guard_failed_predictions,
+    is_failed_prediction,
+)
 
 
 def normalize_answer(answer: str) -> str:
@@ -83,9 +88,23 @@ def metric_max_over_ground_truths(metric_fn, prediction, ground_truths):
     return max(scores_for_ground_truths)
 
 
-def compute_score(predictions: List, references: List) -> Dict:
+def compute_score(
+    predictions: List,
+    references: List,
+    max_na_fraction: float = DEFAULT_MAX_NA_FRACTION,
+) -> Dict:
+    """
+    Score over valid predictions only. Failed/NA predictions are reported in `na_count`
+    (only present when > 0); above `max_na_fraction` a ValueError is raised instead.
+    """
+    pairs = list(zip(predictions, references))
+    failed = sum(is_failed_prediction(prediction) for prediction, _ in pairs)
+    guard_failed_predictions(failed, len(pairs), max_na_fraction)
+
     f1 = exact_match = total = 0
-    for prediction, reference in zip(predictions, references):
+    for prediction, reference in pairs:
+        if is_failed_prediction(prediction):
+            continue
         total += 1
 
         ground_truths = reference["text"]
@@ -96,10 +115,10 @@ def compute_score(predictions: List, references: List) -> Dict:
 
     if total == 0:
         return {"exact_match": 0.0, "f1": 0.0}
-    exact_match = 100.0 * exact_match / total
-    f1 = 100.0 * f1 / total
-
-    return {"exact_match": exact_match, "f1": f1}
+    result = {"exact_match": 100.0 * exact_match / total, "f1": 100.0 * f1 / total}
+    if failed:
+        result["na_count"] = failed
+    return result
 
 
 class FQuAD(Metric):

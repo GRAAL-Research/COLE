@@ -69,3 +69,4 @@ next-env.d.ts
 /node_modules
 .taste-skill/
 /wandb/
+/runs/
