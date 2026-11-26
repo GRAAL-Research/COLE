@@ -133,6 +133,7 @@
   "leaderboard_modelHeader": "Model name",
   "leaderboard_overallHeader": "Overall",
   "leaderboard_avgScoreLabel": "(avg score)",
+  "leaderboard_columnWithUnit": "{{name}}, percent",
   "leaderboard_notSpecified": "N/A",
   "leaderboard_notSpecifiedTooltip": "This model was not evaluated on this task",
   "leaderboard_modalTitle": "Results for {{name}}",
