@@ -2,7 +2,6 @@
 
 import '../i18n'
 import { useEffect } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import PageTitle from '../components/PageTitle';
@@ -22,16 +21,11 @@ export default function ResultsDefaultPage() {
     }
   }, [router]);
 
+  // The navigation "Submit" button is the only primary action on the page.
   return (
     <div className="max-w-[72ch] py-3">
       <PageTitle>{t('results_default_title')}</PageTitle>
-      <p className="mb-6 text-gray-700">{t('results_default_message')}</p>
-      <Link
-        href="/results?show=submit"
-        className="inline-flex min-h-11 items-center rounded-md bg-accent px-4 py-2 text-base font-medium text-white hover:bg-accent-strong"
-      >
-        {t('nav_submit')}
-      </Link>
+      <p className="text-gray-700">{t('results_default_message')}</p>
     </div>
   );
 }

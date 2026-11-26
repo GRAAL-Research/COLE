@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
 import PageTitle from "@/app/components/PageTitle";
 import Modal from "@/app/components/Modal";
+import BigBlueButton, { buttonClass } from "@/app/components/BigBlueButton";
 import {
   normalizeBenchmarkName,
   computeAverageScore,
@@ -27,6 +28,9 @@ const allowedMetrics = [
 
 const PAGE_SIZE = 25;
 
+// Width of the sticky rank column; the model column is pinned right after it.
+const RANK_COL_WIDTH = "5rem";
+
 export default function LeaderboardPage() {
   const { t } = useTranslation();
   const [entries, setEntries] = useState([]);
@@ -42,6 +46,7 @@ export default function LeaderboardPage() {
   const [scrollState, setScrollState] = useState({ scrolled: false, atEnd: false });
   const searchRef = useRef(null);
   const scrollRef = useRef(null);
+  const tableRef = useRef(null);
 
   const headerLabels = {
     rank: t('leaderboard_rankHeader'),
@@ -81,20 +86,17 @@ export default function LeaderboardPage() {
     setReloadKey((k) => k + 1);
   };
 
-  const updateScrollState = () => {
+  const updateScrollState = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
-    setScrollState({
+    const next = {
       scrolled: el.scrollLeft > 0,
       atEnd: el.scrollLeft + el.clientWidth >= el.scrollWidth - 1,
-    });
-  };
-
-  useEffect(() => {
-    updateScrollState();
-    window.addEventListener('resize', updateScrollState);
-    return () => window.removeEventListener('resize', updateScrollState);
-  }, [loading, benchmarks, currentPage, search]);
+    };
+    setScrollState((prev) =>
+      prev.scrolled === next.scrolled && prev.atEnd === next.atEnd ? prev : next
+    );
+  }, []);
 
   const getCellValue = (entry, col) => {
     if (col === 'model') return entry.display_name;
@@ -190,15 +192,31 @@ export default function LeaderboardPage() {
     setCurrentPage(1);
   };
 
+  // The scroll container only exists once rows are shown; watch its size and
+  // the table's (columns and rows change both) to keep the edge cues right.
+  const hasRows = sorted.length > 0;
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return undefined;
+    updateScrollState();
+    const observer = new ResizeObserver(updateScrollState);
+    observer.observe(el);
+    if (tableRef.current) observer.observe(tableRef.current);
+    return () => observer.disconnect();
+  }, [loading, error, hasRows, updateScrollState]);
 
   const stickyClass = (col, isHeader) => {
     if (col !== 'rank' && col !== 'model') return '';
-    const position = col === 'rank' ? 'left-0 w-14 min-w-14' : 'left-14 min-w-40 sm:min-w-56';
+    // Below sm only the model column is pinned; the rank scrolls away.
+    const position =
+      col === 'rank'
+        ? 'sm:sticky sm:left-0 sm:z-10 w-(--rank-w) min-w-(--rank-w) max-w-(--rank-w)'
+        : 'sticky z-10 left-0 sm:left-(--rank-w) min-w-36 sm:min-w-56';
     const edge = col === 'model' && scrollState.scrolled
       ? ' shadow-[4px_0_6px_-4px_rgba(0,0,0,0.35)]'
       : '';
     const background = isHeader ? '' : ' bg-white group-hover:bg-gray-50';
-    return `sticky z-10 ${position}${background}${edge}`;
+    return `${position}${background}${edge}`;
   };
 
   const renderHeader = (col) => {
@@ -250,11 +268,28 @@ export default function LeaderboardPage() {
 
   const title = <PageTitle>{t('leaderboard_title')}</PageTitle>;
 
+  // Live regions stay mounted across states and only their text changes, so
+  // screen readers announce each transition.
+  const liveRegions = (
+    <>
+      <div role="status" aria-busy={loading} className="sr-only">
+        {loading
+          ? t('leaderboard_loading')
+          : !error && query && sorted.length === 0
+            ? t('leaderboard_noResults')
+            : ''}
+      </div>
+      <div role="alert" className={error ? 'pt-12 text-center' : undefined}>
+        {error && <p className="mb-4 text-lg text-red-700">{t('leaderboard_errorMessage')}</p>}
+      </div>
+    </>
+  );
+
   if (loading) {
     return (
-      <div role="status" aria-busy="true">
+      <div>
         {title}
-        <span className="sr-only">{t('leaderboard_loading')}</span>
+        {liveRegions}
         <div aria-hidden="true" className="animate-pulse motion-reduce:animate-none">
           <div className="mb-6 h-10 w-full max-w-sm rounded bg-gray-100" />
           <div className="h-14 w-full rounded-t bg-blue-100" />
@@ -276,15 +311,11 @@ export default function LeaderboardPage() {
     return (
       <div>
         {title}
-        <div role="alert" className="py-12 text-center">
-          <p className="mb-4 text-lg text-red-700">{t('leaderboard_errorMessage')}</p>
-          <button
-            type="button"
-            onClick={retry}
-            className="inline-flex min-h-11 items-center rounded-md bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
-          >
+        {liveRegions}
+        <div className="pb-12 text-center">
+          <BigBlueButton variant="secondary" onClick={retry}>
             {t('leaderboard_retry')}
-          </button>
+          </BigBlueButton>
         </div>
       </div>
     );
@@ -302,36 +333,32 @@ export default function LeaderboardPage() {
   return (
     <div>
       {title}
-      <input
-        ref={searchRef}
-        type="search"
-        value={search}
-        onChange={handleSearch}
-        placeholder={t('leaderboard_searchPlaceholder')}
-        aria-label={t('leaderboard_searchPlaceholder')}
-        className="mb-6 min-h-11 w-full max-w-sm rounded border border-gray-400 px-3 py-2 text-sm text-gray-900"
-      />
+      {liveRegions}
+      {entries.length > 0 && (
+        <input
+          ref={searchRef}
+          type="search"
+          value={search}
+          onChange={handleSearch}
+          placeholder={t('leaderboard_searchPlaceholder')}
+          aria-label={t('leaderboard_searchPlaceholder')}
+          className="mb-6 min-h-11 w-full max-w-sm rounded border border-gray-400 px-3 py-2 text-base text-gray-900 sm:text-sm"
+        />
+      )}
 
       {sorted.length === 0 ? (
-        <div role="status" className="py-12 text-center">
+        <div className="py-12 text-center">
           {query ? (
             <>
               <p className="mb-4 text-gray-700">{t('leaderboard_noResults')}</p>
-              <button
-                type="button"
-                onClick={clearSearch}
-                className="inline-flex min-h-11 items-center rounded-md border border-gray-400 bg-white px-4 py-2 font-medium text-gray-800 hover:bg-gray-100"
-              >
+              <BigBlueButton variant="secondary" onClick={clearSearch}>
                 {t('leaderboard_clearSearch')}
-              </button>
+              </BigBlueButton>
             </>
           ) : (
             <>
               <p className="mb-4 text-gray-700">{t('leaderboard_empty')}</p>
-              <Link
-                href="/leaderboard?show=submit"
-                className="inline-flex min-h-11 items-center rounded-md bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
-              >
+              <Link href="/leaderboard?show=submit" className={buttonClass('secondary')}>
                 {t('nav_submit')}
               </Link>
             </>
@@ -347,7 +374,11 @@ export default function LeaderboardPage() {
             aria-label={t('leaderboard_scrollRegion')}
             className="overflow-x-auto"
           >
-            <table className="min-w-full border-separate border-spacing-0">
+            <table
+              ref={tableRef}
+              style={{ '--rank-w': RANK_COL_WIDTH }}
+              className="min-w-full border-separate border-spacing-0"
+            >
               <thead>
                 <tr>
                   {columns.map((b) => (
@@ -385,9 +416,11 @@ export default function LeaderboardPage() {
                         title={entry.display_name}
                         onClick={(e) => {
                           e.stopPropagation();
+                          // Safari and Firefox on macOS do not focus buttons on click.
+                          e.currentTarget.focus();
                           setSelectedEntry(entry);
                         }}
-                        className="block min-h-11 w-full max-w-[12rem] truncate whitespace-nowrap rounded px-1 text-left text-blue-700 hover:underline sm:max-w-[20rem]"
+                        className="block min-h-11 w-full max-w-[8rem] truncate whitespace-nowrap rounded px-1 text-left text-blue-700 hover:underline sm:max-w-[20rem]"
                       >
                         {entry.display_name}
                       </button>
@@ -419,7 +452,7 @@ export default function LeaderboardPage() {
           {!scrollState.atEnd && (
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-black/15 to-transparent"
+              className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-linear-to-l from-black/15 to-transparent"
             />
           )}
         </div>
