@@ -49,16 +49,51 @@ class F1Score(Metric):
         )
 
 
+DEFAULT_MAX_NA_FRACTION = 0.2
+_FAILED_MARKERS = {"", "NA", str(NA_VALUE)}
+
+
+def is_failed_prediction(prediction) -> bool:
+    """True when the prediction is a pipeline failure marker (None, empty, "NA" or "-1")."""
+    if prediction is None:
+        return True
+    return str(prediction).strip() in _FAILED_MARKERS
+
+
+def guard_failed_predictions(
+    failed: int, total: int, max_na_fraction: float = DEFAULT_MAX_NA_FRACTION
+) -> None:
+    """Raise when too many predictions failed, so a pipeline failure can not look like a 0.0 score."""
+    if total > 0 and failed / total > max_na_fraction:
+        raise ValueError(
+            f"{failed} of {total} predictions are failed/NA "
+            f"(> {max_na_fraction:.0%}); the evaluation pipeline likely failed, "
+            "refusing to report a score."
+        )
+
+
 class ExactMatch(Metric):
-    def compute(self, predictions: List, references: List, **kwargs) -> Dict:
-        # Coerce to string and treat None/missing as empty so a malformed prediction
-        # counts as a miss instead of crashing the whole computation.
+    def compute(
+        self,
+        predictions: List,
+        references: List,
+        max_na_fraction: float = DEFAULT_MAX_NA_FRACTION,
+        **kwargs,
+    ) -> Dict:
+        pairs = list(zip(references, predictions))
+        failed = sum(is_failed_prediction(prediction) for _, prediction in pairs)
+        guard_failed_predictions(failed, len(pairs), max_na_fraction)
+        # Failed predictions are excluded from the denominator and reported in `na_count`.
         score = [
             (str(reference) if reference is not None else "").strip()
-            == (str(prediction) if prediction is not None else "").strip()
-            for reference, prediction in zip(references, predictions)
+            == str(prediction).strip()
+            for reference, prediction in pairs
+            if not is_failed_prediction(prediction)
         ]
-        return {"exact_match": sum(score) / len(score) if score else 0.0}
+        result = {"exact_match": sum(score) / len(score) if score else 0.0}
+        if failed:
+            result["na_count"] = failed
+        return result
 
 
 def apply_int_casting(predictions_to_clean: List) -> List:
