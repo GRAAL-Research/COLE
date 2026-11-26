@@ -1,14 +1,8 @@
-export default function ErrorMessage({children,condition}){
-return(
-    <div className="pt-2">
-        <div className="pt-2 space-y-2">
-            {condition && (
-        <div className="text-red-600 text-sm font-medium">
-            {children}
-        </div>
-        )}
-        </div>
-    </div>
-);
-
+export default function ErrorMessage({ id, children }) {
+  if (!children) return null;
+  return (
+    <p id={id} className="mt-1 text-sm font-medium text-red-700">
+      {children}
+    </p>
+  );
 }

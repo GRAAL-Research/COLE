@@ -4,6 +4,7 @@ import '../i18n'
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import PageTitle from '../components/PageTitle';
 
 export default function ResultsDefaultPage() {
   const router = useRouter();
@@ -20,12 +21,11 @@ export default function ResultsDefaultPage() {
     }
   }, [router]);
 
+  // The navigation "Submit" button is the only primary action on the page.
   return (
-    <main className="max-w-2xl mx-auto px-6 py-12 text-center">
-      <h1 className="text-3xl font-bold text-blue-700 mb-4">
-        {t('results_default_title')}
-      </h1>
+    <div className="max-w-[72ch] py-3">
+      <PageTitle>{t('results_default_title')}</PageTitle>
       <p className="text-gray-700">{t('results_default_message')}</p>
-    </main>
+    </div>
   );
 }

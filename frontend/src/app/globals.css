@@ -1,22 +1,36 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: light;
   --background: #ffffff;
-  --foreground: #6526ae;
+  --text: #111827;
+  --text-muted: #374151;
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-foreground: var(--text);
+  --color-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
-
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+}
+
+/* In the base layer so Tailwind utilities (focus-visible:outline-white,
+   outline-none) override it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 }
 
 code {
@@ -24,5 +38,6 @@ code {
   padding: 0.15em 0.4em;
   border-radius: 0.25em;
   font-size: 0.875em;
-  font-family: var(--font-mono), monospace;
+  /* --font-geist-mono is defined on <body>, so read it here, not through --font-mono. */
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
 }

@@ -16,7 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "COLE - Comprehensive Benchmark for French Language Understanding",
+  title: {
+    default: "COLE - Comprehensive Benchmark for French Language Understanding",
+    template: "%s | COLE",
+  },
   description: "COLE is a benchmark of 23 tasks for evaluating French Natural Language Understanding (NLU) in large language models.",
   openGraph: {
     title: "COLE - French NLU Benchmark",
@@ -34,11 +37,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         <ClientHeader />
-        <main className="w-full flex justify-center px-4 pt-8">
-          <div className="w-full max-w-7xl">{children}</div>
+        <main id="main-content" className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6">
+          {children}
         </main>
         <Suspense fallback={null}>
           <ModalManager/>

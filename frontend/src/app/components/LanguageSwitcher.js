@@ -1,24 +1,39 @@
 'use client';
 
 import {useTranslation} from 'react-i18next';
+import {setLanguage} from '../i18n';
+
+const LANGUAGES = [
+    {code: 'en', label: 'EN', name: 'English'},
+    {code: 'fr', label: 'FR', name: 'Français'},
+];
 
 export function LanguageSwitcher() {
-    const {i18n} = useTranslation();
+    const {t, i18n} = useTranslation();
     const currentLang = i18n.language?.startsWith('fr') ? 'fr' : 'en';
 
     const btnStyle = (lng) =>
-        lng === currentLang
-            ? 'px-2 py-1 rounded-lg border-2 border-blue-600 bg-blue-600 text-white font-semibold'
-            : 'px-2 py-1 rounded-lg border border-gray-300 text-gray-500 hover:border-gray-400';
+        `inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border px-2 text-sm ${
+            lng === currentLang
+                ? 'border-blue-600 bg-blue-600 font-semibold text-white'
+                : 'border-gray-300 text-gray-700 hover:border-gray-500'
+        }`;
 
     return (
-        <div className="flex space-x-1">
-            <button onClick={() => i18n.changeLanguage('en')} className={btnStyle('en')}>
-                EN
-            </button>
-            <button onClick={() => i18n.changeLanguage('fr')} className={btnStyle('fr')}>
-                FR
-            </button>
+        <div role="group" aria-label={t('lang_switcher')} className="flex shrink-0 space-x-1">
+            {LANGUAGES.map(({code, label, name}) => (
+                <button
+                    key={code}
+                    type="button"
+                    lang={code}
+                    aria-label={name}
+                    aria-pressed={code === currentLang}
+                    onClick={() => setLanguage(code)}
+                    className={btnStyle(code)}
+                >
+                    {label}
+                </button>
+            ))}
         </div>
     );
 }
