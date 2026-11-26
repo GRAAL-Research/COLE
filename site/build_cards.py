@@ -9,6 +9,8 @@ ROOT = Path(__file__).resolve().parent
 DATA = json.loads((ROOT / "data/models.json").read_text())
 MODELS = DATA["models"]
 SNAP = DATA["snapshot"]
+CATS = json.loads((ROOT / "data/categories.json").read_text())["categories"]
+N_TESTS = len({t for c in CATS for t in c["tasks"]})
 
 
 def quebec(m):
@@ -32,7 +34,7 @@ TXT = {
         "cap": f"highest score on Quebec expressions and words ({best['label']})",
         "open": f"{quebec(best_open) * 100:.0f}",
         "opencap": "strongest model you can run yourself, up to 33 billion parameters",
-        "foot": f"GRAAL, Université Laval | {len(MODELS)} models, 23 tests",
+        "foot": f"GRAAL, Université Laval | {len(MODELS)} models, {N_TESTS} tests",
     },
     "fr": {
         "head": "Qui parle québécois ?",
@@ -40,7 +42,7 @@ TXT = {
         "cap": f"score le plus élevé sur les expressions et les mots du Québec ({best['label']})",
         "open": f"{quebec(best_open) * 100:.0f}",
         "opencap": "modèle le plus fort utilisable chez soi, jusqu’à 33 milliards de paramètres",
-        "foot": f"GRAAL, Université Laval | {len(MODELS)} modèles, 23 tests",
+        "foot": f"GRAAL, Université Laval | {len(MODELS)} modèles, {N_TESTS} tests",
     },
 }
 

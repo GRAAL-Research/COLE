@@ -73,16 +73,22 @@ local = [
     and m["size_b"] <= 33
 ]
 best_local = max(local, key=q)
-assert best["label"] == "Claude Opus 4", best["label"]
-assert round(q(best) * 100) == 96 and n1(q(best)) == "95.6"
-assert q(best_local) * 100 < 54.5, q(best_local)
-assert round(q(best_local) * 100) == 54
+BEST_LABEL = best["label"]
+Q_BEST = round(
+    q(best) * 100
+)  # whole-number score of the strongest model on Quebec tests
+Q_LOCAL = round(
+    q(best_local) * 100
+)  # same for the strongest model run on your own computer
 RANDOM = BY_ID["RandomBaselineModel"]
 N_OPEN = len(
     [m for m in MODELS if m["kind"] == "open" and m["id"] != "RandomBaselineModel"]
 )
 N_Q4 = len([m for m in MODELS if m["quantized_4bit"]])
-assert len(MODELS) == 96
+N_MODELS = len(MODELS)  # every count of models shown on the pages comes from here
+N_TESTS = len({t for c in CATS for t in c["tasks"]})
+N_QUEBEC_TESTS = len(next(c for c in CATS if c["key"] == "quebec")["tasks"])
+N_OTHER_TESTS = N_TESTS - N_QUEBEC_TESTS
 assert sum(1 for m in DEFAULTS if q(BY_ID[m]) >= 0.5) == 2
 
 
@@ -152,8 +158,8 @@ STEPS = [
         "Compare models",
         "Comparer des modèles",
         "compare",
-        "Put two to six models side by side, skill by skill.",
-        "Placer de deux à six modèles côte à côte, compétence par compétence.",
+        "Put 2 to 6 models side by side, skill by skill.",
+        "Placer de 2 à 6 modèles côte à côte, compétence par compétence.",
         "Go further: see every model and every test",
         "Aller plus loin : voir tous les modèles et tous les tests",
     ),
@@ -162,8 +168,8 @@ STEPS = [
         "All results",
         "Tous les résultats",
         "results",
-        "Sort and filter the full table of 96 models and 23 tests.",
-        "Trier et filtrer le tableau complet des 96 modèles et des 23 tests.",
+        f"Sort and filter the full table of {N_MODELS} models and {N_TESTS} tests.",
+        f"Trier et filtrer le tableau complet des {N_MODELS} modèles et des {N_TESTS} tests.",
         "Next step: explore the results in pictures",
         "Étape suivante : explorer les résultats en images",
     ),
@@ -319,7 +325,7 @@ def footer() -> str:
     return f"""<footer class="site-footer ground-deep">
 <div class="wrap">
 <div class="footer-grid">
-<p class="lead zone-note" data-reveal>{bi("COLE is a GRAAL research project, Université Laval, Quebec.", "COLE est un projet de recherche du GRAAL, Université Laval, Québec.")}</p>
+<p class="small zone-note" data-reveal>{bi("COLE is a GRAAL research project, Université Laval, Quebec.", "COLE est un projet de recherche du GRAAL, Université Laval, Québec.")}</p>
 <div class="stack">
 <ul class="footer-links" data-reveal>
 <li><a href="level-3.html">{bi("Article", "Article")}</a></li>
@@ -329,7 +335,6 @@ def footer() -> str:
 {credits_html()}
 </div>
 </div>
-<div class="footer-name" aria-hidden="true"><span>COLE</span></div>
 </div>
 </footer>
 <dialog id="contact-dialog" aria-labelledby="contact-title">
@@ -344,7 +349,7 @@ def footer() -> str:
 
 SITE_URL = "https://colebenchmark.org"
 OG_TITLE_FR = "COLE : quelle IA comprend le français québécois ?"
-OG_DESC_FR = "COLE : 96 modèles de langage, 23 tests en français."
+OG_DESC_FR = f"COLE : {N_MODELS} modèles de langage, {N_TESTS} tests en français."
 
 
 def name_to_file(name):
@@ -367,7 +372,7 @@ def page(name, title_en, title_fr, body, ground_header="", scripts=(), extra_hea
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title data-en="{escape(title_en)}" data-fr="{escape(title_fr)}">{escape(title_fr)}</title>
-<meta name="description" content="Évaluation de 96 modèles de langage sur 23 tests de compréhension du français, dont le français québécois.">
+<meta name="description" content="Évaluation de {N_MODELS} modèles de langage sur {N_TESTS} tests de compréhension du français, dont le français québécois.">
 <meta property="og:site_name" content="COLE">
 <meta property="og:locale" content="fr_CA">
 <meta property="og:locale:alternate" content="en_CA">
@@ -438,11 +443,11 @@ def index():
 <div class="wrap hero-grid">
 {mask("Who knows", "Qui parle", "Québécois?", "québécois&nbsp;?").replace('<h1 class="display hero-title mask-block">', '<h1 id="hero-title" class="display hero-title mask-block">')}
 <div class="hero-talk" data-stagger>
-<p data-reveal>{bi("We tested 96 AI models on 23 French tests. Here is who understands Quebec.", "Nous avons testé 96 modèles d’IA sur 23 tests en français. Voici lesquels comprennent le Québec.")}</p>
+<p data-reveal>{bi(f"We tested {N_MODELS} AI models on {N_TESTS} French tests. Here is who understands Quebec.", f"Nous avons testé {N_MODELS} modèles d’IA sur {N_TESTS} tests en français. Voici lesquels comprennent le Québec.")}</p>
 <a class="btn" data-reveal href="model.html">{bi("Look up a model", "Consulter un modèle")}</a>
 </div>
 <div class="hero-pic">
-<div class="hero-block" data-reveal><b>{n1b(q(best))}</b><span>{bi("% highest of 96 models on Quebec expressions and words: Claude Opus 4", "% score le plus élevé parmi 96 modèles sur les expressions et les mots du Québec : Claude Opus 4")}</span></div>
+<div class="hero-block" data-reveal><b>{n1b(q(best))}</b><span>{bi(f"% highest of {N_MODELS} models on Quebec expressions and words: {BEST_LABEL}", f"% score le plus élevé parmi {N_MODELS} modèles sur les expressions et les mots du Québec : {BEST_LABEL}")}</span></div>
 <div class="pic">{img("market-quebec-1903.jpg", "Illustrated postcard of the Champlain Market in Quebec City, around 1903: carts, vegetable sellers and tall stone houses.", "Carte postale illustrée du marché Champlain à Québec, vers 1903 : charrettes, marchands de légumes et hautes maisons de pierre.", 'style="object-position:50% 70%" fetchpriority="high"').replace('loading="lazy"', '')}</div>
 </div>
 </div>
@@ -467,8 +472,8 @@ def index():
 <p class="lead col-text" data-reveal>{bi("Pick the format that fits how you read.", "Choisissez le format qui convient à votre façon de lire.")}</p>
 <div class="formats" data-stagger>
 <a class="format-row" href="plain-language.html" data-reveal><h3>{bi("The poster", "L’affiche")}</h3><p><span class="for">{bi("For everyone", "Pour tout le monde")}</span><br>{bi("The essentials on one page: one question, one plain answer, six bars on one skill.", "L’essentiel en une page : une question, une réponse simple, six barres sur une compétence.")}</p><span class="go">{bi("Read the poster", "Lire l’affiche")}</span></a>
-<a class="format-row" href="choose-a-model.html" data-reveal><h3>{bi("The data sheet", "La fiche de données")}</h3><p><span class="for">{bi("For people who must choose", "Pour celles et ceux qui doivent choisir")}</span><br>{bi("Pick two models and compare them on seven skills, as a radar plate and a table.", "Choisissez deux modèles et comparez-les sur sept compétences, en radar et en tableau.")}</p><span class="go">{bi("Open the data sheet", "Ouvrir la fiche")}</span></a>
-<a class="format-row" href="level-3.html" data-reveal><h3>{bi("The article", "L’article")}</h3><p><span class="for">{bi("For researchers", "Pour la recherche")}</span><br>{bi("The accepted paper, the protocol, the 23 tasks and every score to two decimals.", "L’article accepté, le protocole, les 23 tâches et chaque score à deux décimales.")}</p><span class="go">{bi("Open the article page", "Ouvrir la page de l’article")}</span></a>
+<a class="format-row" href="choose-a-model.html" data-reveal><h3>{bi("The data sheet", "La fiche de données")}</h3><p><span class="for">{bi("For people who must choose", "Pour celles et ceux qui doivent choisir")}</span><br>{bi("Pick 2 to 6 models and compare them on seven skills, as a radar plate and a table.", "Choisissez de 2 à 6 modèles et comparez-les sur sept compétences, en radar et en tableau.")}</p><span class="go">{bi("Open the data sheet", "Ouvrir la fiche")}</span></a>
+<a class="format-row" href="level-3.html" data-reveal><h3>{bi("The article", "L’article")}</h3><p><span class="for">{bi("For researchers", "Pour la recherche")}</span><br>{bi(f"The accepted paper, the protocol, the {N_TESTS} tasks and every score to two decimals.", f"L’article accepté, le protocole, les {N_TESTS} tâches et chaque score à deux décimales.")}</p><span class="go">{bi("Open the article page", "Ouvrir la page de l’article")}</span></a>
 </div>
 </div>
 </div>
@@ -476,13 +481,13 @@ def index():
 
 <section class="section ground-blue" aria-labelledby="live-title">
 <div class="wrap axis">
-<div class="zone-note stack" data-reveal><p class="figure-big">{n1b(q(best))}</p><p class="small">{bi("Share of correct answers of the strongest model, Claude Opus 4, on Quebec expressions and words (%).", "Part des réponses justes du modèle le plus fort, Claude Opus 4, sur les expressions et les mots du Québec (%).")}</p></div>
+<div class="zone-note"></div>
 <div class="axis-main stack-lg">
 <h2 id="live-title" class="head" data-reveal>{bi("Quebec expressions, model by model", "Les expressions québécoises, modèle par modèle")}</h2>
 <p class="lead col-text" data-reveal>{bi(f"Six models on the two Quebec tests. Guessing at random scores {n1(q(RANDOM))}.", f"Six modèles sur les deux tests québécois. Le hasard obtient {n1(q(RANDOM), 'fr')}.")}</p>
 <p class="small strong" data-reveal>{bi("Correct answers (%)", "Réponses justes (%)")}</p>
 {bars(DEFAULTS)}
-<p data-reveal><a class="link-btn" href="choose-a-model.html">{bi("Compare any two of the 96 models", "Comparer deux des 96 modèles")}</a></p>
+<p data-reveal><a class="link-btn" href="choose-a-model.html">{bi("Compare models, 2 to 6 at a time", "Comparer des modèles, de 2 à 6 à la fois")}</a></p>
 </div>
 </div>
 </section>
@@ -501,14 +506,14 @@ def index():
 <section class="section ground-tint" aria-labelledby="snap-title">
 <div class="wrap axis">
 <div class="zone-note stats note-after" data-stagger>
-<div class="stat" data-reveal><b>96</b><span>{bi("models evaluated", "modèles évalués")}</span></div>
-<div class="stat" data-reveal><b>23</b><span>{bi("tests in French", "tests en français")}</span></div>
+<div class="stat" data-reveal><b>{N_MODELS}</b><span>{bi("models evaluated", "modèles évalués")}</span></div>
+<div class="stat" data-reveal><b>{N_TESTS}</b><span>{bi("tests in French", "tests en français")}</span></div>
 </div>
 <div class="axis-main stack-lg">
 <h2 id="snap-title" class="head" data-reveal>{bi("What this snapshot holds", "Ce que contient cet instantané")}</h2>
 <div class="stack col-text lead" data-reveal>
 <p>{bi(f"Scores follow the protocol of the COLE paper, taken from colebenchmark.org. Newer models are not in yet, for example Claude Sonnet 4.5, GPT-5.1 and Gemini 3 Pro.", f"Les scores suivent le protocole de l’article COLE, repris de colebenchmark.org. Les modèles plus récents n’y sont pas encore, par exemple Claude Sonnet 4.5, GPT-5.1 et Gemini 3 Pro.")}</p>
-<p>{bi("A test a model did not take is shown as n/a, never as zero. Planned next: a second protocol that re-runs every model, with these entries kept as an archive.", "Un test que le modèle n’a pas passé s’affiche n.d., jamais zéro. Prévu ensuite : un second protocole qui réévalue chaque modèle, ces entrées restant en archive.")}</p>
+<p>{bi("A test a model did not take is left empty, never counted as zero. Planned next: a second protocol that re-runs every model, with these entries kept as an archive.", "Un test que le modèle n’a pas passé reste vide, jamais compté comme zéro. Prévu ensuite : un second protocole qui réévalue chaque modèle, ces entrées restant en archive.")}</p>
 </div>
 </div>
 </div>
@@ -542,7 +547,7 @@ def model():
         for c in CATS
     )
     static = f"""<div class="stack" id="sheet-static"><h2 class="head">{lab(m0)}</h2>
-<p class="lead">{bi(f"Rank {m0['rank']} of 96, overall score {n1(m0['overall'])} %.", f"Rang {m0['rank']} sur 96, score général {n1(m0['overall'], 'fr')} %.")}</p>
+<p class="lead">{bi(f"Rank {m0['rank']} of {N_MODELS}, overall score {n1(m0['overall'])} %.", f"Rang {m0['rank']} sur {N_MODELS}, score général {n1(m0['overall'], 'fr')} %.")}</p>
 <div class="table-scroll" tabindex="0" role="region" {attrs("aria-label", "Skills of the model", "Compétences du modèle")}><table class="data"><caption>{bi("Score per skill, in percent.", "Score par compétence, en pourcentage.")}</caption><thead><tr><th scope="col" class="l">{bi("Skill", "Compétence")}</th><th scope="col">{bi("Score", "Score")}<span class="unit">(%)</span></th></tr></thead><tbody>{rows}</tbody></table></div></div>"""
     body = f"""{header("model")}
 {crumbs((None, "Model sheet", "Fiche d’un modèle"))}
@@ -838,7 +843,7 @@ def choose():
 <div class="wrap stack-lg">
 {mask("Choose a model", "Choisir un modèle", cls="display").replace('<h1 class="display mask-block">', '<h1 id="page-title" class="display mask-block">')}
 <div class="axis" style="margin-top:1.5rem"><div class="zone-note"></div><div class="stack" data-stagger>
-<p class="lead col-text" data-reveal>{bi("Pick two models. See where each one is stronger.", "Choisissez deux modèles. Voyez où chacun est le plus fort.")}</p>
+<p class="lead col-text" data-reveal>{bi("Pick 2 to 6 models. See where each one is stronger.", "Choisissez de 2 à 6 modèles. Voyez où chacun est le plus fort.")}</p>
 </div></div>
 </div>
 </section>
@@ -928,8 +933,8 @@ def plain():
         (
             "It is not the whole of Quebec French.",
             "Ce n’est pas tout le français québécois.",
-            "Two of the 23 tests are about Quebec. The other 21 test French in general.",
-            "Deux des 23 tests portent sur le Québec. Les 21 autres testent le français en général.",
+            f"{N_QUEBEC_TESTS} of the {N_TESTS} tests are about Quebec. The other {N_OTHER_TESTS} test French in general.",
+            f"{N_QUEBEC_TESTS} des {N_TESTS} tests portent sur le Québec. Les {N_OTHER_TESTS} autres testent le français en général.",
         ),
         (
             "It says nothing about cost or speed.",
@@ -962,7 +967,7 @@ def plain():
 <div class="poster-pic"><div class="pic" data-reveal>{img("postcard-sous-le-cap.jpg", "Old postcard of a narrow street in Quebec City, Sous-le-Cap, with wooden balconies and clothes lines.", "Ancienne carte postale d’une ruelle de Québec, Sous-le-Cap, avec des balcons de bois et des cordes à linge.", 'style="object-position:50% 25%"').replace('loading="lazy"', '')}</div></div>
 <div class="poster-main">
 {mask("Does AI get", "L’IA parle", "Québécois?", "québécois&nbsp;?").replace('<h1 class="display hero-title mask-block">', '<h1 id="poster-title" class="display hero-title mask-block">')}
-<p class="lead" data-reveal>{bi("Some do. The strongest model answered 96 out of 100 on Quebec expressions and words. The models you can run on your own computer, up to 33 billion parameters, scored no more than 54.", "Certaines, oui. Le modèle le plus fort a répondu juste à 96 questions sur 100 sur les expressions et les mots du Québec. Les modèles qu’on peut exécuter sur son propre ordinateur, jusqu’à 33 milliards de paramètres, ont obtenu 54 au maximum.")}</p>
+<p class="lead" data-reveal>{bi(f"Some do. The strongest model answered {Q_BEST} out of 100 on Quebec expressions and words. The models you can run on your own computer, up to 33 billion parameters, scored no more than {Q_LOCAL}.", f"Certaines, oui. Le modèle le plus fort a répondu juste à {Q_BEST} questions sur 100 sur les expressions et les mots du Québec. Les modèles qu’on peut exécuter sur son propre ordinateur, jusqu’à 33 milliards de paramètres, ont obtenu {Q_LOCAL} au maximum.")}</p>
 <p data-reveal><a class="btn" href="#bars">{bi("See six models", "Voir six modèles")}</a></p>
 </div>
 </div>
@@ -972,7 +977,7 @@ def plain():
 <div class="wrap">
 <h2 id="words-title" class="head" style="margin-bottom:1.5rem" data-reveal>{bi("Three words", "Trois mots")}</h2>
 <dl class="def-list" data-stagger>
-<div class="def-row" data-reveal><dt>COLE</dt><dd>{bi("A set of 23 French tests built by researchers. Two of them are about Quebec expressions and words.", "Un ensemble de 23 tests en français créé par des chercheurs. Deux portent sur les expressions et les mots du Québec.")}</dd></div>
+<div class="def-row" data-reveal><dt>COLE</dt><dd>{bi(f"A set of {N_TESTS} French tests built by researchers. {N_QUEBEC_TESTS} of them are about Quebec expressions and words.", f"Un ensemble de {N_TESTS} tests en français créé par des chercheurs. {N_QUEBEC_TESTS} portent sur les expressions et les mots du Québec.")}</dd></div>
 <div class="def-row" data-reveal><dt>{bi("Benchmark", "Banc d’essai")}</dt><dd>{bi("A test that asks every model the same questions, so their scores can be compared.", "Un test qui pose les mêmes questions à chaque modèle, pour que leurs scores soient comparables.")}</dd></div>
 <div class="def-row" data-reveal><dt>{bi("Model", "Modèle")}</dt><dd>{bi("An AI program that reads and writes text, like the one behind a chatbot.", "Un programme d’IA qui lit et écrit du texte, comme celui derrière un robot conversationnel.")}</dd></div>
 </dl>
@@ -981,7 +986,7 @@ def plain():
 
 <section id="bars" class="section ground-blue" aria-labelledby="bars-title">
 <div class="wrap axis">
-<div class="zone-note stack" data-reveal><p class="figure-big">{round(q(best) * 100)}</p><p class="small">{bi("out of 100: the highest score, Claude Opus 4.", "sur 100 : le score le plus élevé, Claude Opus 4.")}</p></div>
+<div class="zone-note stack" data-reveal><p class="figure-big">{round(q(best) * 100)}</p><p class="small">{bi(f"out of 100: the highest score, {BEST_LABEL}.", f"sur 100 : le score le plus élevé, {BEST_LABEL}.")}</p></div>
 <div class="axis-main stack-lg">
 <h2 id="bars-title" class="head" data-reveal>{bi("How well do they know Quebec words?", "Connaissent-ils les mots du Québec ?")}</h2>
 <p class="lead col-text" data-reveal>{bi("Each model got the same questions: match a Quebec expression or word with its meaning.", "Chaque modèle a reçu les mêmes questions : associer une expression ou un mot du Québec à son sens.")}</p>
@@ -993,7 +998,7 @@ def plain():
 
 <section class="section" aria-labelledby="limits-title">
 <div class="wrap axis">
-<div class="zone-note stack" data-reveal><p class="stat"><b>2 {bi("of", "sur")} 23</b><span>{bi("tests are about Quebec French.", "tests portent sur le français québécois.")}</span></p></div>
+<div class="zone-note stack" data-reveal><p class="stat"><b>{N_QUEBEC_TESTS} {bi("of", "sur")} {N_TESTS}</b><span>{bi("tests are about Quebec French.", "tests portent sur le français québécois.")}</span></p></div>
 <div class="axis-main stack-lg"><h2 id="limits-title" class="head" data-reveal>{bi("What this does not tell you", "Ce que ce score ne dit pas")}</h2>
 <div class="cols-2">{bh}</div></div>
 </div>
@@ -1003,8 +1008,8 @@ def plain():
 <div class="wrap closing-grid">
 <div class="closing-talk" data-stagger>
 <h2 id="next-title" class="head" data-reveal>{bi("Want the details?", "Envie de détails ?")}</h2>
-<p class="lead" data-reveal>{bi("Compare two models side by side, or read how the scores are computed.", "Comparez deux modèles côte à côte, ou lisez comment les scores sont calculés.")}</p>
-<a class="btn" href="choose-a-model.html" data-reveal>{bi("Compare two models", "Comparer deux modèles")}</a>
+<p class="lead" data-reveal>{bi("Compare 2 to 6 models side by side, or read how the scores are computed.", "Comparez de 2 à 6 modèles côte à côte, ou lisez comment les scores sont calculés.")}</p>
+<a class="btn" href="choose-a-model.html" data-carry data-reveal>{bi("Compare models", "Comparer des modèles")}</a>
 <a class="link-btn" href="level-3.html" data-reveal>{bi("Read the article page", "Lire la page de l’article")}</a>
 </div>
 <div class="pic" style="aspect-ratio:16/8">{img("printing-house-16c.jpg", "Engraving of a sixteenth-century printing house.", "Gravure d’une imprimerie du XVIe siècle.", 'style="object-position:50% 30%"')}</div>
@@ -1017,7 +1022,7 @@ def plain():
 <h2 id="tease-title" class="head" data-reveal>{bi("Quebec against the rest", "Le Québec contre le reste")}</h2>
 <p class="lead col-text" data-reveal>{bi(TEASE_Q[0], TEASE_Q[1])}</p>
 <p class="col-text" data-reveal>{bi(TEASE_C[0], TEASE_C[1])}</p>
-<p data-reveal><a class="btn" href="explore.html#quebec">{bi("Explore the charts", "Explorer les graphiques")}</a></p>
+<p data-reveal><a class="btn" href="explore.html#quebec" data-carry>{bi("Explore the charts", "Explorer les graphiques")}</a></p>
 </div>
 </div>
 </section>
@@ -1037,7 +1042,7 @@ def results():
 <div class="wrap stack-lg">
 {mask("All results", "Tous les résultats", cls="display").replace('<h1 class="display mask-block">', '<h1 id="page-title" class="display mask-block">')}
 <div class="axis" style="margin-top:1.5rem"><div class="zone-note"></div><div class="stack" data-stagger>
-<p class="lead col-text" data-reveal>{bi("Every model, every skill, every task. Sort, filter, then select up to six models to compare.", "Chaque modèle, chaque compétence, chaque tâche. Triez, filtrez, puis sélectionnez jusqu’à six modèles à comparer.")}</p>
+<p class="lead col-text" data-reveal>{bi("Every model, every skill, every task. Sort, filter, then select 2 to 6 models to compare.", "Chaque modèle, chaque compétence, chaque tâche. Triez, filtrez, puis sélectionnez de 2 à 6 modèles à comparer.")}</p>
 </div></div>
 </div>
 </section>
@@ -1157,14 +1162,14 @@ def level3():
 <div class="cols-2">
 <div data-reveal><p>{bi("A task score is the mean of its metrics among accuracy, f1, pearson, pearsonr, spearman, fquad and exact match. A value above 1 is divided by 100.", "Le score d’une tâche est la moyenne de ses métriques parmi accuracy, f1, pearson, pearsonr, spearman, fquad et exact match. Une valeur supérieure à 1 est divisée par 100.")}</p></div>
 <div data-reveal><p>{bi("A skill score is the mean of the tasks the model has. Missing tasks are never counted as zero. The overall score follows the live leaderboard.", "Le score d’une compétence est la moyenne des tâches du modèle. Une tâche manquante n’est jamais comptée comme zéro. Le score général suit le classement en ligne.")}</p></div>
-<div data-reveal><p>{bi("To check with the authors: the entry frblimp duplicates qfrblimp in all 96 results, so it is left out and counted once; in this snapshot the Quebec grammar test (qfrblimp) therefore cannot be told apart from the general one. The wsd metric also holds values below 1.", "À vérifier avec les auteurs : l’entrée frblimp duplique qfrblimp dans les 96 résultats ; elle est donc écartée et comptée une fois. Dans ce relevé, le test de grammaire québécoise (qfrblimp) ne se distingue donc pas de la version générale. La métrique wsd contient aussi des valeurs inférieures à 1.")}</p></div>
+<div data-reveal><p>{bi(f"To check with the authors: the entry frblimp duplicates qfrblimp in all {N_MODELS} results, so it is left out and counted once; in this snapshot the Quebec grammar test (qfrblimp) therefore cannot be told apart from the general one. The wsd metric also holds values below 1.", f"À vérifier avec les auteurs : l’entrée frblimp duplique qfrblimp dans les {N_MODELS} résultats ; elle est donc écartée et comptée une fois. Dans ce relevé, le test de grammaire québécoise (qfrblimp) ne se distingue donc pas de la version générale. La métrique wsd contient aussi des valeurs inférieures à 1.")}</p></div>
 </div></div>
 </div>
 </section>
 
 <section class="section ground-tint" aria-labelledby="tasks-title">
 <div class="wrap axis">
-<div class="zone-note" data-reveal><p class="lead">{bi("The 23 tasks, grouped into seven skills.", "Les 23 tâches, regroupées en sept compétences.")}</p></div>
+<div class="zone-note" data-reveal><p class="lead">{bi(f"The {N_TESTS} tasks, grouped into seven skills.", f"Les {N_TESTS} tâches, regroupées en sept compétences.")}</p></div>
 <div class="axis-main"><h2 id="tasks-title" class="head" data-reveal>{bi("Task list", "Liste des tâches")}</h2></div>
 <div class="span-all tbl-wide" data-reveal>{tbl}</div>
 </div>

@@ -4,21 +4,21 @@
   var C = window.COLE, $ = function (id) { return document.getElementById(id); };
   var STR = {
     en: {
-      loading: "Loading the results of 96 models…", errorTitle: "We could not load the results.", errorBody: "The data file did not answer. Check your connection and try again.", retry: "Try again",
-      rank: "Rank", model: "Model", overall: "Overall", tasks: "Tasks", hideTasks: "Hide tasks", na: "n/a", matching: "{n} models match.", shownOf: "{s} shown.", showing: "{s} of {n} models", more: "Show 25 more",
+      loading: "Loading the results…", errorTitle: "We could not load the results.", errorBody: "The data file did not answer. Check your connection and try again.", retry: "Try again",
+      rank: "Rank", model: "Model", overall: "Overall", tasks: "Tasks", hideTasks: "Hide tasks", na: "n/a", matching: "{n} models match.", shownOf: "{s} shown.", showing: "{n} models", showingFirst: "First {s} models of {n}", scrollHint: "Scroll the table sideways to see every column.", more: "Show 25 more",
       none: "No model matches these filters.", noneHelp: "Relax a filter or clear them all.", clear: "Clear filters", family: "Family", type: "Type", size: "Size", any: "Any",
       tAPI: "Served through an API", tOpen: "Open weights", tRef: "Reference", sUnknown: "Unknown size", s1: "Under 3 billion", s2: "3 to 10 billion", s3: "10 to 35 billion", s4: "Over 35 billion",
-      search: "Search by model name", dec: "Two decimals", sel: "{n} selected (6 at most)", compare: "Compare these {n} models", selClear: "Clear selection", selNeed: "Select at least two models to compare them.",
+      search: "Search by model name", dec: "Two decimals", sel: "{n} selected (6 at most)", compare: "Compare these {n} models", selClear: "Clear selection", selNeed: "Select 2 to 6 models to compare them.",
       pick: "Compare {m}", maxPick: "Six models are already selected.", remove: "Remove {m}", unknownFam: "Unknown",
       caption: "All results, score in percent. n/a means no result for that test, never zero.", region: "Results table, scrolls sideways",
       naNote: "n/a: no result, never counted as zero.", unrel: "n/a: evaluation not reliable for this model on this task, under verification.", unit: "Scores in %", toggleOn: "Show the tasks (each test and its metric)", toggleOff: "Hide the tasks", csv: "Download CSV", json: "Download JSON", downloaded: "Downloaded {f}.", metricLabel: "Metric: {m}", yourModel: "Your model"
     },
     fr: {
-      loading: "Chargement des résultats de 96 modèles…", errorTitle: "Nous n’avons pas pu charger les résultats.", errorBody: "Le fichier de données n’a pas répondu. Vérifiez votre connexion et réessayez.", retry: "Réessayer",
-      rank: "Rang", model: "Modèle", overall: "Général", tasks: "Tâches", hideTasks: "Masquer les tâches", na: "n.d.", matching: "{n} modèles correspondent.", shownOf: "{s} affichés.", showing: "{s} modèles sur {n}", more: "Afficher 25 de plus",
+      loading: "Chargement des résultats…", errorTitle: "Nous n’avons pas pu charger les résultats.", errorBody: "Le fichier de données n’a pas répondu. Vérifiez votre connexion et réessayez.", retry: "Réessayer",
+      rank: "Rang", model: "Modèle", overall: "Général", tasks: "Tâches", hideTasks: "Masquer les tâches", na: "n.d.", matching: "{n} modèles correspondent.", shownOf: "{s} affichés.", showing: "{n} modèles", showingFirst: "{s} premiers modèles sur {n}", scrollHint: "Faites défiler le tableau latéralement pour voir toutes les colonnes.", more: "Afficher 25 de plus",
       none: "Aucun modèle ne correspond à ces filtres.", noneHelp: "Assouplissez un filtre ou effacez-les tous.", clear: "Effacer les filtres", family: "Famille", type: "Type", size: "Taille", any: "Toutes",
       tAPI: "Utilisé par API", tOpen: "Poids ouverts", tRef: "Référence", sUnknown: "Taille inconnue", s1: "Moins de 3 milliards", s2: "3 à 10 milliards", s3: "10 à 35 milliards", s4: "Plus de 35 milliards",
-      search: "Chercher par nom de modèle", dec: "Deux décimales", sel: "{n} sélectionnés (6 au maximum)", compare: "Comparer ces {n} modèles", selClear: "Effacer la sélection", selNeed: "Sélectionnez au moins deux modèles pour les comparer.",
+      search: "Chercher par nom de modèle", dec: "Deux décimales", sel: "{n} sélectionnés (6 au maximum)", compare: "Comparer ces {n} modèles", selClear: "Effacer la sélection", selNeed: "Sélectionnez de 2 à 6 modèles pour les comparer.",
       pick: "Comparer {m}", maxPick: "Six modèles sont déjà sélectionnés.", remove: "Retirer {m}", unknownFam: "Inconnue",
       caption: "Tous les résultats, score en pourcentage. n.d. signifie aucun résultat pour ce test, jamais zéro.", region: "Tableau des résultats, défile horizontalement",
       naNote: "n.d. : pas de résultat, jamais compté comme zéro.", unrel: "n.d. : évaluation non fiable pour ce modèle sur cette épreuve, en cours de vérification.", unit: "Scores en %", toggleOn: "Afficher les tâches (chaque test et sa métrique)", toggleOff: "Masquer les tâches", csv: "Télécharger le CSV", json: "Télécharger le JSON", downloaded: "{f} téléchargé.", metricLabel: "Métrique : {m}", yourModel: "Votre modèle"
@@ -107,14 +107,14 @@
       cols.forEach(function (c) { var v = val(m, c); h += "<td" + (c.kind === "task" ? ' class="task"' : "") + ">" + (v == null ? C.esc(t("na")) : C.pct(v, d)) + "</td>"; });
       h += "</tr>";
     });
-    h += "</tbody></table></div></div>";
+    h += "</tbody></table></div></div>" + (shown.length ? '<p class="small scroll-hint">' + C.esc(t("scrollHint")) + "</p>" : "");
     var anyNa = shown.some(function (m) { return cols.some(function (c) { return val(m, c) == null; }); });
     var anyUnrel = shown.some(function (m) { return cols.some(function (c) { return c.kind === "task" && val(m, c) == null && (m.unreliable_tasks || []).indexOf(c.task) !== -1; }); });
     if (anyNa) h += '<p class="small" id="na-note">' + C.esc(t("naNote")) + (anyUnrel ? " " + C.esc(t("unrel")) : "") + "</p>";
     if (!shown.length) h = '<div class="state"><h3 class="lead strong">' + C.esc(t("none")) + "</h3><p>" + C.esc(t("noneHelp")) + '</p><button class="btn" type="button" id="empty-clear">' + C.esc(t("clear")) + "</button></div>";
     if (rows.length > shown.length) h += '<p style="margin-top:1rem"><button class="btn btn-ghost" type="button" id="more">' + C.esc(t("more")) + "</button></p>";
     $("res-host").innerHTML = h;
-    $("count").textContent = rows.length === D.models.length ? t("showing", { s: shown.length, n: rows.length }) : t("matching", { n: rows.length }) + (rows.length > shown.length ? " " + t("shownOf", { s: shown.length }) : "");
+    $("count").textContent = rows.length === D.models.length ? t(shown.length < rows.length ? "showingFirst" : "showing", { s: shown.length, n: rows.length }) : t("matching", { n: rows.length }) + (rows.length > shown.length ? " " + t("shownOf", { s: shown.length }) : "");
     var host = $("res-host");
     host.querySelectorAll("[data-sort]").forEach(function (b) { b.addEventListener("click", function () { var k = b.dataset.sort; if (S.sortKey === k) S.sortDir = S.sortDir === "desc" ? "asc" : "desc"; else { S.sortKey = k; S.sortDir = k === "name" ? "asc" : "desc"; } render(); var a = host.querySelector('[data-sort="' + k + '"]'); if (a) a.focus(); }); });
     host.querySelectorAll("[data-pick]").forEach(function (cb) { cb.addEventListener("change", function () { pick(cb.dataset.pick, cb.checked); }); });
@@ -127,10 +127,12 @@
     var upd = function () { w.classList.toggle("has-more", s.scrollLeft + s.clientWidth < s.scrollWidth - 4); w.classList.toggle("has-less", s.scrollLeft > 4); };
     s.addEventListener("scroll", upd, { passive: true }); upd();
   }
+  /* the model in focus (or the first one ticked) follows the reader to Compare and Explore */
+  function carry() { var s = S.sel[0] || FOCUS; if (window.coleCarry && s) window.coleCarry(s); }
   function pick(slug, on) {
     if (on && S.sel.length < 6 && S.sel.indexOf(slug) === -1) S.sel.push(slug);
     if (!on) S.sel = S.sel.filter(function (s) { return s !== slug; });
-    C.writeHash({ m: S.sel }); render(); selbar();
+    C.writeHash({ m: S.sel }); render(); selbar(); carry();
   }
   function selbar() {
     var bar = $("selbar"), n = S.sel.length;
@@ -177,7 +179,7 @@
     showState("loading");
     C.load().then(function (d) {
       D = d; S.sel = C.readHash().m.filter(function (s) { return D.bySlug[s]; }).slice(0, 6);
-      filters(); render(); selbar();
+      filters(); render(); selbar(); carry();
     }).catch(function () { showState("error"); });
   }
   $("q").addEventListener("input", function (e) { S.q = e.target.value; S.limit = 25; render(); });
@@ -188,7 +190,7 @@
   $("sel-clear").addEventListener("click", function () { S.sel = []; C.writeHash({}); render(); selbar(); });
   $("dl-csv").addEventListener("click", function () { download("csv"); });
   $("dl-json").addEventListener("click", function () { download("json"); });
-  document.addEventListener("langchange", function () { if (D) { filters(); render(); selbar(); } else if (C.forced === "error") showState("error"); else showState("loading"); });
+  document.addEventListener("langchange", function () { if (D) { filters(); render(); selbar(); carry(); } else if (C.forced === "error") showState("error"); else showState("loading"); });
   if (C.forced === "empty") S.q = "zzzz";
   load();
 })();

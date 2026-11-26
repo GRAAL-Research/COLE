@@ -113,13 +113,14 @@
       var q = [], o = []; Object.keys(m.tasks).forEach(function (k) { if (m.tasks[k] == null) return; (qk.indexOf(k) !== -1 ? q : o).push(m.tasks[k]); });
       return { m: m, q: mean(q), o: mean(o) };
     }).filter(function (r) { return r.q != null && r.o != null; }).sort(function (a, b) { return (a.q - a.o) - (b.q - b.o); });
-    var host = $("x1"), W = wid(host), wide = W >= 640, lw = wide ? 210 : 0, pad = 22, x0 = lw + pad, x1 = W - pad, x = function (v) { return x0 + v * (x1 - x0); }, rh = wide ? 70 : 92;
+    var host = $("x1"), W = wid(host), wide = W >= 640, lw = wide ? 210 : 0, pad = 22, x0 = lw + pad, x1 = W - pad, x = function (v) { return x0 + v * (x1 - x0); }, rh = wide ? 70 : 92, top = 30, bot = rows.length > 3 ? 30 : 0;
     var QS = { c: "var(--accent)", sh: "circle" }, OS = { c: "var(--s1)", sh: "square" };
-    var svg = '<svg viewBox="0 0 ' + W + " " + rows.length * rh + '" width="' + W + '" height="' + rows.length * rh + '" role="img" aria-label="' + C.esc(t("qLeg") + " / " + t("oLeg")) + '">';
+    var svg = '<svg viewBox="0 0 ' + W + " " + (top + rows.length * rh + bot) + '" width="' + W + '" height="' + (top + rows.length * rh + bot) + '" role="img" aria-label="' + C.esc(t("qLeg") + " / " + t("oLeg")) + '">' + axisTicks(x, 22, 0, 1, pad, W);
+    [0, 0.5, 1].forEach(function (g) { svg += '<line class="grid" x1="' + x(g).toFixed(1) + '" x2="' + x(g).toFixed(1) + '" y1="' + top + '" y2="' + (top + rows.length * rh) + '"/>'; });
     rows.forEach(function (r, i) {
-      var y = i * rh, base = y + (wide ? 30 : 56), a = Math.min(r.q, r.o), b = Math.max(r.q, r.o);
+      var y = top + i * rh, base = y + (wide ? 30 : 56), a = Math.min(r.q, r.o), b = Math.max(r.q, r.o);
       var nm = '<text class="row-name" x="' + (wide ? 0 : pad) + '" y="' + (wide ? base + 5 : y + 18) + '">' + C.esc(ml(r.m)) + "</text>";
-      svg += nm + '<line class="track" x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base + '"/>' + axisTicks(x, base, 0, 1, pad, W);
+      svg += nm + '<line class="track" x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base + '"/>';
       svg += '<line class="link" x1="' + x(a).toFixed(1) + '" y1="' + base + '" x2="' + x(b).toFixed(1) + '" y2="' + base + '"/>';
       [[r.q, QS, 0, "qLeg"], [r.o, OS, 1, "oLeg"]].forEach(function (p) {
         var xv = x(p[0]), near = Math.abs(x(r.q) - x(r.o)) < 46, low = p[0] === a, side = near ? (low ? "end" : "start") : "middle", lx = near ? xv + (low ? -11 : 11) : xv;
@@ -129,6 +130,7 @@
         svg += '<text class="end-label" x="' + lx.toFixed(1) + '" y="' + (near ? base + 5 : base + 24) + '" text-anchor="' + side + '" style="fill:' + p[1].c + '">' + C.pct(p[0]) + "</text>";
       });
     });
+    if (bot) svg += axisTicks(x, top + rows.length * rh + 24, 0, 1, pad, W);
     host.innerHTML = '<ul class="plate-legend"><li><svg width="16" height="16" aria-hidden="true">' + C.shape("circle", 8, 8, 6, "fill:var(--accent);stroke:var(--accent)", "") + "</svg>" + C.esc(t("qLeg")) + '</li><li><svg width="16" height="16" aria-hidden="true">' + C.shape("square", 8, 8, 6, "fill:var(--s1);stroke:var(--s1)", "") + "</svg>" + C.esc(t("oLeg")) + "</li></ul>" + svg + "</svg>" +
       '<p class="small">' + C.esc(t("qOnly", { q: qk.map(tname).join(", "), n: Object.keys(D.taskNames).length - qk.length })) + "</p>" +
       tableOf([t("model"), t("qLeg"), t("oLeg")], rows.map(function (r) { return [ml(r.m), C.pct(r.q, 2), C.pct(r.o, 2)]; }), t("qLeg"));
@@ -363,7 +365,7 @@
     svg += "</svg>";
     var leg = '<ul class="plate-legend"><li><svg width="16" height="16" aria-hidden="true"><line x1="8" y1="1" x2="8" y2="15" style="stroke:var(--accent);stroke-width:3"/></svg>' + C.esc(t("chTk")) + "</li>" + legendShape("circle", "var(--bg)", t("bestMk")) + legendShape("square", "var(--bg)", t("medMk")) + '<li class="strong">' + C.esc(t("boldK")) + "</li></ul>";
     var tbl = tableOf([C.lang() === "en" ? "Task" : "Épreuve", C.lang() === "en" ? "Skill" : "Compétence", t("bestM"), t("hMed"), t("chTk")], all.map(function (r) {
-      var cat = groups.filter(function (g) { return g.rs.indexOf(r) !== -1; })[0].c; return [tname(r.k), cl(cat), ml(r.bm) + " " + pc1(r.best), pc1(r.med), r.ch == null ? t("na") : pc1(r.ch)];
+      var cat = groups.filter(function (g) { return g.rs.indexOf(r) !== -1; })[0].c; return [tname(r.k), cl(cat), ml(r.bm) + " " + pc1(r.best), pc1(r.med), r.ch == null ? "–" : pc1(r.ch)];
     }), t("hardCap"));
     host.innerHTML = '<p class="lead">' + C.esc(t("hardSum", { g: C.fmt(minGap.gap * 100, 0), t: tname(minGap.k), k: nearN, n: meaningful.length })) + "</p>" + leg + svg + tbl; host.setAttribute("aria-busy", "false"); bindTips(host);
   }

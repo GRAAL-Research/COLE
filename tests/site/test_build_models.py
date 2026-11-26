@@ -192,3 +192,21 @@ def test_committed_models_json_matches_committed_snapshot():
     expected = build_models.build_all(snapshot, categories, sizes, details)
     committed = json.loads((SITE_DIR / "data/models.json").read_text())["models"]
     assert committed == expected
+
+
+def test_family_cohere_command_models():
+    assert build_models.family("command-r7b-12-2024") == "Cohere"
+    assert build_models.family("CohereForAI/aya-expanse-32b") == "Cohere"
+
+
+def test_published_pages_follow_the_data():
+    """Counts shown on the pages come from models.json: no stale hardcoded count."""
+    data = json.loads((SITE_DIR / "data/models.json").read_text())
+    n = len(data["models"])
+    index = (SITE_DIR / "index.html").read_text()
+    assert f"{n} models" in index
+    for page in ("index.html", "all-results.html", "model.html"):
+        html = (SITE_DIR / page).read_text()
+        assert "{N_" not in html and "{Q_" not in html
+        if n != 96:
+            assert "96 models" not in html and "96 modèles" not in html

@@ -6,13 +6,13 @@
     en: {
       loading: "Loading the model results…", errorTitle: "We could not load the results.", errorBody: "The data file did not answer. Check your connection and try again.", retry: "Try again",
       noMatch: "No model matches “{q}”.", clear: "Clear search", suggested: "Suggested",
-      same: "", add: "Add model", full: "Six models is the maximum. Remove one to add another.", minNote: "Keep at least two models.", remove: "Remove {m}",
-      reset: "Reset to the default pair", quick: "Quick add", added: "Added {m}. {n} of 6 models.", removed: "Removed {m}. {n} of 6 models.", addLabel: "Add a model", addPh: "Choose a model", emptyTitle: "No model to compare yet.", emptyBody: "Add two models with the list on the left, then the chart appears here.", suggested: "Suggested", allModels: "All models", pickFirst: "Choose a model in the list first.", help: "How to read this chart",
+      same: "", add: "Add model", full: "6 models is the maximum. Remove one to add another.", minNote: "Keep at least 2 models.", remove: "Remove {m}",
+      reset: "Reset to the default pair", quick: "Quick add", added: "Added {m}. {n} of 6 models.", removed: "Removed {m}. {n} of 6 models.", addLabel: "Add a model", addPh: "Choose a model", emptyTitle: "No model to compare yet.", emptyBody: "Add 2 models with the list on the left, then the chart appears here.", suggested: "Suggested", allModels: "All models", pickFirst: "Choose a model in the list first.", help: "How to read this chart",
       views: "View", vRadar: "Radar", vCats: "By skill", vTable: "Table",
       radarNote: "Check up to 3 models", replaced: "{a} replaced by {b}",
       moreCats: "See more skills", fewerCats: "Show fewer skills", overall: "Overall", skill: "Skill", tests: "{n} tests", testsOne: "{n} test", partial: "{n} of {m} tests",
       caption: "Score by skill", best: "strongest", bestNote: "* strongest in the row",
-      showTasks: "Show the 23 tasks", hideTasks: "Hide the tasks", task: "Task", na: "n/a", naList: "n/a: {list}",
+      showTasks: "Show the {n} tasks", hideTasks: "Hide the tasks", task: "Task", na: "n/a", naList: "n/a: {list}",
       rank: "Rank", model: "Model", more: "Show all {n} models", less: "Show the top 10 only",
       lbCaption: "Overall score and score by skill, in percent. Blue rows are your selected models.", partialNote: "Fewer tests than the other models.",
       plateTitle: "Radar plate comparing models on seven skills", scale: "Scores in %. Hollow marks mean fewer tests than expected.",
@@ -24,13 +24,13 @@
     fr: {
       loading: "Chargement des résultats des modèles…", errorTitle: "Nous n’avons pas pu charger les résultats.", errorBody: "Le fichier de données n’a pas répondu. Vérifiez votre connexion et réessayez.", retry: "Réessayer",
       noMatch: "Aucun modèle ne correspond à « {q} ».", clear: "Effacer la recherche", suggested: "Suggestions",
-      add: "Ajouter le modèle", full: "Six modèles au maximum. Retirez-en un pour en ajouter.", minNote: "Gardez au moins deux modèles.", remove: "Retirer {m}",
-      reset: "Revenir à la paire par défaut", quick: "Ajout rapide", added: "{m} ajouté. {n} modèles sur 6.", removed: "{m} retiré. {n} modèles sur 6.", addLabel: "Ajouter un modèle", addPh: "Choisir un modèle", emptyTitle: "Aucun modèle à comparer pour l’instant.", emptyBody: "Ajoutez deux modèles avec la liste à gauche ; le graphique apparaîtra ici.", suggested: "Suggestions", allModels: "Tous les modèles", pickFirst: "Choisissez d’abord un modèle dans la liste.", help: "Comment lire ce graphique",
+      add: "Ajouter le modèle", full: "6 modèles au maximum. Retirez-en un pour en ajouter.", minNote: "Gardez au moins 2 modèles.", remove: "Retirer {m}",
+      reset: "Revenir à la paire par défaut", quick: "Ajout rapide", added: "{m} ajouté. {n} modèles sur 6.", removed: "{m} retiré. {n} modèles sur 6.", addLabel: "Ajouter un modèle", addPh: "Choisir un modèle", emptyTitle: "Aucun modèle à comparer pour l’instant.", emptyBody: "Ajoutez 2 modèles avec la liste à gauche ; le graphique apparaîtra ici.", suggested: "Suggestions", allModels: "Tous les modèles", pickFirst: "Choisissez d’abord un modèle dans la liste.", help: "Comment lire ce graphique",
       views: "Vue", vRadar: "Radar", vCats: "Par compétence", vTable: "Tableau",
       radarNote: "Cochez jusqu’à 3 modèles", replaced: "{a} remplacé par {b}",
       moreCats: "Voir plus de compétences", fewerCats: "Voir moins de compétences", overall: "Général", skill: "Compétence", tests: "{n} tests", testsOne: "{n} test", partial: "{n} tests sur {m}",
       caption: "Score par compétence", best: "le plus fort", bestNote: "* le plus fort de la ligne",
-      showTasks: "Afficher les 23 tâches", hideTasks: "Masquer les tâches", task: "Tâche", na: "n.d.", naList: "n.d. : {list}",
+      showTasks: "Afficher les {n} tâches", hideTasks: "Masquer les tâches", task: "Tâche", na: "n.d.", naList: "n.d. : {list}",
       rank: "Rang", model: "Modèle", more: "Afficher les {n} modèles", less: "Afficher seulement les 10 premiers",
       lbCaption: "Score général et score par compétence, en pourcentage. Les lignes en bleu sont vos modèles choisis.", partialNote: "Moins de tests que les autres modèles.",
       plateTitle: "Radar comparant des modèles sur sept compétences", scale: "Scores en %. Une marque creuse signifie moins de tests que prévu.",
@@ -50,7 +50,7 @@
 
   function ml(m) { return C.mlabel(m); }
   function M(slug) { return D.bySlug[slug]; }
-  function cats() { return S.moreCats ? D.cats : D.cats.filter(function (c) { return BASIC.indexOf(c.key) !== -1; }); }
+  function cats() { return S.moreCats || S.view === "radar" ? D.cats : D.cats.filter(function (c) { return BASIC.indexOf(c.key) !== -1; }); }
   function selModels() { return S.sel.map(M); }
   function clabel(c) { return c.short[C.lang()]; }
   function say(msg, quiet) { $(quiet ? "live-note" : "add-note").textContent = msg; if (!quiet) $("live-note").textContent = ""; }
@@ -165,7 +165,7 @@
   var NS = "http://www.w3.org/2000/svg";
   function drawRadar(animate) {
     var host = $("plate-svg-host"), W = Math.max(280, host.clientWidth || 320), narrow = W < 560;
-    var padX = narrow ? 70 : 118, padY = 34, R = Math.min(W / 2 - padX, 235), cx = W / 2, cy = R + padY + 6, H = cy + R + padY + 14, n = cats().length;
+    var padX = narrow ? 82 : 118, padY = 34, R = Math.min(W / 2 - padX, 235), cx = W / 2, cy = R + padY + 6, H = cy + R + padY + 14, n = cats().length;
     var ang = function (i) { return -Math.PI / 2 + (i * 2 * Math.PI) / n; };
     var pt = function (i, r) { return [cx + r * Math.cos(ang(i)), cy + r * Math.sin(ang(i))]; };
     var picks = S.sel.length > 3 ? S.rpick : S.sel;
@@ -174,8 +174,7 @@
       svg += '<polygon class="ring" points="' + cats().map(function (c, i) { return pt(i, (R * p) / 100).map(function (v) { return v.toFixed(1); }).join(","); }).join(" ") + '"/>';
     });
     cats().forEach(function (c, i) { var p = pt(i, R); svg += '<line class="spoke" x1="' + cx + '" y1="' + cy + '" x2="' + p[0].toFixed(1) + '" y2="' + p[1].toFixed(1) + '"/>'; });
-    [0, 50, 100].forEach(function (p) { var q = pt(0, 0), a = ang(0) + Math.PI / n, x = cx + (R * p / 100) * Math.cos(a), y = cy + (R * p / 100) * Math.sin(a); svg += '<text class="ring-label" x="' + (x + 4).toFixed(1) + '" y="' + (y - 4).toFixed(1) + '">' + p + "</text>"; });
-    var labels = "";
+    [50, 100].forEach(function (p) { var q = pt(0, 0), a = ang(0) + Math.PI / n, x = cx + (R * p / 100) * Math.cos(a), y = cy + (R * p / 100) * Math.sin(a); svg += '<text class="ring-label" x="' + (x + 4).toFixed(1) + '" y="' + (y - 4).toFixed(1) + '">' + p + "</text>"; });
     picks.forEach(function (slug, k) {
       var m = M(slug), slot = S.sel.indexOf(slug), st = C.STY[slot], col = "stroke:" + st.color + ";fill:" + st.color;
       var coords = [], dots = "", best = { i: 0, v: -1 };
@@ -188,14 +187,12 @@
         dots += C.shape(st.shape, +p[0].toFixed(1), +p[1].toFixed(1), 5, col, "") .replace("/>", "><title>" + C.esc(tip) + "</title></" + (st.shape === "square" ? "rect" : st.shape === "triangle" || st.shape === "diamond" ? "polygon" : st.shape === "cross" ? "path" : "circle") + ">");
       });
       svg += '<g class="series' + (animate ? " enter" : "") + '"><polygon points="' + coords.join(" ") + '" style="fill:' + st.color + ";fill-opacity:0.1;stroke:" + st.color + ";stroke-width:3;stroke-linejoin:round" + (st.dash ? ";stroke-dasharray:" + st.dash : "") + '"/>' + dots + "</g>";
-      var lp = pt(best.i, Math.max(12, R * best.v - 16 - k * 17)), dx = Math.cos(ang(best.i));
-      if (!narrow) labels += '<text class="end-label" x="' + lp[0].toFixed(1) + '" y="' + (lp[1] + 5).toFixed(1) + '" text-anchor="' + (dx > 0.2 ? "end" : dx < -0.2 ? "start" : "middle") + '" style="fill:' + st.color + '">' + C.esc(C.short(m)) + "</text>";
     });
     cats().forEach(function (c, i) {
       var p = pt(i, R + 16), dx = Math.cos(ang(i)), anchor = dx > 0.2 ? "start" : dx < -0.2 ? "end" : "middle", dy = Math.sin(ang(i)) > 0.5 ? 14 : (Math.sin(ang(i)) < -0.5 ? -4 : 5);
       svg += '<text class="axis-label" x="' + p[0].toFixed(1) + '" y="' + (p[1] + dy).toFixed(1) + '" text-anchor="' + anchor + '">' + C.esc(clabel(c, true)) + "</text>";
     });
-    host.innerHTML = svg + labels + "</svg>";
+    host.innerHTML = svg + "</svg>";
   }
   function radarPicker() {
     var box = $("radar-pick");
@@ -280,12 +277,12 @@
       });
     });
     h += "</tbody></table></div><p class=\"small\">" + C.esc(t("bestNote")) + "</p>";
-    if (withTasks) h += '<p><button class="btn btn-ghost" type="button" data-toggle-tasks aria-expanded="false">' + C.esc(t("showTasks")) + "</button></p>";
+    if (withTasks) h += '<p><button class="btn btn-ghost" type="button" data-toggle-tasks aria-expanded="false">' + C.esc(t("showTasks", { n: D.cats.reduce(function (s, c) { return s + c.tasks.length; }, 0) })) + "</button></p>";
     return h;
   }
   function bindTaskToggle(host) {
     var b = host.querySelector("[data-toggle-tasks]"); if (!b) return;
-    var apply = function () { host.querySelectorAll("[data-task-row]").forEach(function (r) { r.hidden = !S.tasksOpen; }); b.setAttribute("aria-expanded", String(S.tasksOpen)); b.textContent = S.tasksOpen ? t("hideTasks") : t("showTasks"); };
+    var apply = function () { host.querySelectorAll("[data-task-row]").forEach(function (r) { r.hidden = !S.tasksOpen; }); b.setAttribute("aria-expanded", String(S.tasksOpen)); b.textContent = S.tasksOpen ? t("hideTasks") : t("showTasks", { n: D.cats.reduce(function (s, c) { return s + c.tasks.length; }, 0) }); };
     b.addEventListener("click", function () { S.tasksOpen = !S.tasksOpen; apply(); }); apply();
   }
 
@@ -293,6 +290,7 @@
   function moreBtn() {
     var b = $("more-cats"); if (!b) return;
     b.textContent = S.moreCats ? t("fewerCats") : t("moreCats"); b.setAttribute("aria-expanded", String(S.moreCats));
+    if (b.parentNode) b.parentNode.hidden = S.view === "radar";
   }
   var VIEWS = [["radar", "vRadar"], ["cats", "vCats"], ["table", "vTable"]];
   function seg() {

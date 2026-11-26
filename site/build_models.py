@@ -165,7 +165,7 @@ FAMILIES = [
     (r"OLMo", "AI2"),
     (r"granite", "IBM"),
     (r"SmolLM", "Hugging Face"),
-    (r"aya", "Cohere"),
+    (r"aya|^command-", "Cohere"),
     (r"Lucie|Croissant", "OpenLLM-France"),
     (r"Apertus", "Swiss AI"),
     (r"reka", "Reka"),
