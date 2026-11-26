@@ -68,3 +68,4 @@ next-env.d.ts
 /src/backend/results
 /node_modules
 .taste-skill/
+/runs/
