@@ -239,16 +239,31 @@ export default function LeaderboardPage() {
       }
     }
 
+    // Score columns carry the unit once in the header so cells stay bare numbers.
+    const isScore = col !== 'rank' && col !== 'model';
+
     return (
       <>
         <button
           type="button"
           onClick={() => handleSort(col)}
-          className="inline-flex min-h-11 items-center gap-1 rounded text-left font-semibold text-white focus-visible:outline-white"
+          aria-label={
+            isScore
+              ? t('leaderboard_columnWithUnit', { name: `${baseLabel}${metricText}` })
+              : undefined
+          }
+          className={`inline-flex min-h-11 items-center gap-1 rounded font-semibold text-white focus-visible:outline-white ${
+            isScore ? 'text-right' : 'text-left'
+          }`}
         >
           <span>
             {baseLabel}
             {metricText}
+            {isScore && (
+              <span aria-hidden="true" className="whitespace-nowrap font-normal">
+                {' '}(%)
+              </span>
+            )}
           </span>
           <SortIcon
             className={`h-4 w-4 shrink-0 ${isSorted ? '' : 'opacity-70'}`}
@@ -388,8 +403,10 @@ export default function LeaderboardPage() {
                       key={b}
                       scope="col"
                       aria-sort={ariaSort(b)}
-                      className={`border-b border-r border-blue-500 bg-blue-600 px-2 py-1 text-left align-top text-sm text-white ${
-                        b === 'rank' || b === 'model' ? stickyClass(b, true) : 'min-w-28'
+                      className={`border-b border-r border-blue-500 bg-blue-600 px-2 py-1 align-top text-sm text-white ${
+                        b === 'rank' || b === 'model'
+                          ? `text-left ${stickyClass(b, true)}`
+                          : 'min-w-28 text-right'
                       }`}
                     >
                       {renderHeader(b)}
@@ -427,22 +444,22 @@ export default function LeaderboardPage() {
                         {entry.display_name}
                       </button>
                     </td>
-                    <td className="border-b border-r border-gray-200 bg-white px-2 py-1 text-center font-bold text-gray-900 group-hover:bg-gray-50">
+                    <td className="border-b border-r border-gray-200 bg-white px-2 py-1 text-right font-bold tabular-nums text-gray-900 group-hover:bg-gray-50">
                       {entry.averageScore == null
                         ? t('leaderboard_notSpecified')
-                        : (entry.averageScore * 100).toFixed(1) + '%'}
+                        : (entry.averageScore * 100).toFixed(1)}
                     </td>
                     {benchmarks.map((b) => {
                       const val = getCellValue(entry, b);
                       return (
                         <td
                           key={b}
-                          className="border-b border-r border-gray-200 bg-white px-2 py-1 text-center text-gray-800 group-hover:bg-gray-50"
+                          className="border-b border-r border-gray-200 bg-white px-2 py-1 text-right tabular-nums text-gray-800 group-hover:bg-gray-50"
                           title={val == null ? t('leaderboard_notSpecifiedTooltip') : undefined}
                         >
                           {val == null
                             ? <span className="italic text-gray-600">{t('leaderboard_notSpecified')}</span>
-                            : (val * 100).toFixed(1) + '%'}
+                            : (val * 100).toFixed(1)}
                         </td>
                       );
                     })}

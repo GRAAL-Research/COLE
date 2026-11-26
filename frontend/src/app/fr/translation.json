@@ -132,6 +132,7 @@
   "leaderboard_modelHeader": "Nom du modèle",
   "leaderboard_overallHeader": "Global",
   "leaderboard_avgScoreLabel": "(score moyen)",
+  "leaderboard_columnWithUnit": "{{name}}, en pourcentage",
   "leaderboard_notSpecified": "N/A",
   "leaderboard_notSpecifiedTooltip": "Ce modèle n'a pas été évalué sur cette tâche",
   "leaderboard_modalTitle": "Résultats pour {{name}}",
