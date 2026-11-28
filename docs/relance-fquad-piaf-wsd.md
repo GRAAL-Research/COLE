@@ -62,6 +62,8 @@ virgules, et écrit ses résultats dans `./results` relatif au dossier courant.
 
 ## 4. Modèles et identifiants
 
+> **Retirés le 28 novembre 2026 :** `claude-opus-4-20250514` et `claude-sonnet-4-20250514` ne sont plus servis par l'API Anthropic (réponse 404 `not_found_error`, vérifiée par un appel direct). Leur relance est impossible ; leurs anciens scores à 0 sur fquad/piaf/wsd ne peuvent plus être refaits.
+
 Sélection : modèles de `cole/backend/results/leaderboard.json` qui appartiennent à
 `predictions/all_llms.py` (`private_llm`) et dont le f1 fquad vaut exactement 0.0 (constaté dans le
 fichier). Ce sont onze modèles, pas dix ; `command-r7b-12-2024` est le moins « fort » des onze et
@@ -71,7 +73,6 @@ peut être retiré si David veut s'en tenir à dix.
 |---|---|---|---|---|
 | `pixtral-large-latest` | mistral | 0.0 | 0.0 | 0.0 |
 | `mistral-large-latest` | mistral | 0.0 | 0.0 | 0.0 |
-| `claude-opus-4-20250514` | anthropic | 0.0 | 29.1 | 0.16 |
 | `o3-2025-04-16` | openai | 0.0 | 0.0 | 0.0 |
 | `o1-2024-12-17` | openai | 0.0 | 0.0 | 0.0 |
 | `gpt-4.1-2025-04-14` | openai | 0.0 | 0.0 | 1.2 |

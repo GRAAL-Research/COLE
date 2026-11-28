@@ -22,7 +22,6 @@ TASKS="fquad,piaf,wsd"
 DEFAULT_MODELS=(
   "pixtral-large-latest"
   "mistral-large-latest"
-  "claude-opus-4-20250514"
   "o3-2025-04-16"
   "o1-2024-12-17"
   "gpt-4.1-2025-04-14"
