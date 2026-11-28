@@ -14426,5 +14426,133 @@
       }
     ],
     "model_url": "https://huggingface.co/google/gemma-4-31B-it"
+  },
+  {
+    "model_name": "allenai/Olmo-3-7B-Instruct",
+    "tasks": [
+      {
+        "allocine": {
+          "accuracy": 51.544999999999995
+        }
+      },
+      {
+        "daccord": {
+          "accuracy": 50.77369439071566
+        }
+      },
+      {
+        "french_boolq": {
+          "accuracy": 51.68539325842697
+        }
+      },
+      {
+        "fracas": {
+          "accuracy": 59.40298507462687
+        }
+      },
+      {
+        "gqnli": {
+          "accuracy": 16.666666666666664
+        }
+      },
+      {
+        "lingnli": {
+          "accuracy": 35.13182096873084
+        }
+      },
+      {
+        "mms": {
+          "accuracy": 40.13768001266023
+        }
+      },
+      {
+        "mnli-nineeleven-fr-mt": {
+          "accuracy": 34.4
+        }
+      },
+      {
+        "multiblimp": {
+          "accuracy": 48.05194805194805
+        }
+      },
+      {
+        "paws_x": {
+          "accuracy": 47.599999999999994
+        }
+      },
+      {
+        "qfrblimp": {
+          "accuracy": 47.82608695652174
+        }
+      },
+      {
+        "qfrcola": {
+          "accuracy": 30.598992843890805
+        }
+      },
+      {
+        "qfrcore": {
+          "accuracy": 9.712928987696955
+        }
+      },
+      {
+        "qfrcort": {
+          "accuracy": 14.035087719298245
+        }
+      },
+      {
+        "frcoe": {
+          "accuracy": 10.65208586472256
+        }
+      },
+      {
+        "rte3-french": {
+          "accuracy": 44.125
+        }
+      },
+      {
+        "sickfr": {
+          "accuracy": 25.315939665715447
+        }
+      },
+      {
+        "sts22": {
+          "accuracy": 22.22222222222222
+        }
+      },
+      {
+        "wino_x_lm": {
+          "accuracy": 50.37593984962406
+        }
+      },
+      {
+        "wino_x_mt": {
+          "accuracy": 49.33065595716198
+        }
+      },
+      {
+        "xnli": {
+          "accuracy": 34.311377245508986
+        }
+      },
+      {
+        "wsd": {
+          "exact_match": 4.6779878244152515
+        }
+      },
+      {
+        "fquad": {
+          "exact_match": 25.75,
+          "f1": 58.03312821400281
+        }
+      },
+      {
+        "piaf": {
+          "exact_match": 24.739583333333332,
+          "f1": 50.357125882842894
+        }
+      }
+    ],
+    "model_url": "https://huggingface.co/allenai/Olmo-3-7B-Instruct"
   }
 ]
