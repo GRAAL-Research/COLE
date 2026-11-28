@@ -14296,5 +14296,135 @@
       }
     ],
     "model_url": "https://huggingface.co/ibm-granite/granite-4.1-8b"
+  },
+  {
+    "model_name": "google/gemma-4-31B-it",
+    "tasks": [
+      {
+        "allocine": {
+          "accuracy": 53.99
+        }
+      },
+      {
+        "daccord": {
+          "accuracy": 51.64410058027079
+        }
+      },
+      {
+        "fquad": {
+          "exact_match": 3.0150753768844223,
+          "f1": 16.202292246749543,
+          "na_count": 2
+        }
+      },
+      {
+        "french_boolq": {
+          "accuracy": 51.12359550561798
+        }
+      },
+      {
+        "fracas": {
+          "accuracy": 36.11940298507463
+        }
+      },
+      {
+        "gqnli": {
+          "accuracy": 23.333333333333332
+        }
+      },
+      {
+        "lingnli": {
+          "accuracy": 32.67933782955242
+        }
+      },
+      {
+        "mms": {
+          "accuracy": 27.07548662763096
+        }
+      },
+      {
+        "mnli-nineeleven-fr-mt": {
+          "accuracy": 31.85
+        }
+      },
+      {
+        "multiblimp": {
+          "accuracy": 51.94805194805194
+        }
+      },
+      {
+        "paws_x": {
+          "accuracy": 47.699999999999996
+        }
+      },
+      {
+        "piaf": {
+          "exact_match": 1.8229166666666667,
+          "f1": 11.40814955652957
+        }
+      },
+      {
+        "qfrblimp": {
+          "accuracy": 53.875236294896034
+        }
+      },
+      {
+        "qfrcola": {
+          "accuracy": 68.24807845216009
+        }
+      },
+      {
+        "qfrcore": {
+          "accuracy": 11.051154759335203
+        }
+      },
+      {
+        "qfrcort": {
+          "accuracy": 16.95906432748538
+        }
+      },
+      {
+        "frcoe": {
+          "accuracy": 10.895099230457674
+        }
+      },
+      {
+        "rte3-french": {
+          "accuracy": 39.75
+        }
+      },
+      {
+        "sickfr": {
+          "accuracy": 56.01304525071341
+        }
+      },
+      {
+        "wino_x_lm": {
+          "accuracy": 50.089509488005724
+        }
+      },
+      {
+        "wino_x_mt": {
+          "accuracy": 50.602409638554214
+        }
+      },
+      {
+        "xnli": {
+          "accuracy": 34.4311377245509
+        }
+      },
+      {
+        "wsd": {
+          "exact_match": 0.0,
+          "na_count": 4100
+        }
+      },
+      {
+        "sts22": {
+          "accuracy": 25.0
+        }
+      }
+    ],
+    "model_url": "https://huggingface.co/google/gemma-4-31B-it"
   }
 ]
