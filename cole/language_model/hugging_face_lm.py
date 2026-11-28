@@ -133,8 +133,42 @@ class HFLLMModel(LanguageModel):
             generated_texts = [
                 output[0]["generated_text"].strip() for output in outputs
             ]
+            generated_texts = self._retry_empty_with_chat_template(
+                text, generated_texts
+            )
 
         return {"prediction": generated_texts}
+
+    def _retry_empty_with_chat_template(
+        self, texts: List[str], generated_texts: List[str]
+    ) -> List[str]:
+        """
+        Retry the empty generations with the tokenizer chat template.
+
+        Some instruct checkpoints (e.g., Olmo-3-7B-Instruct) emit the end-of-sequence
+        token right away when they receive a raw prompt, which yields an empty
+        prediction. Only those examples are regenerated, with the prompt wrapped as a
+        user message; non-empty generations are left untouched.
+        """
+        if not getattr(self.tokenizer, "chat_template", None):
+            return generated_texts
+
+        empty_idx = [i for i, g in enumerate(generated_texts) if not g]
+        if not empty_idx:
+            return generated_texts
+
+        chat_prompts = [
+            self.tokenizer.apply_chat_template(
+                [{"role": "user", "content": texts[i]}],
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+            for i in empty_idx
+        ]
+        retried = self.pipeline(chat_prompts)
+        for i, output in zip(empty_idx, retried):
+            generated_texts[i] = output[0]["generated_text"].strip()
+        return generated_texts
 
     def infer(self, rows: LazyRow) -> Dict:
         """
